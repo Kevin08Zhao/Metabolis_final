@@ -21,3 +21,4 @@
 | T-04 · 网格尺寸、坐标系与 tile 像素基线 | `docs/GRID_BASELINE.md` | [`done/T-04.md`](done/T-04.md) |
 | T-05 · GAME_RULES.md 玩法规则规格 | `docs/GAME_RULES.md` | [`T-05.done`](T-05.done) |
 | T-05a · 章节与发育时间轴定义 | `docs/CHAPTER_TIMELINE.md` | [`done/T-05a.md`](done/T-05a.md) |
+| T-07 · 科学表述压缩 | `docs/SCIENCE_NOTES.md` | [`done/T-07.md`](done/T-07.md) |
