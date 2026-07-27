@@ -201,6 +201,24 @@ the specification does not add a penalty for having been eased.
 | `balance.minigames.failure.failures_before_ease` | Consecutive failures that move the tier to `eased` |
 | `balance.minigames.validation.completion_headroom` | Unitless factor below one, guaranteeing the target fits inside the limit |
 | `balance.minigames.validation.reward_cost_ratio_max` | Reward ceiling ratio, at most three tenths |
+| `balance.minigames.runtime.initial_resolution` | Value `ChapterData.minigame_resolution` starts at before a run is offered. Sourced from the `MinigameResolution.PENDING` state in `docs/GAME_RULES.md`, not from this specification |
+
+### Legacy path aliases
+
+`docs/GAME_RULES.md` predates this specification and addresses the same values
+through a flat singular prefix. The T-11 access layer resolves the two forms onto
+one another; `docs/BALANCE_VALIDATION.md` is the authoritative alias table. The
+pairs that concern this specification are:
+
+| Path in `docs/GAME_RULES.md` | Resolves to |
+|---|---|
+| `balance.minigame.time_limit` | `minigames[active_minigame_id].duration_limit_sec` |
+| `balance.minigame.reward.<resource>` | `minigames[active_minigame_id].reward.<resource>` |
+| `balance.minigame.initial_resolution` | `minigames.runtime.initial_resolution` |
+
+`active_minigame_id` is runtime context set through `Balance.set_runtime_context`.
+The nested form in table M7 is canonical for new work; implementers should not
+introduce further flat paths.
 
 ## Acceptance: zero-reward sufficiency calculation
 
@@ -252,14 +270,36 @@ already assigns to T-06: all four birth thresholds must hold with every organ at
 This specification deliberately reuses that key instead of introducing a second
 zero-reward validation path.
 
-**Current result.** `docs/BALANCE.json` does not exist yet — T-06 has not run — so
-the assertions above cannot be evaluated numerically today. What this specification
-fixes is the shape of the check and the direction of the remedy. The structural
-conclusion already holds: because the reward ceiling in M4 keeps every stage's
-reward strictly below three tenths of that stage's cheapest build cost, zeroing the
-rewards can remove at most three tenths of one stage's build budget, and the
-remaining seven tenths must come from city production either way. Minigames are
-therefore a top-up, never a load-bearing supply.
+**Current result.** `docs/BALANCE.json` now exists, so the M4 ceiling and the M2
+sixty-second targets were evaluated against real values:
+
+| Stage | Maximum reward | Cheapest build cost | Ceiling at three tenths | Result |
+|---|---:|---:|---:|---|
+| `stage_origin` | 9.00 | 58.00 | 17.40 | PASS |
+| `stage_harbor` | 9.00 | 198.00 | 59.40 | PASS |
+| `stage_circulation` | 8.00 | 206.00 | 61.80 | PASS |
+
+| Prototype | Target time at base tier | Limit at `duration_limit_sec * completion_headroom` | Result |
+|---|---:|---:|---|
+| `minigame_cell_division` | 40.0 s | 48.0 s | PASS |
+| `minigame_material_transport` | 36.0 s | 48.0 s | PASS |
+| `minigame_signal_transfer` | 40.0 s | 48.0 s | PASS |
+
+All three `duration_limit_sec` values are sixty and `task_level` is `tutorial` for
+stage one and `standard` for stages two and three, as M1 requires.
+
+The zero-reward sufficiency assertion itself is discharged by T-06 through
+`balance.validation.zero_reward` and the baseline birth check of table E5 in
+`docs/OPERATION_SPEC.md`, which is why this specification reuses those keys rather
+than adding a second validation path.
+
+The structural conclusion holds independently of the numbers: because the M4
+ceiling keeps every stage's reward strictly below three tenths of that stage's
+cheapest build cost, zeroing the rewards can remove at most three tenths of one
+stage's build budget, and the remaining seven tenths must come from city production
+either way. Minigames are a top-up, never a load-bearing supply. The measured
+margin is wider still — the tightest stage, `stage_origin`, uses just over half of
+its allowance.
 
 **Remedy direction when an assertion fails.** If `available[r] >= required[r]` fails
 for some stage and resource, raise the production of that specific stage — that is,
