@@ -2,7 +2,7 @@
 
 This document is the single source of truth for the three task minigames: their
 mechanics, rating rules, reward ceiling, and failure handling. The main loop of
-*Metabolis: City of Life — Birth* is building and operating. Minigames are content
+*Metabolis: Birth of the City of Life* is building and operating. Minigames are content
 garnish and a partial resource source, capped at twenty percent of operating time.
 
 The first playable version contains exactly three runs, and their distribution is
