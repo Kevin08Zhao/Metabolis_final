@@ -1,72 +1,72 @@
-## 项目定位
+## Project Positioning
 
-《Metabolis：生命之城·诞生》是 Godot 4 + GDScript 的 2D 像素建造与运营游戏。它借用人体发育机制搭建“生命之城”：胎盘是生命港口，心脏是中央泵站，血管是运输道路，大脑与神经是信息网络，肺是空气交换设施。玩家沿受精后发育时间轴推进四个线性段落，从受精卵走到出生与第一次呼吸；每段落的核心行为是建造决策与运营决策，任务小游戏只作点缀。
+Metabolis: Birth of the City of Life is a Godot 4 and GDScript 2D pixel-art building and operations game. It uses human development mechanisms to build a “City of Life”: the placenta is the life harbor, the heart is the central pumping station, blood vessels are transport roads, the brain and nerves are the information network, and the lungs are the air-exchange facility. Players advance through four linear stages on a post-fertilization developmental timeline, from the zygote to birth and the first breath. Building and operations decisions are the core of each stage; task minigames are accents only.
 
-## 核心循环十步
+## Ten-Step Core Loop
 
-1. 进入城市，读取当前运营指标。
-2. 接收本段落发育目标与 2–4 个建造候选。
-3. 可选进入一次 60 秒任务小游戏，取得少量额外资源与知识星章。
-4. 结算以城市自身产出为主的本段落可用资源。
-5. 做建造决策：比较候选并投入三种建造资源；确认后不可回滚。
-6. 器官从蓝图变为建造中、已完成，运输网络按所选走向自动延伸。
-7. 做运营决策：分配有限资源的优先级并处理瓶颈；确认后立即结算，不可回滚。
-8. 激活器官，观察它与既有系统的一次协作。
-9. 解锁对应器官档案与时间轴条目。
-10. 推进下一段落，并结转网络效率、运营压力与废物累积。
+1. Enter the city and read its current operating indicators.
+2. Receive the stage objective and two to four building candidates.
+3. Optionally enter one sixty-second task minigame to earn a small amount of additional resources and Knowledge Badges.
+4. Settle the resources available for the stage, primarily from the city’s own production.
+5. Make a building decision: compare candidates and invest the three buildable resources; confirmation is irreversible.
+6. The organ progresses from blueprint to under construction to complete, while the transport network automatically extends along the selected route.
+7. Make an operations decision: prioritize limited resources and address a bottleneck; confirmation settles immediately and is irreversible.
+8. Activate the organ and observe one collaboration with existing systems.
+9. Unlock the corresponding organ archive entry and timeline entry.
+10. Advance to the next stage and carry over network efficiency, operating pressure, and accumulated waste.
 
-## 玩法权重
+## Gameplay Weights
 
-建造与运营不低于百分之六十五，任务小游戏不高于百分之二十，观察与即时提示约百分之十五。三者均为占操作时长的比例，科普阅读不计入。
+Building and operations account for at least sixty-five percent of active play time, task minigames account for no more than twenty percent, and observation plus immediate prompts account for approximately fifteen percent. All three are proportions of active play time; time spent reading science content is excluded.
 
-## In scope
+## In Scope
 
-首个可玩版本包含四个线性段落、七次建造决策、四次运营决策、三次可跳过的任务小游戏；包含六种资源、运输压力/废物累积/信号覆盖不足三类运营瓶颈、受限的运输网络干预、器官档案与即时知识提示、出生前全身检查，以及出生与第一次呼吸。
+The first playable version includes four linear stages, seven building decisions, four operations decisions, and three skippable task minigames. It includes six resources; three operating bottlenecks—transport pressure, waste accumulation, and insufficient signal coverage; limited intervention in the transport network; organ archives and immediate knowledge prompts; a simplified whole-body check before birth; and birth plus the first breath.
 
-## Out of scope
+## Out of Scope
 
-出生后玩法、自由建造、复杂加工链、随机地图、大型科技树、战斗、疾病模拟、多结局、在线功能。
+Post-birth gameplay, free building, complex production chains, random maps, a large technology tree, combat, disease simulation, multiple endings, and online features.
 
-## 六种资源
+## Six Resources
 
-| 中文名 | 内部变量名 | 规则 |
+| Display Name | Internal Variable | Rule |
 |---|---|---|
-| 营养能量 | `nutrient_energy` | 可投入建造 |
-| 细胞材料 | `cell_material` | 可投入建造 |
-| 发育信号 | `development_signal` | 可投入建造 |
-| 废物 | `waste` | 独立可计量池；累积会形成运营压力 |
-| 稳定度 | `stability` | 有上限的连续值；界面分三档显示 |
-| 知识星章 | `knowledge_badge_count` | 首个可玩版本只计数，不作解锁消耗 |
+| Nutrient Energy | `nutrient_energy` | May be invested in building |
+| Cell Material | `cell_material` | May be invested in building |
+| Development Signal | `development_signal` | May be invested in building |
+| Waste | `waste` | Independent measurable pool; accumulation creates operating pressure |
+| Stability | `stability` | Capped continuous value; displayed in three UI bands |
+| Knowledge Badge | `knowledge_badge_count` | Counted only in the first playable version; never spent to unlock content |
 
-## 四段落结构
+## Four-Stage Structure
 
-| 段落 | 覆盖内容 | 建造/运营决策 | 任务小游戏 |
+| Stage | Covered Content | Building / Operations Decisions | Task Minigame |
 |---|---|---|---|
-| 一·起源 | 受精卵与细胞分裂 | 1（教学）/1 | 细胞分裂 |
-| 二·港口 | 囊胚、胎盘基础与三胚层 | 2/1 | 物质运输 |
-| 三·循环 | 心脏、早期循环、神经系统基础及其他器官背景动画 | 2/1 | 信号传递 |
-| 四·诞生 | 肺部出生准备、全身检查、出生与第一次呼吸 | 2/1 | 无 |
+| One · Origin | Zygote and cell division | 1 tutorial / 1 | Cell Division |
+| Two · Harbor | Blastocyst, placental foundation, and three germ layers | 2 / 1 | Material Transport |
+| Three · Circulation | Heart, early circulation, nervous-system foundation, and background animations for other organs | 2 / 1 | Signal Transfer |
+| Four · Birth | Lung preparation for birth, whole-body check, birth, and first breath | 2 / 1 | None |
 
-## 命名规范
+## Naming Conventions
 
-显示名固定为《Metabolis：生命之城·诞生》；内部项目标识、仓库名与导出文件基名统一使用 `Metabolis`。
+The display name is fixed as Metabolis: Birth of the City of Life. The internal project identifier, repository name, and export-file basename must use `Metabolis`.
 
-| 类别 | 模板 | 三个正例 | 一个反例 |
+| Category | Template | Three Positive Examples | One Negative Example |
 |---|---|---|---|
-| 文件名 | `{domain}_{purpose}.{ext}`，全小写 `snake_case` | `organ_controller.gd`、`stage_harbor.tscn`、`resource_balance.tres` | `Stage Harbor.tscn` |
-| GDScript 变量与类名 | 变量/函数用 `snake_case`；类用 `PascalCase` | `nutrient_energy`、`allocate_resources`、`OrganController` | `organ-controller` |
-| 事件与信号名 | `{subject}_{past_tense}`，用 `snake_case` 描述已发生事实 | `organ_built`、`resource_allocated`、`stage_completed` | `OnOrganBuilt` |
-| 静态图文件名 | `{category}_{subject}_{variant}.png` | `organ_heart_base.png`、`tile_vessel_straight.png`、`ui_resource_waste.png` | `Heart Final 2.png` |
-| 动画文件名 | `{subject}_{action}_{state}.tres` | `heart_pump_active.tres`、`lung_first_breath.tres`、`cell_divide_loop.tres` | `anim01_final.tres` |
+| File names | `{domain}_{purpose}.{ext}` in lowercase `snake_case` | `organ_controller.gd`, `stage_harbor.tscn`, `resource_balance.tres` | `Stage Harbor.tscn` |
+| GDScript variables and class names | Variables/functions use `snake_case`; classes use `PascalCase` | `nutrient_energy`, `allocate_resources`, `OrganController` | `organ-controller` |
+| Event and signal names | `{subject}_{past_tense}` in `snake_case`, describing a fact that has occurred | `organ_built`, `resource_allocated`, `stage_completed` | `OnOrganBuilt` |
+| Static-image file names | `{category}_{subject}_{variant}.png` | `organ_heart_base.png`, `tile_vessel_straight.png`, `ui_resource_waste.png` | `Heart Final 2.png` |
+| Animation file names | `{subject}_{action}_{state}.tres` | `heart_pump_active.tres`, `lung_first_breath.tres`, `cell_divide_loop.tres` | `anim01_final.tres` |
 
-## 目录结构
+## Directory Structure
 
-`docs/` 文档；`art/tiles/` 地图块；`art/organs/` 器官图；`art/ui/` 界面图；`art/icons/` 图标；`anim/` 动画；`audio/` 音乐与音效；`src/` Godot 场景与 GDScript 源码；`tools/` 校验脚本；`builds/` 导出产物。
+`docs/` documentation; `art/tiles/` map tiles; `art/organs/` organ art; `art/ui/` interface art; `art/icons/` icons; `anim/` animations; `audio/` music and sound effects; `src/` Godot scenes and GDScript source; `tools/` validation scripts; `builds/` exported builds.
 
-| 这份文档能回答哪些问题 | 它故意不回答哪些 |
+| Questions This Document Answers | Questions It Deliberately Does Not Answer |
 |---|---|
-| 游戏是什么、核心体验是什么 | 具体数值公式与最终平衡值 |
-| 首个版本做什么、不做什么 | 七次建造决策的具体候选内容 |
-| 主循环、玩法权重与资源语义是什么 | 三个任务小游戏的详细操作规格 |
-| 四段落如何划分 | 美术、音频与关卡的最终内容 |
-| 名称和文件应如何书写、内容放在哪里 | 代码实现细节与完整接口定义 |
+| What the game is and what its core experience is | Exact formulas and final balance values |
+| What the first version does and does not include | The specific candidates in the seven building decisions |
+| What the core loop, gameplay weights, and resource semantics are | Detailed control specifications for the three task minigames |
+| How the four stages are divided | Final art, audio, and level content |
+| How names and files are written and where content belongs | Code implementation details and complete interface definitions |

@@ -1,55 +1,55 @@
-# 科学解释基准
+# Scientific Explanation Baseline
 
-《Metabolis：生命之城·诞生》是教学模型，不是诊断或医疗工具。游戏中的科学解释只能取自本文，也不用于现实个体判断。
+Metabolis: Birth of the City of Life is a teaching model, not a diagnostic or medical tool. All scientific explanations in the game must come from this document and must not be used to judge real individuals.
 
-科学内容与游戏表现必须分开：因果链只保留出处明确支持的关系；“游戏中对应的可见变化”只是教学映射，不反向证明真实发育过程。多个现象同时出现时，不得仅凭相关性写成前后因果。
+Scientific content and game representation must remain separate. Causal chains retain only relationships explicitly supported by the cited sources. A “Visible In-Game Change” is a teaching representation and does not prove the real developmental process. When phenomena occur together, correlation must not be rewritten as sequential causation.
 
-## 时间口径
+## Time Basis
 
-游戏统一使用受精后发育时间，从受精时刻开始计数。临床孕周从末次月经第一天算起；该起点通常比排卵与受精早约两周，因此本游戏时间加约两周才与临床孕周口径大致对应。[美国国家医学图书馆 MeSH 对“Gestational Age”的定义](https://www.ncbi.nlm.nih.gov/mesh/68005865)明确说明临床计算常从末次月经开始，约早于排卵和受精两周；[NCBI Bookshelf《Embryology, Fertilization》](https://www.ncbi.nlm.nih.gov/books/NBK542186/)也区分受精后时间与相差约两周的临床口径。
+The game consistently uses post-fertilization developmental time, counted from fertilization. Clinical gestational age is counted from the first day of the last menstrual period. That starting point is usually about two weeks before ovulation and fertilization, so adding approximately two weeks to the game’s time gives a rough clinical gestational-age equivalent. The [U.S. National Library of Medicine MeSH definition of “Gestational Age”](https://www.ncbi.nlm.nih.gov/mesh/68005865) states that clinical calculation commonly starts with the last menstrual period, approximately two weeks before ovulation and fertilization. [NCBI Bookshelf, “Embryology, Fertilization”](https://www.ncbi.nlm.nih.gov/books/NBK542186/) also distinguishes post-fertilization time from the clinical convention that differs by approximately two weeks.
 
-这段说明固定在玩家首次进入段落一时显示；界面写作“本游戏按受精后时间计，临床孕周通常约多两周”。“约”必须保留，因为实际排卵和受精时点存在差异。
+This explanation appears when the player enters Stage One for the first time. The interface text is: “This game uses post-fertilization time; clinical gestational age is usually about two weeks greater.” The word “about” must remain because actual ovulation and fertilization timing varies.
 
-## 发育重叠
+## Developmental Overlap
 
-多个系统会同时开始、相互伴随并持续发育很长时间。器官形成集中发生在早期的重叠时段，但不同系统的分化和成熟并不会在章节边界整齐停止。[NCBI Bookshelf《Embryology, Weeks 6–8》](https://www.ncbi.nlm.nih.gov/books/NBK563181/)将器官形成描述为跨越多个发育周的过程；[NCBI Bookshelf《Embryology, Gastrointestinal》](https://www.ncbi.nlm.nih.gov/books/NBK537172/)明确指出发育变化同时发生。
+Multiple systems begin, overlap, and continue developing for long periods. Organ formation is concentrated in overlapping early periods, but differentiation and maturation do not stop cleanly at stage boundaries. [NCBI Bookshelf, “Embryology, Weeks 6–8”](https://www.ncbi.nlm.nih.gov/books/NBK563181/) describes organ formation across multiple developmental weeks. [NCBI Bookshelf, “Embryology, Gastrointestinal”](https://www.ncbi.nlm.nih.gov/books/NBK537172/) explicitly notes that developmental changes occur concurrently.
 
-游戏按“起源 → 港口 → 循环 → 诞生”依次介绍，只是为了降低理解负担，不代表真实发育按这个顺序逐项完成。时间轴、章节总结和知识提示都必须保留这层说明。
+The game introduces “Origin → Harbor → Circulation → Birth” in sequence only to reduce cognitive load. This does not mean real development completes one item at a time in that order. The timeline, stage summaries, and knowledge prompts must preserve this qualification.
 
-## 九项科学主题
+## Nine Scientific Themes
 
-| 主题 | 玩家版一句话 | 支撑它的因果链 | 游戏中对应的可见变化 | 必须避免的错误说法 |
+| Theme | One-Sentence Player Version | Supporting Causal Chain | Visible In-Game Change | Incorrect Claims to Avoid |
 |---|---|---|---|---|
-| 受精卵与细胞分裂 | 一个细胞反复分开，身体由此起步。 | 受精形成单细胞合子 → 连续卵裂增加细胞数而整体尺寸近似不变 → 桑椹胚再形成囊胚（S1） | 段落一的单个细胞反复分开并聚成细胞群，已选施工槽位成为城市核心。 | 不得说“细胞数增加时胚体也同步等比例变大”。 |
-| 囊胚、着床与胎盘基础 | 新的交换通道把需要的物质送进来。 | 囊胚外层参与着床和胎盘形成 → 胎盘建立彼此分隔的交换界面 → 氧与营养进入胎儿侧，二氧化碳与代谢废物移出（S2、S3） | 段落二前半段出现“生命港口”，运输线亮起并双向显示进入与移出的物质。 | 不得说“母体血液与胎儿血液直接混在一起”。 |
-| 三胚层形成 | 三层细胞会长成不同的身体部分。 | 原条形成并引导细胞移动 → 外胚层、中胚层、内胚层建立 → 三层分别参与不同组织与器官形成（S4） | 段落二后半段在同一施工区展开三层功能分区，各层用固定形状而非只用颜色区分。 | 不得说“三胚层已经是三个器官”或“每层只形成一种器官”。 |
-| 心脏与早期循环 | 小小的泵开始推动早期血流。 | 两侧心管融合并形成早期心管 → 心管开始有节律地收缩 → 血液沿早期血管运输来自交换界面的物质（S5、S3） | 段落三的中央泵站开始搏动，血管流向箭头随搏动推进。 | 不得说“母体心脏直接把胎儿血液泵遍全身”。 |
-| 神经管与脑、脊髓 | 一条早期结构会长成大脑和脊髓。 | 外胚层形成神经板 → 神经板折叠并闭合成神经管 → 神经管头端形成脑的基础，尾端形成脊髓的基础（S6） | 段落三即时知识提示先显示神经板折叠，再把头端连到脑图标、尾端连到脊髓图标。 | 不得说“脑和脊髓与神经管分别独立长成”，也不得省略神经板到神经管这一步。 |
-| 其他器官同步形成 | 许多身体部分会在同一时期一起成形。 | 三胚层同时继续分化 → 多个器官原基在重叠时段出现 → 各系统继续分化与生长（S7、S8） | 心脏和神经决策进行时，肝、肾、消化道、肢芽、眼与耳原基只播放并行背景动画。 | 不得说“器官严格一个接一个形成，前一个完成后下一个才开始”。 |
-| 肺部出生准备 | 肺在出生前持续为呼吸做准备。 | 下呼吸道很早开始形成并持续分支 → 肺内气体交换结构和表面活性物质逐步发展 → 出生时肺具备开始空气换气的基础（S9、S10） | 段落四先显示肺部结构逐步展开与准备状态，出生前不播放空气进入动画。 | 不得说“肺只在出生前一刻才出现”或“肺在出生时已经完全成熟”。 |
-| 全身系统协作 | 出生前后，多个系统必须一起换挡。 | 出生前由胎盘和胎儿循环承担物质交换与运输 → 出生时胎盘血流停止且呼吸开始 → 呼吸与循环共同转入出生后的工作方式（S3、S10） | 简化全身检查同时汇总运输、废物、稳定度与信号覆盖，再触发出生序列。 | 不得说“胎儿会主动做一次全身检查”，也不得把游戏指标当成现实检查结论。 |
-| 出生与第一次呼吸 | 第一次呼吸让肺张开，也改变血流。 | 第一次呼吸使肺扩张 → 肺血管阻力下降 → 更多血液流经肺部，胎儿期分流结构开始发生功能性变化（S3、S10） | 肺部由准备态切换为扩张态，运输流线从绕过肺部改为经过肺部。 | 不得说“第一口气会让所有胎儿期通道瞬间永久闭合”。 |
+| Zygote and cell division | One cell divides again and again, starting the body. | Fertilization forms a single-cell zygote → successive cleavage increases cell count while overall size remains approximately unchanged → the morula forms a blastocyst (S1) | In Stage One, one cell repeatedly divides into a cluster, and the selected construction slot becomes the city core. | Do not say that the embryo grows proportionally larger whenever its cell count increases. |
+| Blastocyst, implantation, and placental foundation | A new exchange route brings in what the body needs. | The blastocyst’s outer layer participates in implantation and placental formation → the placenta establishes a separated exchange interface → oxygen and nutrients enter the fetal side while carbon dioxide and metabolic waste leave (S2, S3) | The “Life Harbor” appears in the first half of Stage Two; transport lines illuminate and show substances entering and leaving. | Do not say that maternal and fetal blood mix directly. |
+| Formation of the three germ layers | Three cell layers grow into different body parts. | The primitive streak forms and guides cell movement → ectoderm, mesoderm, and endoderm are established → the layers contribute to different tissues and organs (S4) | The second half of Stage Two unfolds three functional districts in one construction zone, distinguished by fixed shapes rather than color alone. | Do not say that the three germ layers are already three organs or that each layer forms only one organ. |
+| Heart and early circulation | A tiny pump starts moving early blood flow. | Paired heart tubes fuse into an early heart tube → the tube begins rhythmic contraction → blood carries substances from the exchange interface through early vessels (S5, S3) | The central pumping station begins beating in Stage Three, and vessel-flow arrows advance with each beat. | Do not say that the maternal heart directly pumps fetal blood around the fetal body. |
+| Neural tube, brain, and spinal cord | One early structure develops into the brain and spinal cord. | Ectoderm forms the neural plate → the neural plate folds and closes into the neural tube → the cranial end forms the brain foundation and the caudal end forms the spinal-cord foundation (S6) | A Stage Three knowledge prompt shows the neural plate folding, then connects the cranial end to a brain icon and the caudal end to a spinal-cord icon. | Do not say that the brain, spinal cord, and neural tube form independently, and do not omit the neural-plate-to-neural-tube step. |
+| Concurrent formation of other organs | Many body parts begin forming during the same period. | The three germ layers continue differentiating concurrently → multiple organ primordia appear during overlapping periods → each system continues differentiating and growing (S7, S8) | While heart and neural decisions occur, the liver, kidneys, digestive tract, limb buds, and eye and ear primordia appear only as parallel background animations. | Do not say that organs form strictly one after another, with each finishing before the next begins. |
+| Lung preparation for birth | The lungs keep preparing for breathing before birth. | The lower respiratory tract begins forming early and continues branching → gas-exchange structures and surfactant progressively develop → at birth, the lungs have the foundation needed to begin air exchange (S9, S10) | Stage Four first shows pulmonary structures unfolding and entering a prepared state; air-entry animation does not play before birth. | Do not say that the lungs appear only immediately before birth or are fully mature at birth. |
+| Whole-body system collaboration | Several body systems must shift together around birth. | Before birth, the placenta and fetal circulation perform exchange and transport → at birth, placental flow stops and breathing begins → respiratory and circulatory systems transition together toward post-birth operation (S3, S10) | The simplified whole-body check summarizes transport, waste, stability, and signal coverage together before triggering the birth sequence. | Do not say that a fetus actively performs a whole-body check, and do not treat game indicators as real-world examination findings. |
+| Birth and first breath | The first breath opens the lungs and changes blood flow. | The first breath expands the lungs → pulmonary vascular resistance falls → more blood flows through the lungs and fetal shunts begin functional change (S3, S10) | The lungs change from prepared to expanded, and transport lines reroute from bypassing the lungs to passing through them. | Do not say that the first breath instantly and permanently closes every fetal shunt. |
 
-## 出处对照表
+## Source Cross-Reference
 
-| 主题 | 玩家版一句话 | 出处名称 | 该出处支持的是哪一步因果 |
+| Theme | One-Sentence Player Version | Source | Causal Step Supported by the Source |
 |---|---|---|---|
-| 受精卵与细胞分裂 | 一个细胞反复分开，身体由此起步。 | S1 · 政府公开资料：[NCBI Bookshelf《Embryology, Week 1》](https://www.ncbi.nlm.nih.gov/books/NBK554562/) | 支持受精、连续卵裂、桑椹胚和囊胚的先后关系，以及卵裂时细胞数增加而整体尺寸近似不变。 |
-| 囊胚、着床与胎盘基础 | 新的交换通道把需要的物质送进来。 | S2 · 提案第 6 节来源：[NICHD Human Placenta Project Fact Sheet](https://www.nichd.nih.gov/sites/default/files/publications/pubs/Documents/HumanPlacentaProject.pdf) | 支持胎盘向胎儿侧输送氧和营养、移走废物，即因果链第三步。 |
-| 囊胚、着床与胎盘基础 | 新的交换通道把需要的物质送进来。 | S3 · 提案第 6 节来源：[NCBI Bookshelf《Embryology, Fetal Circulation》](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | 支持胎盘交换界面分隔母体与胎儿血液，并允许气体、营养和废物交换，即第二、三步。 |
-| 三胚层形成 | 三层细胞会长成不同的身体部分。 | S4 · 提案第 6 节来源：[NCBI Bookshelf《Embryology, Gastrulation》](https://www.ncbi.nlm.nih.gov/books/NBK554394/) | 支持原条与细胞迁移形成外胚层、中胚层和内胚层，以及三层参与不同组织形成的三步关系。 |
-| 心脏与早期循环 | 小小的泵开始推动早期血流。 | S5 · 政府公开资料：[NCBI Bookshelf《Embryology, Heart Tube》](https://www.ncbi.nlm.nih.gov/books/NBK499934/) | 支持两侧心管融合、早期心管形成并开始搏动，即第一、二步。 |
-| 心脏与早期循环 | 小小的泵开始推动早期血流。 | S3 · 提案第 6 节来源：[NCBI Bookshelf《Embryology, Fetal Circulation》](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | 支持胎盘交换后的氧与营养经胎儿血管运输，即第三步。 |
-| 神经管与脑、脊髓 | 一条早期结构会长成大脑和脊髓。 | S6 · 政府公开资料：[NCBI Bookshelf《Embryology, Central Nervous System》](https://www.ncbi.nlm.nih.gov/books/NBK526024/) | 支持神经板折叠为神经管，以及神经管头端、尾端分别形成脑和脊髓基础的完整因果链。 |
-| 其他器官同步形成 | 许多身体部分会在同一时期一起成形。 | S7 · 政府公开资料：[NCBI Bookshelf《Embryology, Weeks 6–8》](https://www.ncbi.nlm.nih.gov/books/NBK563181/) | 支持多个组织在器官形成期持续分化为器官，即第二、三步。 |
-| 其他器官同步形成 | 许多身体部分会在同一时期一起成形。 | S8 · 政府公开资料：[NCBI Bookshelf《Embryology, Gastrointestinal》](https://www.ncbi.nlm.nih.gov/books/NBK537172/) | 支持发育变化同时发生、器官形成时段彼此重叠，即第一、二步。 |
-| 肺部出生准备 | 肺在出生前持续为呼吸做准备。 | S9 · 政府公开资料：[NCBI Bookshelf《Embryology, Pulmonary》](https://www.ncbi.nlm.nih.gov/books/NBK544372/) | 支持下呼吸道早期开始形成、持续分支和出生后仍继续成熟，即第一、二步。 |
-| 肺部出生准备 | 肺在出生前持续为呼吸做准备。 | S10 · 提案第 6 节来源：[NCBI Bookshelf《Physiology, Newborn》](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | 支持肺和表面活性物质为出生后空气换气做准备，即第二、三步。 |
-| 全身系统协作 | 出生前后，多个系统必须一起换挡。 | S3 · 提案第 6 节来源：[NCBI Bookshelf《Embryology, Fetal Circulation》](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | 支持出生前胎盘交换、胎儿循环绕过肺部，以及出生时胎盘血流与呼吸改变循环路径，即第一、二步。 |
-| 全身系统协作 | 出生前后，多个系统必须一起换挡。 | S10 · 提案第 6 节来源：[NCBI Bookshelf《Physiology, Newborn》](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | 支持第一次呼吸引发肺部和循环共同转换，即第二、三步。 |
-| 出生与第一次呼吸 | 第一次呼吸让肺张开，也改变血流。 | S3 · 提案第 6 节来源：[NCBI Bookshelf《Embryology, Fetal Circulation》](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | 支持呼吸开始后肺循环开放、肺部血流增加以及胎儿期分流开始改变，即第二、三步。 |
-| 出生与第一次呼吸 | 第一次呼吸让肺张开，也改变血流。 | S10 · 提案第 6 节来源：[NCBI Bookshelf《Physiology, Newborn》](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | 支持第一次呼吸使肺扩张、肺血管阻力下降，即第一、二步。 |
+| Zygote and cell division | One cell divides again and again, starting the body. | S1 · Government public resource: [NCBI Bookshelf, “Embryology, Week 1”](https://www.ncbi.nlm.nih.gov/books/NBK554562/) | Supports the sequence from fertilization through successive cleavage, morula, and blastocyst, and the increase in cell count without a corresponding increase in overall size. |
+| Blastocyst, implantation, and placental foundation | A new exchange route brings in what the body needs. | S2 · Proposal Section Six source: [NICHD Human Placenta Project Fact Sheet](https://www.nichd.nih.gov/sites/default/files/publications/pubs/Documents/HumanPlacentaProject.pdf) | Supports transfer of oxygen and nutrients toward the fetus and removal of waste through the placenta: causal-chain step three. |
+| Blastocyst, implantation, and placental foundation | A new exchange route brings in what the body needs. | S3 · Proposal Section Six source: [NCBI Bookshelf, “Embryology, Fetal Circulation”](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | Supports separation of maternal and fetal blood at the placental exchange interface and exchange of gases, nutrients, and waste: steps two and three. |
+| Formation of the three germ layers | Three cell layers grow into different body parts. | S4 · Proposal Section Six source: [NCBI Bookshelf, “Embryology, Gastrulation”](https://www.ncbi.nlm.nih.gov/books/NBK554394/) | Supports the three-step relationship from primitive streak and cell migration to ectoderm, mesoderm, and endoderm and their contribution to different tissues. |
+| Heart and early circulation | A tiny pump starts moving early blood flow. | S5 · Government public resource: [NCBI Bookshelf, “Embryology, Heart Tube”](https://www.ncbi.nlm.nih.gov/books/NBK499934/) | Supports fusion of the paired heart tubes, formation of the early heart tube, and onset of beating: steps one and two. |
+| Heart and early circulation | A tiny pump starts moving early blood flow. | S3 · Proposal Section Six source: [NCBI Bookshelf, “Embryology, Fetal Circulation”](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | Supports transport of oxygen and nutrients from placental exchange through fetal vessels: step three. |
+| Neural tube, brain, and spinal cord | One early structure develops into the brain and spinal cord. | S6 · Government public resource: [NCBI Bookshelf, “Embryology, Central Nervous System”](https://www.ncbi.nlm.nih.gov/books/NBK526024/) | Supports folding of the neural plate into the neural tube and formation of brain and spinal-cord foundations from its cranial and caudal ends: the complete causal chain. |
+| Concurrent formation of other organs | Many body parts begin forming during the same period. | S7 · Government public resource: [NCBI Bookshelf, “Embryology, Weeks 6–8”](https://www.ncbi.nlm.nih.gov/books/NBK563181/) | Supports continued differentiation of multiple tissues into organs during organogenesis: steps two and three. |
+| Concurrent formation of other organs | Many body parts begin forming during the same period. | S8 · Government public resource: [NCBI Bookshelf, “Embryology, Gastrointestinal”](https://www.ncbi.nlm.nih.gov/books/NBK537172/) | Supports concurrent developmental changes and overlapping periods of organ formation: steps one and two. |
+| Lung preparation for birth | The lungs keep preparing for breathing before birth. | S9 · Government public resource: [NCBI Bookshelf, “Embryology, Pulmonary”](https://www.ncbi.nlm.nih.gov/books/NBK544372/) | Supports early formation and continued branching of the lower respiratory tract, as well as continued maturation after birth: steps one and two. |
+| Lung preparation for birth | The lungs keep preparing for breathing before birth. | S10 · Proposal Section Six source: [NCBI Bookshelf, “Physiology, Newborn”](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | Supports preparation of the lungs and surfactant for air exchange after birth: steps two and three. |
+| Whole-body system collaboration | Several body systems must shift together around birth. | S3 · Proposal Section Six source: [NCBI Bookshelf, “Embryology, Fetal Circulation”](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | Supports placental exchange and pulmonary bypass before birth and altered circulatory paths as placental flow and breathing change at birth: steps one and two. |
+| Whole-body system collaboration | Several body systems must shift together around birth. | S10 · Proposal Section Six source: [NCBI Bookshelf, “Physiology, Newborn”](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | Supports the joint pulmonary and circulatory transition initiated with the first breath: steps two and three. |
+| Birth and first breath | The first breath opens the lungs and changes blood flow. | S3 · Proposal Section Six source: [NCBI Bookshelf, “Embryology, Fetal Circulation”](https://www.ncbi.nlm.nih.gov/books/NBK537149/) | Supports opening of pulmonary circulation, increased pulmonary blood flow, and the beginning of changes in fetal shunts after breathing starts: steps two and three. |
+| Birth and first breath | The first breath opens the lungs and changes blood flow. | S10 · Proposal Section Six source: [NCBI Bookshelf, “Physiology, Newborn”](https://www.ncbi.nlm.nih.gov/books/NBK499951/) | Supports expansion of the lungs and the fall in pulmonary vascular resistance with the first breath: steps one and two. |
 
-## 最容易在简化过程中失真的主题
+## Theme Most Vulnerable to Distortion
 
-最容易失真的是“神经管与脑、脊髓”。危险词是“直接”：若写成“外胚层直接变成脑和脊髓”，或省略“神经板折叠并闭合成神经管”这一步，就会抹掉神经管作为共同发育基础的关键关系。玩家版可以说“一条早期结构”，但内部因果链和段落三即时知识提示必须完整保留“神经板 → 神经管 → 脑与脊髓基础”。
+“Neural tube, brain, and spinal cord” is the theme most likely to be distorted during simplification. The dangerous word is “directly.” Writing “ectoderm directly becomes the brain and spinal cord,” or omitting the step “the neural plate folds and closes into the neural tube,” erases the neural tube’s key role as their shared developmental foundation. The player version may say “one early structure,” but the internal causal chain and the Stage Three immediate knowledge prompt must retain “neural plate → neural tube → foundations of the brain and spinal cord.”
