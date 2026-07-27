@@ -1,0 +1,1855 @@
+{
+  "version": "1.0.0",
+  "tick_interval_sec": 1.0,
+  "chapters": {
+    "stage_origin": {
+      "id": "stage_origin",
+      "next_stage_id": "stage_harbor",
+      "initial_phase": "observe_state",
+      "required_build_decision_ids": [
+        "build_cell_cluster"
+      ],
+      "required_operation_decision_ids": [
+        "operate_cleavage_allocation"
+      ],
+      "required_organ_ids": [
+        "cell_cluster"
+      ],
+      "build_confirmation_policy": "irreversible",
+      "operation_confirmation_policy": "irreversible",
+      "first_build_decision_id": "build_cell_cluster",
+      "operation_decision_id": "operate_cleavage_allocation",
+      "minigame_id": "minigame_cell_division",
+      "system_observation_complete_initial": false,
+      "knowledge_unlock_resolved_initial": false,
+      "operation_time_sec": 240,
+      "tick_count": 240
+    },
+    "stage_harbor": {
+      "id": "stage_harbor",
+      "next_stage_id": "stage_circulation",
+      "initial_phase": "observe_state",
+      "required_build_decision_ids": [
+        "build_placenta_port",
+        "build_germ_layer_districts"
+      ],
+      "required_operation_decision_ids": [
+        "operate_placental_transport"
+      ],
+      "required_organ_ids": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts"
+      ],
+      "build_confirmation_policy": "irreversible",
+      "operation_confirmation_policy": "irreversible",
+      "first_build_decision_id": "build_placenta_port",
+      "operation_decision_id": "operate_placental_transport",
+      "minigame_id": "minigame_material_transport",
+      "system_observation_complete_initial": false,
+      "knowledge_unlock_resolved_initial": false,
+      "operation_time_sec": 276,
+      "tick_count": 276
+    },
+    "stage_circulation": {
+      "id": "stage_circulation",
+      "next_stage_id": "stage_birth",
+      "initial_phase": "observe_state",
+      "required_build_decision_ids": [
+        "build_heart_pump",
+        "build_neural_network"
+      ],
+      "required_operation_decision_ids": [
+        "operate_circulation_signal_priority"
+      ],
+      "required_organ_ids": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts",
+        "heart_pump",
+        "neural_network"
+      ],
+      "build_confirmation_policy": "irreversible",
+      "operation_confirmation_policy": "irreversible",
+      "first_build_decision_id": "build_heart_pump",
+      "operation_decision_id": "operate_circulation_signal_priority",
+      "minigame_id": "minigame_signal_transfer",
+      "system_observation_complete_initial": false,
+      "knowledge_unlock_resolved_initial": false,
+      "operation_time_sec": 300,
+      "tick_count": 300
+    },
+    "stage_birth": {
+      "id": "stage_birth",
+      "next_stage_id": null,
+      "initial_phase": "observe_state",
+      "required_build_decision_ids": [
+        "build_lung_exchange",
+        "build_pulmonary_interface"
+      ],
+      "required_operation_decision_ids": [
+        "operate_birth_readiness_check"
+      ],
+      "required_organ_ids": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts",
+        "heart_pump",
+        "neural_network",
+        "lung_exchange",
+        "pulmonary_interface"
+      ],
+      "build_confirmation_policy": "irreversible",
+      "operation_confirmation_policy": "irreversible",
+      "first_build_decision_id": "build_lung_exchange",
+      "operation_decision_id": "operate_birth_readiness_check",
+      "minigame_id": null,
+      "system_observation_complete_initial": false,
+      "knowledge_unlock_resolved_initial": false,
+      "operation_time_sec": 252,
+      "tick_count": 252
+    },
+    "total_operation_time_sec": 1068,
+    "save": {
+      "version": 1,
+      "current_city_state_schema": [
+        "resources",
+        "organs",
+        "network",
+        "chapter",
+        "operation_start_conditions"
+      ],
+      "chapter_snapshot_policy": "write_once_on_first_entry"
+    },
+    "progress": {
+      "initial": {
+        "current_stage_id": "stage_origin",
+        "unlocked_stage_ids": [
+          "stage_origin"
+        ]
+      }
+    }
+  },
+  "resources": {
+    "nutrient_energy": {
+      "initial": 80.0,
+      "max": 450.0,
+      "per_tick_output": 0.3,
+      "per_tick_consumption": 0.05,
+      "low_threshold": 40.0
+    },
+    "cell_material": {
+      "initial": 75.0,
+      "max": 420.0,
+      "per_tick_output": 0.28,
+      "per_tick_consumption": 0.04,
+      "low_threshold": 35.0
+    },
+    "development_signal": {
+      "initial": 65.0,
+      "max": 360.0,
+      "per_tick_output": 0.22,
+      "per_tick_consumption": 0.03,
+      "low_threshold": 30.0
+    },
+    "waste": {
+      "initial": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "accumulation_per_tick": 0.08,
+      "recovery_by_coverage": {
+        "base": 0.04,
+        "coverage_factor": 0.08
+      },
+      "overflow_stability_penalty": 8.0,
+      "warning_threshold": 70.0
+    },
+    "stability": {
+      "initial": 85.0,
+      "min": 0.0,
+      "max": 100.0,
+      "warning_line": 60.0,
+      "critical_line": 30.0,
+      "hysteresis": 5.0,
+      "decay_per_unmet_demand": 4.0
+    },
+    "knowledge_badge_count": {
+      "initial": 0,
+      "max": 99
+    }
+  },
+  "organs": {
+    "required_ids_by_stage": {
+      "stage_origin": [
+        "cell_cluster"
+      ],
+      "stage_harbor": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts"
+      ],
+      "stage_circulation": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts",
+        "heart_pump",
+        "neural_network"
+      ],
+      "stage_birth": [
+        "cell_cluster",
+        "placenta_port",
+        "germ_layer_districts",
+        "heart_pump",
+        "neural_network",
+        "lung_exchange",
+        "pulmonary_interface"
+      ]
+    },
+    "cell_cluster": {
+      "id": "cell_cluster",
+      "initial_state": "blueprint",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        2,
+        3
+      ],
+      "footprint_id": "standard_building",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.16,
+      "required_development_signal": 0.08,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.01
+      }
+    },
+    "placenta_port": {
+      "id": "placenta_port",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        2,
+        8
+      ],
+      "footprint_id": "landmark_organ",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.22,
+      "required_development_signal": 0.1,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.03
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      }
+    },
+    "germ_layer_districts": {
+      "id": "germ_layer_districts",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        20,
+        3
+      ],
+      "footprint_id": "standard_building",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.24,
+      "required_development_signal": 0.14,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.04
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      }
+    },
+    "heart_pump": {
+      "id": "heart_pump",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        20,
+        8
+      ],
+      "footprint_id": "landmark_organ",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.28,
+      "required_development_signal": 0.12,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.05
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.03
+      }
+    },
+    "neural_network": {
+      "id": "neural_network",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        4,
+        14
+      ],
+      "footprint_id": "standard_building",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.2,
+      "required_development_signal": 0.2,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.04
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      }
+    },
+    "lung_exchange": {
+      "id": "lung_exchange",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        22,
+        14
+      ],
+      "footprint_id": "landmark_organ",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.24,
+      "required_development_signal": 0.14,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.04
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      }
+    },
+    "pulmonary_interface": {
+      "id": "pulmonary_interface",
+      "initial_state": "locked",
+      "spec_tier_id": "baseline",
+      "grid_origin": [
+        4,
+        17
+      ],
+      "footprint_id": "standard_building",
+      "active": false,
+      "resources": {},
+      "required_flow": 0.26,
+      "required_development_signal": 0.14,
+      "transport_coverage": {
+        "initial": 0.0
+      },
+      "signal_coverage": {
+        "initial": 0.0
+      },
+      "per_tick_output": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.04
+      },
+      "per_tick_consumption": {
+        "nutrient_energy": 0.0,
+        "cell_material": 0.0,
+        "development_signal": 0.0,
+        "waste": 0.02
+      }
+    }
+  },
+  "build_options": {
+    "selection_policy": "empty_until_player_selection",
+    "slot_selection_policy": "empty_until_player_selection",
+    "metric_ranges": {
+      "network_efficiency": [
+        0.8,
+        1.2
+      ],
+      "build_duration": [
+        20.0,
+        40.0
+      ],
+      "future_convenience": [
+        0.8,
+        1.2
+      ]
+    },
+    "metric_units": {
+      "network_efficiency": "coefficient",
+      "build_duration": "seconds",
+      "future_convenience": "coefficient"
+    },
+    "normalized_min": 0.0,
+    "normalized_max": 1.0,
+    "normalized_sum_max": 3.0,
+    "carryover": {
+      "decision_weights": {
+        "build_cell_cluster": 1.0,
+        "build_placenta_port": 1.0,
+        "build_germ_layer_districts": 1.0,
+        "build_heart_pump": 1.0,
+        "build_neural_network": 1.0,
+        "build_lung_exchange": 1.0,
+        "build_pulmonary_interface": 1.0
+      },
+      "network_efficiency_factor": 0.1,
+      "operation_pressure_factor": 15.0,
+      "waste_factor": 10.0
+    },
+    "validation": {
+      "equal_weight_tolerance": 0.15
+    },
+    "build_cell_cluster": {
+      "available_option_ids": [
+        "cluster_compact",
+        "cluster_wave"
+      ],
+      "cluster_compact": {
+        "available_slot_ids": [
+          "slot_2_3",
+          "slot_8_3",
+          "slot_14_3"
+        ],
+        "cost": {
+          "nutrient_energy": 28.0,
+          "cell_material": 26.0,
+          "development_signal": 16.0
+        },
+        "slot_candidates": [
+          [
+            2,
+            3
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            14,
+            3
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 1.12,
+          "build_duration": 31.0,
+          "future_convenience": 0.98
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            3,
+            4
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_cluster_compact",
+          "extension_profile_id": "profile_compact",
+          "spec_tier_id": "reinforced",
+          "network_capacity": 22.0,
+          "extension_length_by_spec": {
+            "baseline": 4,
+            "extended": 6,
+            "reinforced": 5
+          }
+        }
+      },
+      "cluster_wave": {
+        "available_slot_ids": [
+          "slot_2_3",
+          "slot_8_3",
+          "slot_14_3"
+        ],
+        "cost": {
+          "nutrient_energy": 24.0,
+          "cell_material": 22.0,
+          "development_signal": 12.0
+        },
+        "slot_candidates": [
+          [
+            2,
+            3
+          ],
+          [
+            8,
+            3
+          ],
+          [
+            14,
+            3
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 0.96,
+          "build_duration": 24.0,
+          "future_convenience": 1.04
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            3,
+            4
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_cluster_wave",
+          "extension_profile_id": "profile_wave",
+          "spec_tier_id": "baseline",
+          "network_capacity": 18.0,
+          "extension_length_by_spec": {
+            "baseline": 4,
+            "extended": 6,
+            "reinforced": 5
+          }
+        }
+      }
+    },
+    "build_placenta_port": {
+      "available_option_ids": [
+        "placenta_exchange",
+        "placenta_interface"
+      ],
+      "placenta_exchange": {
+        "available_slot_ids": [
+          "slot_2_8",
+          "slot_8_8",
+          "slot_14_8"
+        ],
+        "cost": {
+          "nutrient_energy": 44.0,
+          "cell_material": 40.0,
+          "development_signal": 28.0
+        },
+        "slot_candidates": [
+          [
+            2,
+            8
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            14,
+            8
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 1.14,
+          "build_duration": 32.0,
+          "future_convenience": 0.96
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            3,
+            10
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_placenta_exchange",
+          "extension_profile_id": "profile_exchange",
+          "spec_tier_id": "reinforced",
+          "network_capacity": 28.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      },
+      "placenta_interface": {
+        "available_slot_ids": [
+          "slot_2_8",
+          "slot_8_8",
+          "slot_14_8"
+        ],
+        "cost": {
+          "nutrient_energy": 38.0,
+          "cell_material": 34.0,
+          "development_signal": 24.0
+        },
+        "slot_candidates": [
+          [
+            2,
+            8
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            14,
+            8
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 0.98,
+          "build_duration": 25.0,
+          "future_convenience": 1.06
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            3,
+            10
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_placenta_interface",
+          "extension_profile_id": "profile_interface",
+          "spec_tier_id": "baseline",
+          "network_capacity": 23.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      }
+    },
+    "build_germ_layer_districts": {
+      "available_option_ids": [
+        "layers_parallel",
+        "layers_staged"
+      ],
+      "layers_parallel": {
+        "available_slot_ids": [
+          "slot_20_3",
+          "slot_26_3",
+          "slot_32_3"
+        ],
+        "cost": {
+          "nutrient_energy": 40.0,
+          "cell_material": 46.0,
+          "development_signal": 34.0
+        },
+        "slot_candidates": [
+          [
+            20,
+            3
+          ],
+          [
+            26,
+            3
+          ],
+          [
+            32,
+            3
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 1.1,
+          "build_duration": 30.0,
+          "future_convenience": 0.98
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            21,
+            4
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_layers_parallel",
+          "extension_profile_id": "profile_parallel",
+          "spec_tier_id": "extended",
+          "network_capacity": 24.0,
+          "extension_length_by_spec": {
+            "baseline": 4,
+            "extended": 7,
+            "reinforced": 5
+          }
+        }
+      },
+      "layers_staged": {
+        "available_slot_ids": [
+          "slot_20_3",
+          "slot_26_3",
+          "slot_32_3"
+        ],
+        "cost": {
+          "nutrient_energy": 34.0,
+          "cell_material": 40.0,
+          "development_signal": 28.0
+        },
+        "slot_candidates": [
+          [
+            20,
+            3
+          ],
+          [
+            26,
+            3
+          ],
+          [
+            32,
+            3
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 0.96,
+          "build_duration": 23.0,
+          "future_convenience": 1.04
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            21,
+            4
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_layers_staged",
+          "extension_profile_id": "profile_staged",
+          "spec_tier_id": "baseline",
+          "network_capacity": 20.0,
+          "extension_length_by_spec": {
+            "baseline": 4,
+            "extended": 7,
+            "reinforced": 5
+          }
+        }
+      }
+    },
+    "build_heart_pump": {
+      "available_option_ids": [
+        "heart_reinforced",
+        "heart_early_flow"
+      ],
+      "heart_reinforced": {
+        "available_slot_ids": [
+          "slot_20_8",
+          "slot_26_8",
+          "slot_32_8"
+        ],
+        "cost": {
+          "nutrient_energy": 48.0,
+          "cell_material": 42.0,
+          "development_signal": 30.0
+        },
+        "slot_candidates": [
+          [
+            20,
+            8
+          ],
+          [
+            26,
+            8
+          ],
+          [
+            32,
+            8
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 1.16,
+          "build_duration": 32.0,
+          "future_convenience": 0.98
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            21,
+            10
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_heart_reinforced",
+          "extension_profile_id": "profile_heart_reinforced",
+          "spec_tier_id": "reinforced",
+          "network_capacity": 30.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      },
+      "heart_early_flow": {
+        "available_slot_ids": [
+          "slot_20_8",
+          "slot_26_8",
+          "slot_32_8"
+        ],
+        "cost": {
+          "nutrient_energy": 42.0,
+          "cell_material": 36.0,
+          "development_signal": 24.0
+        },
+        "slot_candidates": [
+          [
+            20,
+            8
+          ],
+          [
+            26,
+            8
+          ],
+          [
+            32,
+            8
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 1.0,
+          "build_duration": 24.0,
+          "future_convenience": 1.06
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            21,
+            10
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_heart_early_flow",
+          "extension_profile_id": "profile_heart_early",
+          "spec_tier_id": "baseline",
+          "network_capacity": 24.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      }
+    },
+    "build_neural_network": {
+      "available_option_ids": [
+        "neural_cranial",
+        "neural_distributed"
+      ],
+      "neural_cranial": {
+        "available_slot_ids": [
+          "slot_4_14",
+          "slot_10_14",
+          "slot_16_14"
+        ],
+        "cost": {
+          "nutrient_energy": 38.0,
+          "cell_material": 44.0,
+          "development_signal": 40.0
+        },
+        "slot_candidates": [
+          [
+            4,
+            14
+          ],
+          [
+            10,
+            14
+          ],
+          [
+            16,
+            14
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 1.12,
+          "build_duration": 31.0,
+          "future_convenience": 0.98
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            5,
+            15
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_neural_cranial",
+          "extension_profile_id": "profile_neural_cranial",
+          "spec_tier_id": "extended",
+          "network_capacity": 23.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 8,
+            "reinforced": 6
+          }
+        }
+      },
+      "neural_distributed": {
+        "available_slot_ids": [
+          "slot_4_14",
+          "slot_10_14",
+          "slot_16_14"
+        ],
+        "cost": {
+          "nutrient_energy": 32.0,
+          "cell_material": 38.0,
+          "development_signal": 34.0
+        },
+        "slot_candidates": [
+          [
+            4,
+            14
+          ],
+          [
+            10,
+            14
+          ],
+          [
+            16,
+            14
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 0.98,
+          "build_duration": 23.0,
+          "future_convenience": 1.06
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            5,
+            15
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_neural_distributed",
+          "extension_profile_id": "profile_neural_distributed",
+          "spec_tier_id": "baseline",
+          "network_capacity": 20.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 8,
+            "reinforced": 6
+          }
+        }
+      }
+    },
+    "build_lung_exchange": {
+      "available_option_ids": [
+        "lung_branching",
+        "lung_maturation"
+      ],
+      "lung_branching": {
+        "available_slot_ids": [
+          "slot_22_14",
+          "slot_28_14",
+          "slot_34_14"
+        ],
+        "cost": {
+          "nutrient_energy": 44.0,
+          "cell_material": 46.0,
+          "development_signal": 34.0
+        },
+        "slot_candidates": [
+          [
+            22,
+            14
+          ],
+          [
+            28,
+            14
+          ],
+          [
+            34,
+            14
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 1.12,
+          "build_duration": 32.0,
+          "future_convenience": 1.08
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            23,
+            16
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_lung_branching",
+          "extension_profile_id": "profile_lung_branching",
+          "spec_tier_id": "extended",
+          "network_capacity": 27.0,
+          "extension_length_by_spec": {
+            "baseline": 6,
+            "extended": 9,
+            "reinforced": 7
+          }
+        }
+      },
+      "lung_maturation": {
+        "available_slot_ids": [
+          "slot_22_14",
+          "slot_28_14",
+          "slot_34_14"
+        ],
+        "cost": {
+          "nutrient_energy": 40.0,
+          "cell_material": 42.0,
+          "development_signal": 30.0
+        },
+        "slot_candidates": [
+          [
+            22,
+            14
+          ],
+          [
+            28,
+            14
+          ],
+          [
+            34,
+            14
+          ]
+        ],
+        "footprint_id": "landmark_organ",
+        "metrics": {
+          "network_efficiency": 1.0,
+          "build_duration": 22.0,
+          "future_convenience": 0.98
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            23,
+            16
+          ],
+          "end_anchor": [
+            20,
+            10
+          ],
+          "trunk_route_id": "route_lung_maturation",
+          "extension_profile_id": "profile_lung_maturation",
+          "spec_tier_id": "reinforced",
+          "network_capacity": 24.0,
+          "extension_length_by_spec": {
+            "baseline": 6,
+            "extended": 9,
+            "reinforced": 7
+          }
+        }
+      }
+    },
+    "build_pulmonary_interface": {
+      "available_option_ids": [
+        "pulmonary_reserve",
+        "pulmonary_transition"
+      ],
+      "pulmonary_reserve": {
+        "available_slot_ids": [
+          "slot_4_17",
+          "slot_10_17",
+          "slot_16_17"
+        ],
+        "cost": {
+          "nutrient_energy": 42.0,
+          "cell_material": 40.0,
+          "development_signal": 36.0
+        },
+        "slot_candidates": [
+          [
+            4,
+            17
+          ],
+          [
+            10,
+            17
+          ],
+          [
+            16,
+            17
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 1.14,
+          "build_duration": 33.0,
+          "future_convenience": 1.08
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            5,
+            18
+          ],
+          "end_anchor": [
+            23,
+            16
+          ],
+          "trunk_route_id": "route_pulmonary_reserve",
+          "extension_profile_id": "profile_pulmonary_reserve",
+          "spec_tier_id": "reinforced",
+          "network_capacity": 28.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      },
+      "pulmonary_transition": {
+        "available_slot_ids": [
+          "slot_4_17",
+          "slot_10_17",
+          "slot_16_17"
+        ],
+        "cost": {
+          "nutrient_energy": 36.0,
+          "cell_material": 34.0,
+          "development_signal": 30.0
+        },
+        "slot_candidates": [
+          [
+            4,
+            17
+          ],
+          [
+            10,
+            17
+          ],
+          [
+            16,
+            17
+          ]
+        ],
+        "footprint_id": "standard_building",
+        "metrics": {
+          "network_efficiency": 1.0,
+          "build_duration": 23.0,
+          "future_convenience": 1.0
+        },
+        "carryover": {
+          "convenience_weight": 1.0
+        },
+        "network": {
+          "start_anchor": [
+            5,
+            18
+          ],
+          "end_anchor": [
+            23,
+            16
+          ],
+          "trunk_route_id": "route_pulmonary_transition",
+          "extension_profile_id": "profile_pulmonary_transition",
+          "spec_tier_id": "baseline",
+          "network_capacity": 24.0,
+          "extension_length_by_spec": {
+            "baseline": 5,
+            "extended": 7,
+            "reinforced": 6
+          }
+        }
+      }
+    }
+  },
+  "operations": {
+    "selection_policy": "empty_until_player_selection",
+    "allocation": {
+      "initial_total": 0.0,
+      "required_total": 1.0
+    },
+    "max_confirms_per_stage": 1,
+    "available_options_by_stage": {
+      "stage_origin": [
+        "transport_priority",
+        "waste_priority",
+        "signal_priority",
+        "balanced_support"
+      ],
+      "stage_harbor": [
+        "transport_priority",
+        "waste_priority",
+        "signal_priority",
+        "balanced_support"
+      ],
+      "stage_circulation": [
+        "transport_priority",
+        "waste_priority",
+        "signal_priority",
+        "balanced_support"
+      ],
+      "stage_birth": [
+        "transport_priority",
+        "waste_priority",
+        "signal_priority",
+        "balanced_support"
+      ]
+    },
+    "option_count_by_stage": {
+      "stage_origin": 4,
+      "stage_harbor": 4,
+      "stage_circulation": 4,
+      "stage_birth": 4
+    },
+    "options": {
+      "transport_priority": {
+        "allocation_weights": {
+          "transport": 0.5,
+          "waste": 0.2,
+          "signal": 0.3
+        },
+        "cost": {
+          "nutrient_energy": 8.0,
+          "cell_material": 6.0,
+          "development_signal": 8.0
+        },
+        "outcome": {
+          "transport_pressure": -12.0,
+          "waste": -2.0,
+          "stability": 4.0,
+          "network_efficiency": 0.06
+        }
+      },
+      "waste_priority": {
+        "allocation_weights": {
+          "transport": 0.25,
+          "waste": 0.5,
+          "signal": 0.25
+        },
+        "cost": {
+          "nutrient_energy": 6.0,
+          "cell_material": 8.0,
+          "development_signal": 6.0
+        },
+        "outcome": {
+          "transport_pressure": -4.0,
+          "waste": -12.0,
+          "stability": 4.0,
+          "network_efficiency": 0.02
+        }
+      },
+      "signal_priority": {
+        "allocation_weights": {
+          "transport": 0.25,
+          "waste": 0.2,
+          "signal": 0.55
+        },
+        "cost": {
+          "nutrient_energy": 6.0,
+          "cell_material": 6.0,
+          "development_signal": 10.0
+        },
+        "outcome": {
+          "transport_pressure": -3.0,
+          "waste": -2.0,
+          "stability": 5.0,
+          "network_efficiency": 0.03
+        }
+      },
+      "balanced_support": {
+        "allocation_weights": {
+          "transport": 0.34,
+          "waste": 0.33,
+          "signal": 0.33
+        },
+        "cost": {
+          "nutrient_energy": 7.0,
+          "cell_material": 7.0,
+          "development_signal": 7.0
+        },
+        "outcome": {
+          "transport_pressure": -6.0,
+          "waste": -6.0,
+          "stability": 4.0,
+          "network_efficiency": 0.04
+        }
+      }
+    },
+    "normalized": {
+      "min": 0.0,
+      "max": 1.0
+    },
+    "stability": {
+      "base_recovery": 0.04,
+      "transport_weight": 0.06,
+      "signal_weight": 0.05,
+      "waste_weight": 0.08,
+      "pressure_weight": 0.07
+    },
+    "thresholds": {
+      "stability": {
+        "stable_enter": 75.0,
+        "stable_exit": 65.0,
+        "strained_recover": 70.0,
+        "critical_enter": 30.0,
+        "critical_recover": 40.0,
+        "hysteresis": 5.0
+      },
+      "waste": {
+        "warning": 70.0
+      },
+      "resources": {
+        "nutrient_energy_low": 40.0,
+        "cell_material_low": 35.0,
+        "development_signal_low": 30.0
+      }
+    },
+    "bottlenecks": {
+      "transport_pressure": {
+        "enter": 70.0,
+        "recover": 55.0,
+        "organ_coverage_recover": 0.75
+      },
+      "waste": {
+        "enter": 70.0,
+        "recover": 55.0,
+        "net_rate_enter": 0.5,
+        "net_rate_recover": 0.1
+      },
+      "signal_coverage": {
+        "enter": 0.65,
+        "recover": 0.78,
+        "organ_recovery_ratio": 0.75
+      }
+    },
+    "birth_check": {
+      "transport_coverage_min": 0.7,
+      "waste_max": 50.0,
+      "stability_min": 55.0,
+      "birth_readiness_min": 0.7,
+      "weights": {
+        "transport": 0.4,
+        "signal": 0.25,
+        "pulmonary": 0.35
+      },
+      "range": {
+        "min": 0.0,
+        "max": 1.0
+      }
+    },
+    "ui": {
+      "blocking_modal_open_initial": false,
+      "units": {
+        "transport_pressure": "pressure",
+        "waste": "waste",
+        "signal_coverage": "coverage"
+      }
+    },
+    "validation": {
+      "zero_reward": 0.0,
+      "baseline_build": {
+        "transport_coverage": 0.8,
+        "waste_steady_state": 45.0,
+        "stability_equilibrium": 70.0,
+        "birth_readiness": 0.78
+      },
+      "operation": {
+        "minimum_affordable_option_by_stage": {
+          "stage_origin": "balanced_support",
+          "stage_harbor": "balanced_support",
+          "stage_circulation": "balanced_support",
+          "stage_birth": "balanced_support"
+        },
+        "zero_reward_recovery": true
+      }
+    }
+  },
+  "network": {
+    "nodes_by_stage": {
+      "stage_origin": [],
+      "stage_harbor": [],
+      "stage_circulation": [],
+      "stage_birth": []
+    },
+    "edges_by_stage": {
+      "stage_origin": [],
+      "stage_harbor": [],
+      "stage_circulation": [],
+      "stage_birth": []
+    },
+    "active_edges_by_stage": {
+      "stage_origin": [],
+      "stage_harbor": [],
+      "stage_circulation": [],
+      "stage_birth": []
+    },
+    "mutable_edges_by_stage": {
+      "stage_origin": [],
+      "stage_harbor": [],
+      "stage_circulation": [],
+      "stage_birth": []
+    },
+    "efficiency": {
+      "initial": 1.0
+    },
+    "transport": {
+      "selection_policy": "empty_until_player_selection",
+      "distance_metric": "manhattan",
+      "coverage_radius_by_spec": {
+        "baseline": 2.0,
+        "extended": 3.0,
+        "reinforced": 2.5
+      },
+      "capacity_multiplier_by_spec": {
+        "baseline": 1.0,
+        "extended": 1.1,
+        "reinforced": 1.2
+      },
+      "capacity": {
+        "min": 5.0,
+        "max": 100.0,
+        "denominator_floor": 1.0
+      },
+      "coverage": {
+        "initial": 1.0,
+        "denominator_floor": 0.01,
+        "no_demand_value": 1.0,
+        "organ_weights": {
+          "cell_cluster": 1.0,
+          "placenta_port": 1.2,
+          "germ_layer_districts": 1.0,
+          "heart_pump": 1.3,
+          "neural_network": 1.2,
+          "lung_exchange": 1.3,
+          "pulmonary_interface": 1.3
+        }
+      },
+      "pressure": {
+        "initial": 10.0,
+        "base": 10.0,
+        "coverage_weight": 45.0,
+        "utilization_weight": 30.0,
+        "min": 0.0,
+        "max": 100.0
+      },
+      "intervention": {
+        "used_initial": false,
+        "plan_by_edge": {},
+        "capacity_increment": 15.0,
+        "spec_multiplier": {
+          "baseline": 1.0,
+          "extended": 1.1,
+          "reinforced": 1.2
+        },
+        "pressure_response": {
+          "input_range": [
+            0.0,
+            100.0
+          ],
+          "output_range": [
+            0.75,
+            1.25
+          ]
+        },
+        "cost": {
+          "development_signal": 8.0
+        },
+        "max_uses_per_stage": 1,
+        "unlock_pressure": 60.0,
+        "outcome": {
+          "transport_pressure": -12.0,
+          "waste": -4.0,
+          "stability": 5.0
+        }
+      }
+    },
+    "signal": {
+      "denominator_floor": 0.01,
+      "coverage": {
+        "initial": 1.0,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "organ_weights": {
+        "cell_cluster": 0.8,
+        "placenta_port": 0.8,
+        "germ_layer_districts": 1.0,
+        "heart_pump": 0.9,
+        "neural_network": 1.4,
+        "lung_exchange": 1.1,
+        "pulmonary_interface": 1.1
+      }
+    }
+  },
+  "carryover": {
+    "network_efficiency": {
+      "base": 1.0,
+      "build_delta_weight": 0.2,
+      "operation_weight": 1.0,
+      "source_transport_coverage_range": [
+        0.0,
+        1.0
+      ],
+      "range": {
+        "min": 0.85,
+        "max": 1.15
+      }
+    },
+    "operation_pressure": {
+      "base": 10.0,
+      "build_delta_weight": 0.2,
+      "operation_weight": 0.8,
+      "source_transport_pressure_range": [
+        0.0,
+        100.0
+      ],
+      "range": {
+        "min": 0.0,
+        "max": 40.0
+      }
+    },
+    "waste": {
+      "base": 5.0,
+      "build_delta_weight": 0.2,
+      "operation_weight": 0.8,
+      "source_waste_range": [
+        0.0,
+        100.0
+      ],
+      "range": {
+        "min": 0.0,
+        "max": 35.0
+      }
+    },
+    "summary": {
+      "network_efficiency_format": "0.00x",
+      "operation_pressure_format": "0.0",
+      "waste_format": "0.0",
+      "network_efficiency": {
+        "reference": 1.0
+      },
+      "operation_pressure": {
+        "reference": 20.0
+      },
+      "waste": {
+        "reference": 18.0
+      }
+    },
+    "validation": {
+      "perceptible_gap_floor": 0.05,
+      "stage_harbor_to_circulation": {
+        "network_efficiency_gap": {
+          "min": 0.05,
+          "max": 0.12
+        },
+        "operation_pressure_gap": {
+          "min": 3.0,
+          "max": 8.0
+        },
+        "waste_gap": {
+          "min": 2.0,
+          "max": 6.0
+        }
+      },
+      "stage_circulation": {
+        "recoverable_start_range": {
+          "network_efficiency_coefficient": [
+            0.85,
+            1.15
+          ],
+          "initial_operation_pressure": [
+            0.0,
+            40.0
+          ],
+          "initial_waste_accumulation": [
+            0.0,
+            35.0
+          ]
+        },
+        "completion_reachable": true
+      }
+    }
+  },
+  "minigames": {
+    "runtime": {
+      "initial_resolution": "pending"
+    },
+    "rating": {
+      "weights": {
+        "accuracy": 0.6,
+        "efficiency": 0.4,
+        "hint_penalty": 0.08
+      },
+      "hint_penalty_cap": 2,
+      "star_thresholds": [
+        0.45,
+        0.65,
+        0.82
+      ]
+    },
+    "failure": {
+      "reason_codes": [
+        "timeout",
+        "target_not_reached",
+        "chain_broken"
+      ],
+      "max_retries_per_stage": 3,
+      "failures_before_ease": 2
+    },
+    "validation": {
+      "completion_headroom": 0.8,
+      "reward_cost_ratio_max": 0.3
+    },
+    "minigame_cell_division": {
+      "duration_limit_sec": 60,
+      "task_level": "tutorial",
+      "goal": {
+        "target_divisions": 8
+      },
+      "difficulty": {
+        "base": {
+          "readiness_interval_sec": 4.0,
+          "readiness_window_sec": 1.0,
+          "target_multiplier": 1.0
+        },
+        "eased": {
+          "readiness_interval_sec": 3.5,
+          "readiness_window_sec": 1.5,
+          "target_multiplier": 0.75
+        }
+      },
+      "reward": {
+        "nutrient_energy": 4.0,
+        "cell_material": 3.0,
+        "development_signal": 2.0,
+        "knowledge_badge_count": 1,
+        "star_multiplier": [
+          0.0,
+          0.5,
+          0.75,
+          1.0
+        ]
+      }
+    },
+    "minigame_material_transport": {
+      "duration_limit_sec": 60,
+      "task_level": "standard",
+      "goal": {
+        "target_deliveries": 12
+      },
+      "difficulty": {
+        "base": {
+          "packet_interval_sec": 3.0,
+          "lane_count": 3,
+          "target_multiplier": 1.0
+        },
+        "eased": {
+          "packet_interval_sec": 4.0,
+          "lane_count": 2,
+          "target_multiplier": 0.75
+        }
+      },
+      "reward": {
+        "nutrient_energy": 3.0,
+        "cell_material": 4.0,
+        "development_signal": 2.0,
+        "knowledge_badge_count": 1,
+        "star_multiplier": [
+          0.0,
+          0.5,
+          0.75,
+          1.0
+        ]
+      }
+    },
+    "minigame_signal_transfer": {
+      "duration_limit_sec": 60,
+      "task_level": "standard",
+      "goal": {
+        "target_nodes": 10
+      },
+      "difficulty": {
+        "base": {
+          "pulse_decay_sec": 6.0,
+          "node_step_sec": 4.0,
+          "node_spacing": 1.0,
+          "target_multiplier": 1.0
+        },
+        "eased": {
+          "pulse_decay_sec": 8.0,
+          "node_step_sec": 4.5,
+          "node_spacing": 0.8,
+          "target_multiplier": 0.8
+        }
+      },
+      "reward": {
+        "nutrient_energy": 2.0,
+        "cell_material": 2.0,
+        "development_signal": 4.0,
+        "knowledge_badge_count": 1,
+        "star_multiplier": [
+          0.0,
+          0.5,
+          0.75,
+          1.0
+        ]
+      }
+    }
+  },
+  "challenges": {
+    "enabled_ids": [
+      "transport_pressure_intro",
+      "waste_accumulation_intro",
+      "signal_coverage_intro"
+    ],
+    "max_injections_per_stage": 1,
+    "max_injections_total": 3,
+    "transport_pressure_intro": {
+      "stage_id": "stage_origin",
+      "bottleneck_id": "transport_pressure",
+      "capacity_multiplier": 0.65,
+      "pressure_target": 75.0,
+      "max_recovery_ticks": 8
+    },
+    "waste_accumulation_intro": {
+      "stage_id": "stage_harbor",
+      "bottleneck_id": "waste_accumulation",
+      "waste_delta": 12.0,
+      "processing_multiplier": 0.6,
+      "max_recovery_ticks": 10,
+      "maximum_self_recoverable_delta": 15.0
+    },
+    "signal_coverage_intro": {
+      "stage_id": "stage_circulation",
+      "bottleneck_id": "signal_coverage_low",
+      "delivery_multiplier": 0.65,
+      "coverage_target": 0.6,
+      "max_recovery_ticks": 8
+    },
+    "by_stage": {
+      "stage_birth": []
+    }
+  },
+  "assist": {
+    "hint_levels": [
+      "hint_observe",
+      "hint_compare",
+      "hint_consequence"
+    ],
+    "default_hint_level": "hint_observe",
+    "knowledge": {
+      "initial_unlocked_entry_ids": [],
+      "read_tracking_policy": "explicit_id_set",
+      "selection_policy": "empty_until_player_selection"
+    }
+  }
+}

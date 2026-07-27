@@ -27,10 +27,13 @@ This directory records tasks from the complete prompt list that have passed acce
 | T-04 · Grid Dimensions, Coordinate System, and Tile-Pixel Baseline | `docs/GRID_BASELINE.md` | [`done/T-04.md`](done/T-04.md) |
 | T-05 · GAME_RULES.md Gameplay Rules Specification | `docs/GAME_RULES.md` | [`T-05.done`](T-05.done) |
 | T-05a · Stage and Development Timeline Definition | `docs/CHAPTER_TIMELINE.md` | [`done/T-05a.md`](done/T-05a.md) |
+| T-05b · Minigame Framework Specification | `docs/MINIGAME_SPEC.md` | [`done/T-05b.md`](done/T-05b.md) |
 | T-05c · Scripted Challenge Specification | `docs/SCRIPTED_CHALLENGE_SPEC.md` | [`done/T-05c.md`](done/T-05c.md) |
 | T-05d · Build Decision Candidate Specification | `docs/BUILD_DECISION_SPEC.md` | [`done/T-05d.md`](done/T-05d.md) |
 | T-05e · Operation Loop and Bottleneck Specification | `docs/OPERATION_SPEC.md` | [`done/T-05e.md`](done/T-05e.md) |
 | T-05f · Cross-Stage Carryover Specification | `docs/CARRYOVER_SPEC.md` | [`done/T-05f.md`](done/T-05f.md) |
+| T-06 · Balance Configuration and Validation | `docs/BALANCE.json`, `docs/BALANCE_VALIDATION.md` | [`done/T-06.md`](done/T-06.md) |
 | T-07 · Scientific-Statement Compression | `docs/SCIENCE_NOTES.md` | [`done/T-07.md`](done/T-07.md) |
 | T-08 · Event and Signal API | `docs/EVENT_API.md` | [`done/T-08.md`](done/T-08.md) |
+| T-09 · Core Data Structure Definitions | `src/data/resource_pool.gd`, `src/data/organ_data.gd`, `src/data/network_data.gd`, `src/data/chapter_data.gd`, `src/data/game_state.gd` | [`done/T-09.md`](done/T-09.md) |
 | T-10 · EventBus Singleton | `src/autoload/event_bus.gd`, `src/autoload/event_bus.gd.uid` | [`done/T-10.md`](done/T-10.md) |
