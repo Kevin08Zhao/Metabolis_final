@@ -1,38 +1,38 @@
-# Godot 工程建立与项目设置
+# Godot Project Setup
 
-本文记录账号 B 在 Windows 11 环境中重新执行 T-03 的实际配置。使用的完整引擎版本为 `Godot 4.7.1.stable.official.a13da4feb`，渲染器为 `GL Compatibility`。工程目录固定为 `src/`，不安装插件、addon 或第三方资源，也不生成 GDScript。
+This document records the verified T-03 configuration on Windows 11. The exact engine version is `Godot 4.7.1.stable.official.a13da4feb`, the renderer is `GL Compatibility`, and the project root is `src/`. No plugins, addons, third-party assets, or GDScript files are introduced by this setup task.
 
-## 逐步操作清单
+## Setup checklist
 
-1. 启动 Godot `4.7.1.stable.official.a13da4feb`，在项目管理器中导入 `src/project.godot`。
-2. 打开“项目 → 项目设置”，按下表逐项设置显示、拉伸、DPI、纹理过滤和渲染器。
-3. 将项目名设置为 `Metabolis`，主场景设置为 `res://main.tscn`。
-4. 主场景只保留一个名为 `Main` 的 `Node2D` 根节点；保存到 `src/main.tscn`。
-5. 关闭项目设置并保存工程，确认 `src/project.godot` 已写入表中目标值。
-6. 按 F5 运行项目。应出现 `1280 × 720` 的空白窗口，画面由 `640 × 360` 基准画布按整数 `2×` 显示，输出面板无脚本错误、场景错误和资源错误。
+1. Start Godot `4.7.1.stable.official.a13da4feb` and import `src/project.godot` from the Project Manager.
+2. Open Project Settings and set the display, stretch, DPI, texture filtering, and renderer values listed below.
+3. Set the project name to `Metabolis` and the main scene to `res://main.tscn`.
+4. Keep only one `Node2D` root named `Main` in the main scene and save it as `src/main.tscn`.
+5. Close Project Settings, save the project, and confirm that `src/project.godot` contains the target values.
+6. Press F5. A blank `1280 x 720` window must open. It displays the `640 x 360` reference canvas at an integer `2x` scale. The Output and Debugger panels must contain no script, scene, or resource errors.
 
-`640 × 360` 是固定基准。整数缩放关系为：`640 × 360` 乘 `2` 得 `1280 × 720`（720p），乘 `3` 得 `1920 × 1080`（1080p），乘 `6` 得 `3840 × 2160`（4K）。
+`640 x 360` is the fixed reference canvas. Integer output scales are: `2x` for `1280 x 720` (720p), `3x` for `1920 x 1080` (1080p), and `6x` for `3840 x 2160` (4K).
 
-## 设置修改对照表
+## Project setting comparison
 
-“重新执行前实际值”来自本工作副本原有 `project.godot`；空白表示该项此前依赖引擎默认值、没有显式写入工程文件。
+The "value before verification" column comes from the existing `project.godot` in this working copy. A blank value means the project previously relied on the engine default instead of storing an explicit value.
 
-| 项目设置菜单路径 | 重新执行前实际值 | 目标值 | 修改理由 |
+| Project Settings path | Value before verification | Target value | Reason |
 |---|---|---|---|
-| 项目 → 项目设置 → 应用程序 → 配置 → 名称 | `Metabolis` | `Metabolis` | 固定项目显示名与内部工程名。 |
-| 项目 → 项目设置 → 应用程序 → 运行 → 主场景 | `res://main.tscn` | `res://main.tscn` | F5 可直接运行空白主场景。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 大小 → 视口宽度 | `640` | `640` | 锁定像素游戏基准画布宽度。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 大小 → 视口高度 | `360` | `360` | 锁定像素游戏基准画布高度。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 大小 → 窗口宽度覆盖 | `1280` | `1280` | 默认以整数 `2×` 输出 720p。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 大小 → 窗口高度覆盖 | `720` | `720` | 默认以整数 `2×` 输出 720p。 |
-| 项目 → 项目设置 → 显示 → 窗口 → DPI → 允许高 DPI | 空白（引擎默认开启） | `true` | 高 DPI 屏幕使用真实像素密度，缩放仍由整数模式约束。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 拉伸 → 模式 | `canvas_items` | `canvas_items` | 按 2D 画布缩放整个像素画面。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 拉伸 → 宽高比 | 空白（引擎默认 `keep`） | `keep` | 保持 `16:9`，禁止画面变形。 |
-| 项目 → 项目设置 → 显示 → 窗口 → 拉伸 → 缩放模式 | `integer` | `integer` | 只允许整数倍缩放，避免像素边缘不均匀。 |
-| 项目 → 项目设置 → 渲染 → 纹理 → 画布纹理 → 默认纹理过滤 | `Nearest` | `Nearest` | 关闭线性插值，保持像素边缘锐利。 |
-| 项目 → 项目设置 → 渲染 → 渲染器 → 渲染方法 | `gl_compatibility` | `gl_compatibility` | 兼容 HTML5 主平台及桌面辅助平台。 |
-| 项目 → 项目设置 → 渲染 → 渲染器 → 移动端渲染方法 | `gl_compatibility` | `gl_compatibility` | 保持移动端与 Web 兼容渲染路径一致。 |
+| Application / Config / Name | `Metabolis` | `Metabolis` | Lock the display name and internal project name. |
+| Application / Run / Main Scene | `res://main.tscn` | `res://main.tscn` | Let F5 run the blank main scene directly. |
+| Display / Window / Size / Viewport Width | `640` | `640` | Lock the pixel-art reference canvas width. |
+| Display / Window / Size / Viewport Height | `360` | `360` | Lock the pixel-art reference canvas height. |
+| Display / Window / Size / Window Width Override | `1280` | `1280` | Default to integer `2x` output at 720p. |
+| Display / Window / Size / Window Height Override | `720` | `720` | Default to integer `2x` output at 720p. |
+| Display / Window / DPI / Allow HiDPI | blank (engine default enabled) | `true` | Use the physical pixel density while integer stretch still controls scaling. |
+| Display / Window / Stretch / Mode | `canvas_items` | `canvas_items` | Scale the complete 2D canvas. |
+| Display / Window / Stretch / Aspect | blank (engine default `keep`) | `keep` | Preserve the `16:9` aspect ratio without distortion. |
+| Display / Window / Stretch / Scale Mode | `integer` | `integer` | Allow only integer scaling and prevent uneven pixel edges. |
+| Rendering / Textures / Canvas Textures / Default Texture Filter | `Nearest` | `Nearest` | Disable linear interpolation and preserve sharp pixel edges. |
+| Rendering / Renderer / Rendering Method | `gl_compatibility` | `gl_compatibility` | Support the HTML5 primary target and desktop secondary target. |
+| Rendering / Renderer / Rendering Method Mobile | `gl_compatibility` | `gl_compatibility` | Keep mobile and Web on the same compatibility rendering path. |
 
-## 打开工程后应该看到什么
+## Expected result after opening the project
 
-Godot 项目管理器显示项目 `Metabolis`。编辑器打开 `main.tscn` 后，场景树只有一个 `Main (Node2D)` 根节点，2D 视图中没有游戏对象。按 F5 后出现标题为 `Metabolis` 的 `1280 × 720` 空白窗口；关闭窗口返回编辑器时，调试器与输出面板没有报错。
+The Godot Project Manager displays `Metabolis`. After the editor opens `main.tscn`, the scene tree contains only a `Main (Node2D)` root and the 2D view contains no game objects. Pressing F5 opens a blank `1280 x 720` window titled `Metabolis`. Closing that window returns to the editor with no errors in the Debugger or Output panel.

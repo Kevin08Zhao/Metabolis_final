@@ -1,80 +1,80 @@
-# 网格与像素基线
+# Grid and Pixel Baseline
 
-本文锁定《Metabolis：生命之城·诞生》主视图的网格、坐标、占地、间距与像素渲染规则。以下数值是实现与美术验收的唯一基线。
+This document locks the grid, coordinates, footprints, spacing, and pixel rendering rules for the main game view. These values are the single baseline for implementation and art acceptance.
 
-## 基准画布与渲染
+## Reference canvas and rendering
 
-- 基准画布固定为 `640 × 360` 像素。
-- 内部画布以 `1×` 绘制，默认显示缩放固定为整数 `2×`，输出窗口为 `1280 × 720` 像素。
-- 拉伸模式固定为 `canvas_items`，宽高比固定为 `keep`，缩放模式固定为 `integer`。
-- 纹理过滤固定为 `Nearest`，mipmap 固定为关闭；一个素材原生像素对应基准画布中的一个像素。
-- 地图、器官与 UI 均落在整数像素坐标；不允许半像素位置、非整数节点缩放以及插值过滤。
+- The fixed reference canvas is `640 x 360` pixels.
+- The internal canvas renders at `1x`. The default display uses an integer `2x` scale and a `1280 x 720` output window.
+- Stretch mode is `canvas_items`, aspect mode is `keep`, and scale mode is `integer`.
+- Texture filtering is `Nearest` and mipmaps are disabled. One native asset pixel maps to one pixel on the reference canvas.
+- The map, organs, and UI use integer pixel coordinates. Half-pixel positions, non-integer node scales, and interpolated filtering are not allowed.
 
-## 顶部 UI 预留区
+## Reserved top UI area
 
-顶部 UI 预留区固定为 `Rect2(0, 0, 640, 40)`，即画布的 `y = 0…39`，高度固定为 `40` 像素。内部从上到下固定分为：
+The fixed top UI area is `Rect2(0, 0, 640, 40)`, covering canvas rows `y = 0..39` with a height of `40` pixels. Its fixed vertical layout is:
 
-| 内容 | 区域 | 高度 |
+| Content | Area | Height |
 |---|---|---:|
-| 资源状态栏 | `Rect2(0, 0, 640, 12)` | `12` 像素 |
-| 发育时间轴 | `Rect2(0, 12, 640, 12)` | `12` 像素 |
-| 任务面板 | `Rect2(0, 24, 640, 16)` | `16` 像素 |
+| Resource status bar | `Rect2(0, 0, 640, 12)` | `12` pixels |
+| Development timeline | `Rect2(0, 12, 640, 12)` | `12` pixels |
+| Task panel | `Rect2(0, 24, 640, 16)` | `16` pixels |
 
-三者合计 `12 + 12 + 16 = 40` 像素，能够同时常驻顶部 UI 预留区，因此不增加预留高度，可玩区行数减少 `0` 行。
+The three areas total `12 + 12 + 16 = 40` pixels and remain visible together. No additional reserved height is needed and the playable region loses `0` rows.
 
-## 地图网格
+## Map grid
 
-- tile 固定为正方形，边长 `16` 像素。
-- 可玩区域固定为 `40` 列 × `20` 行，共 `800` 个 tile。
-- 可玩区域固定为 `Rect2(0, 40, 640, 320)`，即 `x = 0…639`、`y = 40…359`。
-- 网格坐标从零开始：列坐标 `column = 0…39`，行坐标 `row = 0…19`。
+- Each tile is a `16 x 16` pixel square.
+- The playable region is `40` columns by `20` rows, for `800` tiles.
+- Its fixed bounds are `Rect2(0, 40, 640, 320)`, or `x = 0..639` and `y = 40..359`.
+- Grid coordinates are zero-based: `column = 0..39` and `row = 0..19`.
 
-## 器官占地与锚点
+## Organ footprints and anchors
 
-器官建造物只使用以下两个已命名的固定规格，不使用介于两者之间的尺寸：
+Buildable organs use only these two named fixed footprints:
 
-| 规格 | 适用对象 | tile 占地 | 基准像素尺寸 | `2×` 显示尺寸 |
+| Footprint | Objects | Tile size | Reference pixel size | `2x` display size |
 |---|---|---:|---:|---:|
-| 标准建造物 | 血管枢纽、神经枢纽 | `2 × 2` | `32 × 32` | `64 × 64` |
-| 地标器官 | 胎盘、心脏、大脑、双肺整体 | `3 × 3` | `48 × 48` | `96 × 96` |
+| Standard building | Vascular hub, neural hub | `2 x 2` | `32 x 32` | `64 x 64` |
+| Landmark organ | Placenta, heart, brain, paired lungs as one object | `3 x 3` | `48 x 48` | `96 x 96` |
 
-精灵锚点固定为占地矩形的底边中点（bottom-center）。网格坐标始终记录占地矩形的左上角 tile，不记录锚点所在 tile。由此，`2 × 2` 精灵的局部锚点为 `(16, 32)`，`3 × 3` 精灵的局部锚点为 `(24, 48)`。
+The sprite anchor is the bottom-center point of the footprint rectangle. Grid coordinates always store the footprint's top-left tile, not the tile containing the anchor. Therefore, the local anchor is `(16, 32)` for a `2 x 2` sprite and `(24, 48)` for a `3 x 3` sprite.
 
-不参与建造决策的背景器官不占用网格槽位。最小的标准建造物在基准画布中仍有 `32 × 32` 个原生像素，在默认 `2×` 显示中占 `64 × 64` 个屏幕像素；单个原生像素会显示为 `2 × 2` 屏幕像素，因此器官轮廓和内部识别特征均可稳定辨认。地标器官显示为 `96 × 96` 屏幕像素，可承载更强的主视图识别度。
+Background organs that are not part of build decisions occupy no grid slots. The smallest standard building still contains `32 x 32` native pixels and appears as `64 x 64` screen pixels at the default scale. Each native pixel becomes `2 x 2` screen pixels, so outlines and internal identifying features remain legible. Landmark organs appear at `96 x 96` screen pixels and receive stronger visual prominence.
 
-## 候选槽位间距
+## Candidate slot spacing
 
-同一建造决策的候选槽位之间，两个占地矩形的边缘必须至少隔开 `1` 个完整 tile，即 `16` 个基准像素、默认显示下 `32` 个屏幕像素。该间距同时适用于水平与垂直方向；候选高亮、选择框和器官精灵均不得进入这一个空 tile。
+For one build decision, the edges of any two candidate footprint rectangles must be separated by at least one complete tile: `16` reference pixels or `32` screen pixels at the default scale. This rule applies horizontally and vertically. Candidate highlights, selection frames, and organ sprites must not enter the empty spacing tile.
 
-四个候选槽位必须按最大规格 `3 × 3` 校验。即使四个槽位全部横向并列，三个间隔也能让其占地、高亮与选择区域互不相交，因此不会相互遮挡。
+Validate four simultaneous candidate slots against the largest `3 x 3` footprint. Even when all four slots are arranged horizontally, three spacing tiles keep their footprints, highlights, and selection areas disjoint.
 
-## 世界坐标与网格坐标
+## World and grid coordinates
 
-世界坐标原点固定为基准画布左上角 `(0, 0)`。设网格左上角坐标为 `(column, row)`，对应世界像素坐标为 `(world_x, world_y)`：
-
-```text
-world_x = column × 16
-world_y = 40 + row × 16
-```
-
-世界坐标位于可玩区域内时，反向换算为：
+The world origin is the top-left reference-canvas point `(0, 0)`. For a grid top-left coordinate `(column, row)`, the world pixel coordinate `(world_x, world_y)` is:
 
 ```text
-column = floor(world_x ÷ 16)
-row = floor((world_y - 40) ÷ 16)
+world_x = column * 16
+world_y = 40 + row * 16
 ```
 
-设器官占地为 `width_tiles × height_tiles`，其底边中点锚点世界坐标为：
+For a world point inside the playable region, the reverse conversion is:
 
 ```text
-anchor_x = column × 16 + width_tiles × 8
-anchor_y = 40 + (row + height_tiles) × 16
+column = floor(world_x / 16)
+row = floor((world_y - 40) / 16)
 ```
 
-## 验收算式一：地图与分辨率
+For an organ footprint of `width_tiles x height_tiles`, the bottom-center world anchor is:
 
-tile 边长为 `16` 像素，因此地图宽度为 `40 × 16 = 640` 像素，地图高度为 `20 × 16 = 320` 像素；顶部 UI 高度为 `12 + 12 + 16 = 40` 像素，总画面为 `640 × (320 + 40) = 640 × 360` 像素，与基准分辨率完全相等，宽高余量均为 `0`。默认整数 `2×` 显示后为 `1280 × 720` 像素，所以顶部 UI 与整张地图可以同时一屏完整显示。
+```text
+anchor_x = column * 16 + width_tiles * 8
+anchor_y = 40 + (row + height_tiles) * 16
+```
 
-## 验收算式二：四候选槽位
+## Acceptance calculation 1: map and resolution
 
-按最大 `3 × 3` 占地让四个候选槽位横向并列，并在相邻槽位之间保留最小 `1` tile 间距，总宽度为 `4 × 3 + 3 × 1 = 15` tiles，即 `15 × 16 = 240` 个基准像素；可玩区宽度为 `40 × 16 = 640` 个基准像素，故 `240 ≤ 640`。默认整数 `2×` 显示后仍为 `480 ≤ 1280`，四个候选槽位并存时不会相互遮挡。
+A `16` pixel tile produces a map width of `40 * 16 = 640` pixels and a map height of `20 * 16 = 320` pixels. The top UI height is `12 + 12 + 16 = 40` pixels. The full canvas is therefore `640 x (320 + 40) = 640 x 360`, exactly matching the reference resolution with `0` unused pixels on either axis. The default integer `2x` output is `1280 x 720`, so the complete map and top UI fit on one screen.
+
+## Acceptance calculation 2: four candidate slots
+
+Four maximum `3 x 3` footprints arranged horizontally with three one-tile gaps require `4 * 3 + 3 * 1 = 15` tiles, or `15 * 16 = 240` reference pixels. The playable width is `40 * 16 = 640` reference pixels, so `240 <= 640`. At integer `2x` scale, `480 <= 1280`; four simultaneous candidate slots do not overlap.
