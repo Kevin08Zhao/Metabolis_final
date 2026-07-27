@@ -1,0 +1,6 @@
+task_id: T-05
+status: done
+validated_on: 2026-07-28
+source: docs/prompts/Metabolis_Prompts_Full_v2.md
+artifact: docs/GAME_RULES.md
+checks: exactly six player-action rows and eight columns; all prerequisites are boolean expressions; no bare numeric values; every visible-feedback cell identifies a UI element, animation and sound; every rejection has visible feedback; build and operation decisions are irreversible after confirmation and state when consequences appear; no other action depends on the minigame; the most complex prerequisite is restated with every subcondition source

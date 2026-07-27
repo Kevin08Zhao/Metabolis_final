@@ -1,0 +1,6 @@
+task_id: T-02
+status: done
+validated_on: 2026-07-28
+source: docs/prompts/Metabolis_Prompts_Full_v2.md
+artifact: docs/CONTEXT.md
+checks: exactly nine required sections; gameplay weights and all six resources are present; Out of scope contains every required exclusion; all five naming categories include a template, three positive examples and one negative example; final two-column answer-boundary table is present

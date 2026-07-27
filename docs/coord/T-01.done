@@ -1,0 +1,6 @@
+task_id: T-01
+status: done
+validated_on: 2026-07-28
+source: docs/prompts/Metabolis_Prompts_Full_v2.md
+artifacts: required directories and .gitkeep files, .gitignore, README.md
+checks: all required directories exist; all required .gitkeep files are empty; Godot, export, macOS and Windows temporary files are ignored; README has only project positioning and directory-purpose sections; positioning contains 建造与运营
