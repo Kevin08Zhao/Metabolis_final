@@ -4,7 +4,8 @@
 
 ## Marker 规则
 
-- 文件名固定为 `<任务 ID>.done`，例如 `T-01.done`。
+- A-00 握手阶段创建的 marker 保留为 `<任务 ID>.done`，例如 `T-01.done`。
+- 并行开发阶段的 marker 固定为 `done/<任务 ID>.md`，例如 `done/T-03.md`；新增任务使用此格式。
 - 只有任务产物存在且通过对应条目的验收方法后，才能创建 marker。
 - marker 内记录任务 ID、状态、验收依据、产物与检查结论。
 - 上游产物发生实质修改后，原 marker 视为失效；必须按源 Prompt 重新验收并更新 marker。
@@ -16,4 +17,8 @@
 |---|---|---|
 | T-01 · 空仓库初始化与目录结构 | 约定目录及空 `.gitkeep`、`.gitignore`、`README.md` | [`T-01.done`](T-01.done) |
 | T-02 · CONTEXT.md 项目基准文档 | `docs/CONTEXT.md` | [`T-02.done`](T-02.done) |
+| T-03 · Godot 4 工程创建与项目设置 | `src/project.godot`、`docs/GODOT_SETUP.md` | [`done/T-03.md`](done/T-03.md) |
+| T-04 · 网格尺寸、坐标系与 tile 像素基线 | `docs/GRID_BASELINE.md` | [`done/T-04.md`](done/T-04.md) |
 | T-05 · GAME_RULES.md 玩法规则规格 | `docs/GAME_RULES.md` | [`T-05.done`](T-05.done) |
+| T-05a · 章节与发育时间轴定义 | `docs/CHAPTER_TIMELINE.md` | [`done/T-05a.md`](done/T-05a.md) |
+| T-07 · 科学表述压缩 | `docs/SCIENCE_NOTES.md` | [`done/T-07.md`](done/T-07.md) |
