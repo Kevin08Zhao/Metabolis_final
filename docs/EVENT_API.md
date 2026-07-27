@@ -43,10 +43,22 @@ not receive an event here.
 
 | Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
 |---|---|---|---|---|---|
-| `stage_advanced` | The instant `advance_to_next_stage` passes its preconditions, locks the stage inputs, and switches the flow to `Phase.STAGE_TRANSITION` | `from_stage_id: StringName`, `to_stage_id: StringName` | once per stage | `stage_transition_wipe`; the current node of `DevelopmentTimeline` slides to the next stage | `sfx_stage_advance` |
-| `stage_snapshot_written` | Within the same action, once the carryover snapshot has been generated and persisted; fires before the transition of `stage_advanced` completes | `stage_id: StringName`, `snapshot_slot: int`, `snapshot: Dictionary` (keys defined by the snapshot ownership rules in table F2 of `docs/CARRYOVER_SPEC.md`) | once per stage | Carryover rows settle into place in `StageSummaryPanel` | `sfx_snapshot_write` (light; must not cover the transition) |
+| `stage_advanced` | The instant `advance_to_next_stage` passes its preconditions, locks the stage inputs, **generates** the carryover record, and switches the flow to `Phase.STAGE_TRANSITION`. Generation is not persistence; see `stage_snapshot_written` | `from_stage_id: StringName`, `to_stage_id: StringName` | once per stage | `stage_transition_wipe`; the current node of `DevelopmentTimeline` slides to the next stage | `sfx_stage_advance` |
 | `stage_loaded` | Transition finished, the stage behind `next_stage_id` is fully loaded, and the playable area accepts input again | `stage_id: StringName`, `stage_index: int` | once per stage | `stage_intro_fade` fades the city map in | `bgm_stage_theme` track switch |
+| `stage_snapshot_written` | The atomic save transaction of table F2 in `docs/CARRYOVER_SPEC.md` has committed. Per F2 this happens when the entered stage is reached **for the first time**, so the event fires after `stage_loaded`, not during the transition. One transaction writes both `chapter_snapshots[snapshot_stage_id].operation_start_conditions` and `current_city_state.operation_start_conditions`; the event marks its commit | `snapshot_stage_id: StringName` (the stage whose `chapter_snapshots` entry was written, i.e. the stage just entered), `snapshot: Dictionary` (the three `operation_start_conditions` fields of table F1) | once per stage (three times across the run; never on `stage_origin`, which has no producing predecessor, and never on replay — see below) | Carryover rows settle into place in `StageSummaryPanel` | `sfx_snapshot_write` (light; must not cover the transition) |
 | `phase_changed` | Any time `Phase` changes. Preconditions of all six actions in `docs/GAME_RULES.md` lead with `phase` | `previous_phase: int`, `current_phase: int` | at most once per tick | No animation of its own; used to close the previous phase panel and open the next | None |
+
+**Generation versus persistence.** `advance_to_next_stage` in `docs/GAME_RULES.md`
+generates the carryover record as an immediate effect, while table F2 of
+`docs/CARRYOVER_SPEC.md` commits it when the next stage is entered for the first
+time. These are two distinct moments and only the second one is an event.
+Listeners must not treat `stage_advanced` as proof that anything reached the save.
+
+**Replay.** In replay mode the T-19h rule of `docs/CARRYOVER_SPEC.md` reads the
+stored record straight out of `chapter_snapshots` and recalculates nothing, so no
+snapshot write occurs and `stage_snapshot_written` does **not** fire.
+`carryover_applied` still fires, carrying the values read from the snapshot. This
+is the distinction T-26, T-27, and T-28 rely on.
 
 ## 2 · Build options presented, selected, construction started, construction complete
 
@@ -108,7 +120,7 @@ clearing event.
 | `system_observation_ended` | The collaboration demonstration finishes playing and `system_observation_complete` is set to `true` | `organ_id: StringName`, `observation_id: StringName` | once per stage | The collaboration path converges and the city map returns to its normal loop | The ambient layer fades out |
 | `knowledge_entry_unlocked` | The matching organ archive entry and timeline entry unlock and are written into `unlocked_knowledge_entry_ids` | `entry_id: StringName`, `organ_id: StringName`, `stage_id: StringName` | repeatable within one tick (one stage may unlock several entries at once) | A "new" badge appears on the timeline archive marker and pops once | `sfx_knowledge_unlock` (only one playback per tick regardless of count) |
 | `knowledge_entry_opened` | `view_knowledge_archive` passes its preconditions and the archive detail opens. `first_read` is `true` when this call flips `is_read` from false to true | `entry_id: StringName`, `first_read: bool` | repeatable within one tick | `knowledge_card_unfold` expands `KnowledgeArchivePanel` to the entry; the "new" badge switches to "read" | `sfx_knowledge_open` |
-| `carryover_applied` | After the transition, once network efficiency, operating pressure, and waste buildup have been written into the next stage's starting state; immediately follows `stage_loaded` | `from_stage_id: StringName`, `to_stage_id: StringName`, `carryover: Dictionary` (keys defined by table F1 of `docs/CARRYOVER_SPEC.md`) | once per stage (stage four produces no carryover, so three times across the run) | The three carryover summary lines of `StageSummaryPanel` push into the new stage's starting readouts | `sfx_carryover_apply` |
+| `carryover_applied` | All three table F1 values have reached `current_city_state.operation_start_conditions` at their respective application positions — network efficiency before the first production tick, operating pressure after the base network is instantiated, waste after organs and waste routes are instantiated — and before the first E3 settlement tick of the entered stage. On a first visit it follows `stage_snapshot_written` in the same transaction; on replay it fires alone, carrying values read from `chapter_snapshots` | `from_stage_id: StringName`, `to_stage_id: StringName`, `carryover: Dictionary` (the three values of table F1 of `docs/CARRYOVER_SPEC.md`: `network_efficiency_coefficient`, `initial_operation_pressure`, `initial_waste_accumulation`) | once per stage (three times across the run; `stage_birth` produces no record for a successor, and `stage_origin` receives none) | The three carryover summary lines of `StageSummaryPanel` push into the new stage's starting readouts | `sfx_carryover_apply` |
 
 ## 8 · Action rejection
 
@@ -162,10 +174,10 @@ feedback" columns of `docs/GAME_RULES.md` has a mount point in this list.
 | `view_knowledge_archive` | `knowledge_card_unfold` plus `sfx_knowledge_open`, badge switches to read | `knowledge_entry_opened` |
 | `view_knowledge_archive` | Lock icon shake | `action_rejected` |
 | `advance_to_next_stage` | System collaboration observation | `system_observation_started`, `system_observation_ended` |
-| `advance_to_next_stage` | Carryover snapshot generated | `stage_snapshot_written` |
-| `advance_to_next_stage` | `stage_transition_wipe` plus `sfx_stage_advance`, timeline node moves | `stage_advanced` |
+| `advance_to_next_stage` | `stage_transition_wipe` plus `sfx_stage_advance`, timeline node moves. The carryover record is generated here but not yet persisted | `stage_advanced` |
 | `advance_to_next_stage` | Next stage loads, timeline switches to the next node | `stage_loaded` |
-| `advance_to_next_stage` | Carryover written into the new stage | `carryover_applied` |
+| `advance_to_next_stage` | Carryover record committed to `chapter_snapshots` on a first visit | `stage_snapshot_written` |
+| `advance_to_next_stage` | Carryover written into the new stage's starting conditions | `carryover_applied` |
 | `advance_to_next_stage` | Incomplete steps marked red, advance button shakes | `action_rejected` |
 | All actions | Panel open/close driven by phase changes | `phase_changed` |
 | City self-operation | Stability band change, waste overflow, resource shortage | `stability_band_changed`, `waste_overflowed`, `resource_shortage_raised` / `_cleared` |
@@ -181,8 +193,8 @@ The thirty-two lines below can be pasted straight into
 ```gdscript
 # 1 · Stage advance and snapshot write
 signal stage_advanced(from_stage_id: StringName, to_stage_id: StringName)
-signal stage_snapshot_written(stage_id: StringName, snapshot_slot: int, snapshot: Dictionary)
 signal stage_loaded(stage_id: StringName, stage_index: int)
+signal stage_snapshot_written(snapshot_stage_id: StringName, snapshot: Dictionary)
 signal phase_changed(previous_phase: int, current_phase: int)
 
 # 2 · Build options presented, selected, construction started, construction complete

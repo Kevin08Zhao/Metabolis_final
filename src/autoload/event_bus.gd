@@ -17,8 +17,8 @@ extends Node
 # 1 · Stage advance and snapshot write
 # ---------------------------------------------------------------------------
 signal stage_advanced(from_stage_id: StringName, to_stage_id: StringName)
-signal stage_snapshot_written(stage_id: StringName, snapshot_slot: int, snapshot: Dictionary)
 signal stage_loaded(stage_id: StringName, stage_index: int)
+signal stage_snapshot_written(snapshot_stage_id: StringName, snapshot: Dictionary)
 signal phase_changed(previous_phase: int, current_phase: int)
 
 # ---------------------------------------------------------------------------
@@ -90,8 +90,8 @@ const LOG_PREFIX := "[EVENT]"
 ## so the built-in Node signals stay untouched.
 const EVENT_NAMES := [
 	&"stage_advanced",
-	&"stage_snapshot_written",
 	&"stage_loaded",
+	&"stage_snapshot_written",
 	&"phase_changed",
 	&"build_options_presented",
 	&"build_decision_confirmed",
