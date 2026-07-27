@@ -1,0 +1,21 @@
+# Godot
+.godot/
+
+# Export products
+builds/*
+!builds/.gitkeep
+*.pck
+*.dmg
+*.app/
+*.exe
+
+# macOS temporary files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows temporary files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
