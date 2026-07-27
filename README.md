@@ -1,18 +1,18 @@
-## 项目定位
+## Project Positioning
 
-《Metabolis：生命之城·诞生》是一款使用 Godot 4 与 GDScript 开发、借用人体机制进行城市搭建的 2D 像素建造与运营游戏。
+Metabolis: Birth of the City of Life is a Godot 4 and GDScript 2D pixel-art building and operations game that uses mechanisms of the human body as the basis for building a city.
 
-## 目录用途对照表
+## Directory Purpose Table
 
-| 目录 | 用途 |
+| Directory | Purpose |
 |---|---|
-| `docs/` | 存放设计与项目文档 |
-| `art/tiles/` | 存放像素地图块素材 |
-| `art/organs/` | 存放器官像素素材 |
-| `art/ui/` | 存放界面像素素材 |
-| `art/icons/` | 存放图标素材 |
-| `anim/` | 存放动画资源 |
-| `audio/` | 存放音乐与音效资源 |
-| `src/` | 存放 Godot 场景与 GDScript 源码 |
-| `tools/` | 存放校验脚本 |
-| `builds/` | 存放导出产物 |
+| `docs/` | Design and project documentation |
+| `art/tiles/` | Pixel-art map tiles |
+| `art/organs/` | Pixel-art organ assets |
+| `art/ui/` | Pixel-art interface assets |
+| `art/icons/` | Icon assets |
+| `anim/` | Animation resources |
+| `audio/` | Music and sound-effect resources |
+| `src/` | Godot scenes and GDScript source code |
+| `tools/` | Validation scripts |
+| `builds/` | Exported builds |

@@ -1,34 +1,34 @@
-# 四段落与发育时间轴基线
+# Four-Stage Development Timeline Baseline
 
-本文是《Metabolis：生命之城·诞生》首个可玩版本的章节单一配置来源。章节流程状态机、发育时间轴界面、章节总结界面和施工区视觉必须读取本文锁定的四段落顺序与内容归属，不得派生第五个段落。
+This document is the single source of configuration for the first playable version of Metabolis: Birth of the City of Life. The stage-flow state machine, Development Timeline, Stage Summary, and construction-zone visuals must consume the locked four-stage order and content assignments defined here. A fifth stage may not be derived.
 
-## 时间计算口径
+## Time Basis
 
-游戏统一使用受精后发育时间。设 `t` 为自受精时刻起经过的周数，四段落采用以下互不重叠的区间：
+The game uses post-fertilization developmental time throughout. Let `t` be the number of weeks elapsed since fertilization. The four stages use these non-overlapping intervals:
 
-| 段落 | 数学区间 | 时间轴显示文字 |
+| Stage | Mathematical Interval | Timeline Label |
 |---|---|---|
-| 一·起源 | `0 ≤ t < 1` | 受精后第 1 周 |
-| 二·港口 | `1 ≤ t < 3` | 受精后第 2–3 周 |
-| 三·循环 | `3 ≤ t < 8` | 受精后第 4–8 周 |
-| 四·诞生 | `8 ≤ t ≤ 38` | 受精后第 9–38 周，至出生 |
+| One · Origin | `0 ≤ t < 1` | Post-fertilization week 1 |
+| Two · Harbor | `1 ≤ t < 3` | Post-fertilization weeks 2–3 |
+| Three · Circulation | `3 ≤ t < 8` | Post-fertilization weeks 4–8 |
+| Four · Birth | `8 ≤ t ≤ 38` | Post-fertilization weeks 9–38, through birth |
 
-临床孕周通常从末次月经第一天计算，比受精后发育时间约多两周；换算口径为“临床孕周约等于受精后发育周数加两周”。这段说明固定在玩家首次进入段落一时呈现，显示于 `StageIntroPanel` 的时间说明卡和 `DevelopmentTimeline` 的时间标签下方；它是非阻塞信息，由系统随段落介绍显示，不新增玩家动作。
+Clinical gestational age is usually counted from the first day of the last menstrual period and is approximately two weeks greater than post-fertilization developmental time. The conversion rule is “clinical gestational age is approximately post-fertilization age plus two weeks.” This explanation appears when the player enters Stage One for the first time, on the time-basis card in `StageIntroPanel` and beneath the time label in `DevelopmentTimeline`. It is non-blocking information displayed by the system with the stage introduction and creates no new player action.
 
-本文中的“本段形成”指结构第一次进入游戏地图、施工区或背景动画的表现清单，不表示该结构已达到生物学成熟状态。真实发育过程存在重叠，四段落顺序是线性教学编排，不代表所有器官严格依次开始发育。
+“Formed in this stage” means the structure first appears on the game map, in the construction zone, or in a background animation. It does not mean the structure is biologically mature. Real development overlaps; the four-stage order is a linear teaching sequence, not a claim that all organs begin developing in strict succession.
 
-## 固定顺序与内部标识
+## Fixed Order and Internal Identifiers
 
-| 顺序 | 显示名 | `stage_id` | 第十八节内容 | `next_stage_id` |
+| Order | Display Name | `stage_id` | Section Eighteen Content | `next_stage_id` |
 |---:|---|---|---|---|
-| 1 | 段落一·起源 | `stage_origin` | 项 1 | `stage_harbor` |
-| 2 | 段落二·港口 | `stage_harbor` | 项 2、项 3 | `stage_circulation` |
-| 3 | 段落三·循环 | `stage_circulation` | 项 4、项 5、项 6 | `stage_birth` |
-| 4 | 段落四·诞生 | `stage_birth` | 项 7、项 8、项 9 | `null` |
+| 1 | Stage One · Origin | `stage_origin` | Item 1 | `stage_harbor` |
+| 2 | Stage Two · Harbor | `stage_harbor` | Items 2 and 3 | `stage_circulation` |
+| 3 | Stage Three · Circulation | `stage_circulation` | Items 4, 5, and 6 | `stage_birth` |
+| 4 | Stage Four · Birth | `stage_birth` | Items 7, 8, and 9 | `null` |
 
-## 过章判定
+## Stage-Exit Evaluation
 
-前三个段落共用以下可直接执行的布尔判定：
+The first three stages share this directly executable Boolean evaluation:
 
 ```text
 stage_exit_ready(stage_id) =
@@ -43,93 +43,93 @@ stage_exit_ready(stage_id) =
     && (blocking_modal_open == false)
 ```
 
-小游戏不出现在过章判定中；玩家跳过、完成或未进入小游戏均不阻止主线推进。具体下一段落还必须满足当前 `StageDefinition.next_stage_id` 与下表目标一致。
+Minigames do not appear in stage-exit evaluation. Skipping, completing, or never entering a minigame cannot block main-path progression. The current `StageDefinition.next_stage_id` must also match the target specified below.
 
-## 段落一·起源
+## Stage One · Origin
 
-| 配置项 | 锁定值 |
+| Configuration | Locked Value |
 |---|---|
 | `stage_id` | `stage_origin` |
-| 受精后发育时间 | `0 ≤ t < 1`；受精后第 1 周 |
-| 第十八节归属 | 项 1：受精卵与细胞分裂 |
-| 建造决策 | `build_cell_cluster`：胚体细胞群“生命城核心”；教学章仅此一个建造决策 |
-| 运营决策 | `operate_cleavage_allocation`：细胞分裂节律与细胞材料分配优先级 |
-| 小游戏 | 有；原型 A“细胞分裂”；`minigame_cell_division` |
-| 本段形成的器官或结构 | 无分化器官；形成受精卵、卵裂球、桑椹胚与囊胚前体 |
-| 施工区视觉 | 单一细胞扩展为紧密细胞群；被选中的候选槽位成为后续城市核心，其余候选槽位退出 |
-| 进入下一段落 | `stage_exit_ready(stage_origin) && (next_stage_id == stage_harbor)` |
-| 跨章结转 | 将网络效率、运营压力与废物状态结转到 `stage_harbor` |
+| Post-fertilization time | `0 ≤ t < 1`; post-fertilization week 1 |
+| Section Eighteen assignment | Item 1: zygote and cell division |
+| Building decision | `build_cell_cluster`: embryonic cell cluster, the “Core of the City of Life”; this tutorial stage has only this one building decision |
+| Operations decision | `operate_cleavage_allocation`: priority between the rhythm of cell division and allocation of Cell Material |
+| Minigame | Yes; Prototype A, “Cell Division”; `minigame_cell_division` |
+| Organs or structures formed | No differentiated organs; zygote, blastomeres, morula, and blastocyst precursor form |
+| Construction-zone visual | One cell expands into a compact cell cluster; the selected candidate slot becomes the later city core and the other slots withdraw |
+| Enter next stage | `stage_exit_ready(stage_origin) && (next_stage_id == stage_harbor)` |
+| Cross-stage carryover | Carries network efficiency, operating pressure, and waste state into `stage_harbor` |
 
-## 段落二·港口
+## Stage Two · Harbor
 
-| 配置项 | 锁定值 |
+| Configuration | Locked Value |
 |---|---|
 | `stage_id` | `stage_harbor` |
-| 受精后发育时间 | `1 ≤ t < 3`；受精后第 2–3 周 |
-| 第十八节归属 | 前半段为项 2“囊胚与胎盘基础”，后半段为项 3“三胚层形成” |
-| 建造决策一 | `build_placenta_port`：胎盘基础“生命港口” |
-| 建造决策二 | `build_germ_layer_districts`：外胚层、中胚层、内胚层“城市功能分区” |
-| 运营决策 | `operate_placental_transport`：胎盘物质运输的供给优先级 |
-| 小游戏 | 有；原型 B“物质运输”；`minigame_material_transport` |
-| 本段形成的器官或结构 | 胎盘基础、外胚层、中胚层、内胚层 |
-| 施工区视觉 | 前半段显示囊胚定位与胎盘港口施工；后半段在同一地图节点展开三层功能分区，不创建新章节地图 |
-| 进入下一段落 | `stage_exit_ready(stage_harbor) && (next_stage_id == stage_circulation)` |
-| 跨章结转 | 将网络效率、运营压力与废物状态结转到 `stage_circulation` |
+| Post-fertilization time | `1 ≤ t < 3`; post-fertilization weeks 2–3 |
+| Section Eighteen assignment | First half: Item 2, “Blastocyst and Placental Foundation”; second half: Item 3, “Formation of the Three Germ Layers” |
+| First building decision | `build_placenta_port`: placental foundation, the “Life Harbor” |
+| Second building decision | `build_germ_layer_districts`: ectoderm, mesoderm, and endoderm as “City Function Districts” |
+| Operations decision | `operate_placental_transport`: supply priority for placental material transport |
+| Minigame | Yes; Prototype B, “Material Transport”; `minigame_material_transport` |
+| Organs or structures formed | Placental foundation, ectoderm, mesoderm, and endoderm |
+| Construction-zone visual | The first half shows blastocyst positioning and Life Harbor construction; the second half unfolds the three functional layers at the same map node without creating a new stage map |
+| Enter next stage | `stage_exit_ready(stage_harbor) && (next_stage_id == stage_circulation)` |
+| Cross-stage carryover | Carries network efficiency, operating pressure, and waste state into `stage_circulation` |
 
-## 段落二的双内容承载与总结上限
+## Stage Two Dual-Content Load and Summary Limit
 
-段落二只有一个章节节点 `stage_harbor`，不得把三胚层形成拆成独立段落。其内部固定使用两个系统子阶段：
+Stage Two has exactly one stage node, `stage_harbor`; formation of the three germ layers may not be split into a separate stage. It uses exactly two internal system phases:
 
-| 子阶段 | 时间 | 内容 | 完成标记 |
+| Subphase | Time | Content | Completion Marker |
 |---|---|---|---|
-| `harbor_placenta_phase` | `1 ≤ t < 2`；受精后第 2 周 | 囊胚定位、胎盘基础与物质运输 | `placenta_phase_complete` |
-| `harbor_germ_layers_phase` | `2 ≤ t < 3`；受精后第 3 周 | 外胚层、中胚层、内胚层形成 | `germ_layers_phase_complete` |
+| `harbor_placenta_phase` | `1 ≤ t < 2`; post-fertilization week 2 | Blastocyst positioning, placental foundation, and material transport | `placenta_phase_complete` |
+| `harbor_germ_layers_phase` | `2 ≤ t < 3`; post-fertilization week 3 | Formation of ectoderm, mesoderm, and endoderm | `germ_layers_phase_complete` |
 
-`StageSummaryPanel` 的段落二总结固定为以下六项，不得增加第七项：
+The Stage Two summary in `StageSummaryPanel` is fixed to the following six items. A seventh item may not be added:
 
-1. 囊胚完成定位。
-2. 胎盘基础“生命港口”建立。
-3. 胎盘物质运输优先级的结算结果。
-4. 外胚层形成。
-5. 中胚层形成。
-6. 内胚层形成。
+1. Blastocyst positioning is complete.
+2. The placental foundation, “Life Harbor,” is established.
+3. The settlement result for placental material-transport priority.
+4. Ectoderm has formed.
+5. Mesoderm has formed.
+6. Endoderm has formed.
 
-绒毛、羊膜、卵黄囊、原条与各胚层后续分化等超出上述六项的内容，只能进入 `ConstructionArchive` 的施工区档案，不进入章节总结，也不在时间轴上新增节点。
+Content beyond these six items—including chorionic villi, amnion, yolk sac, primitive streak, and later differentiation of each germ layer—may appear only in the construction-zone `ConstructionArchive`. It may not enter the stage summary or create an additional timeline node.
 
-## 段落三·循环
+## Stage Three · Circulation
 
-| 配置项 | 锁定值 |
+| Configuration | Locked Value |
 |---|---|
 | `stage_id` | `stage_circulation` |
-| 受精后发育时间 | `3 ≤ t < 8`；受精后第 4–8 周 |
-| 第十八节归属 | 项 4“心脏与早期循环”、项 5“神经系统基础”、项 6“其他器官背景动画” |
-| 建造决策一 | `build_heart_pump`：心脏“中央泵站” |
-| 建造决策二 | `build_neural_network`：神经管及脑、脊髓基础“信息网络” |
-| 运营决策 | `operate_circulation_signal_priority`：早期循环供给与神经信号覆盖的优先级 |
-| 小游戏 | 有；原型 C“信号传递”；`minigame_signal_transfer` |
-| 本段形成的器官或结构 | 心脏、早期血管、神经管、脑基础、脊髓基础；肝、肾、消化道、肢芽、眼与耳原基作为背景结构 |
-| 施工区视觉 | 心脏与神经网络使用可选施工槽位；血管按已选走向自动延伸；其他器官只播放背景形成动画，不提供候选与决策 |
-| 进入下一段落 | `stage_exit_ready(stage_circulation) && (next_stage_id == stage_birth)` |
-| 跨章结转 | 将网络效率、运营压力与废物状态结转到 `stage_birth` |
+| Post-fertilization time | `3 ≤ t < 8`; post-fertilization weeks 4–8 |
+| Section Eighteen assignment | Item 4, “Heart and Early Circulation”; Item 5, “Nervous-System Foundation”; Item 6, “Background Animations for Other Organs” |
+| First building decision | `build_heart_pump`: heart, the “Central Pumping Station” |
+| Second building decision | `build_neural_network`: neural tube and foundations of the brain and spinal cord, the “Information Network” |
+| Operations decision | `operate_circulation_signal_priority`: priority between early-circulation supply and neural-signal coverage |
+| Minigame | Yes; Prototype C, “Signal Transfer”; `minigame_signal_transfer` |
+| Organs or structures formed | Heart, early blood vessels, neural tube, brain foundation, and spinal-cord foundation; liver, kidneys, digestive tract, limb buds, and eye and ear primordia appear as background structures |
+| Construction-zone visual | The heart and neural network use selectable construction slots; vessels extend automatically along the selected route; other organs play background formation animations without candidates or decisions |
+| Enter next stage | `stage_exit_ready(stage_circulation) && (next_stage_id == stage_birth)` |
+| Cross-stage carryover | Carries network efficiency, operating pressure, and waste state into `stage_birth` |
 
-## 段落四·诞生
+## Stage Four · Birth
 
-| 配置项 | 锁定值 |
+| Configuration | Locked Value |
 |---|---|
 | `stage_id` | `stage_birth` |
-| 受精后发育时间 | `8 ≤ t ≤ 38`；受精后第 9–38 周，至出生 |
-| 第十八节归属 | 项 7“肺部出生准备”、项 8“简化全身检查”、项 9“出生与第一次呼吸” |
-| 建造决策一 | `build_lung_exchange`：肺部气体交换区“空气交换设施” |
-| 建造决策二 | `build_pulmonary_interface`：肺循环接口“空气—运输联接” |
-| 运营决策 | `operate_birth_readiness_check`：简化全身检查中的系统支持优先级 |
-| 小游戏 | 无；`minigame_id = null` |
-| 本段形成的器官或结构 | 肺部气体交换区、肺循环接口；既有全身器官系统进入出生前协作状态 |
-| 施工区视觉 | 肺部与肺循环接口使用可选施工槽位；随后切换为全身检查覆盖层、出生转换和第一次呼吸动画 |
-| 进入下一段落 | 无；`next_stage_id = null`，不得调用 `advance_to_next_stage` |
-| 最终完成条件 | `final_completion_ready(stage_birth)`；满足后进入首个可玩版本结束状态，不创建第五段落 |
-| 跨章结转 | 无。第 10 步只关闭本段流程并写入结局状态，不结转网络效率、运营压力、废物或其他章节快照 |
+| Post-fertilization time | `8 ≤ t ≤ 38`; post-fertilization weeks 9–38, through birth |
+| Section Eighteen assignment | Item 7, “Lung Preparation for Birth”; Item 8, “Simplified Whole-Body Check”; Item 9, “Birth and First Breath” |
+| First building decision | `build_lung_exchange`: pulmonary gas-exchange region, the “Air-Exchange Facility” |
+| Second building decision | `build_pulmonary_interface`: pulmonary-circulation interface, the “Air–Transport Link” |
+| Operations decision | `operate_birth_readiness_check`: system-support priority in the simplified whole-body check |
+| Minigame | None; `minigame_id = null` |
+| Organs or structures formed | Pulmonary gas-exchange region and pulmonary-circulation interface; existing whole-body organ systems enter a pre-birth collaboration state |
+| Construction-zone visual | The lungs and pulmonary-circulation interface use selectable construction slots, followed by the whole-body-check overlay, birth transition, and first-breath animation |
+| Enter next stage | None; `next_stage_id = null`, and `advance_to_next_stage` may not be called |
+| Final completion condition | `final_completion_ready(stage_birth)`; satisfying it enters the end state of the first playable version without creating a fifth stage |
+| Cross-stage carryover | None. Step Ten only closes this stage flow and writes the ending state; it does not carry over network efficiency, operating pressure, waste, or any other stage snapshot |
 
-其中：
+The final condition is:
 
 ```text
 final_completion_ready(stage_id) =
@@ -146,35 +146,35 @@ final_completion_ready(stage_id) =
     && (first_breath_complete == true)
 ```
 
-## 四处取用规则
+## Rules for the Four Consumers
 
-| 取用方 | 必须读取的配置 | 禁止自行推导的内容 |
+| Consumer | Configuration It Must Read | Content It May Not Derive Independently |
 |---|---|---|
-| 章节流程状态机 | `stage_id`、固定顺序、`next_stage_id`、决策 ID 集合、小游戏 ID、过章或最终完成条件、跨章结转规则 | 不得增加支线段落，不得把小游戏状态加入过章条件 |
-| 发育时间轴界面 | 显示名、时间轴显示文字、第十八节内容编号；段落二只显示一个节点 | 不得把三胚层显示为第五个章节节点 |
-| 章节总结界面 | 本段形成清单、决策结算结果；段落二只使用锁定的六项 | 不得把施工区档案内容扩充进段落二总结 |
-| 施工区视觉 | 建造对象、候选槽位、背景形成对象、段落二两个子阶段 | 不得让背景器官成为建造或运营决策 |
+| Stage-flow state machine | `stage_id`, fixed order, `next_stage_id`, decision-ID sets, minigame ID, stage-exit or final-completion condition, and cross-stage carryover rule | May not add branch stages or include minigame state in stage-exit conditions |
+| Development Timeline | Display names, timeline labels, and Section Eighteen item numbers; Stage Two displays only one node | May not display the three germ layers as a fifth stage node |
+| Stage Summary | Structures formed and decision-settlement results; Stage Two uses only the locked six items | May not expand construction-archive content into the Stage Two summary |
+| Construction-zone visuals | Building objects, candidate slots, background-formation objects, and the two Stage Two subphases | May not turn background organs into building or operations decisions |
 
-## 验收表一：第十八节九项内容归属
+## Acceptance Table One: Assignment of the Nine Section Eighteen Items
 
-| 项 | 内容 | 唯一段落 | 本项角色 | 对应配置 |
+| Item | Content | Sole Stage | Role in That Stage | Corresponding Configuration |
 |---:|---|---|---|---|
-| 1 | 受精卵与细胞分裂 | 段落一·起源 | 建造决策对象 | `build_cell_cluster` |
-| 2 | 囊胚与胎盘基础 | 段落二·港口前半段 | 建造决策对象 | `build_placenta_port` |
-| 3 | 三胚层形成 | 段落二·港口后半段 | 建造决策对象 | `build_germ_layer_districts` |
-| 4 | 心脏与早期循环 | 段落三·循环 | 建造决策对象 | `build_heart_pump` |
-| 5 | 神经系统基础 | 段落三·循环 | 建造决策对象 | `build_neural_network` |
-| 6 | 其他器官背景动画 | 段落三·循环 | 非决策内容 | `background_organogenesis` |
-| 7 | 肺部出生准备 | 段落四·诞生 | 建造决策对象 | `build_lung_exchange`、`build_pulmonary_interface` |
-| 8 | 简化全身检查 | 段落四·诞生 | 运营决策对象 | `operate_birth_readiness_check` |
-| 9 | 出生与第一次呼吸 | 段落四·诞生 | 非决策内容 | `birth_transition`、`first_breath` |
+| 1 | Zygote and cell division | Stage One · Origin | Building-decision object | `build_cell_cluster` |
+| 2 | Blastocyst and placental foundation | First half of Stage Two · Harbor | Building-decision object | `build_placenta_port` |
+| 3 | Formation of the three germ layers | Second half of Stage Two · Harbor | Building-decision object | `build_germ_layer_districts` |
+| 4 | Heart and early circulation | Stage Three · Circulation | Building-decision object | `build_heart_pump` |
+| 5 | Nervous-system foundation | Stage Three · Circulation | Building-decision object | `build_neural_network` |
+| 6 | Background animations for other organs | Stage Three · Circulation | Non-decision content | `background_organogenesis` |
+| 7 | Lung preparation for birth | Stage Four · Birth | Building-decision object | `build_lung_exchange`, `build_pulmonary_interface` |
+| 8 | Simplified whole-body check | Stage Four · Birth | Operations-decision object | `operate_birth_readiness_check` |
+| 9 | Birth and first breath | Stage Four · Birth | Non-decision content | `birth_transition`, `first_breath` |
 
-## 验收表二：决策与小游戏计数
+## Acceptance Table Two: Decision and Minigame Counts
 
-| 段落 | 建造决策数 | 运营决策数 | 小游戏数 |
+| Stage | Building Decisions | Operations Decisions | Minigames |
 |---|---:|---:|---:|
-| 段落一·起源 | 1 | 1 | 1 |
-| 段落二·港口 | 2 | 1 | 1 |
-| 段落三·循环 | 2 | 1 | 1 |
-| 段落四·诞生 | 2 | 1 | 0 |
-| 合计 | **7** | **4** | **3** |
+| Stage One · Origin | 1 | 1 | 1 |
+| Stage Two · Harbor | 2 | 1 | 1 |
+| Stage Three · Circulation | 2 | 1 | 1 |
+| Stage Four · Birth | 2 | 1 | 0 |
+| Total | **7** | **4** | **3** |
