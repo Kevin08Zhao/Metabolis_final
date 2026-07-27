@@ -1,170 +1,204 @@
-# 事件与信号清单
+# Event and Signal API
 
-本文件是《Metabolis：生命之城·诞生》动画与音频接入游戏的**唯一挂载点**。任何动效、音效、界面反馈都只能挂在本清单定义的事件上；本清单之外的时刻不提供挂载。
+This file is the **single mount point** through which animation and audio attach to
+*Metabolis: City of Life — Birth*. Every animation, sound effect, and UI reaction
+must hang off an event defined here; moments outside this list offer no mount point.
 
-事件全部来自 [`docs/GAME_RULES.md`](GAME_RULES.md) 的六个玩家动作与其立即效果、延迟效果、玩家可见反馈、拒绝反馈四列，以及 [`docs/CONTEXT.md`](CONTEXT.md) 的核心循环十步。规则表中不存在的时刻不得在此定义事件。
+Every event derives from [`docs/GAME_RULES.md`](GAME_RULES.md) — the six player
+actions and their immediate effects, delayed effects, visible feedback, and
+rejection feedback — and from the ten-step core loop in
+[`docs/CONTEXT.md`](CONTEXT.md). Moments that do not exist in the rules table must
+not receive an event here.
 
-## 使用约定
+## Conventions
 
-- **命名**：遵循 `docs/CONTEXT.md` 命名规范中的「事件与信号名」一类，模板为 `{subject}_{past_tense}`，全小写 `snake_case`，描述已发生的事实，长度不超过三个词。
-- **参数**：一律带完整类型标注。`StringName` 用于各类标识符，`int` 用于枚举序号与计数，`float` 用于连续量与秒数，`Dictionary` 用于键集合由下游规格定义的成组数值。
-- **成组数值的键**：`spent`、`deltas`、`totals` 的键为 `docs/CONTEXT.md` 六种资源的内部变量名；`outcome`、`rating_detail`、`carryover`、`snapshot` 的键由对应下游规格定义（见每行备注），本文件不预先假定。
-- **枚举**：`phase` 取 `docs/GAME_RULES.md` 中的 `Phase`；`resolution` 取 `MinigameResolution`／`MinigameResult`；`*_band` 为稳定度三档的档位序号。本文件只引用，不重新定义。
-- **触发频率**列的取值只有四种：`每局一次`、`每段落一次`、`每 tick 至多一次`、`同一 tick 内可重复`。取值为 `同一 tick 内可重复` 的事件，监听方必须能处理一帧内的多次回调，动效需要排队或合并，不得假设一次结算只到达一条。
-- 事件只描述「发生了什么」，不携带界面节点引用，也不规定接收方。动效列与音效列是**建议**，实现方可替换资源名，但不得改变挂载点。
-
----
-
-## 一 · 段落推进与快照写入
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `stage_advanced` | `advance_to_next_stage` 前置条件成立、锁定当前段落输入并把流程切换到 `Phase.STAGE_TRANSITION` 的瞬间 | `from_stage_id: StringName`、`to_stage_id: StringName` | 每段落一次 | `stage_transition_wipe` 转场擦除；`DevelopmentTimeline` 当前节点滑向下一段落 | `sfx_stage_advance` |
-| `stage_snapshot_written` | 同一动作中生成结转快照、快照落盘完成时；先于 `stage_advanced` 的转场结束 | `stage_id: StringName`、`snapshot_slot: int`、`snapshot: Dictionary`（键由 `docs/CARRYOVER_SPEC.md` 表 F2 的快照归属定义） | 每段落一次 | `StageSummaryPanel` 结转项目逐行落位 | `sfx_snapshot_write`（轻，不得盖过转场） |
-| `stage_loaded` | 转场结束、`next_stage_id` 对应段落加载完毕、可玩区恢复交互时 | `stage_id: StringName`、`stage_index: int` | 每段落一次 | `stage_intro_fade` 城市图淡入 | `bgm_stage_theme` 切轨 |
-| `phase_changed` | `Phase` 发生任何一次变化时；`docs/GAME_RULES.md` 全部六个动作的前置条件都以 `phase` 为首项 | `previous_phase: int`、`current_phase: int` | 每 tick 至多一次 | 无独立动效；用于关闭上一阶段面板、打开下一阶段面板 | 无 |
-
-## 二 · 建造候选呈现、选定、建造开始、建造完成
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `build_options_presented` | 进入 `Phase.BUILD_DECISION`、`available_build_option_ids` 与 `available_build_slot_ids` 填充完毕时 | `decision_id: StringName`、`option_ids: Array[StringName]`、`slot_ids: Array[StringName]` | 每段落一次（段落一为教学章，全局共七次） | `build_card_deal` 候选卡依次展开；`BuildSlotOverlay` 候选槽位呼吸高亮 | `sfx_build_options_open` |
-| `build_decision_confirmed` | `confirm_build_decision` 前置条件成立、扣除资源并锁定选项与槽位、写入 `confirmed_build_decision_ids` 的瞬间。确认后不可回滚 | `decision_id: StringName`、`option_id: StringName`、`slot_id: StringName`、`spent: Dictionary` | 每段落一次（全局七次） | `BuildSlotOverlay` 仅保留已选槽位并锁定确认按钮；`ResourceBar` 三项资源读数滚动扣减 | `sfx_build_confirm` |
-| `organ_construction_started` | 器官蓝图生成、进入建造中状态时；紧随 `build_decision_confirmed` | `organ_id: StringName`、`slot_id: StringName`、`option_id: StringName` | 每段落一次（全局七次） | `organ_blueprint_construct` 蓝图逐格填充 | `sfx_build_start`（可与 `sfx_build_confirm` 合并为一次播放） |
-| `organ_built` | `Phase.BUILD_COMPLETION` 中该器官由建造中转为已完成、运输网络按所选走向延伸完毕时 | `organ_id: StringName`、`slot_id: StringName`、`option_id: StringName` | 同一 tick 内可重复（同段落两个建造决策可能在同一结算 tick 完成） | `organ_build_complete` 器官定版；`transport_route_extend` 运输道路延伸 | `sfx_build_complete` |
-
-## 三 · 运营决策提交与资源优先级变更
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `resource_priority_changed` | 玩家在 `OperationPanel` 中改动优先级分配、`allocation_total` 重算完成时。这是同一动作事务内的参数变更，不是独立玩家动作 | `decision_id: StringName`、`allocation: Dictionary`、`allocation_total: float` | 同一 tick 内可重复（连续拖动会连发） | `AllocationMeter` 指针跟随；缺口或溢出时刻度变红 | `sfx_allocation_tick`（需节流，同一 tick 只播一次） |
-| `operation_decision_confirmed` | `confirm_operation_decision` 前置条件成立、扣除资源并锁定运营方案、写入 `confirmed_operation_decision_ids` 的瞬间。确认后不可回滚 | `decision_id: StringName`、`operation_id: StringName`、`spent: Dictionary` | 每段落一次（全局四次） | `operation_flow_pulse` 优先级控件锁定并沿运输网络推出一次脉冲；`CityStatusPanel` 由预测标记切为待结算标记 | `sfx_operation_confirm` |
-| `transport_network_intervened` | `intervene_transport_network` 前置条件成立、备用走向生效并完成一次路由重算、`transport_intervention_used` 置为 `true` 的瞬间 | `edge_id: StringName`、`plan_id: StringName`、`capacity: float` | 每段落一次（每段落至多一次干预） | `transport_route_reflow` 所选运输边重绘并更新容量徽标；`ResourceBar` 发育信号读数扣减 | `sfx_transport_intervene` |
-| `operation_result_settled` | `Phase.SYSTEM_ACTIVATION` 中运输压力、废物、稳定度与网络效率按运营结果完成结算时 | `decision_id: StringName`、`outcome: Dictionary`（键由 `docs/OPERATION_SPEC.md` 定义） | 每段落一次 | `operation_result_reveal` 城市图上逐项揭示变化 | `sfx_operation_settle` |
-| `resources_settled` | `Phase.RESOURCE_SETTLEMENT` 结束、本段落可用资源（含小游戏奖励，跳过时不含）写入资源池时 | `stage_id: StringName`、`deltas: Dictionary`、`totals: Dictionary` | 每段落一次 | `resource_counter_roll` `ResourceBar` 六项读数滚动到新值 | `sfx_resource_settle` |
-
-## 四 · 三类瓶颈的出现与解除
-
-三类瓶颈固定为运输压力、废物累积、信号覆盖不足，与 `docs/CONTEXT.md` In scope 一节一致，不得增删。每类各有一个出现事件与一个解除事件。
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `transport_pressure_appeared` | 某条运输边的运输压力越过检测条件、该边首次被判定为瓶颈时 | `edge_id: StringName`、`severity: float` | 同一 tick 内可重复（多条边可在同一 tick 同时越线） | `TransportOverlay` 该边转为拥堵纹理并持续脉动；`TransportPressureMeter` 标出该边 | `sfx_bottleneck_transport`（同 tick 多条只播一次） |
-| `transport_pressure_cleared` | 该边满足恢复判定、退出瓶颈状态时 | `edge_id: StringName` | 同一 tick 内可重复 | 拥堵纹理淡出，该边恢复常态流动 | `sfx_bottleneck_cleared` |
-| `waste_buildup_appeared` | 某器官或分区的废物累积越过检测条件、首次被判定为瓶颈时 | `organ_id: StringName`、`severity: float` | 同一 tick 内可重复 | 该区域出现废物堆积图层并加深；地图标记为不依赖颜色的堆积图形 | `sfx_bottleneck_waste`（同 tick 多处只播一次） |
-| `waste_buildup_cleared` | 该处满足恢复判定、废物回落到检测条件之下时 | `organ_id: StringName` | 同一 tick 内可重复 | 废物图层逐格消退 | `sfx_bottleneck_cleared` |
-| `signal_gap_appeared` | 某器官或分区的信号覆盖不足越过检测条件、首次被判定为瓶颈时 | `organ_id: StringName`、`severity: float` | 同一 tick 内可重复 | 该区域信号纹理转为断续虚线并闪烁；标记为不依赖颜色的断线图形 | `sfx_bottleneck_signal`（同 tick 多处只播一次） |
-| `signal_gap_cleared` | 该处满足恢复判定、覆盖恢复时 | `organ_id: StringName` | 同一 tick 内可重复 | 断续虚线接合为连续线 | `sfx_bottleneck_cleared` |
-
-## 五 · 稳定度跨档、废物溢出、可投入资源不足
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `stability_band_changed` | 稳定度跨过界面三档中的任一分界并越过滞回幅度时。仅在档位真正改变时触发，档内变化不触发 | `previous_band: int`、`current_band: int`、`stability: float` | 每 tick 至多一次 | `ResourceBar` 稳定度控件整体换档，档位图形与文字同时变化 | 升档 `sfx_stability_up`；降档 `sfx_stability_down` |
-| `waste_overflowed` | 废物达到上限、开始施加稳定度惩罚的瞬间 | `waste: float`、`stability_penalty: float` | 每 tick 至多一次 | `waste_overflow_spill` 废物读数满格并向城市图外溢出一次；稳定度控件同步下压 | `sfx_waste_overflow` |
-| `resource_shortage_raised` | 营养能量、细胞材料、发育信号三种可投入资源中的某一种跌破不足提示线时 | `resource_id: StringName`、`amount: float`、`threshold: float` | 同一 tick 内可重复（三种资源可在同一 tick 同时跌破） | `ResourceBar` 该项目红色闪烁并保持低量标记 | `sfx_resource_low`（同 tick 多项只播一次） |
-| `resource_shortage_cleared` | 该资源回升到不足提示线之上时 | `resource_id: StringName`、`amount: float` | 同一 tick 内可重复 | 该项目停止闪烁，低量标记移除 | 无 |
-
-## 六 · 小游戏进入与退出、星级结算
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `minigame_entered` | `resolve_optional_minigame` 事务开始、小游戏场景取得输入焦点时 | `minigame_id: StringName`、`stage_id: StringName`、`time_limit_sec: float` | 每段落一次（全局三次，段落四无） | `minigame_panel_expand` 任务面板展开为全屏 | `sfx_minigame_enter`；主城 BGM 压低 |
-| `minigame_exited` | `minigame_resolution` 由 `PENDING` 写为 `SKIPPED` 或 `COMPLETED`、本段任务入口锁定时。跳过与完成走同一事件，由 `resolution` 区分 | `minigame_id: StringName`、`resolution: int`、`elapsed_sec: float` | 每段落一次（全局三次） | 完成 `minigame_reward_fly` 奖励飞向 `ResourceBar`；跳过 `minigame_panel_collapse` 面板收起。`TaskPanel` 状态改为「已完成」或「已跳过」 | 完成 `sfx_minigame_complete`；跳过 `sfx_minigame_skip`。主城 BGM 恢复 |
-| `minigame_rated` | 完成路径下评价结算完毕、星级确定时。跳过路径不触发 | `minigame_id: StringName`、`stars: int`、`rating_detail: Dictionary`（键由 `docs/MINIGAME_SPEC.md` 的评价依据定义） | 每段落至多一次（全局至多三次） | `star_stamp` 星级逐颗盖章 | `sfx_star_stamp` 按星数逐颗升调 |
-
-## 七 · 器官档案解锁、系统协作观察、跨章结转应用
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `system_observation_started` | `Phase.SYSTEM_ACTIVATION` 中器官激活、与既有系统的一次协作演示开始时 | `organ_id: StringName`、`observation_id: StringName` | 每段落一次 | `organ_activate_glow` 器官点亮；协作路径沿运输网络逐段推进 | `sfx_organ_activate`；协作过程铺环境层 |
-| `system_observation_ended` | 该次协作演示播放完毕、`system_observation_complete` 置为 `true` 时 | `organ_id: StringName`、`observation_id: StringName` | 每段落一次 | 协作路径收束，城市图恢复常态循环 | 环境层淡出 |
-| `knowledge_entry_unlocked` | 对应器官档案与时间轴条目解锁、写入 `unlocked_knowledge_entry_ids` 时 | `entry_id: StringName`、`organ_id: StringName`、`stage_id: StringName` | 同一 tick 内可重复（同一段落可一次解锁多条） | 时间轴对应档案标记出现「新」角标并弹一下 | `sfx_knowledge_unlock`（同 tick 多条只播一次） |
-| `knowledge_entry_opened` | `view_knowledge_archive` 前置条件成立、档案详情打开时。`first_read` 为 `true` 表示本次把 `is_read` 由假置真 | `entry_id: StringName`、`first_read: bool` | 同一 tick 内可重复 | `knowledge_card_unfold` `KnowledgeArchivePanel` 展开到该条目；「新」角标切为「已读」 | `sfx_knowledge_open` |
-| `carryover_applied` | 转场结束后，网络效率、运营压力与废物累积按结转规则写入新段落起始状态时；紧随 `stage_loaded` | `from_stage_id: StringName`、`to_stage_id: StringName`、`carryover: Dictionary`（键由 `docs/CARRYOVER_SPEC.md` 表 F1 定义） | 每段落一次（段落四不产生结转，因此全局三次） | `StageSummaryPanel` 的三行结转摘要逐行推入新段落起始读数 | `sfx_carryover_apply` |
-
-## 八 · 动作拒绝
-
-`docs/GAME_RULES.md` 中六个动作各有一列拒绝反馈，全部以「界面元素抖动或闪烁 ＋ `sfx_action_denied`」为共同形态，区别只在于聚焦的界面元素与显示的原因文案。因此拒绝合并为一个事件，由参数区分，不为六个动作各定义一个。
-
-| 事件名 | 触发时机 | 携带参数及类型 | 触发频率 | 建议的动效反应 | 建议的音效反应 |
-|---|---|---|---|---|---|
-| `action_rejected` | 六个动作中任一动作的前置条件求值为 `false`、游戏状态不发生任何改变时 | `action_id: StringName`（六个内部动作 ID 之一）、`reason_code: StringName`（对应规则表拒绝反馈中的具体原因）、`focus_element: StringName`（应当抖动或闪烁的界面元素） | 同一 tick 内可重复（连点会连发） | 由 `focus_element` 决定：卡片红框抖动、槽位红色叉号、资源项目红色闪烁、面板边框闪烁等 | `sfx_action_denied`（需节流，同一 tick 只播一次） |
+- **Naming**: follows the "event and signal names" category of the naming
+  conventions in `docs/CONTEXT.md`. Template is `{subject}_{past_tense}`, all
+  lowercase `snake_case`, stating a fact that already happened, at most three
+  words long.
+- **Parameters**: always fully type-annotated. `StringName` for identifiers, `int`
+  for enum ordinals and counts, `float` for continuous values and durations in
+  seconds, `Dictionary` for grouped values whose key set is defined by a
+  downstream spec.
+- **Keys of grouped values**: keys of `spent`, `deltas`, and `totals` are the
+  internal variable names of the six resources in `docs/CONTEXT.md`. Keys of
+  `outcome`, `rating_detail`, `carryover`, and `snapshot` are defined by the
+  corresponding downstream spec (noted per row); this file does not presume them.
+- **Enums**: `phase` is the `Phase` enum from `docs/GAME_RULES.md`; `resolution`
+  comes from `MinigameResolution` / `MinigameResult`; `*_band` is the ordinal of
+  the three stability bands. This file only references them, it does not redefine
+  them.
+- The **Frequency** column takes exactly four values: `once per run`,
+  `once per stage`, `at most once per tick`, `repeatable within one tick`. Any
+  event marked `repeatable within one tick` must be handled by listeners that can
+  take several callbacks in a single frame — animations have to queue or coalesce,
+  and no listener may assume a settlement delivers only one.
+- Events describe only what happened. They carry no UI node references and do not
+  prescribe a receiver. The animation and audio columns are **suggestions**:
+  implementers may swap the asset names, but must not move the mount point.
 
 ---
 
-## 已废除、不得保留的旧事件
+## 1 · Stage advance and snapshot write
 
-以下四类事件属于旧版维护玩法，本清单不定义，实现方也不得自行补回：
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `stage_advanced` | The instant `advance_to_next_stage` passes its preconditions, locks the stage inputs, and switches the flow to `Phase.STAGE_TRANSITION` | `from_stage_id: StringName`, `to_stage_id: StringName` | once per stage | `stage_transition_wipe`; the current node of `DevelopmentTimeline` slides to the next stage | `sfx_stage_advance` |
+| `stage_snapshot_written` | Within the same action, once the carryover snapshot has been generated and persisted; fires before the transition of `stage_advanced` completes | `stage_id: StringName`, `snapshot_slot: int`, `snapshot: Dictionary` (keys defined by the snapshot ownership rules in table F2 of `docs/CARRYOVER_SPEC.md`) | once per stage | Carryover rows settle into place in `StageSummaryPanel` | `sfx_snapshot_write` (light; must not cover the transition) |
+| `stage_loaded` | Transition finished, the stage behind `next_stage_id` is fully loaded, and the playable area accepts input again | `stage_id: StringName`, `stage_index: int` | once per stage | `stage_intro_fade` fades the city map in | `bgm_stage_theme` track switch |
+| `phase_changed` | Any time `Phase` changes. Preconditions of all six actions in `docs/GAME_RULES.md` lead with `phase` | `previous_phase: int`, `current_phase: int` | at most once per tick | No animation of its own; used to close the previous phase panel and open the next | None |
 
-| 旧事件类别 | 处理 |
+## 2 · Build options presented, selected, construction started, construction complete
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `build_options_presented` | `Phase.BUILD_DECISION` is entered and `available_build_option_ids` and `available_build_slot_ids` have been populated | `decision_id: StringName`, `option_ids: Array[StringName]`, `slot_ids: Array[StringName]` | once per stage (stage one is the tutorial; seven times across the run) | `build_card_deal` unfolds the option cards in sequence; `BuildSlotOverlay` breathes on candidate slots | `sfx_build_options_open` |
+| `build_decision_confirmed` | The instant `confirm_build_decision` passes its preconditions, deducts resources, locks option and slot, and writes into `confirmed_build_decision_ids`. Irreversible once confirmed | `decision_id: StringName`, `option_id: StringName`, `slot_id: StringName`, `spent: Dictionary` | once per stage (seven times across the run) | `BuildSlotOverlay` keeps only the chosen slot and locks the confirm button; the three resource readouts in `ResourceBar` roll down | `sfx_build_confirm` |
+| `organ_construction_started` | The organ blueprint is generated and enters the under-construction state; immediately follows `build_decision_confirmed` | `organ_id: StringName`, `slot_id: StringName`, `option_id: StringName` | once per stage (seven times across the run) | `organ_blueprint_construct` fills the blueprint cell by cell | `sfx_build_start` (may be merged into a single playback with `sfx_build_confirm`) |
+| `organ_built` | During `Phase.BUILD_COMPLETION`, the organ turns from under-construction to complete and the transport network has finished extending along the chosen routing | `organ_id: StringName`, `slot_id: StringName`, `option_id: StringName` | repeatable within one tick (both build decisions of a stage may complete in the same settlement tick) | `organ_build_complete` locks in the organ art; `transport_route_extend` extends the transport roads | `sfx_build_complete` |
+
+## 3 · Operation decisions and resource priority changes
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `resource_priority_changed` | The player alters the priority allocation in `OperationPanel` and `allocation_total` has been recomputed. This is a parameter change inside one action transaction, not a separate player action | `decision_id: StringName`, `allocation: Dictionary`, `allocation_total: float` | repeatable within one tick (continuous dragging fires repeatedly) | The `AllocationMeter` needle tracks the value; the scale turns red on shortfall or overflow | `sfx_allocation_tick` (must be throttled to one playback per tick) |
+| `operation_decision_confirmed` | The instant `confirm_operation_decision` passes its preconditions, deducts resources, locks the operation plan, and writes into `confirmed_operation_decision_ids`. Irreversible once confirmed | `decision_id: StringName`, `operation_id: StringName`, `spent: Dictionary` | once per stage (four times across the run) | `operation_flow_pulse` locks the priority controls and pushes one pulse along the transport network; `CityStatusPanel` switches from forecast marker to pending-settlement marker | `sfx_operation_confirm` |
+| `transport_network_intervened` | The instant `intervene_transport_network` passes its preconditions, the alternate routing takes effect, one route recomputation completes, and `transport_intervention_used` is set to `true` | `edge_id: StringName`, `plan_id: StringName`, `capacity: float` | once per stage (at most one intervention per stage) | `transport_route_reflow` redraws the chosen edge and updates its capacity badge; the development signal readout in `ResourceBar` drops | `sfx_transport_intervene` |
+| `operation_result_settled` | During `Phase.SYSTEM_ACTIVATION`, transport pressure, waste, stability, and network efficiency have all been settled against the operation result | `decision_id: StringName`, `outcome: Dictionary` (keys defined by `docs/OPERATION_SPEC.md`) | once per stage | `operation_result_reveal` reveals each change on the city map in turn | `sfx_operation_settle` |
+| `resources_settled` | `Phase.RESOURCE_SETTLEMENT` ends and the stage's available resources — including the minigame reward, excluded when skipped — are written into the resource pool | `stage_id: StringName`, `deltas: Dictionary`, `totals: Dictionary` | once per stage | `resource_counter_roll` rolls all six `ResourceBar` readouts to their new values | `sfx_resource_settle` |
+
+## 4 · The three bottleneck types appearing and clearing
+
+The three bottleneck types are fixed as transport pressure, waste buildup, and
+signal coverage gap, matching the In scope section of `docs/CONTEXT.md`. Neither
+additions nor removals are allowed. Each type has one appearance event and one
+clearing event.
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `transport_pressure_appeared` | Transport pressure on a transport edge crosses the detection condition and the edge is judged a bottleneck for the first time | `edge_id: StringName`, `severity: float` | repeatable within one tick (several edges may cross in the same tick) | The edge in `TransportOverlay` switches to a congestion texture and keeps pulsing; `TransportPressureMeter` marks it | `sfx_bottleneck_transport` (only one playback even if several edges cross in a tick) |
+| `transport_pressure_cleared` | The edge meets the recovery condition and leaves the bottleneck state | `edge_id: StringName` | repeatable within one tick | The congestion texture fades out and the edge returns to normal flow | `sfx_bottleneck_cleared` |
+| `waste_buildup_appeared` | Waste buildup on an organ or district crosses the detection condition and is judged a bottleneck for the first time | `organ_id: StringName`, `severity: float` | repeatable within one tick | A waste layer appears over the area and darkens; the map marker is a shape, not a colour, so it reads without colour | `sfx_bottleneck_waste` (only one playback per tick regardless of count) |
+| `waste_buildup_cleared` | The area meets the recovery condition and waste falls back below the detection threshold | `organ_id: StringName` | repeatable within one tick | The waste layer recedes cell by cell | `sfx_bottleneck_cleared` |
+| `signal_gap_appeared` | Signal coverage on an organ or district crosses the detection condition and is judged a bottleneck for the first time | `organ_id: StringName`, `severity: float` | repeatable within one tick | The signal texture of the area turns into a blinking broken dashed line; the marker is a shape, not a colour | `sfx_bottleneck_signal` (only one playback per tick regardless of count) |
+| `signal_gap_cleared` | The area meets the recovery condition and coverage is restored | `organ_id: StringName` | repeatable within one tick | The dashed line rejoins into a continuous line | `sfx_bottleneck_cleared` |
+
+## 5 · Stability band change, waste overflow, investable resource shortage
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `stability_band_changed` | Stability crosses one of the two boundaries of the three display bands and exceeds the hysteresis margin. Fires only when the band truly changes; movement inside a band does not fire | `previous_band: int`, `current_band: int`, `stability: float` | at most once per tick | The stability widget in `ResourceBar` changes band as a whole, shape and label together | `sfx_stability_up` on rise, `sfx_stability_down` on fall |
+| `waste_overflowed` | The instant waste reaches its cap and the stability penalty starts applying | `waste: float`, `stability_penalty: float` | at most once per tick | `waste_overflow_spill` maxes the waste readout and spills once past the city map edge; the stability widget presses down in sync | `sfx_waste_overflow` |
+| `resource_shortage_raised` | One of the three investable resources — nutrient energy, cell material, development signal — falls below its shortage warning line | `resource_id: StringName`, `amount: float`, `threshold: float` | repeatable within one tick (all three may fall below in the same tick) | The item in `ResourceBar` flashes red and keeps a low-level marker | `sfx_resource_low` (only one playback per tick regardless of count) |
+| `resource_shortage_cleared` | The resource climbs back above its shortage warning line | `resource_id: StringName`, `amount: float` | repeatable within one tick | The item stops flashing and the low-level marker is removed | None |
+
+## 6 · Minigame entry, exit, and star rating
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `minigame_entered` | The `resolve_optional_minigame` transaction begins and the minigame scene takes input focus | `minigame_id: StringName`, `stage_id: StringName`, `time_limit_sec: float` | once per stage (three times across the run; stage four has none) | `minigame_panel_expand` expands the task panel to full screen | `sfx_minigame_enter`; the city BGM ducks |
+| `minigame_exited` | `minigame_resolution` moves from `PENDING` to `SKIPPED` or `COMPLETED` and the stage's task entry point locks. Skip and completion share one event, distinguished by `resolution` | `minigame_id: StringName`, `resolution: int`, `elapsed_sec: float` | once per stage (three times across the run) | On completion `minigame_reward_fly` sends the reward to `ResourceBar`; on skip `minigame_panel_collapse` folds the panel. `TaskPanel` switches to "completed" or "skipped" | `sfx_minigame_complete` on completion, `sfx_minigame_skip` on skip; the city BGM returns |
+| `minigame_rated` | On the completion path only, once the rating has been settled and the star count is known. The skip path does not fire | `minigame_id: StringName`, `stars: int`, `rating_detail: Dictionary` (keys defined by the rating criteria in `docs/MINIGAME_SPEC.md`) | at most once per stage (at most three times across the run) | `star_stamp` stamps the stars one at a time | `sfx_star_stamp`, pitched up per star |
+
+## 7 · Knowledge unlock, system observation, carryover application
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `system_observation_started` | During `Phase.SYSTEM_ACTIVATION`, the organ activates and the demonstration of one collaboration with the existing systems begins | `organ_id: StringName`, `observation_id: StringName` | once per stage | `organ_activate_glow` lights the organ; the collaboration path advances segment by segment along the transport network | `sfx_organ_activate`; an ambient layer under the collaboration |
+| `system_observation_ended` | The collaboration demonstration finishes playing and `system_observation_complete` is set to `true` | `organ_id: StringName`, `observation_id: StringName` | once per stage | The collaboration path converges and the city map returns to its normal loop | The ambient layer fades out |
+| `knowledge_entry_unlocked` | The matching organ archive entry and timeline entry unlock and are written into `unlocked_knowledge_entry_ids` | `entry_id: StringName`, `organ_id: StringName`, `stage_id: StringName` | repeatable within one tick (one stage may unlock several entries at once) | A "new" badge appears on the timeline archive marker and pops once | `sfx_knowledge_unlock` (only one playback per tick regardless of count) |
+| `knowledge_entry_opened` | `view_knowledge_archive` passes its preconditions and the archive detail opens. `first_read` is `true` when this call flips `is_read` from false to true | `entry_id: StringName`, `first_read: bool` | repeatable within one tick | `knowledge_card_unfold` expands `KnowledgeArchivePanel` to the entry; the "new" badge switches to "read" | `sfx_knowledge_open` |
+| `carryover_applied` | After the transition, once network efficiency, operating pressure, and waste buildup have been written into the next stage's starting state; immediately follows `stage_loaded` | `from_stage_id: StringName`, `to_stage_id: StringName`, `carryover: Dictionary` (keys defined by table F1 of `docs/CARRYOVER_SPEC.md`) | once per stage (stage four produces no carryover, so three times across the run) | The three carryover summary lines of `StageSummaryPanel` push into the new stage's starting readouts | `sfx_carryover_apply` |
+
+## 8 · Action rejection
+
+Each of the six actions in `docs/GAME_RULES.md` has a rejection feedback column,
+and all of them take the same shape: a UI element shakes or flashes plus
+`sfx_action_denied`. They differ only in which element takes focus and which reason
+string is shown. Rejection is therefore collapsed into a single event parameterised
+by those differences, rather than one event per action.
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `action_rejected` | The precondition of any of the six actions evaluates to `false` and no game state changes | `action_id: StringName` (one of the six internal action IDs), `reason_code: StringName` (the specific reason from the rejection column of the rules table), `focus_element: StringName` (the UI element that should shake or flash) | repeatable within one tick (rapid clicking fires repeatedly) | Determined by `focus_element`: red card border shake, red cross on a slot, red flash on a resource item, panel border flash, and so on | `sfx_action_denied` (must be throttled to one playback per tick) |
+
+---
+
+## Retired events that must not be reintroduced
+
+The four event families below belong to the retired maintenance gameplay. This list
+does not define them, and implementers must not add them back.
+
+| Retired event family | Disposition |
 |---|---|
-| 路线手动连接 | 废除。运输网络按建造决策所选走向**自动延伸**，玩家不手动连线；仅保留每段落至多一次的 `transport_network_intervened` 干预。 |
-| 供给测试 | 废除。供给结果由 `resources_settled` 与 `operation_result_settled` 直接呈现，没有独立的测试动作。 |
-| 维护选择 | 废除。旧维护阶段（T-23）已作废，其位置由运营决策取代，对应事件为 `operation_decision_confirmed`。 |
-| 维护延迟效果 | 废除。延迟后果统一由 `operation_result_settled` 与 `carryover_applied` 承载。 |
+| Manual route connection | Retired. The transport network **extends automatically** along the routing chosen in the build decision; the player does not draw lines. Only `transport_network_intervened`, at most once per stage, remains. |
+| Supply testing | Retired. Supply outcomes are presented directly by `resources_settled` and `operation_result_settled`; there is no separate test action. |
+| Maintenance choice | Retired. The old maintenance phase (T-23) is void and its slot is taken by the operation decision, whose event is `operation_decision_confirmed`. |
+| Maintenance delayed effect | Retired. Delayed consequences are carried entirely by `operation_result_settled` and `carryover_applied`. |
 
-## 规则表反馈时刻与事件的对照
+## Cross-check: rules-table feedback moments against events
 
-用于验收：`docs/GAME_RULES.md`「玩家可见反馈」与「拒绝反馈」两列中的每个时刻都能在本清单中找到挂载点。
+Used for acceptance: every moment in the "visible feedback" and "rejection
+feedback" columns of `docs/GAME_RULES.md` has a mount point in this list.
 
-| 规则表动作 | 反馈时刻 | 对应事件 |
+| Rules-table action | Feedback moment | Event |
 |---|---|---|
-| `resolve_optional_minigame` | 进入任务 | `minigame_entered` |
-| `resolve_optional_minigame` | `TaskPanel` 改为已完成／已跳过，`minigame_reward_fly`／`minigame_panel_collapse` | `minigame_exited` |
-| `resolve_optional_minigame` | 星级结算 | `minigame_rated` |
-| `resolve_optional_minigame` | 奖励在资源结算阶段加入 | `resources_settled` |
-| `resolve_optional_minigame` | `TaskPanel` 抖动 ＋ `sfx_action_denied` | `action_rejected` |
-| `confirm_build_decision` | 候选与槽位呈现 | `build_options_presented` |
-| `confirm_build_decision` | `organ_blueprint_construct` ＋ `sfx_build_confirm` | `build_decision_confirmed`、`organ_construction_started` |
-| `confirm_build_decision` | `organ_build_complete` ＋ `sfx_build_complete` | `organ_built` |
-| `confirm_build_decision` | 红框抖动／红色叉号／资源闪烁 | `action_rejected` |
-| `confirm_operation_decision` | 优先级控件变动 | `resource_priority_changed` |
-| `confirm_operation_decision` | `operation_flow_pulse` ＋ `sfx_operation_confirm` | `operation_decision_confirmed` |
-| `confirm_operation_decision` | `operation_result_reveal` ＋ `sfx_operation_settle` | `operation_result_settled` |
-| `confirm_operation_decision` | `AllocationMeter` 缺口或溢出、资源闪烁 | `action_rejected` |
-| `intervene_transport_network` | `transport_route_reflow` ＋ `sfx_transport_intervene` | `transport_network_intervened` |
-| `intervene_transport_network` | 断线标记、解锁刻度、禁止图标 | `action_rejected` |
-| `view_knowledge_archive` | 档案解锁、时间轴出现新条目 | `knowledge_entry_unlocked` |
-| `view_knowledge_archive` | `knowledge_card_unfold` ＋ `sfx_knowledge_open`，标记切为已读 | `knowledge_entry_opened` |
-| `view_knowledge_archive` | 锁图标抖动 | `action_rejected` |
-| `advance_to_next_stage` | 系统协作观察 | `system_observation_started`、`system_observation_ended` |
-| `advance_to_next_stage` | 结转快照生成 | `stage_snapshot_written` |
-| `advance_to_next_stage` | `stage_transition_wipe` ＋ `sfx_stage_advance`，时间轴节点移动 | `stage_advanced` |
-| `advance_to_next_stage` | 下一段落加载、时间轴切换到下一节点 | `stage_loaded` |
-| `advance_to_next_stage` | 结转项目写入新段落 | `carryover_applied` |
-| `advance_to_next_stage` | 未完成步骤标红、推进按钮抖动 | `action_rejected` |
-| 全部动作 | 阶段切换导致的面板开合 | `phase_changed` |
-| 城市自身运转 | 稳定度换档、废物溢出、资源不足 | `stability_band_changed`、`waste_overflowed`、`resource_shortage_raised`／`_cleared` |
-| 城市自身运转 | 三类瓶颈的出现与解除 | 第四节六个事件 |
+| `resolve_optional_minigame` | Entering the task | `minigame_entered` |
+| `resolve_optional_minigame` | `TaskPanel` switches to completed/skipped, `minigame_reward_fly` / `minigame_panel_collapse` | `minigame_exited` |
+| `resolve_optional_minigame` | Star rating settlement | `minigame_rated` |
+| `resolve_optional_minigame` | Reward added during resource settlement | `resources_settled` |
+| `resolve_optional_minigame` | `TaskPanel` shake plus `sfx_action_denied` | `action_rejected` |
+| `confirm_build_decision` | Options and slots presented | `build_options_presented` |
+| `confirm_build_decision` | `organ_blueprint_construct` plus `sfx_build_confirm` | `build_decision_confirmed`, `organ_construction_started` |
+| `confirm_build_decision` | `organ_build_complete` plus `sfx_build_complete` | `organ_built` |
+| `confirm_build_decision` | Red border shake / red cross / resource flash | `action_rejected` |
+| `confirm_operation_decision` | Priority controls change | `resource_priority_changed` |
+| `confirm_operation_decision` | `operation_flow_pulse` plus `sfx_operation_confirm` | `operation_decision_confirmed` |
+| `confirm_operation_decision` | `operation_result_reveal` plus `sfx_operation_settle` | `operation_result_settled` |
+| `confirm_operation_decision` | `AllocationMeter` shortfall or overflow, resource flash | `action_rejected` |
+| `intervene_transport_network` | `transport_route_reflow` plus `sfx_transport_intervene` | `transport_network_intervened` |
+| `intervene_transport_network` | Broken-line marker, unlock tick mark, forbidden icon | `action_rejected` |
+| `view_knowledge_archive` | Archive unlock, new timeline entry | `knowledge_entry_unlocked` |
+| `view_knowledge_archive` | `knowledge_card_unfold` plus `sfx_knowledge_open`, badge switches to read | `knowledge_entry_opened` |
+| `view_knowledge_archive` | Lock icon shake | `action_rejected` |
+| `advance_to_next_stage` | System collaboration observation | `system_observation_started`, `system_observation_ended` |
+| `advance_to_next_stage` | Carryover snapshot generated | `stage_snapshot_written` |
+| `advance_to_next_stage` | `stage_transition_wipe` plus `sfx_stage_advance`, timeline node moves | `stage_advanced` |
+| `advance_to_next_stage` | Next stage loads, timeline switches to the next node | `stage_loaded` |
+| `advance_to_next_stage` | Carryover written into the new stage | `carryover_applied` |
+| `advance_to_next_stage` | Incomplete steps marked red, advance button shakes | `action_rejected` |
+| All actions | Panel open/close driven by phase changes | `phase_changed` |
+| City self-operation | Stability band change, waste overflow, resource shortage | `stability_band_changed`, `waste_overflowed`, `resource_shortage_raised` / `_cleared` |
+| City self-operation | The three bottleneck types appearing and clearing | The six events in section 4 |
 
 ---
 
-## GDScript signal 声明
+## GDScript signal declarations
 
-以下三十二行可直接粘进 `src/autoload/event_bus.gd`。参数类型完整，无省略。
+The thirty-two lines below can be pasted straight into
+`src/autoload/event_bus.gd`. Parameter types are complete, with nothing elided.
 
 ```gdscript
-# 一 · 段落推进与快照写入
+# 1 · Stage advance and snapshot write
 signal stage_advanced(from_stage_id: StringName, to_stage_id: StringName)
 signal stage_snapshot_written(stage_id: StringName, snapshot_slot: int, snapshot: Dictionary)
 signal stage_loaded(stage_id: StringName, stage_index: int)
 signal phase_changed(previous_phase: int, current_phase: int)
 
-# 二 · 建造候选呈现、选定、建造开始、建造完成
+# 2 · Build options presented, selected, construction started, construction complete
 signal build_options_presented(decision_id: StringName, option_ids: Array[StringName], slot_ids: Array[StringName])
 signal build_decision_confirmed(decision_id: StringName, option_id: StringName, slot_id: StringName, spent: Dictionary)
 signal organ_construction_started(organ_id: StringName, slot_id: StringName, option_id: StringName)
 signal organ_built(organ_id: StringName, slot_id: StringName, option_id: StringName)
 
-# 三 · 运营决策提交与资源优先级变更
+# 3 · Operation decisions and resource priority changes
 signal resource_priority_changed(decision_id: StringName, allocation: Dictionary, allocation_total: float)
 signal operation_decision_confirmed(decision_id: StringName, operation_id: StringName, spent: Dictionary)
 signal transport_network_intervened(edge_id: StringName, plan_id: StringName, capacity: float)
 signal operation_result_settled(decision_id: StringName, outcome: Dictionary)
 signal resources_settled(stage_id: StringName, deltas: Dictionary, totals: Dictionary)
 
-# 四 · 三类瓶颈的出现与解除
+# 4 · The three bottleneck types appearing and clearing
 signal transport_pressure_appeared(edge_id: StringName, severity: float)
 signal transport_pressure_cleared(edge_id: StringName)
 signal waste_buildup_appeared(organ_id: StringName, severity: float)
@@ -172,24 +206,24 @@ signal waste_buildup_cleared(organ_id: StringName)
 signal signal_gap_appeared(organ_id: StringName, severity: float)
 signal signal_gap_cleared(organ_id: StringName)
 
-# 五 · 稳定度跨档、废物溢出、可投入资源不足
+# 5 · Stability band change, waste overflow, investable resource shortage
 signal stability_band_changed(previous_band: int, current_band: int, stability: float)
 signal waste_overflowed(waste: float, stability_penalty: float)
 signal resource_shortage_raised(resource_id: StringName, amount: float, threshold: float)
 signal resource_shortage_cleared(resource_id: StringName, amount: float)
 
-# 六 · 小游戏进入与退出、星级结算
+# 6 · Minigame entry, exit, and star rating
 signal minigame_entered(minigame_id: StringName, stage_id: StringName, time_limit_sec: float)
 signal minigame_exited(minigame_id: StringName, resolution: int, elapsed_sec: float)
 signal minigame_rated(minigame_id: StringName, stars: int, rating_detail: Dictionary)
 
-# 七 · 器官档案解锁、系统协作观察、跨章结转应用
+# 7 · Knowledge unlock, system observation, carryover application
 signal system_observation_started(organ_id: StringName, observation_id: StringName)
 signal system_observation_ended(organ_id: StringName, observation_id: StringName)
 signal knowledge_entry_unlocked(entry_id: StringName, organ_id: StringName, stage_id: StringName)
 signal knowledge_entry_opened(entry_id: StringName, first_read: bool)
 signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, carryover: Dictionary)
 
-# 八 · 动作拒绝
+# 8 · Action rejection
 signal action_rejected(action_id: StringName, reason_code: StringName, focus_element: StringName)
 ```
