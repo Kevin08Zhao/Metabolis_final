@@ -1,6 +1,6 @@
 # Balance Key Dictionary and Validation
 
-This document validates `docs/BALANCE.json` against `docs/GAME_RULES.md`, Tables M1–M7, Tables D1–D11, Tables E1–E11, Table F1, and the T-09 runtime data contracts. It contains no authoritative gameplay values of its own; every value quoted here is read from `BALANCE.json`.
+This document validates `docs/BALANCE.json` against `docs/GAME_RULES.md`, `docs/GRID_BASELINE.md`, Tables M1–M7, Tables D1–D11, Tables E1–E11, Table F1, and the T-09 and T-12 runtime data contracts. It contains no authoritative gameplay values of its own; every value quoted here is read from `BALANCE.json`.
 
 ## Closed Expansion Sets and Runtime Aliases
 
@@ -27,6 +27,7 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 - `balance.transport.intervention.capacity` resolves to `network.transport.intervention.capacity_increment`.
 - Legacy `balance.stage.carryover.*` resolves to `carryover.*`; Table F1’s `balance.carryover.*` is canonical.
 - T-09 logical paths `balance.save.*`, `balance.progress.*`, and `balance.knowledge.*` resolve to `chapters.save.*`, `chapters.progress.*`, and `assist.knowledge.*` so the required twelve-key top level is preserved.
+- T-12 reads the canonical paths `build_options.grid.columns`, `build_options.grid.rows`, and `build_options.grid.tile_size_px` directly through `Balance.get_value`; no alias or script constant is permitted for these values.
 
 ## Complete Key-Path Dictionary
 
@@ -76,6 +77,9 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `organs.{organ_id}.{transport_coverage\|signal_coverage}.initial` | Initial settled coverage | ratio |
 | `organs.{organ_id}.per_tick_output.{nutrient_energy\|cell_material\|development_signal\|waste}` | Organ-local tick output | corresponding resource units per tick |
 | `organs.{organ_id}.per_tick_consumption.{nutrient_energy\|cell_material\|development_signal\|waste}` | Organ-local tick consumption or processing | corresponding resource units per tick |
+| `build_options.grid.columns` | Number of playable grid columns read by T-12 | tiles |
+| `build_options.grid.rows` | Number of playable grid rows read by T-12 | tiles |
+| `build_options.grid.tile_size_px` | Side length of one square grid tile read by T-12 | reference pixels |
 | `build_options.metric_ranges.network_efficiency` | Normalization interval for preview efficiency | coefficient range |
 | `build_options.metric_ranges.build_duration` | Normalization interval for build duration | seconds range |
 | `build_options.metric_ranges.future_convenience` | Normalization interval for future convenience | coefficient range |

@@ -1,7 +1,9 @@
 upstream_task: T-06
 reported_by: ACCOUNT_B
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 86d39a8699cfcbaadff5b317e0e6370e889af8f0
+resolved_by: CODEX
+resolved_at: 2026-07-28T07:27:24+08:00
 failed_files:
 - docs/BALANCE.json
 - docs/BALANCE_VALIDATION.md
@@ -38,3 +40,10 @@ required_resolution: |
   schema, document their paths and units in BALANCE_VALIDATION.md, rerun T-06
   validation, update docs/coord/done/T-06.md, and rename this marker to
   T-06__from_ACCOUNT_B.resolved.md in the same repair commit.
+resolution: |
+  Added build_options.grid.columns, build_options.grid.rows, and
+  build_options.grid.tile_size_px without changing the twelve-key top-level
+  schema. Their values match GRID_BASELINE.md and are available through the
+  existing Balance.get_value interface. BALANCE_VALIDATION.md now documents
+  all three paths and units, and the T-06 marker records the successful
+  revalidation. T-12 is no longer blocked by this report.
