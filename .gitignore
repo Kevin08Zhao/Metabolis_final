@@ -19,3 +19,7 @@ builds/*
 Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# Local Codex instructions and configuration
+/agents-local.md
+/.codex/config.toml
