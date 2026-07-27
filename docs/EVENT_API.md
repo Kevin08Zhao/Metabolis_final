@@ -1,7 +1,7 @@
 # Event and Signal API
 
 This file is the **single mount point** through which animation and audio attach to
-*Metabolis: City of Life — Birth*. Every animation, sound effect, and UI reaction
+*Metabolis: Birth of the City of Life*. Every animation, sound effect, and UI reaction
 must hang off an event defined here; moments outside this list offer no mount point.
 
 Every event derives from [`docs/GAME_RULES.md`](GAME_RULES.md) — the six player
