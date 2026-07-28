@@ -1,6 +1,6 @@
 target_task: D-07
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 7d06ad9b79fd3989419040aaf063f9d173b588d2
 failed_files:
   - art/tiles/tile_terrain_empty.png (missing)
@@ -24,4 +24,7 @@ impact:
   - D-07 is not DONE under the Account D guide.
   - D-08 and D-13a cannot use D-07 as a completed upstream.
 resolution:
-  - Deliver and inspect all 19 PNGs plus D-07_MANIFEST.md, convert this file to .resolved.md, then recreate docs/coord/done/D-07.md.
+  - Delivered all 19 deterministic 16 by 16 PNGs without PixelLab calls.
+  - Passed canonical-mask rotation, 5 by 5 repeat, 3 by 3 closed-boundary, palette, alpha, size, naming, and grayscale-construction checks.
+  - Added docs/assets/D-07_VALIDATION_REPORT.json, docs/assets/D-07_MANIFEST.md, and docs/coord/done/D-07.md.
+resolved_at: 2026-07-29T00:18:00+08:00

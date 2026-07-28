@@ -1,6 +1,6 @@
 target_task: D-08
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 7d06ad9b79fd3989419040aaf063f9d173b588d2
 failed_files:
   - art/tiles/tile_vessel_straight.png (missing)
@@ -24,4 +24,7 @@ impact:
   - D-08 is not DONE under the Account D guide.
   - D-09 cannot use D-08 as a completed upstream.
 resolution:
-  - Deliver and inspect all four source PNGs plus D-08_MANIFEST.md, convert this file to .resolved.md, then recreate docs/coord/done/D-08.md.
+  - Delivered the four canonical deterministic 16 by 16 PNGs without PixelLab calls.
+  - Passed exact interface, 11 logical direction, 5 by 5 double-loop splice, palette, alpha, size, and naming checks.
+  - Added docs/assets/D-08_VALIDATION_REPORT.json, docs/assets/D-08_MANIFEST.md, and docs/coord/done/D-08.md.
+resolved_at: 2026-07-29T00:18:00+08:00
