@@ -43,3 +43,7 @@ This directory records tasks from the complete prompt list that have passed acce
 | D-04 · Asset Technical Specification | `docs/ASSET_SPEC.md` | [`done/D-04.md`](done/D-04.md) |
 | D-05 · Shape and State Encoding | `docs/ENCODING_SPEC.md` | [`done/D-05.md`](done/D-05.md) |
 | D-06 · Single Concept-Scene Style Validation | `docs/D-06_PIXELLAB_CONCEPT_PROMPT.md` | [`done/D-06.md`](done/D-06.md) |
+| D-07 · Terrain and Tissue Tiles | `docs/D-07_TERRAIN_TILE_PROMPTS.md` | [`done/D-07.md`](done/D-07.md) |
+| D-08 · Vessel Geometry Tiles | `docs/D-08_VESSEL_TILE_PROMPTS.md` | [`done/D-08.md`](done/D-08.md) |
+| D-14 · UI Framework and Six Regions | `docs/UI_LAYOUT.md` sections 1–6 | [`done/D-14.md`](done/D-14.md) |
+| D-17 · Tooltip and Information-Panel Visual Style | `docs/UI_LAYOUT.md` sections 7–9 | [`done/D-17.md`](done/D-17.md) |
