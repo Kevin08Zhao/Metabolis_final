@@ -24,3 +24,7 @@ $RECYCLE.BIN/
 /agents-local.md
 /CLAUDE.md
 /.codex/config.toml
+
+# Per-account local session notes and private briefs
+*.local.md
+/docs/prompts/*.pdf
