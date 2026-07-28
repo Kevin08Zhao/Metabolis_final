@@ -224,7 +224,7 @@ sources are named at the top of section 9.
 
 ## GDScript signal declarations
 
-The thirty-nine lines below can be pasted straight into
+The forty lines below can be pasted straight into
 `src/autoload/event_bus.gd`. Parameter types are complete, with nothing elided.
 
 ```gdscript
@@ -271,6 +271,7 @@ signal system_observation_started(organ_id: StringName, observation_id: StringNa
 signal system_observation_ended(organ_id: StringName, observation_id: StringName)
 signal knowledge_entry_unlocked(entry_id: StringName, organ_id: StringName, stage_id: StringName)
 signal knowledge_entry_opened(entry_id: StringName, first_read: bool)
+signal knowledge_entry_closed(entry_id: StringName)
 signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, carryover: Dictionary)
 signal save_loaded(outcome: StringName, chapter_select_available: bool)
 signal season_completed(summary: Dictionary)
