@@ -15,6 +15,11 @@ from PIL import Image
 
 HEX_COLOR = re.compile(r"#[0-9A-Fa-f]{6}")
 ASSET_NAME = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*\.[a-z0-9]+$")
+AMBIENT_HEARTBEAT_PATHS = {
+    "audio/ambient/heartbeat_bed.wav",
+    "audio/ambient/heartbeat_bed_strained.wav",
+    "audio/ambient/heartbeat_bed_critical.wav",
+}
 EXACT_IMAGE_SIZES = {
     "art/backgrounds/background_title.png": (320, 180),
     "art/reference/palette_strip.png": (352, 16),
@@ -231,7 +236,7 @@ def audit(repo_root: Path) -> dict[str, Any]:
                         "message": "File name must use lowercase snake_case.",
                     }
                 )
-            is_ambient_heartbeat = relative == "audio/ambient/heartbeat_bed.wav"
+            is_ambient_heartbeat = relative in AMBIENT_HEARTBEAT_PATHS
             if event_names and not is_ambient_heartbeat and path.stem not in event_names:
                 issues["error"].append(
                     {

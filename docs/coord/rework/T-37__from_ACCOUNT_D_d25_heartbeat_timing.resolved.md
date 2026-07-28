@@ -1,7 +1,7 @@
 target_task: T-37
 reported_by: ACCOUNT_D
 blocking_task: D-25
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 7464f53d7cadacb1239d05c8dc66ea880d246db4
 completed_work:
   - docs/AUDIO_SFX_SPEC.md
@@ -32,3 +32,13 @@ resolution_condition:
   - Pass live 1000/440/1800 ms cadence checks, 250 ms crossfade, hysteresis, mute, and no-clipping checks.
   - Confirm a normal project shutdown releases the loaded heartbeat stream without an ObjectDB leak warning.
 opened_at: 2026-07-28T19:00:00Z
+resolved_at: 2026-07-28T15:19:00-04:00
+resolved_by: ACCOUNT_C
+authorization: The project owner authorized correction work after T-37.
+resolution:
+  - Generated deterministic 1,000, 440, and 1,800 ms PCM loops that preserve the same 72 Hz and 56 Hz pulse character without runtime pitch scaling.
+  - Replaced the single ambient player with two reusable players that switch only at the active loop boundary and crossfade for 250 ms.
+  - Kept Table E4 hysteresis in ThresholdWatcher; AudioRouter consumes only stability_band_changed and retains only the latest pending band.
+  - Muting stops and dereferences ambient and one-shot streams while gameplay events continue.
+  - Added a 100 ms graceful normal shutdown and explicit programmatic-shutdown preparation so the audio thread releases its final playback reference.
+  - Passed deterministic waveform, asset compliance, live cadence, crossfade, hysteresis, mute, no-clipping, and clean-shutdown checks.

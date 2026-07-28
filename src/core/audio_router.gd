@@ -1,6 +1,7 @@
 extends Node
 
-## Event-driven audio playback with one ambient bed and a reusable one-shot pool.
+## Event-driven audio playback with a crossfaded ambient bed and reusable
+## one-shot pool.
 ##
 ## Autoload registration:
 ## Project > Project Settings > Globals > Autoload
@@ -11,11 +12,23 @@ extends Node
 
 const LOG_PREFIX := "[AUDIO]"
 const EVENT_AUDIO_ROOT := "res://../audio/events"
-const AMBIENT_AUDIO_PATH := "res://../audio/ambient/heartbeat_bed.wav"
 const AUDIO_EXTENSION := "wav"
 const MAX_ONE_SHOTS_BALANCE_PATH := "assist.audio.max_concurrent_one_shots"
 const HIGH_FREQUENCY_INTERVAL_BALANCE_PATH := "assist.audio.high_frequency_min_interval_sec"
 const AMBIENT_FADE_SEC := 0.25
+const AMBIENT_SILENCE_DB := -80.0
+const AMBIENT_PLAYER_COUNT := 2
+const AUDIO_RELEASE_GRACE_SEC := 0.10
+const AMBIENT_AUDIO_PATHS_BY_STABILITY_BAND: Array[String] = [
+	"res://../audio/ambient/heartbeat_bed.wav",
+	"res://../audio/ambient/heartbeat_bed_strained.wav",
+	"res://../audio/ambient/heartbeat_bed_critical.wav",
+]
+const AMBIENT_LOOP_DURATION_SEC_BY_STABILITY_BAND: Array[float] = [
+	1.0,
+	0.44,
+	1.8,
+]
 const AMBIENT_VOLUME_DB_BY_STABILITY_BAND: Array[float] = [-16.0, -12.0, -8.0]
 
 ## EVENT_API marks these events as repeatable within one tick.
@@ -42,25 +55,82 @@ var muted: bool:
 		set_muted(value)
 
 var _muted := false
-var _ambient_player: AudioStreamPlayer
+var _ambient_players: Array[AudioStreamPlayer] = []
+var _ambient_cycle_timer: Timer
+var _active_ambient_player_index := 0
+var _ambient_band := 0
+var _pending_ambient_band := -1
+var _ambient_transition_count := 0
 var _one_shot_players: Array[AudioStreamPlayer] = []
 var _next_reuse_index := 0
 var _high_frequency_interval_msec := 0
 var _last_played_at_msec: Dictionary = {}
 var _warned_paths: Dictionary = {}
 var _ambient_tween: Tween
+var _graceful_quit_started := false
 
 
 func _ready() -> void:
+	get_tree().auto_accept_quit = false
 	_read_configuration()
 	_create_players()
 	_connect_event_bus()
 	_start_ambient()
 
 
+func _exit_tree() -> void:
+	_shutdown_audio()
+	_release_audio_nodes()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST and is_inside_tree():
+		_graceful_quit()
+
+
 ## Return the only valid one-shot path for an event.
 func event_audio_path(event_name: StringName) -> String:
 	return "%s/%s.%s" % [EVENT_AUDIO_ROOT, event_name, AUDIO_EXTENSION]
+
+
+## Return the deterministic heartbeat path for a D-21 stability band.
+func ambient_audio_path(stability_band: int) -> String:
+	if not _valid_ambient_band(stability_band):
+		return ""
+	return AMBIENT_AUDIO_PATHS_BY_STABILITY_BAND[stability_band]
+
+
+func current_ambient_band() -> int:
+	return _ambient_band
+
+
+func pending_ambient_band() -> int:
+	return _pending_ambient_band
+
+
+func ambient_transition_count() -> int:
+	return _ambient_transition_count
+
+
+func ambient_player_count() -> int:
+	return _ambient_players.size()
+
+
+func ambient_crossfade_duration_sec() -> float:
+	return AMBIENT_FADE_SEC
+
+
+func ambient_loop_duration_sec(stability_band: int) -> float:
+	if not _valid_ambient_band(stability_band):
+		return 0.0
+	return AMBIENT_LOOP_DURATION_SEC_BY_STABILITY_BAND[stability_band]
+
+
+## Stop and dereference audio before a programmatic SceneTree.quit().
+## Callers should allow at least AUDIO_RELEASE_GRACE_SEC before quitting so the
+## audio thread can retire its final playback reference.
+func prepare_for_shutdown() -> void:
+	_shutdown_audio()
 
 
 ## Toggle all audio controlled by this router. Gameplay signals continue normally.
@@ -75,13 +145,10 @@ func set_muted(value: bool) -> void:
 	_muted = value
 
 	if _muted:
-		if _ambient_tween != null:
-			_ambient_tween.kill()
-		_ambient_tween = null
-		if _ambient_player != null:
-			_ambient_player.stop()
+		_stop_ambient()
 		for player in _one_shot_players:
 			player.stop()
+			player.stream = null
 		return
 
 	_start_ambient()
@@ -123,10 +190,18 @@ func _create_players() -> void:
 	if pool_size < 1:
 		return
 
-	_ambient_player = AudioStreamPlayer.new()
-	_ambient_player.name = "AmbientBed"
-	_ambient_player.volume_db = AMBIENT_VOLUME_DB_BY_STABILITY_BAND[0]
-	add_child(_ambient_player)
+	for player_index in AMBIENT_PLAYER_COUNT:
+		var ambient_player := AudioStreamPlayer.new()
+		ambient_player.name = "AmbientBed%s" % String.chr(65 + player_index)
+		ambient_player.volume_db = AMBIENT_SILENCE_DB
+		add_child(ambient_player)
+		_ambient_players.append(ambient_player)
+
+	_ambient_cycle_timer = Timer.new()
+	_ambient_cycle_timer.name = "AmbientCycleBoundary"
+	_ambient_cycle_timer.one_shot = true
+	_ambient_cycle_timer.timeout.connect(_on_ambient_cycle_boundary)
+	add_child(_ambient_cycle_timer)
 
 	for player_index in pool_size:
 		var player := AudioStreamPlayer.new()
@@ -202,32 +277,178 @@ func _acquire_one_shot_player() -> AudioStreamPlayer:
 
 
 func _start_ambient() -> void:
-	if _muted or _ambient_player == null:
+	if _muted or _ambient_players.is_empty():
 		return
-	if _ambient_player.stream == null:
-		var stream := _load_wav(AMBIENT_AUDIO_PATH, true)
-		if stream == null:
-			return
-		_ambient_player.stream = stream
-	if not _ambient_player.playing:
-		_ambient_player.play()
+	_stop_ambient()
+
+	var stream := _load_ambient_stream(_ambient_band)
+	if stream == null:
+		return
+	_active_ambient_player_index = 0
+	var player := _ambient_players[_active_ambient_player_index]
+	player.stream = stream
+	player.volume_db = AMBIENT_VOLUME_DB_BY_STABILITY_BAND[_ambient_band]
+	player.play()
+	_start_ambient_cycle_timer()
 
 
 func _update_ambient_for_stability(stability_band: int) -> void:
-	if stability_band < 0 or stability_band >= AMBIENT_VOLUME_DB_BY_STABILITY_BAND.size():
+	if not _valid_ambient_band(stability_band):
 		_warn("Ignoring unknown stability band %s." % stability_band)
 		return
-	if _ambient_player == null or not _ambient_player.playing:
+	if _muted or _ambient_players.is_empty():
+		_ambient_band = stability_band
+		_pending_ambient_band = -1
 		return
+	var active_player := _ambient_players[_active_ambient_player_index]
+	if not active_player.playing:
+		_ambient_band = stability_band
+		_pending_ambient_band = -1
+		_start_ambient()
+		return
+
+	if stability_band == _ambient_band:
+		_pending_ambient_band = -1
+		return
+	_pending_ambient_band = stability_band
+
+
+func _on_ambient_cycle_boundary() -> void:
+	if _muted or _ambient_players.is_empty():
+		return
+	if (
+		_valid_ambient_band(_pending_ambient_band)
+		and _pending_ambient_band != _ambient_band
+	):
+		_begin_ambient_crossfade(_pending_ambient_band)
+		return
+	_pending_ambient_band = -1
+	_start_ambient_cycle_timer()
+
+
+func _begin_ambient_crossfade(target_band: int) -> void:
+	var incoming_index := 1 - _active_ambient_player_index
+	var outgoing_player := _ambient_players[_active_ambient_player_index]
+	var incoming_player := _ambient_players[incoming_index]
+	var incoming_stream := _load_ambient_stream(target_band)
+	if incoming_stream == null:
+		_pending_ambient_band = -1
+		_start_ambient_cycle_timer()
+		return
+
+	incoming_player.stop()
+	incoming_player.stream = incoming_stream
+	incoming_player.volume_db = AMBIENT_SILENCE_DB
+	incoming_player.play()
+
+	_active_ambient_player_index = incoming_index
+	_ambient_band = target_band
+	_pending_ambient_band = -1
+	_ambient_transition_count += 1
+	_start_ambient_cycle_timer()
 
 	if _ambient_tween != null:
 		_ambient_tween.kill()
-	_ambient_tween = create_tween()
+	_ambient_tween = create_tween().set_parallel(true)
 	_ambient_tween.tween_property(
-		_ambient_player,
+		outgoing_player,
 		"volume_db",
-		AMBIENT_VOLUME_DB_BY_STABILITY_BAND[stability_band],
+		AMBIENT_SILENCE_DB,
 		AMBIENT_FADE_SEC
+	)
+	_ambient_tween.tween_property(
+		incoming_player,
+		"volume_db",
+		AMBIENT_VOLUME_DB_BY_STABILITY_BAND[target_band],
+		AMBIENT_FADE_SEC
+	)
+	_ambient_tween.chain().tween_callback(
+		_finish_ambient_crossfade.bind(outgoing_player)
+	)
+
+
+func _finish_ambient_crossfade(outgoing_player: AudioStreamPlayer) -> void:
+	outgoing_player.stop()
+	outgoing_player.stream = null
+	outgoing_player.volume_db = AMBIENT_SILENCE_DB
+	_ambient_tween = null
+
+
+func _start_ambient_cycle_timer() -> void:
+	if _ambient_cycle_timer == null or _muted:
+		return
+	_ambient_cycle_timer.start(
+		AMBIENT_LOOP_DURATION_SEC_BY_STABILITY_BAND[_ambient_band]
+	)
+
+
+func _load_ambient_stream(stability_band: int) -> AudioStreamWAV:
+	var stream := _load_wav(ambient_audio_path(stability_band), true)
+	if stream == null:
+		return null
+	var expected_duration := AMBIENT_LOOP_DURATION_SEC_BY_STABILITY_BAND[stability_band]
+	var frame_tolerance := 1.0 / float(stream.mix_rate)
+	if absf(stream.get_length() - expected_duration) > frame_tolerance:
+		_warn(
+			"Heartbeat band %s must be %.0f ms, got %.3f ms."
+			% [stability_band, expected_duration * 1000.0, stream.get_length() * 1000.0]
+		)
+		return null
+	return stream
+
+
+func _stop_ambient() -> void:
+	if _ambient_cycle_timer != null:
+		_ambient_cycle_timer.stop()
+	if _ambient_tween != null:
+		_ambient_tween.kill()
+		_ambient_tween = null
+	for player in _ambient_players:
+		player.stop()
+		player.stream = null
+		player.volume_db = AMBIENT_SILENCE_DB
+
+
+func _shutdown_audio() -> void:
+	_stop_ambient()
+	for player in _one_shot_players:
+		player.stop()
+		player.stream = null
+	_last_played_at_msec.clear()
+	_warned_paths.clear()
+
+
+func _graceful_quit() -> void:
+	if _graceful_quit_started:
+		return
+	_graceful_quit_started = true
+	prepare_for_shutdown()
+	await get_tree().create_timer(AUDIO_RELEASE_GRACE_SEC).timeout
+	get_tree().quit()
+
+
+func _release_audio_nodes() -> void:
+	if _ambient_cycle_timer != null:
+		if _ambient_cycle_timer.get_parent() == self:
+			remove_child(_ambient_cycle_timer)
+		_ambient_cycle_timer.free()
+		_ambient_cycle_timer = null
+	for player in _ambient_players:
+		if player.get_parent() == self:
+			remove_child(player)
+		player.free()
+	_ambient_players.clear()
+	for player in _one_shot_players:
+		if player.get_parent() == self:
+			remove_child(player)
+		player.free()
+	_one_shot_players.clear()
+
+
+func _valid_ambient_band(stability_band: int) -> bool:
+	return (
+		stability_band >= 0
+		and stability_band < AMBIENT_AUDIO_PATHS_BY_STABILITY_BAND.size()
 	)
 
 
