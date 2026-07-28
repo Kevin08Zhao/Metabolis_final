@@ -1,7 +1,7 @@
 {
-  "control_id": "P-F01",
+  "control_id": "P-F03",
   "owner": "ACCOUNT_D",
-  "observed_main_sha": "d13bb366833e0fec1e89d234495b827bcdefd502",
+  "observed_main_sha": "88041591dbfb688449484e66fa0cc8fc6aeb24a3",
   "scheduler": {
     "max_active": 8,
     "reserve_slots": 2,
@@ -175,7 +175,9 @@
     "D-15a",
     "D-16",
     "D-17L",
-    "D-18"
+    "D-18",
+    "D-20",
+    "D-21"
   ],
   "blocked_tasks": [
     {
@@ -201,8 +203,11 @@
     "pf01_generation_calls": 0,
     "pf01_jobs_created": 0,
     "pf01_actual_generation_units": 0,
-    "current_generations_used": 156,
-    "current_generations_remaining": 4844,
+    "pf03_generation_calls": 0,
+    "pf03_jobs_created": 0,
+    "pf03_actual_generation_units": 0,
+    "current_generations_used": 157,
+    "current_generations_remaining": 4843,
     "subscription": "active Tier 2 Pixel Artisan",
     "credits_usd": 0.0
   },
@@ -240,6 +245,12 @@
       "action": "stopped new submissions until batch polling released slots"
     }
   ],
-  "last_poll_at": "2026-07-28T17:03:00Z",
-  "resume_prompt": "P-F02"
+  "last_poll_at": "2026-07-28T18:48:10Z",
+  "final_audit": {
+    "status": "BLOCKED_UPSTREAM",
+    "report": "docs/assets/D-F03_FINAL_AUDIT.json",
+    "asset_compliance": "PASS",
+    "final_done_created": false
+  },
+  "resume_prompt": "Refresh main and resume P-F02 from the first newly READY task, then rerun P-F03."
 }

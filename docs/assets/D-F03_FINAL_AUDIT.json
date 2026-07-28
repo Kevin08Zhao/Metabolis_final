@@ -1,0 +1,133 @@
+{
+  "control_id": "P-F03",
+  "generated_at": "2026-07-28T18:48:10Z",
+  "base_main_sha": "88041591dbfb688449484e66fa0cc8fc6aeb24a3",
+  "status": "BLOCKED_UPSTREAM",
+  "final_done_created": false,
+  "pixelLab": {
+    "subscription": "active Tier 2 Pixel Artisan",
+    "generations_total": 5000,
+    "generations_used": 157,
+    "generations_remaining": 4843,
+    "credits_usd": 0.0,
+    "generation_calls_in_f03": 0,
+    "active_jobs": []
+  },
+  "checks": {
+    "asset_compliance": {
+      "command": "python tools/check_assets.py --repo-root . --format text",
+      "status": "PASS",
+      "files_scanned": 247,
+      "errors": 0,
+      "warnings": 7,
+      "warning_summary": {
+        "source_png_color_outside_palette": 5,
+        "duplicate_asset_content": 2
+      },
+      "note": "The five palette warnings apply only to retained raw source candidates. Their production derivatives are quantized and pass with tolerance 0."
+    },
+    "asset_checker_tests": {
+      "command": "python -m unittest tests.test_check_assets -v",
+      "status": "PASS",
+      "tests": 11
+    },
+    "core_tile_check": {
+      "command": "python tools/build_core_tiles.py --repo-root . --check",
+      "status": "PASS"
+    },
+    "animation_metadata": {
+      "command": "python tools/check_anim.py anim --event-api docs/EVENT_API.md --self-test",
+      "status": "PASS",
+      "pairs": 4,
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "delivery_tiers": {
+    "P0": {
+      "status": "READY",
+      "scope": [
+        "D-07 terrain tiles",
+        "D-08 vessel road geometry",
+        "D-10, D-11, and D-12 canonical organ art",
+        "D-14L and D-17L UI frames",
+        "D-15 resource icons"
+      ]
+    },
+    "P1": {
+      "status": "PARTIAL",
+      "ready": [
+        "All five-state organ matrices",
+        "D-13a construction states",
+        "D-15a task-rating icons",
+        "D-16 bottleneck icons",
+        "D-18 animation metadata contract",
+        "D-09 complete 132-PNG art matrix"
+      ],
+      "blocked": [
+        "D-09 runtime selection contract",
+        "D-13b candidate-card geometry and final PNGs"
+      ]
+    },
+    "P2": {
+      "status": "PARTIAL",
+      "ready": [
+        "D-20 heartbeat animation",
+        "D-21 heartbeat timing variants",
+        "D-29 accepted text-free title background"
+      ],
+      "blocked": [
+        "D-19 and D-19a runtime animation integration",
+        "D-22 birth transition animation",
+        "D-23 static fallbacks",
+        "D-24 through D-27 audio specifications and assets",
+        "D-29 runtime title integration and real screenshots",
+        "T-35 science audit"
+      ]
+    }
+  },
+  "open_rework": [
+    "docs/coord/rework/D-09__from_ACCOUNT_D.open.md",
+    "docs/coord/rework/D-13b__from_ACCOUNT_D.open.md",
+    "docs/coord/rework/D-28__from_ACCOUNT_D.open.md",
+    "docs/coord/rework/D-29__from_ACCOUNT_D.open.md"
+  ],
+  "remaining_critical_path": [
+    {
+      "task": "D-09",
+      "blocked_by": "Runtime edge fields and directed junction contract",
+      "next_command_after_upstream": "python tools/build_d09_vessel_variants.py"
+    },
+    {
+      "task": "D-13b",
+      "blocked_by": "Authoritative 2-to-4 candidate-card allocation geometry",
+      "next_command_after_upstream": "Run the D-13b deterministic card builder after the layout contract lands."
+    },
+    {
+      "task": "D-19 -> D-19a -> D-22 -> D-23",
+      "blocked_by": "D-09 runtime contract and missing D-19 marker",
+      "next_command_after_upstream": "Refresh main, complete D-19, then run P-F02 from the first newly READY task."
+    },
+    {
+      "task": "D-24 -> D-25/D-26 -> D-27 -> D-28",
+      "blocked_by": "Missing T-37 audio router marker",
+      "next_command_after_upstream": "Refresh main after T-37 lands, then execute D-24 before generating or selecting audio."
+    },
+    {
+      "task": "D-29",
+      "blocked_by": "Missing production title/game/ending scenes and runtime screenshots",
+      "next_command_after_upstream": "Integrate the existing background; do not regenerate it."
+    },
+    {
+      "task": "T-35",
+      "blocked_by": "Missing T-34 marker",
+      "next_command_after_upstream": "Run the independent science audit only after T-34 lands."
+    }
+  ],
+  "partial_outputs_added_by_f03": [
+    "tools/check_assets.py",
+    "tests/test_check_assets.py",
+    "docs/ATTRIBUTIONS.md",
+    "docs/assets/D-F03_FINAL_AUDIT.json"
+  ]
+}
