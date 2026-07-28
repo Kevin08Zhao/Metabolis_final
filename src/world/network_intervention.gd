@@ -33,7 +33,6 @@ var feedback: String:
 
 var _balance_access: Node
 var _event_bus: Node
-var _uses_by_stage: Dictionary = {}
 var _feedback := ""
 
 
@@ -43,21 +42,24 @@ func configure(balance_access: Node, event_bus: Node) -> void:
 
 
 func is_available(
-	stage_id: StringName,
 	intervention_id: StringName,
-	network_data: NetworkData = null
+	network_data: NetworkData
 ) -> bool:
-	if intervention_id == CAPACITY_INCREASE:
-		return (
-			network_data != null
-			and not network_data.transport_intervention_used
-			and _use_count(stage_id, intervention_id) < _max_uses_per_stage()
-		)
-	return _use_count(stage_id, intervention_id) < _max_uses_per_stage()
+	if network_data == null or _max_uses_per_stage() <= 0:
+		return false
+	match intervention_id:
+		TRUNK_DIRECTION:
+			return not network_data.trunk_direction_intervention_used
+		CAPACITY_INCREASE:
+			return not network_data.transport_intervention_used
+		BOTTLENECK_PRIORITY:
+			return not network_data.bottleneck_priority_intervention_used
+	return false
 
 
 func select_trunk_direction(
 	chapter_data: ChapterData,
+	network_data: NetworkData,
 	organ_id: StringName,
 	decision_id: StringName,
 	option_id: StringName,
@@ -68,8 +70,11 @@ func select_trunk_direction(
 	if chapter_data == null:
 		_reject(&"chapter_data_unavailable", FOCUS_DIRECTION)
 		return {}
+	if network_data == null:
+		_reject(&"network_data_unavailable", FOCUS_DIRECTION)
+		return {}
 	var stage_id := chapter_data.stage_id
-	if not is_available(stage_id, TRUNK_DIRECTION):
+	if not is_available(TRUNK_DIRECTION, network_data):
 		_reject(&"usage_limit_reached", FOCUS_DIRECTION)
 		return {}
 	if chapter_data.phase != &"build_decision":
@@ -83,6 +88,9 @@ func select_trunk_direction(
 		return {}
 	if not chapter_data.available_build_option_ids.has(option_id):
 		_reject(&"build_option_unavailable", FOCUS_DIRECTION)
+		return {}
+	if chapter_data.selected_build_option_id != option_id:
+		_reject(&"build_option_not_selected", FOCUS_DIRECTION)
 		return {}
 	if (
 		network_builder == null
@@ -103,7 +111,7 @@ func select_trunk_direction(
 		_reject(&"invalid_trunk_direction", FOCUS_DIRECTION)
 		return {}
 
-	_record_use(stage_id, TRUNK_DIRECTION)
+	network_data.trunk_direction_intervention_used = true
 	_feedback = "Trunk direction locked for this stage."
 	print(
 		"[NET] trunk direction stage=%s decision=%s option=%s"
@@ -126,8 +134,7 @@ func increase_edge_capacity(
 	if network_data == null:
 		_reject(&"network_data_unavailable", FOCUS_CAPACITY)
 		return {}
-	var stage_id := chapter_data.stage_id
-	if not is_available(stage_id, CAPACITY_INCREASE, network_data):
+	if not is_available(CAPACITY_INCREASE, network_data):
 		_reject(&"usage_limit_reached", FOCUS_CAPACITY)
 		return {}
 	if chapter_data.phase != &"operation_decision":
@@ -160,7 +167,10 @@ func increase_edge_capacity(
 		selected_edge_id,
 		null
 	)
-	var plan_id := _plan_id(plan)
+	if not (plan is String or plan is StringName):
+		_reject(&"intervention_plan_unavailable", FOCUS_ROUTE)
+		return {}
+	var plan_id := StringName(plan)
 	if plan_id.is_empty():
 		_reject(&"intervention_plan_unavailable", FOCUS_ROUTE)
 		return {}
@@ -254,7 +264,6 @@ func increase_edge_capacity(
 	selected_edge["effective_capacity"] = capacity_after
 	resources["development_signal"] = available_signal - signal_cost
 	network_data.transport_intervention_used = true
-	_record_use(stage_id, CAPACITY_INCREASE)
 	_feedback = "Capacity intervention applied; this entry is now disabled."
 	_emit(
 		&"transport_network_intervened",
@@ -276,17 +285,19 @@ func increase_edge_capacity(
 
 func prioritize_bottleneck_edges(
 	chapter_data: ChapterData,
+	network_data: NetworkData,
 	ordered_edge_ids: Array[StringName],
-	active_transport_edge_ids: Array[StringName],
-	mutable_transport_edge_ids: Array[StringName]
 ) -> Array[StringName]:
 	if not _ready():
 		return []
 	if chapter_data == null:
 		_reject(&"chapter_data_unavailable", FOCUS_PRIORITY)
 		return []
+	if network_data == null:
+		_reject(&"network_data_unavailable", FOCUS_PRIORITY)
+		return []
 	var stage_id := chapter_data.stage_id
-	if not is_available(stage_id, BOTTLENECK_PRIORITY):
+	if not is_available(BOTTLENECK_PRIORITY, network_data):
 		_reject(&"usage_limit_reached", FOCUS_PRIORITY)
 		return []
 	if chapter_data.phase != &"operation_decision":
@@ -308,14 +319,14 @@ func prioritize_bottleneck_edges(
 		if (
 			edge_id.is_empty()
 			or result.has(edge_id)
-			or not active_transport_edge_ids.has(edge_id)
-			or not mutable_transport_edge_ids.has(edge_id)
+			or not network_data.active_transport_edge_ids.has(edge_id)
+			or not network_data.mutable_transport_edge_ids.has(edge_id)
 		):
 			_reject(&"edge_not_prioritizable", FOCUS_PRIORITY)
 			return []
 		result.append(edge_id)
 
-	_record_use(stage_id, BOTTLENECK_PRIORITY)
+	network_data.bottleneck_priority_intervention_used = true
 	_feedback = "Bottleneck priority locked for this stage."
 	print("[NET] bottleneck priority stage=%s order=%s" % [stage_id, result])
 	return result
@@ -341,17 +352,6 @@ func _max_uses_per_stage() -> int:
 		int(_read("network.transport.intervention.max_uses_per_stage", 0)),
 		0
 	)
-
-
-func _use_count(stage_id: StringName, intervention_id: StringName) -> int:
-	var stage_uses: Dictionary = _uses_by_stage.get(stage_id, {})
-	return int(stage_uses.get(intervention_id, 0))
-
-
-func _record_use(stage_id: StringName, intervention_id: StringName) -> void:
-	var stage_uses: Dictionary = _uses_by_stage.get(stage_id, {})
-	stage_uses[intervention_id] = _use_count(stage_id, intervention_id) + 1
-	_uses_by_stage[stage_id] = stage_uses
 
 
 func _read(path: String, default_value: Variant) -> Variant:
@@ -384,14 +384,6 @@ func _map_clamped(
 	return lerpf(output_min, output_max, ratio)
 
 
-func _plan_id(plan: Variant) -> StringName:
-	if plan is String or plan is StringName:
-		return StringName(plan)
-	if plan is Dictionary:
-		return StringName(plan.get("plan_id", ""))
-	return &""
-
-
 func _find_runtime_edge(
 	edges: Array,
 	edge_id: StringName
@@ -408,7 +400,7 @@ func _emit(signal_name: StringName, arguments: Array) -> void:
 
 
 func _reject(reason_code: StringName, focus_element: StringName) -> void:
-	_feedback = "Network intervention rejected: %s." % reason_code
+	_feedback = _feedback_for_reason(reason_code)
 	print(
 		"[NET] rejected action=%s reason=%s focus=%s"
 		% [ACTION_ID, reason_code, focus_element]
@@ -420,3 +412,38 @@ func _reject(reason_code: StringName, focus_element: StringName) -> void:
 			reason_code,
 			focus_element
 		)
+
+
+func _feedback_for_reason(reason_code: StringName) -> String:
+	match reason_code:
+		&"usage_limit_reached":
+			return "Stage intervention already used."
+		&"not_in_operation_decision":
+			return "Not currently in the operations decision phase."
+		&"operation_decision_unavailable":
+			return "No operations decision is available."
+		&"operation_decision_locked":
+			return "This round is locked."
+		&"edge_not_selected", &"edge_not_active", &"edge_not_mutable":
+			return "The selected transport edge is unavailable."
+		&"transport_pressure_below_unlock":
+			return "Transport pressure has not reached the intervention threshold."
+		&"insufficient_development_signal":
+			return "There is not enough Development Signal."
+		&"required_organ_would_disconnect":
+			return "This intervention would disconnect a required organ."
+		&"manual_route_edit_forbidden":
+			return "Existing transport edges cannot be dragged, deleted, or rerouted."
+		&"not_in_build_decision":
+			return "Not currently in the build decision phase."
+		&"build_decision_unavailable", &"build_option_unavailable":
+			return "The selected build option is unavailable."
+		&"build_decision_locked":
+			return "This build decision is already locked."
+		&"build_option_not_selected":
+			return "Choose this build option before locking its trunk direction."
+		&"no_bottleneck_edges_selected":
+			return "Select at least one bottleneck edge."
+		&"edge_not_prioritizable":
+			return "Every prioritized edge must be active and mutable."
+	return "Network intervention rejected: %s." % reason_code
