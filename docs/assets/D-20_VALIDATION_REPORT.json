@@ -1,0 +1,54 @@
+{
+  "task_id": "D-20",
+  "status": "PASS",
+  "generated_at": "2026-07-28T18:05:14+00:00",
+  "generated_by": "tools/build_d20_heartbeat.py",
+  "source": {
+    "path": "art/organs/organ_heart_operating.png",
+    "sha256": "b0fdbcb1c254069c92beac47bc508289882b5f4382458376e3669ad22994dccf",
+    "pulse_region_inclusive": {
+      "x_min": 12,
+      "y_min": 21,
+      "x_max": 37,
+      "y_max": 36
+    }
+  },
+  "selected_pixellab_response_indices": [
+    0,
+    2,
+    3,
+    2
+  ],
+  "frame_changed_pixels_inside_pulse_region": [
+    0,
+    30,
+    125,
+    30
+  ],
+  "frame_durations_ms": [
+    320,
+    120,
+    80,
+    280
+  ],
+  "checks": {
+    "source_is_48x48": true,
+    "frame_count_is_4": true,
+    "sheet_is_192x48": true,
+    "input_frame_matches_d11": true,
+    "contains_three_distinct_poses": true,
+    "relaxation_reverses_through_contraction_pose": true,
+    "peak_has_maximum_deformation": true,
+    "outside_pulse_region_is_static": true,
+    "pulse_boundary_is_static": true,
+    "alpha_mask_is_preserved": true,
+    "uses_only_locked_palette": true,
+    "uses_binary_alpha": true
+  },
+  "output": {
+    "path": "anim/heart_pump_active.png",
+    "width": 192,
+    "height": 48,
+    "sha256": "84dd84ee5e2b3fc0564d59dcd59e3d49e6ec2a3d669dff4be3b2e7b06a3e0961"
+  }
+}

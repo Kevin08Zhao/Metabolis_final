@@ -1,0 +1,106 @@
+{
+  "task_id": "D-20",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-20_LAND_REPORT.json",
+  "manifest": "docs/assets/D-20_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "max_over_threshold_percent": 100.0,
+  "items": [
+    {
+      "id": "heart_pulse_input",
+      "target": "art/candidates/anim_heart_pulse_input.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=0"
+      },
+      "generation": {
+        "tool": "animate_image",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "usage": {
+          "generation_units": 1
+        },
+        "create_response": "id: 97436fcf-d7c1-44ba-84cd-5a66f44d0a6e; frames: 4; size: 26x16px; transparent: True; last_frame: yes; seed: 20001; cost: 1 generation; status: processing (30-180s)",
+        "status_response": "status: completed; id: 97436fcf-d7c1-44ba-84cd-5a66f44d0a6e; frames: 5; download: https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=0 ... ?index=4"
+      },
+      "expected_size": {
+        "width": 26,
+        "height": 16
+      },
+      "alpha_threshold": 128,
+      "operations": []
+    },
+    {
+      "id": "heart_pulse_contraction",
+      "target": "art/candidates/anim_heart_pulse_contraction.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=2"
+      },
+      "generation": {
+        "tool": "animate_image",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "usage": {
+          "generation_units": 0
+        },
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "status_response": "status: completed; response frame index: 2"
+      },
+      "expected_size": {
+        "width": 26,
+        "height": 16
+      },
+      "alpha_threshold": 128,
+      "operations": []
+    },
+    {
+      "id": "heart_pulse_peak",
+      "target": "art/candidates/anim_heart_pulse_peak.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=3"
+      },
+      "generation": {
+        "tool": "animate_image",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "usage": {
+          "generation_units": 0
+        },
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "status_response": "status: completed; response frame index: 3"
+      },
+      "expected_size": {
+        "width": 26,
+        "height": 16
+      },
+      "alpha_threshold": 128,
+      "operations": []
+    },
+    {
+      "id": "heart_pulse_relaxation",
+      "target": "art/candidates/anim_heart_pulse_relaxation.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=4"
+      },
+      "generation": {
+        "tool": "animate_image",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "usage": {
+          "generation_units": 0
+        },
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "status_response": "status: completed; response frame index: 4"
+      },
+      "expected_size": {
+        "width": 26,
+        "height": 16
+      },
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ]
+}
