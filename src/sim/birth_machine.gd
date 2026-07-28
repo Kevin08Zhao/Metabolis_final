@@ -581,9 +581,46 @@ func _on_enter_ending() -> void:
 	print("%s first breath complete; the run is ready for T-25 to close." % LOG_PREFIX)
 
 
-## Filled by T-21-7.
+## Implemented by T-21-7.
+##
+## Entry action: unwind the attempt so a retry starts from a clean machine. Exit
+## judgement: the player acknowledges, which is acknowledge_rollback.
+##
+## This state has no window and no timer. It waits for a person, not a clock,
+## which is why the interruptible-wait rule the other beats follow has nothing to
+## apply to here.
+##
+## What is unwound is only this machine's own state. The rollback never touches
+## the city, the organs, or the resources, so there is nothing to undo out there
+## and nothing that could be half undone. docs/BIRTH_STATES.md requires that this
+## is never presented as a death, a game over, or a lost run: the player returns
+## to the gate and tries again.
+##
+## gate_report is deliberately left in place. It holds the four rows with their
+## gaps and recovery directions, and this state is exactly where the player reads
+## them to learn what to fix. Clearing it here would throw away the only
+## explanation of why the attempt stopped.
+##
+## Nothing is played. The unwinding visual is D-22 and D-26's work, hung off
+## birth_rolled_back, which transition_to emitted on the way in.
 func _on_enter_failure_rollback() -> void:
-	pass
+	# Cancel any beat still counting down. The beat's own guard already refuses to
+	# advance a machine that has left its state, so this is belt and braces, but
+	# it makes the cancellation deliberate rather than incidental.
+	_beat_token += 1
+
+	# The attempt did not succeed, so no completion term may survive it. Neither
+	# can currently be true here, because ending is terminal and unreachable from
+	# any path that leads to a rollback; resetting them is what keeps that true if
+	# the graph ever grows.
+	_gate_passed = false
+	birth_transition_complete = false
+	first_breath_complete = false
+
+	print(
+		"%s attempt unwound; waiting for the player to acknowledge. Retry returns to %s."
+		% [LOG_PREFIX, STATE_IDS[State.READY_CHECK]]
+	)
 
 
 # ---------------------------------------------------------------------------
