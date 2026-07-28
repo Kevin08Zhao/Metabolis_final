@@ -1,6 +1,6 @@
 target_task: D-06
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 7d06ad9b79fd3989419040aaf063f9d173b588d2
 failed_files:
   - art/reference/STYLE_MASTER.png (missing)
@@ -21,4 +21,7 @@ impact:
   - D-06 is not DONE under the Account D guide.
   - Batch production for D-07 and later formal art must remain blocked.
 resolution:
-  - Generate and inspect the style master, add the manifest, convert this file to .resolved.md, then recreate docs/coord/done/D-06.md in the same atomic commit.
+  - Generated and inspected art/reference/STYLE_MASTER.png.
+  - Recorded PixelLab job IDs, seeds, dimensions, palette samples, post-processing, and gate checks in docs/assets/D-06_MANIFEST.md.
+  - Recreated docs/coord/done/D-06.md in the same atomic change.
+resolved_at: 2026-07-28T10:00:40-04:00

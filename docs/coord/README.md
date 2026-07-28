@@ -42,6 +42,7 @@ This directory records tasks from the complete prompt list that have passed acce
 | D-03 · Visual Bible | `docs/ART_BIBLE.md` | [`done/D-03.md`](done/D-03.md) |
 | D-04 · Asset Technical Specification | `docs/ASSET_SPEC.md` | [`done/D-04.md`](done/D-04.md) |
 | D-05 · Shape and State Encoding | `docs/ENCODING_SPEC.md` | [`done/D-05.md`](done/D-05.md) |
+| D-06 · Single Concept-Scene Style Validation | `art/reference/STYLE_MASTER.png`, `docs/D-06_PIXELLAB_CONCEPT_PROMPT.md`, `docs/assets/D-06_MANIFEST.md` | [`done/D-06.md`](done/D-06.md) |
 | D-14 · UI Framework and Six Regions | `docs/UI_LAYOUT.md` sections 1–6, `docs/assets/D-14_MANIFEST.md` | [`done/D-14.md`](done/D-14.md) |
 | D-17 · Tooltip and Information-Panel Visual Style | `docs/UI_LAYOUT.md` sections 7–9, `docs/assets/D-17_MANIFEST.md` | [`done/D-17.md`](done/D-17.md) |
 
@@ -49,6 +50,5 @@ This directory records tasks from the complete prompt list that have passed acce
 
 | Task | Planning artifact retained | Blocking record |
 |---|---|---|
-| D-06 · Single Concept-Scene Style Validation | `docs/D-06_PIXELLAB_CONCEPT_PROMPT.md` | [`rework/D-06__from_ACCOUNT_D.open.md`](rework/D-06__from_ACCOUNT_D.open.md) |
 | D-07 · Terrain and Tissue Tiles | `docs/D-07_TERRAIN_TILE_PROMPTS.md` | [`rework/D-07__from_ACCOUNT_D.open.md`](rework/D-07__from_ACCOUNT_D.open.md) |
 | D-08 · Vessel Geometry Tiles | `docs/D-08_VESSEL_TILE_PROMPTS.md` | [`rework/D-08__from_ACCOUNT_D.open.md`](rework/D-08__from_ACCOUNT_D.open.md) |

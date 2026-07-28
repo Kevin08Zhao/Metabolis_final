@@ -15,7 +15,7 @@ reproduction:
   - Run find art/tiles -type f -name 'tile_*.png'; no file is returned.
   - Run find docs/assets -type f -name D-07_MANIFEST.md; no file is returned.
 expected:
-  - D-06 must first be restored to DONE.
+  - D-06 is restored to DONE; its style gate no longer blocks this task.
   - Generate the 19 listed native 16 by 16 PNGs and record their individual seeds.
   - Run the repeat, closed-boundary, grayscale, binary-alpha, and locked-palette checks.
 actual:
