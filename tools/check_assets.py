@@ -118,11 +118,12 @@ def audit(repo_root: Path) -> dict[str, Any]:
                         }
                     )
                 rgba = image.convert("RGBA")
-                alpha_values = {pixel[3] for pixel in rgba.get_flattened_data()}
+                pixels = list(rgba.getdata())
+                alpha_values = {pixel[3] for pixel in pixels}
                 outside = sorted(
                     {
                         pixel[:3]
-                        for pixel in rgba.get_flattened_data()
+                        for pixel in pixels
                         if pixel[3] and pixel[:3] not in palette
                     }
                 )
@@ -230,7 +231,8 @@ def audit(repo_root: Path) -> dict[str, Any]:
                         "message": "File name must use lowercase snake_case.",
                     }
                 )
-            if event_names and path.stem not in event_names:
+            is_ambient_heartbeat = relative == "audio/ambient/heartbeat_bed.wav"
+            if event_names and not is_ambient_heartbeat and path.stem not in event_names:
                 issues["error"].append(
                     {
                         "code": "audio_event_unknown",

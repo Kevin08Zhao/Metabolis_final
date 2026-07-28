@@ -64,6 +64,7 @@ the exact output paths and hashes.
 | D-15 | Deterministic semantic resource icons and states | `tools/build_d15_resource_icons.py`, `docs/assets/D-15_MANIFEST.md` |
 | D-15a/D-16 | Deterministic task-rating and bottleneck icons | `tools/build_d15a_d16_icons.py`, task manifests |
 | D-20/D-21 | Deterministic heartbeat sheet assembly and timing/state variants | `tools/build_d20_heartbeat.py`, `tools/build_d21_heartbeat_states.py`, task manifests |
+| D-25 partial | Deterministic PCM heartbeat source with no external sample | `tools/build_d25_heartbeat_audio.py`, `docs/HEARTBEAT_AUDIO_SPEC.md` |
 | D-29 | Quantized and validated title background derived from the attributed source | `fetch_plans/D-29_fetch_plan.json`, `docs/assets/D-29_MANIFEST.md` |
 
 ## License Rules

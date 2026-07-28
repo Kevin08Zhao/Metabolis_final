@@ -1,7 +1,7 @@
 {
   "control_id": "P-F03",
-  "generated_at": "2026-07-28T18:48:10Z",
-  "base_main_sha": "88041591dbfb688449484e66fa0cc8fc6aeb24a3",
+  "generated_at": "2026-07-28T19:00:00Z",
+  "base_main_sha": "7464f53d7cadacb1239d05c8dc66ea880d246db4",
   "status": "BLOCKED_UPSTREAM",
   "final_done_created": false,
   "pixelLab": {
@@ -17,7 +17,7 @@
     "asset_compliance": {
       "command": "python tools/check_assets.py --repo-root . --format text",
       "status": "PASS",
-      "files_scanned": 247,
+      "files_scanned": 248,
       "errors": 0,
       "warnings": 7,
       "warning_summary": {
@@ -29,7 +29,7 @@
     "asset_checker_tests": {
       "command": "python -m unittest tests.test_check_assets -v",
       "status": "PASS",
-      "tests": 11
+      "tests": 12
     },
     "core_tile_check": {
       "command": "python tools/build_core_tiles.py --repo-root . --check",
@@ -41,6 +41,18 @@
       "pairs": 4,
       "errors": 0,
       "warnings": 0
+    },
+    "heartbeat_audio": {
+      "command": "python -m unittest tests.test_build_d25_heartbeat_audio -v",
+      "status": "PASS",
+      "tests": 1,
+      "note": "Stable fallback only; three-band runtime cadence remains blocked."
+    },
+    "godot_headless_startup": {
+      "command": "godot --headless --path src --quit-after 2",
+      "status": "PASS_WITH_WARNING",
+      "exit_code": 0,
+      "warning": "Godot 4.7.1 reports one AudioStreamWAV and one AudioStreamPlaybackWAV instance still referenced during rapid headless shutdown."
     }
   },
   "delivery_tiers": {
@@ -74,13 +86,16 @@
       "ready": [
         "D-20 heartbeat animation",
         "D-21 heartbeat timing variants",
+        "D-24 sound-effect inventory",
+        "D-25 stable heartbeat fallback",
         "D-29 accepted text-free title background"
       ],
       "blocked": [
         "D-19 and D-19a runtime animation integration",
         "D-22 birth transition animation",
         "D-23 static fallbacks",
-        "D-24 through D-27 audio specifications and assets",
+        "D-25 three-band heartbeat cadence support in T-37",
+        "D-26 birth audio and D-27 final mix",
         "D-29 runtime title integration and real screenshots",
         "T-35 science audit"
       ]
@@ -90,7 +105,8 @@
     "docs/coord/rework/D-09__from_ACCOUNT_D.open.md",
     "docs/coord/rework/D-13b__from_ACCOUNT_D.open.md",
     "docs/coord/rework/D-28__from_ACCOUNT_D.open.md",
-    "docs/coord/rework/D-29__from_ACCOUNT_D.open.md"
+    "docs/coord/rework/D-29__from_ACCOUNT_D.open.md",
+    "docs/coord/rework/T-37__from_ACCOUNT_D_d25_heartbeat_timing.open.md"
   ],
   "remaining_critical_path": [
     {
@@ -109,9 +125,9 @@
       "next_command_after_upstream": "Refresh main, complete D-19, then run P-F02 from the first newly READY task."
     },
     {
-      "task": "D-24 -> D-25/D-26 -> D-27 -> D-28",
-      "blocked_by": "Missing T-37 audio router marker",
-      "next_command_after_upstream": "Refresh main after T-37 lands, then execute D-24 before generating or selecting audio."
+      "task": "D-25 -> D-27 -> D-28",
+      "blocked_by": "T-37 has one fixed-cadence ambient stream; D-26 separately waits for D-22",
+      "next_command_after_upstream": "Resolve the T-37 heartbeat cadence rework, validate D-25 live, and run D-26 after D-22."
     },
     {
       "task": "D-29",
@@ -127,6 +143,14 @@
   "partial_outputs_added_by_f03": [
     "tools/check_assets.py",
     "tests/test_check_assets.py",
+    "docs/AUDIO_SFX_SPEC.md",
+    "docs/coord/done/D-24.md",
+    "docs/HEARTBEAT_AUDIO_SPEC.md",
+    "audio/ambient/heartbeat_bed.wav",
+    "docs/assets/D-25_MANIFEST.md",
+    "tools/build_d25_heartbeat_audio.py",
+    "tests/test_build_d25_heartbeat_audio.py",
+    "docs/coord/rework/T-37__from_ACCOUNT_D_d25_heartbeat_timing.open.md",
     "docs/ATTRIBUTIONS.md",
     "docs/assets/D-F03_FINAL_AUDIT.json"
   ]

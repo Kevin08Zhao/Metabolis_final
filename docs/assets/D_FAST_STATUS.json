@@ -1,7 +1,7 @@
 {
   "control_id": "P-F03",
   "owner": "ACCOUNT_D",
-  "observed_main_sha": "88041591dbfb688449484e66fa0cc8fc6aeb24a3",
+  "observed_main_sha": "7464f53d7cadacb1239d05c8dc66ea880d246db4",
   "scheduler": {
     "max_active": 8,
     "reserve_slots": 2,
@@ -177,7 +177,8 @@
     "D-17L",
     "D-18",
     "D-20",
-    "D-21"
+    "D-21",
+    "D-24"
   ],
   "blocked_tasks": [
     {
@@ -191,6 +192,10 @@
     {
       "task_id": "D-29",
       "reason": "The background source is complete, but T-32 confirms title, game, and ending scenes are still placeholders. The full title/disclaimer/font/screenshot task cannot receive DONE until those runtime scenes exist."
+    },
+    {
+      "task_id": "D-25",
+      "reason": "The stable heartbeat fallback passes PCM and loop checks, but T-37 exposes one fixed-cadence ambient stream. It cannot match the 1000/440/1800 ms D-21 loops without state-specific playback and crossfade support."
     }
   ],
   "actual_usage": {
@@ -245,7 +250,7 @@
       "action": "stopped new submissions until batch polling released slots"
     }
   ],
-  "last_poll_at": "2026-07-28T18:48:10Z",
+  "last_poll_at": "2026-07-28T19:00:00Z",
   "final_audit": {
     "status": "BLOCKED_UPSTREAM",
     "report": "docs/assets/D-F03_FINAL_AUDIT.json",
