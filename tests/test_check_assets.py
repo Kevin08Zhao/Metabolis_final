@@ -176,7 +176,7 @@ class CheckAssetsTests(unittest.TestCase):
                 {issue["code"] for issue in report["issues"]["error"]},
             )
 
-    def test_allows_the_contract_ambient_heartbeat_path(self) -> None:
+    def test_allows_the_contract_ambient_heartbeat_paths(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "art").mkdir()
@@ -189,13 +189,44 @@ class CheckAssetsTests(unittest.TestCase):
                 "| event | audio |\n| build_confirmed | sfx_build_confirm |\n",
                 encoding="utf-8",
             )
-            (root / "audio" / "ambient" / "heartbeat_bed.wav").write_bytes(b"RIFF")
+            for filename in (
+                "heartbeat_bed.wav",
+                "heartbeat_bed_strained.wav",
+                "heartbeat_bed_critical.wav",
+            ):
+                (root / "audio" / "ambient" / filename).write_bytes(b"RIFF")
 
             result = self.run_checker(root)
 
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads(result.stdout)
             self.assertNotIn(
+                "audio_event_unknown",
+                {issue["code"] for issue in report["issues"]["error"]},
+            )
+
+    def test_rejects_uncontracted_ambient_heartbeat_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "art").mkdir()
+            (root / "audio" / "ambient").mkdir(parents=True)
+            (root / "docs").mkdir()
+            (root / "art" / "palette.gpl").write_text(
+                "GIMP Palette\n#\n#140F1D\n", encoding="utf-8"
+            )
+            (root / "docs" / "EVENT_API.md").write_text(
+                "| event | audio |\n| build_confirmed | sfx_build_confirm |\n",
+                encoding="utf-8",
+            )
+            (root / "audio" / "ambient" / "heartbeat_bed_fast.wav").write_bytes(
+                b"RIFF"
+            )
+
+            result = self.run_checker(root)
+
+            self.assertEqual(result.returncode, 1, result.stderr)
+            report = json.loads(result.stdout)
+            self.assertIn(
                 "audio_event_unknown",
                 {issue["code"] for issue in report["issues"]["error"]},
             )

@@ -2,8 +2,11 @@
 
 ## Scope
 
-The shipping list contains eleven files, including the ambient heartbeat bed.
-Every event file follows `docs/AUDIO_NAMING.md` exactly:
+The shipping list contains eleven sound designs. The three-state ambient design
+uses three cadence files, so the list contains thirteen physical files. This
+still remains below the twelve-sound-design limit because the state loops share
+one role, synthesis grammar, priority, and mute behavior. Every event file
+follows `docs/AUDIO_NAMING.md` exactly:
 
 ```text
 audio/events/<event_name>.wav
@@ -17,7 +20,7 @@ external sample, instrument performance, voice, or recognizable melody.
 
 | File | Event or role | Duration | Concrete sound structure | Priority | Acquisition | Missing-audio visual fallback | Debounce |
 |---|---|---:|---|---:|---|---|---:|
-| `audio/ambient/heartbeat_bed.wav` | Stability-linked ambient bed | 1000 ms source loop | Two low-frequency impulses below 180 Hz; attack under 8 ms; second impulse quieter; no tonal tail | 9 | Synthetic generation, because exact loop timing must match D-21 | D-21 heartbeat sheet and stability-band shape remain visible | Not event-driven |
+| `audio/ambient/heartbeat_bed.wav`; `heartbeat_bed_strained.wav`; `heartbeat_bed_critical.wav` | One stability-linked ambient design | 1,000 / 440 / 1,800 ms loops | Two low-frequency impulses below 180 Hz; attack under 8 ms; second impulse quieter; no tonal tail | 9 | Deterministic synthetic generation, because pitch-preserving cadence must match all three D-21 loops | D-21 heartbeat sheet and stability-band shape remain visible | Not event-driven |
 | `audio/events/build_decision_confirmed.wav` | `build_decision_confirmed` | 180 ms | Fast dry low-mid click followed by one 120 ms filtered settling tail | 5 | Synthetic generation, for deterministic transient length | Selected slot remains, confirm control locks, and resource values roll down | Not high frequency |
 | `audio/events/transport_pressure_appeared.wav` | `transport_pressure_appeared` | 240 ms | Two dull low-band impacts, 70 ms apart, with a short downward-noise tail | 4 | Synthetic generation, to avoid a literal alarm sound | Edge changes to the congestion texture and the pressure meter marks it | 100 ms |
 | `audio/events/waste_buildup_appeared.wav` | `waste_buildup_appeared` | 300 ms | Mid-low granular burst with a 180 ms downward filtered decay | 4 | Synthetic generation, because the cue must not resemble liquid or gore | Waste layer appears and the bottleneck marker changes shape | 100 ms |
@@ -65,7 +68,7 @@ final causal confirmation of the birth transition.
 
 If only three sounds can be produced, produce:
 
-1. `audio/ambient/heartbeat_bed.wav`
+1. The three-state `audio/ambient/heartbeat_bed*.wav` design
 2. `audio/events/birth_state_changed.wav`
 3. `audio/events/birth_sequence_completed.wav`
 
