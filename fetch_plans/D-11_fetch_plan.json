@@ -1,0 +1,34 @@
+{
+  "task_id": "D-11",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-11_LAND_REPORT.json",
+  "manifest": "docs/assets/D-11_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "items": [
+    {
+      "id": "heart_operating",
+      "target": "art/organs/organ_heart_operating.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download"
+      },
+      "generation": {
+        "tool": "create_image_pixflux",
+        "job_id": "f6688d85-ddf0-4f23-8360-8899ce255648",
+        "seed": 11001,
+        "usage": {
+          "generation_units": 1
+        },
+        "create_response": "id: f6688d85-ddf0-4f23-8360-8899ce255648; size: 48x48px; transparent: True; forced_palette: yes; seed: 11001; cost: 1 generation; status: processing (~10-40s)",
+        "status_response": "status: completed; id: f6688d85-ddf0-4f23-8360-8899ce255648; frames: 1; download: https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download"
+      },
+      "expected_size": {
+        "width": 48,
+        "height": 48
+      },
+      "expected_existing_sha256": "8a5286cd2155da302630bed53d3dc77e26784bbb96399748caf13c8185f02533",
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ]
+}

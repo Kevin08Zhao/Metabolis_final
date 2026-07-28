@@ -1,0 +1,34 @@
+{
+  "task_id": "D-10",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-10_LAND_REPORT.json",
+  "manifest": "docs/assets/D-10_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "items": [
+    {
+      "id": "placenta_operating",
+      "target": "art/organs/organ_placenta_operating.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/e5f72fc6-40cb-46f6-8d08-9e16011b6c66/download"
+      },
+      "generation": {
+        "tool": "create_image_pixflux",
+        "job_id": "e5f72fc6-40cb-46f6-8d08-9e16011b6c66",
+        "seed": 10001,
+        "usage": {
+          "generation_units": 1
+        },
+        "create_response": "id: e5f72fc6-40cb-46f6-8d08-9e16011b6c66; size: 48x48px; transparent: True; forced_palette: yes; seed: 10001; cost: 1 generation; status: processing (~10-40s)",
+        "status_response": "status: completed; id: e5f72fc6-40cb-46f6-8d08-9e16011b6c66; frames: 1; download: https://api.pixellab.ai/mcp/images/e5f72fc6-40cb-46f6-8d08-9e16011b6c66/download"
+      },
+      "expected_size": {
+        "width": 48,
+        "height": 48
+      },
+      "expected_existing_sha256": "f93e4d70f00efb4950703da1c0774e04d60c612f42b6f989cc380d09912cd388",
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ]
+}

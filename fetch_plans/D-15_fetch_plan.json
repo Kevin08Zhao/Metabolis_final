@@ -1,0 +1,63 @@
+{
+  "task_id": "D-15",
+  "mode": "STYLE_REFERENCE_ARCHIVE",
+  "final_geometry": "DERIVED_DETERMINISTIC",
+  "final_geometry_source": "docs/ENCODING_SPEC.md section 1 exact 8x8 bitmaps",
+  "usage_units_total": 6,
+  "items": [
+    {
+      "id": "nutrient_energy_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_energy_candidate01_raw.png",
+      "job_id": "6041c45d-0d09-4d25-aa39-e9f14cc0037a",
+      "seed": 15001,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "id": "cell_material_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_cell_candidate01_raw.png",
+      "job_id": "d8564e3d-63ea-416b-b556-155d541c0adb",
+      "seed": 15002,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "id": "developmental_signal_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_signal_candidate01_raw.png",
+      "job_id": "9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba",
+      "seed": 15003,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "id": "waste_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_waste_candidate01_raw.png",
+      "job_id": "e077e060-9ea6-4834-aff1-8ed3130a4551",
+      "seed": 15004,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "id": "stability_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_stability_candidate01_raw.png",
+      "job_id": "9d05bf3a-7017-438b-a4db-726e1e25da87",
+      "seed": 15005,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "id": "knowledge_badge_style_reference",
+      "raw_path": "art/candidates/pf00/ui_resource_knowledge_candidate01_raw.png",
+      "job_id": "14fc8cef-04b8-4063-986f-350161038466",
+      "seed": 15006,
+      "tool": "create_image_pixflux",
+      "usage_units": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    }
+  ]
+}

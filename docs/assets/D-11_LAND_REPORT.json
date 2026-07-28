@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-07-28T16:36:04+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 48,
+          "width": 48
+        },
+        "operations": [],
+        "output": {
+          "height": 48,
+          "width": 48
+        },
+        "source": {
+          "height": 48,
+          "width": 48
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 2442,
+        "final_url": "https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download",
+        "sha256": "76329235b97e9a52c59585312c4fceb57935a8c1471b38fa771a371020f51049",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "id: f6688d85-ddf0-4f23-8360-8899ce255648; size: 48x48px; transparent: True; forced_palette: yes; seed: 11001; cost: 1 generation; status: processing (~10-40s)",
+        "job_id": "f6688d85-ddf0-4f23-8360-8899ce255648",
+        "seed": 11001,
+        "status_response": "status: completed; id: f6688d85-ddf0-4f23-8360-8899ce255648; frames: 1; download: https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download",
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "heart_operating",
+      "naming": {
+        "file_name": "organ_heart_operating.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 2379,
+        "sha256": "553cf70cc9cae8d7f686fc7a3031a16e4df6a79b39763bf0f5d72927919815d9",
+        "status": "replaced_known_hash"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 18,
+        "visible_pixels_after": 1224,
+        "visible_pixels_before": 1224
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download"
+      },
+      "status": "PASS",
+      "target": "art/organs/organ_heart_operating.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 1224,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 1080
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-11_fetch_plan.json",
+    "sha256": "78b0643793692f3b1da1bdc2acbd8e2c514f537e8381177302c5426fa9bcf043"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 1,
+    "success_count": 1
+  },
+  "task_id": "D-11"
+}

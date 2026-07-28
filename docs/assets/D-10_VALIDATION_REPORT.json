@@ -1,0 +1,140 @@
+{
+  "subject": "placenta",
+  "status": "PASS",
+  "source": "art/organs/organ_placenta_operating.png",
+  "canvas": [
+    48,
+    48
+  ],
+  "anchor": [
+    24,
+    48
+  ],
+  "states": [
+    "blueprint",
+    "under_construction",
+    "completed",
+    "operating",
+    "stressed"
+  ],
+  "files": [
+    {
+      "state": "blueprint",
+      "path": "art/organs/organ_placenta_blueprint.png",
+      "sha256": "543680b68ff8f084fc626558164b587efbf1594a1cbfedc428aa94767100412d",
+      "visible_color_count": 4,
+      "visible_bbox": [
+        6,
+        16,
+        42,
+        48
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "under_construction",
+      "path": "art/organs/organ_placenta_under_construction.png",
+      "sha256": "c6b53349f6d1a2534ff3d91e1f44867ebce2a938750599201b7c0070371f739e",
+      "visible_color_count": 15,
+      "visible_bbox": [
+        3,
+        17,
+        45,
+        48
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "completed",
+      "path": "art/organs/organ_placenta_completed.png",
+      "sha256": "c12bcc5eac58ad6b2a3eb186cf36b29959adec3606fc4078fffc9cb50be23d06",
+      "visible_color_count": 14,
+      "visible_bbox": [
+        3,
+        2,
+        45,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "operating",
+      "path": "art/organs/organ_placenta_operating.png",
+      "sha256": "83d2c551b9c24da2b1c277679f8374fe3d15f83de1b29ec0388942f03cbf6d9a",
+      "visible_color_count": 13,
+      "visible_bbox": [
+        3,
+        2,
+        45,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "stressed",
+      "path": "art/organs/organ_placenta_stressed.png",
+      "sha256": "cc770451a01df74b73758e08f0956fcfaffff3ea90aae9ed703ba1dc5cda8f85",
+      "visible_color_count": 14,
+      "visible_bbox": [
+        3,
+        2,
+        45,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    }
+  ],
+  "matrix_checks": {
+    "exactly_five_contract_states": "PASS",
+    "all_states_pairwise_distinct": "PASS",
+    "all_states_pairwise_distinct_in_grayscale": "PASS",
+    "common_48x48_canvas_and_anchor": "PASS",
+    "blueprint_closed_boundary_and_plan_hatch": "PASS",
+    "under_construction_incomplete_structure": "PASS",
+    "completed_has_no_active_pulse_highlight": "PASS",
+    "operating_preserves_ai_master": "PASS",
+    "stressed_has_non_color_structural_signal": "PASS"
+  },
+  "semantic_notes": {
+    "organ_read": "Open life-harbor hub with multiple material routes; never a closed building.",
+    "animation_separable_region": [
+      16,
+      23,
+      32,
+      35
+    ],
+    "terminal_supply_stop": "Not one of OrganStateMachine's five states. No extra PNG was created; downstream birth transition must derive a non-damaged function-transfer overlay from operating."
+  },
+  "task_id": "D-10",
+  "generated_by": "tools/build_organ_states.py"
+}

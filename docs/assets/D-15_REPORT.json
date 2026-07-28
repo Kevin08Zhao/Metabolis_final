@@ -1,0 +1,314 @@
+{
+  "task_id": "D-15",
+  "status": "PASS",
+  "derivation": "DERIVED_DETERMINISTIC",
+  "source_geometry": "docs/ENCODING_SPEC.md section 1 exact 8x8 bitmaps",
+  "canvas": [
+    16,
+    16
+  ],
+  "anchor": [
+    8,
+    8
+  ],
+  "png_count": 12,
+  "palette_size_limit": 22,
+  "pixel_lab_reference_policy": {
+    "purpose": "STYLE_REFERENCE_ONLY",
+    "reference_size": [
+      32,
+      32
+    ],
+    "references": [
+      {
+        "seed": 15001,
+        "resource": "nutrient_energy",
+        "job_id": "6041c45d-0d09-4d25-aa39-e9f14cc0037a"
+      },
+      {
+        "seed": 15002,
+        "resource": "cell_material",
+        "job_id": "d8564e3d-63ea-416b-b556-155d541c0adb"
+      },
+      {
+        "seed": 15003,
+        "resource": "developmental_signal",
+        "job_id": "9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba"
+      },
+      {
+        "seed": 15004,
+        "resource": "waste",
+        "job_id": "e077e060-9ea6-4834-aff1-8ed3130a4551"
+      },
+      {
+        "seed": 15005,
+        "resource": "stability",
+        "job_id": "9d05bf3a-7017-438b-a4db-726e1e25da87"
+      },
+      {
+        "seed": 15006,
+        "resource": "knowledge_badge",
+        "job_id": "14fc8cef-04b8-4063-986f-350161038466"
+      }
+    ],
+    "final_geometry_override_forbidden": true
+  },
+  "files": [
+    {
+      "path": "art/icons/ui_resource_nutrient_energy_sufficient.png",
+      "resource": "nutrient_energy",
+      "state": "sufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "7f5286f1ff404efaae4133952fd5f3a5d17128605d31a0c416b2a400d7f2abee"
+    },
+    {
+      "path": "art/icons/ui_resource_nutrient_energy_insufficient.png",
+      "resource": "nutrient_energy",
+      "state": "insufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "75479e89160dead24c747eec13b1478c0d2d1cfe4bcdcc6890a95f78dea5b0c6"
+    },
+    {
+      "path": "art/icons/ui_resource_cell_material_sufficient.png",
+      "resource": "cell_material",
+      "state": "sufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        5,
+        5,
+        10,
+        10
+      ],
+      "sha256": "0a8b77c7b9bd1368084273bfb6a3b9493cfc86b4728966d88cda71328d659bae"
+    },
+    {
+      "path": "art/icons/ui_resource_cell_material_insufficient.png",
+      "resource": "cell_material",
+      "state": "insufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        5,
+        5,
+        10,
+        10
+      ],
+      "sha256": "95e6ed3d65dfb6616a61c679f1811dff57d623854a43fb88e2d7466bbc87f246"
+    },
+    {
+      "path": "art/icons/ui_resource_developmental_signal_sufficient.png",
+      "resource": "developmental_signal",
+      "state": "sufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        10
+      ],
+      "sha256": "2503fe88cbf392b5ee2d2b872284801458b172b29a97bf9774b81e3477937a9e"
+    },
+    {
+      "path": "art/icons/ui_resource_developmental_signal_insufficient.png",
+      "resource": "developmental_signal",
+      "state": "insufficient",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        10
+      ],
+      "sha256": "e78bc607ba9ebbc082f196c07bb5cacd912c6334faa6ac85862d2472b5da8417"
+    },
+    {
+      "path": "art/icons/ui_resource_waste_normal.png",
+      "resource": "waste",
+      "state": "normal",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "dceb16f4e8b85b056b414f073c09803bae2b46a2bf4ecfaded1efe393fdae0e9"
+    },
+    {
+      "path": "art/icons/ui_resource_waste_overflow.png",
+      "resource": "waste",
+      "state": "overflow",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        2,
+        3,
+        13,
+        12
+      ],
+      "sha256": "d54b84b308bb0cbc280da16b2a82a1fcbdd0e3fdb37af9d7d626e09453d7fa97"
+    },
+    {
+      "path": "art/icons/ui_resource_stability_normal.png",
+      "resource": "stability",
+      "state": "normal",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "8cbbd5a43f47bd87fa338ef1178077876f64e5317d9f861109ea0505611b1a30"
+    },
+    {
+      "path": "art/icons/ui_resource_stability_warning.png",
+      "resource": "stability",
+      "state": "warning",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "473ae1b40b6dfddda18b5bf17c1ceff835d92bfae6420b854165231a54def07f"
+    },
+    {
+      "path": "art/icons/ui_resource_stability_critical.png",
+      "resource": "stability",
+      "state": "critical",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "a6ab0c19a40d81e4e261064b636458949e4d5d052ccbfdb66bda2c05e186b308"
+    },
+    {
+      "path": "art/icons/ui_resource_knowledge_badge_count.png",
+      "resource": "knowledge_badge",
+      "state": "count",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_bounds_inclusive": [
+        4,
+        4,
+        11,
+        11
+      ],
+      "sha256": "0a50119d184fa4e99da9afc25c36fe96ccb329c4d03a7cd3514de9a5c0a8060b"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "checks": {
+      "png_count_is_12": true,
+      "canvas_is_16x16": true,
+      "anchor_is_8_8": true,
+      "alpha_is_binary": true,
+      "visible_colors_are_locked_palette_only": true,
+      "six_locked_8x8_silhouettes_are_pairwise_distinct": true,
+      "spendable_insufficient_states_are_hollow": true,
+      "waste_overflow_uses_three_offset_copies": true,
+      "stability_tiers_are_pairwise_distinct": true,
+      "all_applicable_states_are_distinct_in_grayscale": true,
+      "knowledge_has_exactly_one_count_variant": true
+    }
+  }
+}

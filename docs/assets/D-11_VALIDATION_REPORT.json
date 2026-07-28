@@ -1,0 +1,142 @@
+{
+  "subject": "heart",
+  "status": "PASS",
+  "source": "art/organs/organ_heart_operating.png",
+  "canvas": [
+    48,
+    48
+  ],
+  "anchor": [
+    24,
+    48
+  ],
+  "states": [
+    "blueprint",
+    "under_construction",
+    "completed",
+    "operating",
+    "stressed"
+  ],
+  "files": [
+    {
+      "state": "blueprint",
+      "path": "art/organs/organ_heart_blueprint.png",
+      "sha256": "a2f34c2601d24bdc2d52b89d056826cde8fb6d8ee448f06020041b9a9e3f37c4",
+      "visible_color_count": 4,
+      "visible_bbox": [
+        6,
+        16,
+        42,
+        48
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "under_construction",
+      "path": "art/organs/organ_heart_under_construction.png",
+      "sha256": "ff240a4b91ac190f4f0c51e94882328332766135f727b7b2cecdb632e2c4e891",
+      "visible_color_count": 16,
+      "visible_bbox": [
+        2,
+        17,
+        46,
+        48
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "completed",
+      "path": "art/organs/organ_heart_completed.png",
+      "sha256": "1622337d65b6cca0d0bcc0597fa343137e21fa627758c0b8c5d293fc5101c5e3",
+      "visible_color_count": 17,
+      "visible_bbox": [
+        2,
+        2,
+        46,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "operating",
+      "path": "art/organs/organ_heart_operating.png",
+      "sha256": "553cf70cc9cae8d7f686fc7a3031a16e4df6a79b39763bf0f5d72927919815d9",
+      "visible_color_count": 18,
+      "visible_bbox": [
+        2,
+        2,
+        46,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    },
+    {
+      "state": "stressed",
+      "path": "art/organs/organ_heart_stressed.png",
+      "sha256": "7298e94a6889c0077b9d845660a3aef895b1fbec23043cf4ae395e04f1aecad1",
+      "visible_color_count": 19,
+      "visible_bbox": [
+        2,
+        2,
+        46,
+        46
+      ],
+      "checks": {
+        "dimensions_48x48": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "transparent_padding_preserved": "PASS",
+        "lowercase_static_naming": "PASS"
+      }
+    }
+  ],
+  "matrix_checks": {
+    "exactly_five_contract_states": "PASS",
+    "all_states_pairwise_distinct": "PASS",
+    "all_states_pairwise_distinct_in_grayscale": "PASS",
+    "common_48x48_canvas_and_anchor": "PASS",
+    "blueprint_closed_boundary_and_plan_hatch": "PASS",
+    "under_construction_incomplete_structure": "PASS",
+    "completed_has_no_active_pulse_highlight": "PASS",
+    "operating_preserves_ai_master": "PASS",
+    "stressed_has_non_color_structural_signal": "PASS"
+  },
+  "semantic_notes": {
+    "organ_read": "Urban paired-chamber central pump station; no anatomical heart or ECG symbol.",
+    "pulse_region": [
+      12,
+      21,
+      37,
+      36
+    ],
+    "reserved_deformation_margin_pixels": 2,
+    "incomplete_state_rule": "Blueprint and under_construction omit closed, complete paired pulse chambers.",
+    "stressed_rule": "Cross-braces and a blocked central outlet provide a structural grayscale signal."
+  },
+  "task_id": "D-11",
+  "generated_by": "tools/build_organ_states.py"
+}
