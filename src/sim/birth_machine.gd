@@ -466,9 +466,54 @@ func _on_enter_fetal_shunts() -> void:
 	transition_to(State.SYSTEMS_ONLINE)
 
 
-## Filled by T-21-5.
+## Implemented by T-21-5.
+##
+## Entry action: open the first half of the ending picture, where the major
+## systems light up in turn. Exit judgement: the beat's configured window has
+## elapsed, after which the final image settles.
+##
+## Same shape as the three observable phases, with two differences that matter to
+## whoever collapses the duplication later: this beat's window is shorter, and it
+## hands off to a terminal state rather than to another beat. Neither is decided
+## here. The length comes from state_duration_ms and the successor comes from the
+## graph, so this function reads exactly like the others.
+##
+## The wait is interruptible on the same four conditions: still the current beat
+## by token, still in this state, not queued for deletion, still inside the tree.
+##
+## Nothing is played. The systems lighting up one after another is D-22 and
+## D-26's work, hung off birth_state_changed, which transition_to has already
+## emitted by now. This function only holds the window open for them.
 func _on_enter_systems_online() -> void:
-	pass
+	_beat_token += 1
+	var token := _beat_token
+	var window_ms := state_duration_ms(State.SYSTEMS_ONLINE)
+
+	var tree := get_tree()
+	if tree == null:
+		push_warning("%s Not inside a scene tree; the beat cannot time itself." % LOG_PREFIX)
+		return
+
+	if window_ms > 0:
+		print("%s beat %s running for %d ms" % [LOG_PREFIX, STATE_IDS[State.SYSTEMS_ONLINE], window_ms])
+		await tree.create_timer(float(window_ms) / MS_PER_SECOND).timeout
+	else:
+		push_warning(
+			"%s No window configured for %s; advancing on the next frame. See missing_duration_paths()."
+			% [LOG_PREFIX, STATE_IDS[State.SYSTEMS_ONLINE]]
+		)
+		await tree.process_frame
+
+	if (
+		token != _beat_token
+		or _current_state != State.SYSTEMS_ONLINE
+		or is_queued_for_deletion()
+		or not is_inside_tree()
+	):
+		print("%s beat %s was interrupted; exiting without advancing." % [LOG_PREFIX, STATE_IDS[State.SYSTEMS_ONLINE]])
+		return
+
+	transition_to(State.ENDING)
 
 
 ## Filled by T-21-6.
