@@ -105,6 +105,16 @@ var gate_report: Dictionary = {}
 ## configured in milliseconds and SceneTreeTimer takes seconds.
 const MS_PER_SECOND := 1000.0
 
+## Added by T-21-6. The two terms final_completion_ready in
+## docs/CHAPTER_TIMELINE.md needs from this machine. The names are taken from
+## that expression rather than invented here.
+## birth_transition_complete turns true on reaching the terminal state, because
+## by then the transition itself has run. first_breath_complete turns true only
+## after the ending picture has held its full window, because that window is the
+## first breath. T-19d and T-25 read both; neither is written anywhere else.
+var birth_transition_complete: bool = false
+var first_breath_complete: bool = false
+
 ## Added by T-21-2. Incremented whenever a timed beat starts. A beat's waiter
 ## captures the value and advances the machine only if it still matches, so a
 ## beat that was interrupted and later restarted can never be advanced by the
@@ -516,9 +526,59 @@ func _on_enter_systems_online() -> void:
 	transition_to(State.ENDING)
 
 
-## Filled by T-21-6.
+## Implemented by T-21-6.
+##
+## Entry action: mark the transition complete and hold the ending picture for its
+## configured window, which is the first breath. Exit judgement: there is none.
+## This state is terminal, so unlike every other beat it holds its window and
+## then stops rather than handing off.
+##
+## The two flags are the terms final_completion_ready needs. They are set at
+## different moments on purpose: the transition is over the instant the machine
+## arrives here, but the first breath is the window itself, so its flag waits for
+## the window to finish. Setting both on entry would let T-25 close the run
+## before the ending had been seen.
+##
+## Interruption still matters even though nothing may legally leave this state.
+## The node can be torn down mid-window, and a machine being freed must not come
+## back to life to set a completion flag on its way out.
+##
+## Nothing is played. The first breath and the final image are D-22 and D-26's
+## work, hung off birth_sequence_completed, which transition_to emitted on the
+## way in. This function only holds the window open for them.
 func _on_enter_ending() -> void:
-	pass
+	birth_transition_complete = true
+
+	_beat_token += 1
+	var token := _beat_token
+	var window_ms := state_duration_ms(State.ENDING)
+
+	var tree := get_tree()
+	if tree == null:
+		push_warning("%s Not inside a scene tree; the ending cannot time itself." % LOG_PREFIX)
+		return
+
+	if window_ms > 0:
+		print("%s ending picture holding for %d ms" % [LOG_PREFIX, window_ms])
+		await tree.create_timer(float(window_ms) / MS_PER_SECOND).timeout
+	else:
+		push_warning(
+			"%s No window configured for %s; completing on the next frame. See missing_duration_paths()."
+			% [LOG_PREFIX, STATE_IDS[State.ENDING]]
+		)
+		await tree.process_frame
+
+	if (
+		token != _beat_token
+		or _current_state != State.ENDING
+		or is_queued_for_deletion()
+		or not is_inside_tree()
+	):
+		print("%s ending picture was interrupted; first breath not marked complete." % LOG_PREFIX)
+		return
+
+	first_breath_complete = true
+	print("%s first breath complete; the run is ready for T-25 to close." % LOG_PREFIX)
 
 
 ## Filled by T-21-7.
