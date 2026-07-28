@@ -1,0 +1,73 @@
+{
+  "task_id": "D-07",
+  "status": "PASS",
+  "generation": {
+    "tool": "deterministic_local_script",
+    "script": "tools/build_core_tiles.py",
+    "pixellab_calls": 0
+  },
+  "summary": {
+    "png_count": 19,
+    "native_size": "16x16",
+    "locked_palette_colors": 22,
+    "alpha": "binary",
+    "canonical_boundary_masks": 6,
+    "derived_boundary_rotations": 10
+  },
+  "checks": {
+    "exact_file_count": "PASS",
+    "dimensions_16x16": "PASS",
+    "locked_palette_22": "PASS",
+    "binary_alpha": "PASS",
+    "lowercase_snake_case_naming": "PASS",
+    "canonical_mask_rotation": "PASS",
+    "repeat_5x5": "PASS",
+    "closed_boundary_3x3": "PASS",
+    "construction_grayscale_grammar": "PASS",
+    "construction_focus_line_pixels": 78,
+    "construction_background_line_pixels": 49,
+    "construction_detail_reduction_percent": 37.179487,
+    "construction_focus_lstar_contrast": 24.148513,
+    "construction_background_lstar_contrast": 8.057363,
+    "construction_lstar_contrast_gap": 16.09115
+  },
+  "canonical_rules": {
+    "bit_order": {
+      "N": 1,
+      "E": 2,
+      "S": 4,
+      "W": 8
+    },
+    "canonical_masks": {
+      "isolated": 0,
+      "n": 1,
+      "ns": 5,
+      "ne": 3,
+      "nes": 7,
+      "nesw": 15
+    },
+    "rotation": "lossless clockwise quarter-turns on the complete 16x16 RGBA canvas"
+  },
+  "deterministic_seeds": {
+    "tile_terrain_empty.png": 7001,
+    "tile_tissue_ground.png": 7002,
+    "tile_tissue_isolated.png": 7003,
+    "tile_tissue_n.png": 7004,
+    "tile_tissue_e.png": 7005,
+    "tile_tissue_s.png": 7006,
+    "tile_tissue_w.png": 7007,
+    "tile_tissue_ns.png": 7008,
+    "tile_tissue_ew.png": 7009,
+    "tile_tissue_ne.png": 7010,
+    "tile_tissue_es.png": 7011,
+    "tile_tissue_sw.png": 7012,
+    "tile_tissue_wn.png": 7013,
+    "tile_tissue_nes.png": 7014,
+    "tile_tissue_esw.png": 7015,
+    "tile_tissue_swn.png": 7016,
+    "tile_tissue_wne.png": 7017,
+    "tile_construction_focus.png": 7018,
+    "tile_construction_background.png": 7019
+  },
+  "errors": []
+}

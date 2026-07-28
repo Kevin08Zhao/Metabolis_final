@@ -1,0 +1,39 @@
+{
+  "task_id": "D-08",
+  "status": "PASS",
+  "generation": {
+    "tool": "deterministic_local_script",
+    "script": "tools/build_core_tiles.py",
+    "pixellab_calls": 0
+  },
+  "summary": {
+    "canonical_png_count": 4,
+    "logical_variant_count": 11,
+    "native_size": "16x16",
+    "visible_colors": [
+      "#140F1D",
+      "#BA3A3F"
+    ],
+    "alpha": "binary"
+  },
+  "checks": {
+    "exact_file_count": "PASS",
+    "dimensions_16x16": "PASS",
+    "locked_palette_22": "PASS",
+    "binary_alpha": "PASS",
+    "lowercase_snake_case_naming": "PASS",
+    "canonical_quarter_turns": "PASS",
+    "logical_directions_11": "PASS",
+    "interface_pixels_5_through_12": "PASS",
+    "outline_1px_140f1d": "PASS",
+    "fill_6px_ba3a3f": "PASS",
+    "double_loop_splice_5x5": "PASS"
+  },
+  "canonical_masks": {
+    "tile_vessel_straight.png": 5,
+    "tile_vessel_corner.png": 3,
+    "tile_vessel_tee.png": 7,
+    "tile_vessel_fourway.png": 15
+  },
+  "errors": []
+}
