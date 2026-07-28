@@ -1,0 +1,319 @@
+class_name SceneRouter
+extends Node
+
+## Title screen entry and scene routing.
+##
+## Owns which main scene is resident and, on the title, which entries the player
+## is offered. Both are decisions rather than presentation: this script produces
+## no art, and its buttons use the engine's default style with placeholder text
+## so that D-14 and D-17 can replace them without touching routing.
+##
+## Exactly one main scene is resident at a time. The outgoing scene is removed
+## from the tree and freed before the incoming one is added, not queued for
+## deletion alongside it, so there is never a frame with two of them present.
+##
+## The title offers what the save can actually support and nothing more. No save
+## means one entry. A save means continue and new game, and chapter select only
+## when at least one finished stage has a snapshot that can really be entered -
+## offering it otherwise would open an empty list.
+##
+## docs/EVENT_API.md defines no scene-routing event and this script adds none.
+## Routing is not an animation or audio moment; the beats that are already have
+## their own rows. Callers listen to `route_changed` instead.
+##
+## Requires the `SaveManager` and `Balance` autoloads.
+
+const LOG_PREFIX := "[ROUTE]"
+
+## The three routes. Nothing else exists: no settings, no volume panel, no
+## language switch, all of which the prompt rules out.
+const ROUTE_TITLE := &"title"
+const ROUTE_GAME := &"game"
+const ROUTE_ENDING := &"ending"
+
+## Title entries, in the order they are offered.
+const ENTRY_CONTINUE := &"continue"
+const ENTRY_NEW_GAME := &"new_game"
+const ENTRY_CHAPTER_SELECT := &"chapter_select"
+
+## Placeholder text. The display name is the full one; the internal identifier
+## stays Metabolis, per the naming rules in docs/CONTEXT.md.
+const ENTRY_LABELS := {
+	ENTRY_CONTINUE: "Continue",
+	ENTRY_NEW_GAME: "New Game",
+	ENTRY_CHAPTER_SELECT: "Chapter Select",
+}
+const CONFIRM_LABEL := "New Game will overwrite your progress. Confirm?"
+const CONFIRM_YES := "Yes, start a new game"
+const CONFIRM_NO := "No, go back"
+
+## Where each route's scene lives. Assigned rather than hardcoded at the point of
+## use so an integrator can repoint them; the registration steps in
+## docs/coord/done/T-32.md say which scenes to create.
+var scene_paths := {
+	ROUTE_GAME: "res://main.tscn",
+	ROUTE_ENDING: "res://main.tscn",
+}
+
+signal route_changed(route: StringName)
+## Emitted when the title entries are rebuilt, carrying what is on offer.
+signal title_entries_changed(entries: Array[StringName])
+
+var _route: StringName = &""
+var _awaiting_new_game_confirmation: bool = false
+var _scene_host: Node = null
+var _title_menu: VBoxContainer = null
+var _resident_scene: Node = null
+
+
+func _ready() -> void:
+	_scene_host = Node.new()
+	_scene_host.name = "SceneHost"
+	add_child(_scene_host)
+
+
+# ---------------------------------------------------------------------------
+# Routing
+# ---------------------------------------------------------------------------
+
+## Show the title and build its entries from what the save can support.
+func go_to_title() -> void:
+	_awaiting_new_game_confirmation = false
+	_free_resident_scene()
+	_route = ROUTE_TITLE
+	_build_title_menu()
+	print("%s title" % LOG_PREFIX)
+	route_changed.emit(_route)
+
+
+## Continue the existing run. Refused when there is nothing to continue.
+func continue_game() -> bool:
+	if not has_save():
+		push_warning("%s Nothing to continue." % LOG_PREFIX)
+		return false
+	return _enter_route(ROUTE_GAME)
+
+
+## Ask for a new game. Never starts one: it arms the confirmation and rebuilds the
+## title so the player has to answer. A destructive action gets a second look.
+func request_new_game() -> bool:
+	if _route != ROUTE_TITLE:
+		return false
+	if not has_save():
+		# Nothing to overwrite, so nothing to confirm.
+		return _enter_route(ROUTE_GAME)
+	_awaiting_new_game_confirmation = true
+	print("%s new game requested; waiting for confirmation." % LOG_PREFIX)
+	_build_title_menu()
+	return false
+
+
+func confirm_new_game() -> bool:
+	if not _awaiting_new_game_confirmation:
+		push_warning("%s No new game was requested." % LOG_PREFIX)
+		return false
+	_awaiting_new_game_confirmation = false
+	print("%s new game confirmed." % LOG_PREFIX)
+	return _enter_route(ROUTE_GAME)
+
+
+func cancel_new_game() -> void:
+	if not _awaiting_new_game_confirmation:
+		return
+	_awaiting_new_game_confirmation = false
+	print("%s new game cancelled." % LOG_PREFIX)
+	_build_title_menu()
+
+
+func open_chapter_select() -> bool:
+	if not chapter_select_available():
+		push_warning("%s Chapter select has nothing to offer." % LOG_PREFIX)
+		return false
+	return _enter_route(ROUTE_GAME)
+
+
+func go_to_ending() -> bool:
+	return _enter_route(ROUTE_ENDING)
+
+
+func current_route() -> StringName:
+	return _route
+
+
+func awaiting_new_game_confirmation() -> bool:
+	return _awaiting_new_game_confirmation
+
+
+# ---------------------------------------------------------------------------
+# What the title offers
+# ---------------------------------------------------------------------------
+
+## The entries the title should show, in order. While a new game is awaiting
+## confirmation the list is replaced by the two answers, so the player cannot
+## sidestep the question by pressing something else.
+func title_entries() -> Array[StringName]:
+	if _awaiting_new_game_confirmation:
+		return [ENTRY_NEW_GAME]
+	var entries: Array[StringName] = []
+	if has_save():
+		entries.append(ENTRY_CONTINUE)
+	entries.append(ENTRY_NEW_GAME)
+	if chapter_select_available():
+		entries.append(ENTRY_CHAPTER_SELECT)
+	return entries
+
+
+## A save counts when the file loaded well enough to leave progress behind. A
+## corrupt file is not a save to continue from, and T-27 already reports that.
+func has_save() -> bool:
+	var progress: Dictionary = SaveManager.build_payload().get("main_progress", {})
+	return not progress.is_empty()
+
+
+## Only when a finished stage has a snapshot that can genuinely be entered.
+## Showing the entry for an empty list would be worse than hiding it.
+func chapter_select_available() -> bool:
+	for stage_id in completed_stage_ids():
+		if SaveManager.can_replay_stage(stage_id):
+			return true
+	return false
+
+
+## Stages the main line has moved past, walked from configuration rather than
+## listed here.
+func completed_stage_ids() -> Array[StringName]:
+	var finished: Array[StringName] = []
+	var progress: Dictionary = SaveManager.build_payload().get("main_progress", {})
+	var current := StringName(str(progress.get("current_stage_id", "")))
+	if current == &"":
+		return finished
+	for stage_id in _stage_order():
+		if stage_id == current:
+			break
+		finished.append(stage_id)
+	return finished
+
+
+func _stage_order() -> Array[StringName]:
+	var order: Array[StringName] = []
+	var stage_id := StringName(str(Balance.get_value("progress.initial.current_stage_id", "")))
+	while stage_id != &"" and not order.has(stage_id):
+		order.append(stage_id)
+		var value: Variant = Balance.get_value("chapters.%s.next_stage_id" % stage_id, null)
+		stage_id = &"" if value == null else StringName(str(value))
+	return order
+
+
+# ---------------------------------------------------------------------------
+# Scene residency
+#
+# The order below is the whole point of this section. Remove, free, then add.
+# queue_free would leave the outgoing scene in the tree until the end of the
+# frame, so for that frame two main scenes would be resident and both would
+# receive input and process time.
+# ---------------------------------------------------------------------------
+
+func _enter_route(route: StringName) -> bool:
+	var path: String = str(scene_paths.get(route, ""))
+	if path.is_empty():
+		push_error("%s No scene registered for route '%s'." % [LOG_PREFIX, route])
+		return false
+	if not ResourceLoader.exists(path):
+		push_error("%s Scene '%s' for route '%s' does not exist yet." % [LOG_PREFIX, path, route])
+		return false
+
+	var packed: PackedScene = load(path)
+	if packed == null:
+		push_error("%s Could not load '%s'." % [LOG_PREFIX, path])
+		return false
+
+	_free_title_menu()
+	_free_resident_scene()
+
+	_resident_scene = packed.instantiate()
+	_scene_host.add_child(_resident_scene)
+	_route = route
+	print("%s %s -> %s" % [LOG_PREFIX, route, path])
+	route_changed.emit(_route)
+	return true
+
+
+## How many main scenes are resident. Must never exceed one; exposed so a test can
+## assert that rather than take it on trust.
+func resident_scene_count() -> int:
+	if _scene_host == null:
+		return 0
+	return _scene_host.get_child_count()
+
+
+func _free_resident_scene() -> void:
+	if _resident_scene == null or not is_instance_valid(_resident_scene):
+		_resident_scene = null
+		return
+	_scene_host.remove_child(_resident_scene)
+	_resident_scene.free()
+	_resident_scene = null
+
+
+# ---------------------------------------------------------------------------
+# The title menu
+#
+# Default-styled buttons with placeholder text. The time-basis explanation is
+# deliberately absent: docs/CHAPTER_TIMELINE.md places it at the first entry into
+# stage one, and T-29a presents it there. Putting it here would show it before
+# the player has any stage to attach it to.
+# ---------------------------------------------------------------------------
+
+func _build_title_menu() -> void:
+	_free_title_menu()
+
+	_title_menu = VBoxContainer.new()
+	_title_menu.name = "TitleMenu"
+	add_child(_title_menu)
+
+	var title := Label.new()
+	title.name = "GameTitle"
+	title.text = "Metabolis: Birth of the City of Life"
+	_title_menu.add_child(title)
+
+	if _awaiting_new_game_confirmation:
+		var prompt := Label.new()
+		prompt.name = "ConfirmPrompt"
+		prompt.text = CONFIRM_LABEL
+		_title_menu.add_child(prompt)
+		_add_button(&"confirm_yes", CONFIRM_YES, confirm_new_game)
+		_add_button(&"confirm_no", CONFIRM_NO, cancel_new_game)
+	else:
+		for entry in title_entries():
+			_add_button(entry, str(ENTRY_LABELS.get(entry, entry)), _handler_for(entry))
+
+	title_entries_changed.emit(title_entries())
+
+
+func _add_button(id: StringName, text: String, handler: Callable) -> void:
+	var button := Button.new()
+	button.name = "Entry_%s" % id
+	button.text = text
+	button.pressed.connect(func() -> void: handler.call())
+	_title_menu.add_child(button)
+
+
+func _handler_for(entry: StringName) -> Callable:
+	match entry:
+		ENTRY_CONTINUE:
+			return continue_game
+		ENTRY_NEW_GAME:
+			return request_new_game
+		ENTRY_CHAPTER_SELECT:
+			return open_chapter_select
+		_:
+			return func() -> void: pass
+
+
+func _free_title_menu() -> void:
+	if _title_menu == null or not is_instance_valid(_title_menu):
+		_title_menu = null
+		return
+	remove_child(_title_menu)
+	_title_menu.free()
+	_title_menu = null
