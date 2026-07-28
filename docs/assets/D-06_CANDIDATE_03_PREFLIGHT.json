@@ -1,0 +1,36 @@
+{
+  "task_id": "D-06",
+  "candidate_id": "candidate_03",
+  "status": "AUTOMATED_PREFLIGHT_PASS_AWAITING_HUMAN_STYLE_GATE",
+  "preflight_only": true,
+  "warning": "This report was produced in an isolated temporary repository. No final LAND target, DONE marker, commit, push, or pull request was created.",
+  "source": {
+    "raw_candidate": "art/reference/candidates/reference_style_master_candidate_03_raw.png",
+    "raw_sha256": "d78bb2dd48a736b4c0b478306b52f3b5ececeada1784644b998f45bf2e1192e7",
+    "normalized_candidate": "art/reference/candidates/reference_style_master_candidate_03_palette_normalized.png",
+    "normalized_sha256": "cf4c7fbc31536d6fe57ae703e3411253901ac12ed3e57c74d61e660b2ed6b94e",
+    "preview_2x": "art/reference/candidates/reference_style_master_candidate_03_preview_2x.png",
+    "preview_2x_sha256": "9c5c044eed5ba143df006f562059f8dda0855f2228bb155e261339c3a976c1fc"
+  },
+  "checks": {
+    "pipeline_self_test": "PASS",
+    "fetch_plan_contract": "PASS",
+    "dimensions_320_by_180": "PASS",
+    "opaque_canvas": "PASS",
+    "binary_alpha": "PASS",
+    "locked_palette_has_22_values": "PASS",
+    "visible_pixels_within_locked_palette": "PASS",
+    "visible_output_color_count": 20,
+    "out_of_palette_pixels_before": 0,
+    "out_of_palette_pixels_after": 0,
+    "over_threshold_percent": 0.0,
+    "raw_and_normalized_pixels_identical": "PASS",
+    "nearest_neighbor_preview_640_by_360": "PASS",
+    "human_subject_composition_style_gate": "PENDING"
+  },
+  "temporary_landing_summary": {
+    "failure_count": 0,
+    "item_count": 1,
+    "success_count": 1
+  }
+}
