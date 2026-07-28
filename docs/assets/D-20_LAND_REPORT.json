@@ -1,0 +1,315 @@
+{
+  "generated_at": "2026-07-28T18:02:36+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 16,
+          "width": 26
+        },
+        "operations": [],
+        "output": {
+          "height": 16,
+          "width": 26
+        },
+        "source": {
+          "height": 16,
+          "width": 26
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 884,
+        "final_url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download",
+        "sha256": "932c2c9029c446c7db7f3a04ce807203fabf05794ebadec83b65c176593a773b",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "id: 97436fcf-d7c1-44ba-84cd-5a66f44d0a6e; frames: 4; size: 26x16px; transparent: True; last_frame: yes; seed: 20001; cost: 1 generation; status: processing (30-180s)",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "status_response": "status: completed; id: 97436fcf-d7c1-44ba-84cd-5a66f44d0a6e; frames: 5; download: https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download?index=0 ... ?index=4",
+        "tool": "animate_image",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "heart_pulse_input",
+      "naming": {
+        "file_name": "anim_heart_pulse_input.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 881,
+        "sha256": "902034bc00daf191de91eac9902a986ecd6d3b8d040d9ac7a932bd44d9da71ec",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 14,
+        "visible_pixels_after": 416,
+        "visible_pixels_before": 416
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download"
+      },
+      "status": "PASS",
+      "target": "art/candidates/anim_heart_pulse_input.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 416,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 16,
+          "width": 26
+        },
+        "operations": [],
+        "output": {
+          "height": 16,
+          "width": 26
+        },
+        "source": {
+          "height": 16,
+          "width": 26
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 902,
+        "final_url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download",
+        "sha256": "71695a24cd7eeb8a0296654f86d0b445b9ba212f2ed7a5a82beb2c45eded7028",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "status_response": "status: completed; response frame index: 2",
+        "tool": "animate_image",
+        "usage": {
+          "generation_units": 0
+        }
+      },
+      "id": "heart_pulse_contraction",
+      "naming": {
+        "file_name": "anim_heart_pulse_contraction.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 899,
+        "sha256": "5e5d25f47035a85599f7008ba57f41e9c18b35136dd4024e84d5ea3e7c50186b",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 14,
+        "visible_pixels_after": 416,
+        "visible_pixels_before": 416
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download"
+      },
+      "status": "PASS",
+      "target": "art/candidates/anim_heart_pulse_contraction.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 416,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 16,
+          "width": 26
+        },
+        "operations": [],
+        "output": {
+          "height": 16,
+          "width": 26
+        },
+        "source": {
+          "height": 16,
+          "width": 26
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 794,
+        "final_url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download",
+        "sha256": "e7abaa78833bbe2d51f40b6f18600b97313a7fd9d72f283f51d47ca8a5531f6c",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "status_response": "status: completed; response frame index: 3",
+        "tool": "animate_image",
+        "usage": {
+          "generation_units": 0
+        }
+      },
+      "id": "heart_pulse_peak",
+      "naming": {
+        "file_name": "anim_heart_pulse_peak.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 762,
+        "sha256": "c60be401a40b18f1357db3840559e16df3c2291fe2c290eaf99728d97aceea5e",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 36,
+        "over_threshold_percent": 8.173077,
+        "over_threshold_pixels": 34,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 11,
+        "visible_pixels_after": 416,
+        "visible_pixels_before": 416
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download"
+      },
+      "status": "PASS",
+      "target": "art/candidates/anim_heart_pulse_peak.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 416,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 16,
+          "width": 26
+        },
+        "operations": [],
+        "output": {
+          "height": 16,
+          "width": 26
+        },
+        "source": {
+          "height": 16,
+          "width": 26
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 904,
+        "final_url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download",
+        "sha256": "7aea7626477d931bda32d225d62031f538ef3f37e97bf415deecbfd7515eade0",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "This returned frame shares the single animate_image call recorded on heart_pulse_input.",
+        "job_id": "97436fcf-d7c1-44ba-84cd-5a66f44d0a6e",
+        "seed": 20001,
+        "status_response": "status: completed; response frame index: 4",
+        "tool": "animate_image",
+        "usage": {
+          "generation_units": 0
+        }
+      },
+      "id": "heart_pulse_relaxation",
+      "naming": {
+        "file_name": "anim_heart_pulse_relaxation.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 925,
+        "sha256": "aacd82806942e6f14410690076a9878468e573492300f44756de0d9232454663",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 14,
+        "visible_pixels_after": 355,
+        "visible_pixels_before": 355
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/97436fcf-d7c1-44ba-84cd-5a66f44d0a6e/download"
+      },
+      "status": "PASS",
+      "target": "art/candidates/anim_heart_pulse_relaxation.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 355,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 61
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-20_fetch_plan.json",
+    "sha256": "4cbf7b7ef3468b08984364b8b30e8aa84b249cc0841f27440ca2b472d5119b0e"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 4,
+    "success_count": 4
+  },
+  "task_id": "D-20"
+}
