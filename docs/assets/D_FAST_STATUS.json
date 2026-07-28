@@ -1,7 +1,7 @@
 {
-  "control_id": "P-F00",
+  "control_id": "P-F01",
   "owner": "ACCOUNT_D",
-  "observed_main_sha": "5f9c8e98334910c19cac3c2170d16b47879af7c9",
+  "observed_main_sha": "d13bb366833e0fec1e89d234495b827bcdefd502",
   "scheduler": {
     "max_active": 8,
     "reserve_slots": 2,
@@ -11,7 +11,8 @@
   },
   "branches": {
     "core": "codex/d-fast-core",
-    "static": "codex/d-fast-static"
+    "static": "codex/d-fast-static",
+    "pf01": "codex/d-fast-f01"
   },
   "active_jobs": [],
   "completed_jobs": [
@@ -78,7 +79,7 @@
       "tool": "create_ui_asset",
       "seed": 141701,
       "raw_file": "art/candidates/pf00/ui_frame_shared_candidate01_raw.png",
-      "disposition": "STYLE_SOURCE_ONLY_CONTRACT_REQUIRED"
+      "disposition": "ACCEPTED_STYLE_SOURCE_FOR_DETERMINISTIC_D-14L_D-17L"
     },
     {
       "task_id": "D-15",
@@ -169,16 +170,25 @@
     "D-11",
     "D-12",
     "D-13a",
-    "D-15"
+    "D-14L",
+    "D-15",
+    "D-15a",
+    "D-16",
+    "D-17L",
+    "D-18"
   ],
   "blocked_tasks": [
     {
-      "task_id": "D-14L/D-17L",
-      "reason": "Repository main does not define the exact output list, source-border contract, or nine-slice cut coordinates. The generated panel is retained as a style source and is not falsely marked DONE."
+      "task_id": "D-09",
+      "reason": "All 132 deterministic vessel variants pass art validation, but T-15a edge records do not expose flow_direction, passage_state, route_role, or an unambiguous tee/fourway entry-exit rule. Runtime selection cannot be completed without upstream contract work."
+    },
+    {
+      "task_id": "D-13b",
+      "reason": "Table D8 defines metric content and bars, but UI_LAYOUT and the live option preview do not define the candidate-card allocation rectangle, card height, spacing, or the 2-4 card arrangement required for exact static output."
     },
     {
       "task_id": "D-29",
-      "reason": "The background source is complete, but the full task also requires the runtime title/disclaimer/font/screenshot contract before DONE."
+      "reason": "The background source is complete, but T-32 confirms title, game, and ending scenes are still placeholders. The full title/disclaimer/font/screenshot task cannot receive DONE until those runtime scenes exist."
     }
   ],
   "actual_usage": {
@@ -188,6 +198,9 @@
     "jobs_created_this_run": 15,
     "rejected_create_requests_this_run": 3,
     "actual_generation_units_this_run": 91,
+    "pf01_generation_calls": 0,
+    "pf01_jobs_created": 0,
+    "pf01_actual_generation_units": 0,
     "current_generations_used": 156,
     "current_generations_remaining": 4844,
     "subscription": "active Tier 2 Pixel Artisan",
@@ -227,6 +240,6 @@
       "action": "stopped new submissions until batch polling released slots"
     }
   ],
-  "last_poll_at": "2026-07-28T16:29:39Z",
-  "resume_prompt": "P-F01"
+  "last_poll_at": "2026-07-28T17:03:00Z",
+  "resume_prompt": "P-F02"
 }

@@ -17,5 +17,6 @@
 | `2026-07-28T16:29:39Z` | P-F00 checkpoint 4: D-12 repair 2, D-15 knowledge | `edit_image` ×1, `create_image_pixflux` ×1, then `get_balance({})` | 2 | 21 | `136 / 4864` | Reconstructed from the retained fourth balance checkpoint; repair 2 passed the urban-facility visual gate |
 | `2026-07-28T16:29:39Z` | P-F00 checkpoint 5: D-12 folded AI_EDIT | `edit_image`, followed by `get_balance({})` | 1 | 20 | `156 / 4844` | Final retained balance checkpoint; total P-F00 usage is 91 |
 | `2026-07-28T16:29:39Z` | P-F00 local deterministic work and validation | D-07/D-08/D-15 local generation and validation | 0 | 0 | `156 / 4844` | No PixelLab generation call; D-07/D-08 are already on main, and D-15 is validated on `codex/d-fast-static` |
+| `2026-07-28T17:03:00Z` | P-F01 deterministic static wave | D-09 art matrix, D-14L, D-15a, D-16, D-17L, and D-18 validator; followed by `get_balance({})` | 0 | 0 | `156 / 4844` | Real MCP balance response is unchanged. D-09 is retained with an upstream runtime-contract blocker; all other named outputs are locally validated with zero PixelLab calls. |
 
 下一项生产任务必须增加一行：任务号、真实工具名、创建调用数、响应中的 actual usage/cost、调用后余额以及对应 fetch plan/MANIFEST 路径。余额变化与任务响应冲突时停止 SHIP 并保留两份原始证据。
