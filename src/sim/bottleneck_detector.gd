@@ -110,12 +110,6 @@ func _evaluate_transport(
 		not target_organ.is_empty()
 		and float(coverages[target_organ]) < organ_recover
 	)
-	var overloaded := _edge_is_overloaded(target_edge, edges, edge_flows)
-	var active_now := (
-		pressure >= enter
-		and not target_edge.is_empty()
-		and (under_covered or overloaded)
-	)
 	var recovered := (
 		pressure <= recover
 		and _all_values_at_least(coverages, organ_recover)
@@ -133,6 +127,7 @@ func _evaluate_transport(
 			})
 	if under_covered and not target_edge.is_empty():
 		_append_unique_candidate(candidates, target_edge, target_organ, target_edge)
+	var active_now := pressure >= enter and not candidates.is_empty()
 	_sync_targets(
 		TRANSPORT,
 		stage_id,
@@ -330,8 +325,12 @@ func _sync_targets(
 			_emit(appeared_event, [target_id, current_value])
 	for target_id: Variant in active_targets.keys():
 		if not candidate_ids.has(target_id):
-			_emit(cleared_event, [StringName(target_id)])
-			active_targets.erase(target_id)
+			var held: Dictionary = active_targets[target_id].duplicate(true)
+			held["current_value"] = current_value
+			held["threshold"] = threshold
+			held["first_occurrence"] = false
+			active_targets[target_id] = held
+			results.append(held.duplicate(true))
 	_active_results[bottleneck_id] = active_targets
 	if not was_active and not hint_id.is_empty() and not candidates.is_empty():
 		_episode_hint_emitted[bottleneck_id] = true
