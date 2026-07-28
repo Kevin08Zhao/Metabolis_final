@@ -84,6 +84,23 @@ const ACTION_ID := &"birth_transition"
 const REASON_GATE_CHECK_FAILED := &"gate_check_failed"
 const REASON_PRECONDITION_LOST := &"precondition_lost"
 
+## Added by T-21-1. Supplied by the caller before start(). The readiness gate
+## reads the four E5 verdicts through it; T-19e owns the evaluation and this
+## machine only consumes the result. Left null, the gate waits for an external
+## verdict through submit_gate_result instead of guessing one.
+var birth_check: BirthCheck = null
+
+## Added by T-21-1. The E5 inputs the gate hands to birth_check: transport
+## coverage, waste, stability, and either a birth readiness value or the
+## signal coverage and pulmonary readiness pair the E5 formula derives it from.
+## Supplied by the caller before start().
+var city_metrics: Dictionary = {}
+
+## Added by T-21-1. The full report from the last gate evaluation, so the UI can
+## show all four rows together with their gaps and recovery directions. Empty
+## when the gate has not run or could not run.
+var gate_report: Dictionary = {}
+
 var _current_state: int = State.IDLE
 var _gate_passed: bool = false
 
@@ -239,9 +256,48 @@ func _enter_state(state: int) -> void:
 			_on_enter_failure_rollback()
 
 
-## Filled by T-21-1.
+## Implemented by T-21-1.
+##
+## Entry action: read the four E5 verdicts through `birth_check` and hold them in
+## `gate_report`. Exit judgement: all four passed, or any of them failed.
+##
+## The verdict is submitted deferred rather than inline. `transition_to` calls
+## this function while it is still unwinding, so transitioning from inside it
+## would be re-entrant. Deferring also makes the wait interruptible at no extra
+## cost: if anything moves the machine out of `ready_check` first, the late
+## verdict lands in `submit_gate_result`, which already rejects it and leaves the
+## state untouched. No guard is needed here.
+##
+## Nothing is played. Sound and animation belong to D-22 and D-26 and hang off
+## `birth_state_changed`, which `transition_to` has already emitted by now.
 func _on_enter_ready_check() -> void:
-	pass
+	gate_report = {}
+
+	if birth_check == null:
+		push_warning(
+			"%s No BirthCheck supplied; the gate is waiting for an external verdict through submit_gate_result()."
+			% LOG_PREFIX
+		)
+		return
+
+	if city_metrics.is_empty():
+		push_warning(
+			"%s No city metrics supplied; the gate is waiting for an external verdict through submit_gate_result()."
+			% LOG_PREFIX
+		)
+		return
+
+	# birth_transition_complete is false here by definition: this is the gate, so
+	# the transition has not run yet. BirthCheck deduplicates the birth hint on
+	# its own, so a retry does not emit it twice.
+	gate_report = birth_check.check(city_metrics, false)
+
+	var passed := bool(gate_report.get("passed", false))
+	print(
+		"%s gate evaluated: passed=%s retry_allowed=%s"
+		% [LOG_PREFIX, passed, gate_report.get("retry_allowed", true)]
+	)
+	submit_gate_result.call_deferred(passed)
 
 
 ## Filled by T-21-2.
