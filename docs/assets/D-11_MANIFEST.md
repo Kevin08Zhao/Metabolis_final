@@ -2,7 +2,7 @@
 # D-11 PixelLab landing manifest
 
 - Fetch plan: `fetch_plans/D-11_fetch_plan.json`
-- Fetch plan SHA-256: `5bb32515eb2f734b1cb4979ecb1ab4ebd9385911f42c4571ad640b5b514c74a9`
+- Fetch plan SHA-256: `8a5d7676d7d29a0fc5a607680fbe2d3389b7ea34bfe41a56e3e0e75ebaf5e54a`
 - Landing report: `docs/assets/D-11_LAND_REPORT.json`
 - Palette: `art/palette.gpl` (22 locked colors)
 
