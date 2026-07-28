@@ -62,6 +62,31 @@ reported_not_fixed: |
   T-21-5 does not extend the pattern. systems_online is the last state with a
   window that hands off, but at 5000 ms rather than 10000, and T-21-6's ending is
   terminal so it never hands off at all.
+corrections:
+  - corrected_at: 2026-07-27T23:40:00-04:00
+    corrected_during: T-21-5 acceptance
+    claim: |
+      The observed block of this marker stated that the three observable phases
+      together occupied 30079 ms against the 30000 ms table B2 allots them, a
+      79 ms overrun from frame quantisation. It was published in that form and
+      merged.
+    defect: |
+      The arithmetic was wrong. 30079 is the absolute timestamp at which
+      systems_online was entered, not an elapsed duration. The phases began when
+      umbilical_stop was entered at 183 ms, so they actually ran
+      30079 - 183 = 29896 ms, which is 104 ms UNDER budget rather than 79 ms over.
+      An absolute timestamp was used as if it were a duration.
+    corrected_finding: |
+      The drift is an undershoot, not an overrun, and it is small. Remeasured
+      during T-21-5 acceptance on a fresh run: umbilical_stop -75 ms,
+      pulmonary_flow +6 ms, fetal_shunts +6 ms, systems_online +10 ms, for a
+      whole-sequence total of 44947 ms against the 45000 ms budget, 53 ms under.
+      The three observable phases in that run took 29937 ms against 30000, again
+      under.
+      The practical conclusion reverses: the ending sequence finishes marginally
+      early rather than overrunning, so it does not eat into the operating-time
+      budget. The first beat is consistently the outlier and is worth watching
+      when D-22 and D-26 time real audio against the timeline.
 notes: |
   No file owned by another account was modified. src/project.godot is unchanged.
   docs/coord/rework/ contains no OPEN file against any upstream of this task.
