@@ -21,11 +21,11 @@ The limit is 22 colors: six semantic groups with dark, main, and light values, p
 
 | Semantic group | Dark / main / light hex | Allowed use | Forbidden use |
 |---|---|---|---|
-| Arterial coral | `#6F0417` / `#BA3A3F` / `#F26B6A` | Transport trunks, heart emphasis, critical state | Waste, return flow, normal stability |
-| Oxygen blue | `#48A5CF` / `#7AD1FD` / `#E8F6FF` | Teaching information, immediate prompts, knowledge badges | Decorative background, non-informational water |
-| Blue violet | `#29314A` / `#404586` / `#6A6BB0` | Return flow, fetal passages, developmental signals; the dark value also carries waste | Arteries, nutrients, ordinary roads |
-| Tissue pink | `#91465F` / `#BE6E87` / `#EC98B1` | Organic walls, terrain, cell material | Direction, alerts, knowledge prompts |
-| Warm amber | `#B26C09` / `#E2953A` / `#FEC792` | Nutrient energy, spendable material, warning state | Waste, return flow, completion marks |
+| Arterial coral | `#340106` / `#BA3A3F` / `#C25453` | Transport trunks, heart emphasis, critical state | Waste, return flow, normal stability |
+| Oxygen blue | `#48A5CF` / `#7AD1FD` / `#CDD9E1` | Teaching information, immediate prompts, knowledge badges | Decorative background, non-informational water |
+| Blue violet | `#29314A` / `#404586` / `#53548C` | Return flow, fetal passages, developmental signals; the dark value also carries waste | Arteries, nutrients, ordinary roads |
+| Tissue pink | `#91465F` / `#BE6E87` / `#C98197` | Organic walls, terrain, cell material | Direction, alerts, knowledge prompts |
+| Warm amber | `#B26C09` / `#E2953A` / `#DDAD7E` | Nutrient energy, spendable material, warning state | Waste, return flow, completion marks |
 | Mint green | `#73CD9B` / `#B1FFD1` / `#F4FFF8` | Good stability, completed construction | Critical state, incomplete construction, waste |
 | Neutrals | `#140F1D` / `#514854` / `#817582` / `#E8DCCF` | Global outline and non-semantic dark, mid, and light surfaces | Resource, direction, or state encoding |
 
@@ -46,7 +46,7 @@ Shading within one semantic role may use only that group’s three values. Stabi
 - The placenta reads as a disc hub, radial transport branches, and an umbilical interface. The heart reads as paired pump chambers and rhythmic contraction. The lungs read as paired air sacs and a central airway. Missing any listed component fails acceptance.
 - A construction zone simultaneously shows a closed boundary, unfinished hatch texture, and a construction-marker silhouette. All three disappear when construction completes.
 - Transport direction appears through both arrow or node orientation and an animated sequence; it remains identifiable in a still grayscale screenshot.
-- A bottleneck displays a type-specific graphic at the blockage: interrupted supply for energy, an empty depot for material, or accumulation for waste. A color-only change is forbidden.
+- A bottleneck displays the Table E9 type-specific graphic at its runtime attachment: a narrow-neck hexagon with stacked directional arrows for transport pressure, a graduated angular container with a rising level for waste accumulation, or broken concentric circles with a gapped dotted wave for low signal coverage. A color-only change is forbidden.
 
 ## 5. Three Stability Tiers
 
@@ -83,4 +83,4 @@ At normal game scale, hide text and remove color, then check every item. Any fai
 | Encoding stability tiers by color alone | Normal, warning, and critical cannot be distinguished pairwise under color-vision deficiency or grayscale |
 | Encoding direction only with moving particles | Direction cannot be determined when paused or in a still screenshot |
 | Identifying organs with text labels | The placenta, heart, or lungs become unrecognizable when text is hidden |
-| Reusing one generic alert for every bottleneck | The player knows a problem exists but cannot distinguish energy shortage, material shortage, or waste accumulation |
+| Reusing one generic alert for every bottleneck | The player knows a problem exists but cannot distinguish transport pressure, waste accumulation, or low signal coverage |

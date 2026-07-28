@@ -2,27 +2,30 @@
 
 ## Review Method
 
-This report reviews the initial D-01 palette. The same input was simulated under complete protanopia, deuteranopia, and tritanopia. A composite color difference below 10 fails, 10–15 is borderline, and a grayscale luminance difference below 10 fails. Dark, main, and light values are compared only with the corresponding value of an adjacent semantic group. An em dash means that the condition did not expose a problem. The table lists only problematic pairs.
+This report checks the final D-02 palette after the corrections in `PALETTE_HEX_ADJUSTMENTS.md`. Protanopia, deuteranopia, and tritanopia use the full-severity Machado, Oliveira, and Fernandes simulation matrices in linear sRGB. Normal and simulated colors are compared in CIE L*a*b* with the minimum corresponding dark/main/light `ΔE*ab`; grayscale uses the minimum corresponding `ΔL*`. A value below `10.00` fails. The simulation method is documented by the [Machado et al. paper](https://doi.org/10.1109/TVCG.2009.113) and the [Colour implementation](https://colour.readthedocs.io/en/develop/generated/colour.matrix_cvd_Machado2009.html).
 
-## Findings
+## Pairwise Retest
 
 | Color pair | Normal vision | Protanopia | Deuteranopia | Tritanopia | Grayscale | Result | Smallest correction |
-|---|---|---|---|---|---|---|---|
-| Arterial coral `#9B3F4A/#E45F5F/#FF9B8C` and tissue pink `#884A64/#C97891/#F2B2BE` | All three borderline | Dark and light borderline | Dark and light borderline | All three fail | All three fail | FAIL | Lower coral luminance and raise tissue-pink luminance while preserving hue assignments |
-| Arterial coral `#9B3F4A/#E45F5F` and warm amber `#92522A/#D98D32` | — | Dark borderline | Dark fails; main borderline | Dark and main fail | Dark and main fail | FAIL | Lower coral dark and main values; keep amber in the higher luminance band |
-| Arterial coral `#9B3F4A/#E45F5F` and mint green `#356B55/#53AD7D` | — | Dark fails; main borderline | Dark and main fail | — | Dark and main fail | FAIL | Lower coral and raise mint; changing hue alone is forbidden |
-| Oxygen blue `#245B7A` and blue violet `#4B536B` | Dark borderline | Dark fails | Dark fails | Dark borderline | Dark fails | FAIL | Raise oxygen-blue shadow luminance and lower blue-violet shadow luminance |
-| Oxygen blue `#245B7A/#3B9BC5/#9FE2F4` and tissue pink `#884A64/#C97891/#F2B2BE` | — | Dark fails; main and light borderline | — | — | All three fail | FAIL | Move all oxygen-blue values into a luminance band above tissue pink |
-| Oxygen blue `#245B7A/#3B9BC5/#9FE2F4` and warm amber `#92522A/#D98D32/#FFD06A` | — | — | — | — | All three fail | FAIL | Raise all three oxygen-blue values; do not add a new blue |
-| Oxygen blue `#245B7A/#3B9BC5/#9FE2F4` and mint green `#356B55/#53AD7D/#A2E3B1` | — | — | — | All three fail | All three fail | FAIL | Separate their luminance bands while keeping oxygen blue below mint |
-| Blue-violet shadow `#4B536B` and tissue-pink shadow `#884A64` | — | Fails | Borderline | — | Fails | FAIL | Lower the blue-violet waste value into the darkest resource band |
-| Blue-violet shadow `#4B536B` and neutral dark `#443B49` | Borderline | Borderline | Borderline | Borderline | Fails | FAIL | Lower blue-violet shadow, raise neutral dark, and retain the global outline separator |
-| Tissue pink `#884A64/#C97891/#F2B2BE` and warm amber `#92522A/#D98D32/#FFD06A` | — | — | — | All three fail | All three fail | FAIL | Put tissue pink in a distinct luminance band below amber |
-| Tissue pink `#884A64/#C97891/#F2B2BE` and mint green `#356B55/#53AD7D/#A2E3B1` | — | — | All three fail | — | All three fail | FAIL | Lower tissue pink, raise mint, and preserve both assigned hues |
-| Warm amber `#92522A/#D98D32/#FFD06A` and mint green `#356B55/#53AD7D/#A2E3B1` | — | All three borderline | — | — | All three fail | FAIL | Raise mint into a luminance band above amber |
+|---|---:|---:|---:|---:|---:|---|---|
+| Arterial coral / oxygen blue | `65.13` | `46.15` | `46.22` | `77.83` | `36.00` | PASS | None |
+| Arterial coral / blue violet | `35.66` | `26.45` | `30.86` | `42.00` | `12.03` | PASS | None |
+| Arterial coral / tissue pink | `28.94` | `24.30` | `26.47` | `29.31` | `11.94` | PASS | None |
+| Arterial coral / warm amber | `41.24` | `31.49` | `22.71` | `33.80` | `24.02` | PASS | None |
+| Arterial coral / mint green | `72.21` | `56.17` | `49.07` | `82.69` | `49.01` | PASS | None |
+| Oxygen blue / blue violet | `48.92` | `46.59` | `44.52` | `48.09` | `43.31` | PASS | None |
+| Oxygen blue / tissue pink | `41.38` | `27.53` | `23.56` | `49.19` | `24.03` | PASS | None |
+| Oxygen blue / warm amber | `40.58` | `37.02` | `39.31` | `38.25` | `11.91` | PASS | None |
+| Oxygen blue / mint green | `15.15` | `14.89` | `15.10` | `13.18` | `11.88` | PASS | None |
+| Blue violet / tissue pink | `39.65` | `17.87` | `30.33` | `52.15` | `19.28` | PASS | None |
+| Blue violet / warm amber | `71.87` | `68.93` | `74.67` | `53.86` | `31.39` | PASS | None |
+| Blue violet / mint green | `72.20` | `68.28` | `62.40` | `60.85` | `55.18` | PASS | None |
+| Tissue pink / warm amber | `38.42` | `36.98` | `31.53` | `14.74` | `12.06` | PASS | None |
+| Tissue pink / mint green | `51.46` | `41.20` | `33.77` | `54.97` | `35.91` | PASS | None |
+| Warm amber / mint green | `41.46` | `38.20` | `38.40` | `42.19` | `23.79` | PASS | None |
 
-## Adjustment and Retest Result
+**ALL PASS**
 
-The exact substitutions are recorded in `PALETTE_HEX_ADJUSTMENTS.md`. After adjustment, the six resource anchors are ordered by grayscale luminance as waste, developmental signal, cell material, nutrient energy, knowledge badge, and stability. Semantic assignments did not change and no colors were added. Retesting must include the six fixed shapes in `ENCODING_SPEC.md`, because color is never the only signal.
+## Required Final Answer
 
-The most dangerous original pair was arterial-coral shadow `#9B3F4A` and tissue-pink shadow `#884A64` under grayscale; their original grayscale luminance difference was approximately 0.1.
+No pair fails the stated threshold. The most dangerous final pair is oxygen blue and mint green under grayscale, where the minimum corresponding-value separation is `ΔL* = 11.88`.
