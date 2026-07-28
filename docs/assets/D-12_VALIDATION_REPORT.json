@@ -1,0 +1,108 @@
+{
+  "task_id": "D-12",
+  "status": "PASS",
+  "source_land_report": "docs/assets/D-12_SOURCE_LAND_REPORT.json",
+  "generation": {
+    "method": "deterministic_local_derivation",
+    "script": "tools/build_d12_d13a_assets.py",
+    "pixellab_calls_during_derivation": 0,
+    "operating_job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+    "folded_job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16"
+  },
+  "state_contract": {
+    "exact_five_state_matrix": "PASS",
+    "fixed_structural_branch_count": 12,
+    "fixed_branch_connections": "PASS",
+    "readiness_complete_branch_counts": {
+      "blueprint": 4,
+      "under_construction": 8,
+      "completed": 12,
+      "operating": 12,
+      "stressed": 12
+    },
+    "three_distinguishable_readiness_levels": "PASS",
+    "folded_to_operating_vertical_expansion_pixels": 6,
+    "folded_vs_operating_grayscale_shape": "PASS",
+    "anchor": [
+      24,
+      48
+    ],
+    "padding_preserved": "PASS"
+  },
+  "validation": {
+    "files": [
+      {
+        "path": "art/organs/organ_lungs_blueprint.png",
+        "size": [
+          48,
+          48
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "0a1b43044657e678edb7d9f05a6bfefbb1af7060e0dbce0185f83e1012a2813a"
+        }
+      },
+      {
+        "path": "art/organs/organ_lungs_under_construction.png",
+        "size": [
+          48,
+          48
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "af5e2077bcf470df661aef7472d2f493ae39b40bd2c02904221d73d6ba470832"
+        }
+      },
+      {
+        "path": "art/organs/organ_lungs_completed.png",
+        "size": [
+          48,
+          48
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "793ee740be6da7120aed80b97f78ee48f55e79ad34fc6e6dfb96d9af8f86d154"
+        }
+      },
+      {
+        "path": "art/organs/organ_lungs_operating.png",
+        "size": [
+          48,
+          48
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "27e30633dbb732c537f05e9443c17597706e47f4bc41fbb5af7690ff72b87844"
+        }
+      },
+      {
+        "path": "art/organs/organ_lungs_stressed.png",
+        "size": [
+          48,
+          48
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "f428fbec3617214ada22ea68a89d46a20c42f00b7c60a5d3e231b7afbbeb6b12"
+        }
+      }
+    ],
+    "status": "PASS"
+  },
+  "errors": []
+}

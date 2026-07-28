@@ -1,0 +1,274 @@
+{
+  "control_id": "P-F00",
+  "observed_main_sha": "5f9c8e98334910c19cac3c2170d16b47879af7c9",
+  "schema_source": "Current PixelLab MCP discovery in this session",
+  "submissions": [
+    {
+      "task_id": "D-10",
+      "item": "placenta_canonical",
+      "tool": "create_image_pixflux",
+      "job_id": "e5f72fc6-40cb-46f6-8d08-9e16011b6c66",
+      "seed": 10001,
+      "size": "48x48",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: e5f72fc6-40cb-46f6-8d08-9e16011b6c66; size: 48x48px; transparent: True; forced_palette: yes; seed: 10001; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: e5f72fc6-40cb-46f6-8d08-9e16011b6c66; frames: 1; download: https://api.pixellab.ai/mcp/images/e5f72fc6-40cb-46f6-8d08-9e16011b6c66/download"
+      ]
+    },
+    {
+      "task_id": "D-11",
+      "item": "heart_canonical",
+      "tool": "create_image_pixflux",
+      "job_id": "f6688d85-ddf0-4f23-8360-8899ce255648",
+      "seed": 11001,
+      "size": "48x48",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: f6688d85-ddf0-4f23-8360-8899ce255648; size: 48x48px; transparent: True; forced_palette: yes; seed: 11001; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: processing 71%; id: f6688d85-ddf0-4f23-8360-8899ce255648; eta: ~12s",
+        "status: completed; id: f6688d85-ddf0-4f23-8360-8899ce255648; frames: 1; download: https://api.pixellab.ai/mcp/images/f6688d85-ddf0-4f23-8360-8899ce255648/download"
+      ]
+    },
+    {
+      "task_id": "D-12",
+      "item": "lungs_canonical_original",
+      "tool": "create_image_pixflux",
+      "job_id": "372ec89c-213a-4e70-9f11-e8fdda15ca14",
+      "seed": 12001,
+      "size": "48x48",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 372ec89c-213a-4e70-9f11-e8fdda15ca14; size: 48x48px; transparent: True; forced_palette: yes; seed: 12001; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: 372ec89c-213a-4e70-9f11-e8fdda15ca14; frames: 1; download: https://api.pixellab.ai/mcp/images/372ec89c-213a-4e70-9f11-e8fdda15ca14/download"
+      ],
+      "visual_disposition": "REPAIR_REQUIRED_REALISTIC_ANATOMY"
+    },
+    {
+      "task_id": "D-12",
+      "item": "lungs_canonical_urban_repair_1",
+      "tool": "edit_image",
+      "job_id": "0997def4-c79e-4e71-935d-d5431e46a86f",
+      "seed": 12002,
+      "size": "48x48",
+      "transparent": true,
+      "create_response": "id: 0997def4-c79e-4e71-935d-d5431e46a86f; mode: text; frames: 1; size: 48x48px; transparent: True; seed: 12002; cost: ~20 generations; status: processing (~30-90s)",
+      "status_history": [
+        "status: processing 22%; id: 0997def4-c79e-4e71-935d-d5431e46a86f; eta: ~130s",
+        "status: completed; id: 0997def4-c79e-4e71-935d-d5431e46a86f; frames: 1"
+      ],
+      "actual_usage": 20,
+      "visual_disposition": "REJECTED_STILL_ANATOMICAL"
+    },
+    {
+      "task_id": "D-12",
+      "item": "lungs_canonical_urban_repair_2",
+      "tool": "edit_image",
+      "job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+      "seed": 12003,
+      "size": "48x48",
+      "transparent": true,
+      "create_response": "id: 166c6a8e-7854-4fa1-a84e-a80196fee2e2; mode: text; frames: 1; size: 48x48px; transparent: True; seed: 12003; status: processing",
+      "status_history": [
+        "status: completed; id: 166c6a8e-7854-4fa1-a84e-a80196fee2e2; frames: 1"
+      ],
+      "actual_usage": 20,
+      "visual_disposition": "ACCEPTED_URBAN_FACILITY"
+    },
+    {
+      "task_id": "D-12",
+      "item": "lungs_folded_ai_edit",
+      "tool": "edit_image",
+      "job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16",
+      "seed": 12010,
+      "size": "48x48",
+      "transparent": true,
+      "create_response": "id: c758eb58-236e-42a4-80a5-b79de4ebde16; mode: text; frames: 1; size: 48x48px; transparent: True; seed: 12010; status: processing",
+      "status_history": [
+        "status: completed; id: c758eb58-236e-42a4-80a5-b79de4ebde16; frames: 1"
+      ],
+      "actual_usage": 20,
+      "visual_disposition": "ACCEPTED_FOLDED_SOURCE"
+    },
+    {
+      "task_id": "D-13a",
+      "item": "landmark_construction_canonical",
+      "tool": "create_image_pixflux",
+      "job_id": "6ea2fd7c-2e90-40e7-90e0-407e1f07ca05",
+      "seed": 13101,
+      "size": "80x80",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 6ea2fd7c-2e90-40e7-90e0-407e1f07ca05; size: 80x80px; transparent: True; forced_palette: yes; seed: 13101; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: 6ea2fd7c-2e90-40e7-90e0-407e1f07ca05; frames: 1; download: https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download"
+      ]
+    },
+    {
+      "task_id": "D-14L/D-17L",
+      "item": "shared_nine_slice_source",
+      "tool": "create_ui_asset",
+      "job_id": "3a44ef17-752e-4d36-95b8-6f096a52fdf7",
+      "seed": 141701,
+      "size": "192x192",
+      "transparent": true,
+      "create_response": "id: 3a44ef17-752e-4d36-95b8-6f096a52fdf7; mode: ui-panel (192x192px); cost: 20 generations; status: processing (~30-90s)",
+      "status_history": [
+        "status: creating (20% ~126s); id: 3a44ef17-752e-4d36-95b8-6f096a52fdf7; job_status: processing",
+        "status: completed; id: 3a44ef17-752e-4d36-95b8-6f096a52fdf7; size: 192x192px; download: https://api.pixellab.ai/mcp/ui-assets/3a44ef17-752e-4d36-95b8-6f096a52fdf7/download"
+      ]
+    },
+    {
+      "task_id": "D-15",
+      "item": "nutrient_energy_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "6041c45d-0d09-4d25-aa39-e9f14cc0037a",
+      "seed": 15001,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 6041c45d-0d09-4d25-aa39-e9f14cc0037a; size: 32x32px; transparent: True; forced_palette: yes; seed: 15001; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: 6041c45d-0d09-4d25-aa39-e9f14cc0037a; frames: 1; download: https://api.pixellab.ai/mcp/images/6041c45d-0d09-4d25-aa39-e9f14cc0037a/download"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "cell_material_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "d8564e3d-63ea-416b-b556-155d541c0adb",
+      "seed": 15002,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: d8564e3d-63ea-416b-b556-155d541c0adb; size: 32x32px; transparent: True; forced_palette: yes; seed: 15002; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: d8564e3d-63ea-416b-b556-155d541c0adb; frames: 1; download: https://api.pixellab.ai/mcp/images/d8564e3d-63ea-416b-b556-155d541c0adb/download"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "developmental_signal_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba",
+      "seed": 15003,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba; size: 32x32px; transparent: True; forced_palette: yes; seed: 15003; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: 9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba; frames: 1; download: https://api.pixellab.ai/mcp/images/9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba/download"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "waste_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "e077e060-9ea6-4834-aff1-8ed3130a4551",
+      "seed": 15004,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: e077e060-9ea6-4834-aff1-8ed3130a4551; size: 32x32px; transparent: True; forced_palette: yes; seed: 15004; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: e077e060-9ea6-4834-aff1-8ed3130a4551; frames: 1"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "stability_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "9d05bf3a-7017-438b-a4db-726e1e25da87",
+      "seed": 15005,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 9d05bf3a-7017-438b-a4db-726e1e25da87; size: 32x32px; transparent: True; forced_palette: yes; seed: 15005; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: 9d05bf3a-7017-438b-a4db-726e1e25da87; frames: 1"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "knowledge_style_reference",
+      "tool": "create_image_pixflux",
+      "job_id": "14fc8cef-04b8-4063-986f-350161038466",
+      "seed": 15006,
+      "size": "32x32",
+      "transparent": true,
+      "forced_palette": true,
+      "create_response": "id: 14fc8cef-04b8-4063-986f-350161038466; size: 32x32px; transparent: True; forced_palette: yes; seed: 15006; cost: 1 generation; status: processing",
+      "status_history": [
+        "status: completed; id: 14fc8cef-04b8-4063-986f-350161038466; frames: 1"
+      ],
+      "actual_usage": 1,
+      "final_use": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-29",
+      "item": "title_background_master",
+      "tool": "create_image_pixflux",
+      "job_id": "f9979329-be15-4e32-bbe7-bdbcf88de454",
+      "seed": 29001,
+      "size": "320x180",
+      "transparent": false,
+      "forced_palette": true,
+      "create_response": "id: f9979329-be15-4e32-bbe7-bdbcf88de454; size: 320x180px; transparent: False; forced_palette: yes; seed: 29001; cost: 1 generation; status: processing (~10-40s)",
+      "status_history": [
+        "status: completed; id: f9979329-be15-4e32-bbe7-bdbcf88de454; frames: 1; download: https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
+      ]
+    }
+  ],
+  "rejected_requests": [
+    {
+      "task_id": "D-15",
+      "item": "nutrient_energy_16x16",
+      "tool": "create_image_pixflux",
+      "seed": 15001,
+      "response": "error: 16x16 is too small (256px, minimum is 32x32 = 1024px)",
+      "job_id": null,
+      "usage": "UNREPORTED_NO_JOB"
+    },
+    {
+      "task_id": "D-15",
+      "item": "cell_material_16x16",
+      "tool": "create_image_pixflux",
+      "seed": 15002,
+      "response": "error: 16x16 is too small (256px, minimum is 32x32 = 1024px)",
+      "job_id": null,
+      "usage": "UNREPORTED_NO_JOB"
+    },
+    {
+      "task_id": "D-15",
+      "item": "cell_material_rate_limit_attempt",
+      "tool": "create_image_pixflux",
+      "seed": 15002,
+      "response": "error: rate limit exceeded (11/10 jobs)",
+      "job_id": null,
+      "usage": "UNREPORTED_NO_JOB",
+      "consecutive_429_count": 1
+    }
+  ],
+  "actual_usage": {
+    "baseline_used": 65,
+    "baseline_remaining": 4935,
+    "jobs_created": 15,
+    "rejected_requests_without_job": 3,
+    "generation_units": 91,
+    "final_used": 156,
+    "final_remaining": 4844
+  }
+}

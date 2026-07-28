@@ -1,0 +1,76 @@
+{
+  "task_id": "D-15a",
+  "status": "PASS",
+  "derivation": "DETERMINISTIC_LOCAL_0_CALL",
+  "files": [
+    {
+      "path": "art/icons/ui_resource_knowledge_badge_count.png",
+      "role": "reused locked four-long-arm count badge",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "sha256": "0a50119d184fa4e99da9afc25c36fe96ccb329c4d03a7cd3514de9a5c0a8060b"
+    },
+    {
+      "path": "art/icons/ui_task_rating_one_star.png",
+      "canvas": [
+        32,
+        16
+      ],
+      "anchor": [
+        16,
+        8
+      ],
+      "visible_pixels": 154,
+      "sha256": "38d02e0e3d768b99ad7fae4293d865fbde8bbad0e04c1d1159d942660e7b3766"
+    },
+    {
+      "path": "art/icons/ui_task_rating_two_star.png",
+      "canvas": [
+        32,
+        16
+      ],
+      "anchor": [
+        16,
+        8
+      ],
+      "visible_pixels": 164,
+      "sha256": "5aace16b09a2b83d2b98aa11460fab49c4d71acf5fa1da96c93c92eac57b8b08"
+    },
+    {
+      "path": "art/icons/ui_task_rating_three_star.png",
+      "canvas": [
+        32,
+        16
+      ],
+      "anchor": [
+        16,
+        8
+      ],
+      "visible_pixels": 174,
+      "sha256": "e5cbecc9716473705a16a9190017b823a1466595c1b779a5f185495067a289c7"
+    }
+  ],
+  "validation": {
+    "status": "PASS",
+    "checks": {
+      "d15_done_and_knowledge_source_exact": true,
+      "delivered_png_count_including_reused_knowledge_badge": 4,
+      "three_rating_tiers_only": true,
+      "rating_canvas_is_2T_by_1T": true,
+      "rating_anchor_is_16_8": true,
+      "binary_alpha": true,
+      "locked_palette_only": true,
+      "rating_tiers_pairwise_distinct_in_grayscale": true,
+      "knowledge_and_rating_noncolor_grammar_distinct": true,
+      "one_star_has_no_negative_marker": true,
+      "knowledge_badge_has_no_cap_or_state_variant": true,
+      "pixellab_calls": 0
+    }
+  }
+}

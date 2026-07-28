@@ -1,0 +1,79 @@
+{
+  "task_id": "D-16",
+  "status": "PASS",
+  "derivation": "DETERMINISTIC_FROM_OPERATION_SPEC_TABLE_E9",
+  "files": [
+    {
+      "path": "art/icons/ui_bottleneck_transport_pressure.png",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_pixels": 56,
+      "sha256": "1a397b3f8ad20c57a05f508e58c0b16163eda51d1b105aecade37e45ba766f0b"
+    },
+    {
+      "path": "art/icons/ui_bottleneck_waste_accumulation.png",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_pixels": 92,
+      "sha256": "3f099d770c1238b423a86e97742f5b50621484e6f5f8e6d6abd040c7dd44e81f"
+    },
+    {
+      "path": "art/icons/ui_bottleneck_signal_coverage_low.png",
+      "canvas": [
+        16,
+        16
+      ],
+      "anchor": [
+        8,
+        8
+      ],
+      "visible_pixels": 47,
+      "sha256": "9448363d0e12187eac2d20947cc9a75d375cd546592d9d4a2c41e9fca0153703"
+    }
+  ],
+  "contrast_checks": {
+    "art/icons/ui_bottleneck_transport_pressure.png": {
+      "pixels_visible_on_darkest_background": 32,
+      "pixels_visible_on_lightest_background": 36
+    },
+    "art/icons/ui_bottleneck_waste_accumulation.png": {
+      "pixels_visible_on_darkest_background": 46,
+      "pixels_visible_on_lightest_background": 64
+    },
+    "art/icons/ui_bottleneck_signal_coverage_low.png": {
+      "pixels_visible_on_darkest_background": 19,
+      "pixels_visible_on_lightest_background": 35
+    }
+  },
+  "validation": {
+    "status": "PASS",
+    "checks": {
+      "exactly_three_E9_types": true,
+      "canvas_is_16x16": true,
+      "anchor_is_8_8": true,
+      "binary_alpha": true,
+      "locked_palette_only": true,
+      "pairwise_distinct_in_grayscale": true,
+      "transport_uses_narrow_neck_and_stacked_arrows": true,
+      "waste_uses_graduated_angular_container_and_rising_level": true,
+      "signal_uses_broken_concentric_rings_and_gapped_dotted_wave": true,
+      "dual_contrast_on_darkest_and_lightest_palette_backgrounds": true,
+      "visible_coverage_below_half_canvas": true,
+      "fourth_type_absent": true,
+      "organ_specific_variant_absent": true,
+      "pixellab_calls": 0
+    }
+  }
+}

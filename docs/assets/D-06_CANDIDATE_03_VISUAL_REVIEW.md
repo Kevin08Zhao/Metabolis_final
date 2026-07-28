@@ -6,7 +6,7 @@
 - Native candidate: `320 × 180`
 - Review preview: `640 × 360` nearest-neighbor 2×
 - Automated preflight: `PASS`
-- Mandatory human style gate: `PENDING`
+- Mandatory human style gate: `REJECTED_BY_USER`
 
 ## Visual Checklist
 
@@ -26,3 +26,9 @@
 `REJECT_CANDIDATE_03`
 
 Candidate 03 establishes the requested city-building direction and is the best style reference so far, but it fails the empty construction-zone and route-readability requirements. If the user rejects it, candidate 04 should preserve this image's architectural treatment while editing the construction lot, road connections/arrows, paired chamber balance, and detached face-like objects rather than starting over.
+
+## Human Decision
+
+- Decision: `REJECTED`
+- Recorded at: `2026-07-28T15:44:52Z`
+- Follow-up authorized: generate exactly one final candidate 04 that preserves candidate 03's city-building treatment while correcting the recorded hard failures.

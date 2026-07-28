@@ -1,0 +1,245 @@
+{
+  "control_id": "P-F01",
+  "owner": "ACCOUNT_D",
+  "observed_main_sha": "d13bb366833e0fec1e89d234495b827bcdefd502",
+  "scheduler": {
+    "max_active": 8,
+    "reserve_slots": 2,
+    "poll_interval_seconds": 8,
+    "max_active_per_task": 2,
+    "max_targeted_repairs_per_item": 2
+  },
+  "branches": {
+    "core": "codex/d-fast-core",
+    "static": "codex/d-fast-static",
+    "pf01": "codex/d-fast-f01"
+  },
+  "active_jobs": [],
+  "completed_jobs": [
+    {
+      "task_id": "D-10",
+      "job_id": "e5f72fc6-40cb-46f6-8d08-9e16011b6c66",
+      "tool": "create_image_pixflux",
+      "seed": 10001,
+      "raw_file": "art/candidates/pf00/organ_placenta_candidate01_raw.png"
+    },
+    {
+      "task_id": "D-11",
+      "job_id": "f6688d85-ddf0-4f23-8360-8899ce255648",
+      "tool": "create_image_pixflux",
+      "seed": 11001,
+      "raw_file": "art/candidates/pf00/organ_heart_candidate01_raw.png"
+    },
+    {
+      "task_id": "D-12",
+      "item": "original",
+      "job_id": "372ec89c-213a-4e70-9f11-e8fdda15ca14",
+      "tool": "create_image_pixflux",
+      "seed": 12001,
+      "raw_file": "art/candidates/pf00/organ_lungs_candidate01_raw.png",
+      "disposition": "REJECTED_REALISTIC_ANATOMY"
+    },
+    {
+      "task_id": "D-12",
+      "item": "targeted_repair_1",
+      "job_id": "0997def4-c79e-4e71-935d-d5431e46a86f",
+      "tool": "edit_image",
+      "seed": 12002,
+      "raw_file": "art/candidates/pf00/organ_lungs_candidate02_repair1_raw.png",
+      "disposition": "REJECTED_STILL_ANATOMICAL"
+    },
+    {
+      "task_id": "D-12",
+      "item": "targeted_repair_2",
+      "job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+      "tool": "edit_image",
+      "seed": 12003,
+      "raw_file": "art/candidates/pf00/organ_lungs_candidate03_repair2_raw.png",
+      "disposition": "ACCEPTED_URBAN_FACILITY"
+    },
+    {
+      "task_id": "D-12",
+      "item": "folded_ai_edit",
+      "job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16",
+      "tool": "edit_image",
+      "seed": 12010,
+      "raw_file": "art/candidates/pf00/organ_lungs_folded_candidate01_raw.png",
+      "disposition": "ACCEPTED_FOLDED_SOURCE"
+    },
+    {
+      "task_id": "D-13a",
+      "job_id": "6ea2fd7c-2e90-40e7-90e0-407e1f07ca05",
+      "tool": "create_image_pixflux",
+      "seed": 13101,
+      "raw_file": "art/candidates/pf00/construction_landmark_candidate01_raw.png"
+    },
+    {
+      "task_id": "D-14L/D-17L",
+      "job_id": "3a44ef17-752e-4d36-95b8-6f096a52fdf7",
+      "tool": "create_ui_asset",
+      "seed": 141701,
+      "raw_file": "art/candidates/pf00/ui_frame_shared_candidate01_raw.png",
+      "disposition": "ACCEPTED_STYLE_SOURCE_FOR_DETERMINISTIC_D-14L_D-17L"
+    },
+    {
+      "task_id": "D-15",
+      "item": "nutrient_energy",
+      "job_id": "6041c45d-0d09-4d25-aa39-e9f14cc0037a",
+      "tool": "create_image_pixflux",
+      "seed": 15001,
+      "raw_file": "art/candidates/pf00/ui_resource_energy_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "cell_material",
+      "job_id": "d8564e3d-63ea-416b-b556-155d541c0adb",
+      "tool": "create_image_pixflux",
+      "seed": 15002,
+      "raw_file": "art/candidates/pf00/ui_resource_cell_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "developmental_signal",
+      "job_id": "9bc51d08-3dea-4fcd-bd2c-6af77bebf5ba",
+      "tool": "create_image_pixflux",
+      "seed": 15003,
+      "raw_file": "art/candidates/pf00/ui_resource_signal_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "waste",
+      "job_id": "e077e060-9ea6-4834-aff1-8ed3130a4551",
+      "tool": "create_image_pixflux",
+      "seed": 15004,
+      "raw_file": "art/candidates/pf00/ui_resource_waste_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "stability",
+      "job_id": "9d05bf3a-7017-438b-a4db-726e1e25da87",
+      "tool": "create_image_pixflux",
+      "seed": 15005,
+      "raw_file": "art/candidates/pf00/ui_resource_stability_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-15",
+      "item": "knowledge",
+      "job_id": "14fc8cef-04b8-4063-986f-350161038466",
+      "tool": "create_image_pixflux",
+      "seed": 15006,
+      "raw_file": "art/candidates/pf00/ui_resource_knowledge_candidate01_raw.png",
+      "disposition": "STYLE_REFERENCE_ONLY"
+    },
+    {
+      "task_id": "D-29",
+      "job_id": "f9979329-be15-4e32-bbe7-bdbcf88de454",
+      "tool": "create_image_pixflux",
+      "seed": 29001,
+      "raw_file": "art/candidates/pf00/background_title_candidate01_raw.png",
+      "disposition": "ACCEPTED_BACKGROUND_SOURCE"
+    }
+  ],
+  "repair_queue": [],
+  "repair_history": [
+    {
+      "task_id": "D-12",
+      "source_job_id": "372ec89c-213a-4e70-9f11-e8fdda15ca14",
+      "attempts": 2,
+      "accepted_job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+      "status": "RESOLVED"
+    },
+    {
+      "task_id": "P-F00_GITHUB_ACTION",
+      "source_commit": "5a3638e27f955114f9a4959724db174d6c7da586",
+      "reason": "The first automatic landing rerun refused existing files because their expected hashes were stale or absent; D-29 also lacked a source target.",
+      "resolution": "Updated all expected_existing_sha256 values, gave D-29 a valid source target, and reran all affected 0-call landing plans successfully.",
+      "status": "RESOLVED"
+    }
+  ],
+  "landed_tasks": [
+    "D-05a",
+    "D-06",
+    "D-07",
+    "D-08",
+    "D-10",
+    "D-11",
+    "D-12",
+    "D-13a",
+    "D-14L",
+    "D-15",
+    "D-15a",
+    "D-16",
+    "D-17L",
+    "D-18"
+  ],
+  "blocked_tasks": [
+    {
+      "task_id": "D-09",
+      "reason": "All 132 deterministic vessel variants pass art validation, but T-15a edge records do not expose flow_direction, passage_state, route_role, or an unambiguous tee/fourway entry-exit rule. Runtime selection cannot be completed without upstream contract work."
+    },
+    {
+      "task_id": "D-13b",
+      "reason": "Table D8 defines metric content and bars, but UI_LAYOUT and the live option preview do not define the candidate-card allocation rectangle, card height, spacing, or the 2-4 card arrangement required for exact static output."
+    },
+    {
+      "task_id": "D-29",
+      "reason": "The background source is complete, but T-32 confirms title, game, and ending scenes are still placeholders. The full title/disclaimer/font/screenshot task cannot receive DONE until those runtime scenes exist."
+    }
+  ],
+  "actual_usage": {
+    "baseline_generations_used": 65,
+    "baseline_generations_remaining": 4935,
+    "generation_calls_this_run": 18,
+    "jobs_created_this_run": 15,
+    "rejected_create_requests_this_run": 3,
+    "actual_generation_units_this_run": 91,
+    "pf01_generation_calls": 0,
+    "pf01_jobs_created": 0,
+    "pf01_actual_generation_units": 0,
+    "current_generations_used": 156,
+    "current_generations_remaining": 4844,
+    "subscription": "active Tier 2 Pixel Artisan",
+    "credits_usd": 0.0
+  },
+  "schema_discovery": {
+    "observed_at": "2026-07-28T16:13:24Z",
+    "create_image_pixflux": {
+      "status_tool": "get_image",
+      "cost_declaration": "1 generation",
+      "observed_minimum_size": "32x32",
+      "supports_seed": true,
+      "supports_forced_palette": true,
+      "supports_transparent_background": true
+    },
+    "create_ui_asset": {
+      "status_tool": "get_ui_asset",
+      "cost_declaration": "20-40 generations",
+      "observed_cost": 20,
+      "width_range": "192-688, aspect gated",
+      "height_range": "192-688, aspect gated",
+      "supports_seed": true,
+      "supports_transparent_background": true
+    },
+    "edit_image": {
+      "status_tool": "get_image",
+      "input_limit": "512x512",
+      "observed_cost_per_completed_edit": 20,
+      "supports_seed": true
+    }
+  },
+  "rate_limit_events": [
+    {
+      "at": "2026-07-28T16:14:41Z",
+      "response": "rate limit exceeded (11/10 jobs)",
+      "consecutive_count": 1,
+      "action": "stopped new submissions until batch polling released slots"
+    }
+  ],
+  "last_poll_at": "2026-07-28T17:03:00Z",
+  "resume_prompt": "P-F02"
+}

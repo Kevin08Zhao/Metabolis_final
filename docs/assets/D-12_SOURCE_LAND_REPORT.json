@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-07-28T16:46:32+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 48,
+          "width": 48
+        },
+        "operations": [],
+        "output": {
+          "height": 48,
+          "width": 48
+        },
+        "source": {
+          "height": 48,
+          "width": 48
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 2410,
+        "final_url": "https://api.pixellab.ai/mcp/images/166c6a8e-7854-4fa1-a84e-a80196fee2e2/download",
+        "sha256": "aaaaec1c7e43f119c6a85930bb3b2de90dd0438451179e45048cf777da4d3fce",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12003, actual usage=20",
+        "job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+        "seed": 12003,
+        "status_response": "UNREPORTED; P-F00 disposition=ACCEPTED_URBAN_FACILITY; retained raw file art/candidates/pf00/organ_lungs_candidate03_repair2_raw.png",
+        "tool": "edit_image",
+        "usage": {
+          "generation_units": 20
+        }
+      },
+      "id": "lungs_operating_source",
+      "naming": {
+        "file_name": "organ_lungs_operating_source.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 1221,
+        "sha256": "4397120a04df2b3abc58746868dc85012efcd7f3e5f22b513ad53bdbb655342f",
+        "status": "unchanged_identical"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 1246,
+        "over_threshold_percent": 22.150883,
+        "over_threshold_pixels": 276,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 5,
+        "visible_pixels_after": 1246,
+        "visible_pixels_before": 1246
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/166c6a8e-7854-4fa1-a84e-a80196fee2e2/download"
+      },
+      "status": "PASS",
+      "target": "art/source/organ_lungs_operating_source.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 1246,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 1058
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 48,
+          "width": 48
+        },
+        "operations": [],
+        "output": {
+          "height": 48,
+          "width": 48
+        },
+        "source": {
+          "height": 48,
+          "width": 48
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 2392,
+        "final_url": "https://api.pixellab.ai/mcp/images/c758eb58-236e-42a4-80a5-b79de4ebde16/download",
+        "sha256": "9189af4ddcd7f7ebe6a2b02d41a46eeeacfe496369966c38794816bf33548b04",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12010, actual usage=20",
+        "job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16",
+        "seed": 12010,
+        "status_response": "UNREPORTED; P-F00 disposition=ACCEPTED_FOLDED_SOURCE; retained raw file art/candidates/pf00/organ_lungs_folded_candidate01_raw.png",
+        "tool": "edit_image",
+        "usage": {
+          "generation_units": 20
+        }
+      },
+      "id": "lungs_folded_source",
+      "naming": {
+        "file_name": "organ_lungs_folded_source.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 1023,
+        "sha256": "724dfd35f5aa861d5e6ddcddb106f4fc0b52a533e67525558c37bf933d9c2dc5",
+        "status": "unchanged_identical"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 1263,
+        "over_threshold_percent": 8.471892,
+        "over_threshold_pixels": 107,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 5,
+        "visible_pixels_after": 1263,
+        "visible_pixels_before": 1263
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/c758eb58-236e-42a4-80a5-b79de4ebde16/download"
+      },
+      "status": "PASS",
+      "target": "art/source/organ_lungs_folded_source.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 1263,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 1041
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-12_fetch_plan.json",
+    "sha256": "67dc8c56ff9304b8b6568917d55183c588d1fb45284e5fae1858009ee7a70862"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 2,
+    "success_count": 2
+  },
+  "task_id": "D-12"
+}

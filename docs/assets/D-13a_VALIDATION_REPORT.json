@@ -1,0 +1,133 @@
+{
+  "task_id": "D-13a",
+  "status": "PASS",
+  "source_land_report": "docs/assets/D-13a_SOURCE_LAND_REPORT.json",
+  "generation": {
+    "method": "deterministic_local_derivation_using_D-07_construction_tiles",
+    "script": "tools/build_d12_d13a_assets.py",
+    "pixellab_calls_during_derivation": 0,
+    "source_job_id": "6ea2fd7c-2e90-40e7-90e0-407e1f07ca05"
+  },
+  "state_contract": {
+    "repository_proven_visual_states": [
+      "blueprint",
+      "under_construction"
+    ],
+    "background_sync_variant": "under_construction_background",
+    "standard_canvas_and_anchor": {
+      "size": [
+        64,
+        64
+      ],
+      "target_anchor": [
+        32,
+        64
+      ]
+    },
+    "landmark_canvas_and_anchor": {
+      "size": [
+        80,
+        80
+      ],
+      "target_anchor": [
+        40,
+        80
+      ]
+    },
+    "blueprint_closed_boundary_hatch_four_markers": "PASS",
+    "under_construction_static_three_step_progress": "PASS",
+    "background_detail_reduction": "PASS",
+    "completed_operating_stressed_zone_assets": "NOT_APPLICABLE_ZONE_DISAPPEARS",
+    "evidence": "ART_BIBLE section 4 says boundary, hatch, and marker all disappear when construction completes; organ_state.gd has states for organs, not a separate construction-zone row."
+  },
+  "validation": {
+    "files": [
+      {
+        "path": "art/construction/construction_zone_standard_blueprint.png",
+        "size": [
+          64,
+          64
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "831552d6db50c6a468be0c2a0aa80650eef26009f680808bf4647e381be7b590"
+        }
+      },
+      {
+        "path": "art/construction/construction_zone_standard_under_construction.png",
+        "size": [
+          64,
+          64
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "765e9dac20c9b0d57f6c499618eec60163b961adb89c4e8776281c0e29cf7b79"
+        }
+      },
+      {
+        "path": "art/construction/construction_zone_standard_background.png",
+        "size": [
+          64,
+          64
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "0ed866cd3f24e13999ad85763682a62b1a7cc1f060b91275221d6a039fe0f455"
+        }
+      },
+      {
+        "path": "art/construction/construction_zone_landmark_blueprint.png",
+        "size": [
+          80,
+          80
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "c0e210149e7884f0dd64703dc79ae2f1800dcfb36ca2c6393c9874cccbd4372d"
+        }
+      },
+      {
+        "path": "art/construction/construction_zone_landmark_under_construction.png",
+        "size": [
+          80,
+          80
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "78ff9c164ab9bcc3e5193bd9d16dba67c5d279afb675b585476d05a7f0277741"
+        }
+      },
+      {
+        "path": "art/construction/construction_zone_landmark_background.png",
+        "size": [
+          80,
+          80
+        ],
+        "checks": {
+          "dimensions": "PASS",
+          "binary_alpha": "PASS",
+          "locked_palette": "PASS",
+          "transparent_canvas": "PASS",
+          "sha256": "fc6c7af70308d2a03788bea1578b53ae7c8809c82517ef743f5a71dcf4bf0034"
+        }
+      }
+    ],
+    "status": "PASS"
+  },
+  "errors": []
+}

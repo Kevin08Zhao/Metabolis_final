@@ -1,0 +1,41 @@
+{
+  "task_id": "D-29",
+  "status": "SOURCE_ONLY_BLOCKED_RUNTIME_CONTRACT",
+  "final_use": "TITLE_BACKGROUND_SOURCE",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-29_LAND_REPORT.json",
+  "manifest": "docs/assets/D-29_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "items": [
+    {
+      "id": "title_background_master",
+      "raw_file": "art/candidates/pf00/background_title_candidate01_raw.png",
+      "target": "art/source/background_title_source.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
+      },
+      "generation": {
+        "tool": "create_image_pixflux",
+        "job_id": "f9979329-be15-4e32-bbe7-bdbcf88de454",
+        "seed": 29001,
+        "usage": {
+          "generation_units": 1
+        },
+        "status_response": "completed"
+      },
+      "observed_size": {
+        "width": 320,
+        "height": 180
+      },
+      "expected_size": {
+        "width": 320,
+        "height": 180
+      },
+      "expected_existing_sha256": "6d649b3e07ee8502c6c4271aa2e6a9597e22231d0b6e0b9abf7c2816b9e1cb66",
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ],
+  "blocker": "The background source is accepted, but final DONE also requires the runtime title, disclaimer, font, and screenshot contract."
+}

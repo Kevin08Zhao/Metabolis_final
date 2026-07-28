@@ -1,0 +1,59 @@
+{
+  "task_id": "D-12",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-12_SOURCE_LAND_REPORT.json",
+  "manifest": "docs/assets/D-12_SOURCE_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "items": [
+    {
+      "id": "lungs_operating_source",
+      "target": "art/source/organ_lungs_operating_source.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/166c6a8e-7854-4fa1-a84e-a80196fee2e2/download"
+      },
+      "generation": {
+        "tool": "edit_image",
+        "job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
+        "seed": 12003,
+        "usage": {
+          "generation_units": 20
+        },
+        "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12003, actual usage=20",
+        "status_response": "UNREPORTED; P-F00 disposition=ACCEPTED_URBAN_FACILITY; retained raw file art/candidates/pf00/organ_lungs_candidate03_repair2_raw.png"
+      },
+      "expected_size": {
+        "width": 48,
+        "height": 48
+      },
+      "expected_existing_sha256": "4397120a04df2b3abc58746868dc85012efcd7f3e5f22b513ad53bdbb655342f",
+      "alpha_threshold": 128,
+      "operations": []
+    },
+    {
+      "id": "lungs_folded_source",
+      "target": "art/source/organ_lungs_folded_source.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/c758eb58-236e-42a4-80a5-b79de4ebde16/download"
+      },
+      "generation": {
+        "tool": "edit_image",
+        "job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16",
+        "seed": 12010,
+        "usage": {
+          "generation_units": 20
+        },
+        "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12010, actual usage=20",
+        "status_response": "UNREPORTED; P-F00 disposition=ACCEPTED_FOLDED_SOURCE; retained raw file art/candidates/pf00/organ_lungs_folded_candidate01_raw.png"
+      },
+      "expected_size": {
+        "width": 48,
+        "height": 48
+      },
+      "expected_existing_sha256": "724dfd35f5aa861d5e6ddcddb106f4fc0b52a533e67525558c37bf933d9c2dc5",
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ]
+}
