@@ -21,6 +21,9 @@ extends Node
 ## `state_duration_ms` warns and returns zero until T-06 adds them. The graph and
 ## the rejection rules do not depend on them.
 ##
+## Every state change mounts on section 9 of docs/EVENT_API.md. Illegal
+## transitions reuse `action_rejected` from section 8.
+##
 ## Requires the `EventBus` and `Balance` autoloads.
 
 enum State {
@@ -76,11 +79,10 @@ const STAGE_ID := &"stage_birth"
 const LOG_PREFIX := "[BIRTH]"
 const ACTION_ID := &"birth_transition"
 
-## Local to this machine. docs/EVENT_API.md defines no birth event, because it
-## covers only moments present in the rules table of docs/GAME_RULES.md and the
-## birth sequence contains no player action. See the known gap section of
-## docs/BIRTH_STATES.md.
-signal birth_state_changed(previous_state: int, current_state: int)
+## Reason codes carried by `birth_rolled_back`. These identify why a rollback
+## happened; they are not tunable gameplay parameters.
+const REASON_GATE_CHECK_FAILED := &"gate_check_failed"
+const REASON_PRECONDITION_LOST := &"precondition_lost"
 
 var _current_state: int = State.IDLE
 var _gate_passed: bool = false
@@ -97,8 +99,9 @@ func start() -> bool:
 
 ## The single mutator of the current state. Rejects any transition absent from
 ## the graph, leaves the current state untouched on rejection, and never advances
-## more than one step.
-func transition_to(next_state: int) -> bool:
+## more than one step. `reason_code` is carried by `birth_rolled_back` and is
+## ignored for every other target.
+func transition_to(next_state: int, reason_code: StringName = &"") -> bool:
 	if next_state < 0 or next_state >= STATE_IDS.size():
 		return _reject(next_state, &"out_of_range")
 
@@ -113,7 +116,20 @@ func transition_to(next_state: int) -> bool:
 	_current_state = next_state
 
 	print("%s %s -> %s" % [LOG_PREFIX, STATE_IDS[previous_state], STATE_IDS[_current_state]])
-	birth_state_changed.emit(previous_state, _current_state)
+
+	# The sequence opens before the per-beat event, so a listener that swaps the
+	# soundtrack has done so by the time the first beat arrives.
+	if previous_state == State.IDLE:
+		EventBus.birth_sequence_started.emit(STAGE_ID, total_budget_ms())
+
+	EventBus.birth_state_changed.emit(previous_state, _current_state, state_duration_ms(_current_state))
+
+	if _current_state == State.ENDING:
+		EventBus.birth_sequence_completed.emit(STAGE_ID)
+	elif _current_state == State.FAILURE_ROLLBACK:
+		var reason := reason_code if reason_code != &"" else REASON_PRECONDITION_LOST
+		EventBus.birth_rolled_back.emit(previous_state, reason)
+
 	_enter_state(_current_state)
 	return true
 
@@ -134,7 +150,7 @@ func submit_gate_result(all_checks_passed: bool) -> bool:
 	_gate_passed = all_checks_passed
 	if all_checks_passed:
 		return transition_to(State.UMBILICAL_STOP)
-	return transition_to(State.FAILURE_ROLLBACK)
+	return transition_to(State.FAILURE_ROLLBACK, REASON_GATE_CHECK_FAILED)
 
 
 ## A rollback returns the player to the gate rather than ending the run.
@@ -170,8 +186,13 @@ func state_duration_ms(state: int) -> int:
 	return int(Balance.get_value(path, 0))
 
 
-## Total of every configured window. Compare against `total_budget_ms` to confirm
-## the sequence still fits the budget after any retune.
+## The configured ending-sequence budget, carried by `birth_sequence_started`.
+func total_budget_ms() -> int:
+	return int(Balance.get_value("chapters.%s.birth_sequence.total_budget_ms" % STAGE_ID, 0))
+
+
+## Total of every configured window. Compare against `total_budget_ms()` to
+## confirm the sequence still fits the budget after any retune.
 func total_timeline_ms() -> int:
 	var total := 0
 	for state in DURATION_KEYS:

@@ -134,6 +134,35 @@ by those differences, rather than one event per action.
 |---|---|---|---|---|---|
 | `action_rejected` | The precondition of any of the six actions evaluates to `false` and no game state changes | `action_id: StringName` (one of the six internal action IDs), `reason_code: StringName` (the specific reason from the rejection column of the rules table), `focus_element: StringName` (the UI element that should shake or flash) | repeatable within one tick (rapid clicking fires repeatedly) | Determined by `focus_element`: red card border shake, red cross on a slot, red flash on a resource item, panel border flash, and so on | `sfx_action_denied` (must be throttled to one playback per tick) |
 
+## 9 · Birth transition
+
+The birth sequence is a system sequence with no player action in it, so it does
+not appear in the rules table of `docs/GAME_RULES.md`. Its moments are defined by
+three other accepted documents: `final_completion_ready` in
+`docs/CHAPTER_TIMELINE.md`, the four birth checks of table E5 in
+`docs/OPERATION_SPEC.md`, and the seven states and timeline of
+`docs/BIRTH_STATES.md`. The events below mount on those.
+
+`birth_state_changed` is the generic per-beat mount point, structurally the same
+as `phase_changed`: listeners switch on `current_state` rather than expecting one
+event per beat. It carries the beat's window so animation and audio can time
+themselves without reading Balance.
+
+| Event | Trigger moment | Parameters and types | Frequency | Suggested animation | Suggested audio |
+|---|---|---|---|---|---|
+| `birth_sequence_started` | `BirthMachine.start()` is accepted and the machine enters `ready_check`. The ending sequence has begun; the stage is closed to input from here | `stage_id: StringName`, `total_budget_ms: int` | once per run | The city map pulls back to the whole-body view; the UI recedes | `bgm_birth_sequence` replaces the stage track |
+| `birth_state_changed` | Every accepted transition of the birth machine, emitted from `transition_to`. `window_ms` is the beat's length on the 45-second timeline and is zero for `ready_check` and `failure_rollback`, which carry no window | `previous_state: int`, `current_state: int`, `window_ms: int` | once per run per beat | Determined by `current_state`, per table B1 of `docs/BIRTH_STATES.md`. Each beat must finish inside `window_ms` | One cue per beat, keyed the same way |
+| `birth_sequence_completed` | The machine enters `ending`, which is terminal. Success cannot be revoked afterwards | `stage_id: StringName` | once per run | The ending picture settles and holds | `sfx_first_breath`, then the ending theme |
+| `birth_rolled_back` | The machine enters `failure_rollback`, either because a birth check failed at the gate or because a beat lost its precondition. Never an ending: the machine returns to `ready_check` on acknowledgement | `from_state: int`, `reason_code: StringName` | repeatable within one tick is not possible; at most once per attempt | The sequence unwinds to the pre-birth city view; no failure imagery | `sfx_birth_rollback`, restrained; this is a retry prompt, not a loss |
+
+`birth_rolled_back` must not be presented as a death, a game over, or a lost run.
+`docs/OPERATION_SPEC.md` guarantees that a failed check never locks the flow, and
+`docs/BIRTH_STATES.md` routes rollback back to the gate for exactly that reason.
+
+Illegal transitions inside the machine do not get their own event. They reuse
+`action_rejected` from section 8 with `action_id` set to `birth_transition`, which
+fits without stretching its meaning.
+
 ---
 
 ## Retired events that must not be reintroduced
@@ -183,11 +212,14 @@ feedback" columns of `docs/GAME_RULES.md` has a mount point in this list.
 | City self-operation | Stability band change, waste overflow, resource shortage | `stability_band_changed`, `waste_overflowed`, `resource_shortage_raised` / `_cleared` |
 | City self-operation | The three bottleneck types appearing and clearing | The six events in section 4 |
 
+The birth sequence has no row here because it has no row in the rules table. Its
+sources are named at the top of section 9.
+
 ---
 
 ## GDScript signal declarations
 
-The thirty-two lines below can be pasted straight into
+The thirty-six lines below can be pasted straight into
 `src/autoload/event_bus.gd`. Parameter types are complete, with nothing elided.
 
 ```gdscript
@@ -238,4 +270,10 @@ signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, car
 
 # 8 · Action rejection
 signal action_rejected(action_id: StringName, reason_code: StringName, focus_element: StringName)
+
+# 9 · Birth transition
+signal birth_sequence_started(stage_id: StringName, total_budget_ms: int)
+signal birth_state_changed(previous_state: int, current_state: int, window_ms: int)
+signal birth_sequence_completed(stage_id: StringName)
+signal birth_rolled_back(from_state: int, reason_code: StringName)
 ```

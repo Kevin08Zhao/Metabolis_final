@@ -56,6 +56,11 @@ signal run_completed(final_stage_id: StringName)
 var chapter: ChapterData = null
 
 var _current_step: int = Step.OBSERVE_STATE
+## True between start_new_run and the first advance_to of the run. Entering the
+## first stage establishes the initial step rather than changing it, so that one
+## call is logged but emits nothing. This flag exists so start_new_run never has
+## to write _current_step itself.
+var _run_starting: bool = false
 var _stage_order: Array[StringName] = []
 var _stage_index: int = 0
 var _run_complete: bool = false
@@ -77,7 +82,7 @@ func start_new_run() -> bool:
 	_run_complete = false
 	_visited_stage_ids = []
 	_stage_index = 0
-	_current_step = Step.OBSERVE_STATE
+	_run_starting = true
 	_enter_stage(_stage_order[0])
 	return true
 
@@ -121,9 +126,11 @@ func advance_to(next_step: int) -> void:
 
 	# Entering the first stage establishes the initial step rather than changing
 	# it. docs/EVENT_API.md fires phase_changed only when the phase actually
-	# changes, so a same-to-same entry is logged but not emitted.
-	var is_change := previous_step != _current_step
-	var previous_label: String = STEP_IDS[previous_step] if is_change else "(start)"
+	# changes, so the opening call is logged but not emitted.
+	var is_run_start := _run_starting
+	_run_starting = false
+	var is_change := (not is_run_start) and previous_step != _current_step
+	var previous_label: String = "(start)" if is_run_start else String(STEP_IDS[previous_step])
 
 	print(
 		"%s stage %d  %s -> %s"

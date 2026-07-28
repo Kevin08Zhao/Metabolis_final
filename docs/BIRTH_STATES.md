@@ -19,13 +19,13 @@ not re-derive it.
 
 | State | `state_id` | Entry condition | Performed on entry | Exit condition | Player actions forbidden | Event | Window on the 45 s timeline |
 |---|---|---|---|---|---|---|---|
-| Readiness check | `ready_check` | `start()` is called while the machine is `IDLE`, in `stage_birth`, with `final_completion_ready` otherwise satisfied | Read the four E5 verdicts from T-19e and hold them as the gate result | All four checks pass, or any check fails | All six. The stage is closed to input from here until the sequence resolves | `birth_state_changed` | Off timeline. The gate is evaluated before the sequence begins and animates nothing |
+| Readiness check | `ready_check` | `start()` is called while the machine is `IDLE`, in `stage_birth`, with `final_completion_ready` otherwise satisfied | Read the four E5 verdicts from T-19e and hold them as the gate result | All four checks pass, or any check fails | All six. The stage is closed to input from here until the sequence resolves | `birth_sequence_started`, `birth_state_changed` | Off timeline. The gate is evaluated before the sequence begins and animates nothing |
 | Umbilical supply stops | `umbilical_stop` | `ready_check` exited with all four checks passing | Placeholder for T-21-2 | The state's configured duration elapses | All six | `birth_state_changed` | 0 – 10000 ms |
 | Pulmonary blood flow rises | `pulmonary_flow` | `umbilical_stop` exited | Placeholder for T-21-3 | The state's configured duration elapses | All six | `birth_state_changed` | 10000 – 20000 ms |
 | Fetal shunts change function | `fetal_shunts` | `pulmonary_flow` exited | Placeholder for T-21-4 | The state's configured duration elapses | All six | `birth_state_changed` | 20000 – 30000 ms |
 | Major systems light up | `systems_online` | `fetal_shunts` exited | Placeholder for T-21-5 | The state's configured duration elapses | All six | `birth_state_changed` | 30000 – 35000 ms |
-| Ending picture | `ending` | `systems_online` exited | Placeholder for T-21-6 | Terminal. The state does not exit | All six except viewing the knowledge archive, which T-25 may reopen | `birth_state_changed` | 35000 – 45000 ms |
-| Failure rollback | `failure_rollback` | Any non-terminal state reports that its precondition no longer holds, or `ready_check` found a failing check | Placeholder for T-21-7 | The player acknowledges, returning the machine to `ready_check` | All six while the rollback plays | `birth_state_changed`, `action_rejected` | Off timeline. An interrupt, not a beat |
+| Ending picture | `ending` | `systems_online` exited | Placeholder for T-21-6 | Terminal. The state does not exit | All six except viewing the knowledge archive, which T-25 may reopen | `birth_state_changed`, `birth_sequence_completed` | 35000 – 45000 ms |
+| Failure rollback | `failure_rollback` | Any non-terminal state reports that its precondition no longer holds, or `ready_check` found a failing check | Placeholder for T-21-7 | The player acknowledges, returning the machine to `ready_check` | All six while the rollback plays | `birth_state_changed`, `birth_rolled_back` | Off timeline. An interrupt, not a beat |
 
 `failure_rollback` never ends the run. `docs/OPERATION_SPEC.md` guarantees that a
 failed check does not lock the flow: the player may operate again, wait for ticks,
@@ -106,19 +106,23 @@ transition rules, and the rejection behaviour do not depend on these keys, so th
 machine is fully usable and testable without them. T-21-2 onward do depend on
 them, because that is where a window actually elapses.
 
-## Known gap: no birth rows in EVENT_API
+## Events
 
-`docs/EVENT_API.md` defines events only for moments that exist in the rules table
-of `docs/GAME_RULES.md`, and that table covers the six player actions. The birth
-sequence is a system sequence with no player action in it, so no birth event was
-defined there.
+Section 9 of `docs/EVENT_API.md` carries the birth sequence. Four events:
 
-This machine therefore emits its own class signal, `birth_state_changed`, rather
-than routing state changes through `EventBus`. Rejections do use `EventBus`,
-through `action_rejected`, which fits without stretching its meaning.
+| Event | Emitted at |
+|---|---|
+| `birth_sequence_started` | The first transition out of `IDLE`, before the per-beat event, so a listener that swaps the soundtrack has done so by the time the first beat arrives |
+| `birth_state_changed` | Every accepted transition, from `transition_to`. Carries `window_ms`, which is zero for `ready_check` and `failure_rollback` |
+| `birth_sequence_completed` | Entering `ending` |
+| `birth_rolled_back` | Entering `failure_rollback`, with `gate_check_failed` or `precondition_lost` |
 
-That is workable for T-20 and T-21, but it leaves the climax of the game without
-an animation and audio mount point, which is what `docs/EVENT_API.md` exists to
-provide. D-24 and the ending animation work will need one. Adding birth rows to
-`docs/EVENT_API.md` is a T-08 revalidation and is recorded in
-`docs/coord/done/T-20.md` as a follow-up rather than done silently here.
+`birth_state_changed` is the generic per-beat mount point, structurally the same
+as `phase_changed`: D-22 and D-26 switch on `current_state` rather than expecting
+one event per beat, and each beat must finish inside the `window_ms` it is handed.
+
+Illegal transitions get no event of their own. They reuse `action_rejected` with
+`action_id` set to `birth_transition`.
+
+`birth_rolled_back` must never be presented as a death, a game over, or a lost
+run. The rollback returns the player to the gate.
