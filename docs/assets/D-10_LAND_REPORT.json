@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T16:41:01+00:00",
+  "generated_at": "2026-07-28T16:42:44+00:00",
   "generated_by": "tools/pixellab_fetch.py",
   "items": [
     {
@@ -25,10 +25,6 @@
         "sha256": "15c7c3e4f5b6f6de611ff6190c9ff56280515f4a89433427ee09bf77896af527",
         "status": "downloaded"
       },
-      "error": {
-        "message": "refusing to overwrite unknown existing file /home/runner/work/Metabolis_final/Metabolis_final/art/organs/organ_placenta_operating.png; provide matching expected_existing_sha256",
-        "type": "LandError"
-      },
       "generation": {
         "create_response": "id: e5f72fc6-40cb-46f6-8d08-9e16011b6c66; size: 48x48px; transparent: True; forced_palette: yes; seed: 10001; cost: 1 generation; status: processing (~10-40s)",
         "job_id": "e5f72fc6-40cb-46f6-8d08-9e16011b6c66",
@@ -44,6 +40,11 @@
         "file_name": "organ_placenta_operating.png",
         "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
         "status": "PASS"
+      },
+      "output": {
+        "bytes": 2081,
+        "sha256": "83d2c551b9c24da2b1c277679f8374fe3d15f83de1b29ec0388942f03cbf6d9a",
+        "status": "unchanged_identical"
       },
       "palette": {
         "locked_palette_color_count": 22,
@@ -63,7 +64,7 @@
         "kind": "url",
         "url": "https://api.pixellab.ai/mcp/images/e5f72fc6-40cb-46f6-8d08-9e16011b6c66/download"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "target": "art/organs/organ_placenta_operating.png",
       "transparency": {
         "alpha_threshold": 128,
@@ -82,14 +83,14 @@
   },
   "plan": {
     "path": "fetch_plans/D-10_fetch_plan.json",
-    "sha256": "bc793b7aff9398ca3a4f5e6f1b01a0075edd9e9ee3a37e3762c8569e00763a43"
+    "sha256": "89dc691320fdbd6e2b890b3bde151d898f36163fc2a24a51133d7330e64aaf93"
   },
   "report_version": 1,
-  "status": "FAIL",
+  "status": "PASS",
   "summary": {
-    "failure_count": 1,
+    "failure_count": 0,
     "item_count": 1,
-    "success_count": 0
+    "success_count": 1
   },
   "task_id": "D-10"
 }

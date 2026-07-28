@@ -26,6 +26,7 @@
         "width": 80,
         "height": 80
       },
+      "expected_existing_sha256": "f9a51e91b87325ca626667017a22b500bd220634fcbc727622a1c8c4dff93f28",
       "alpha_threshold": 128,
       "operations": []
     }

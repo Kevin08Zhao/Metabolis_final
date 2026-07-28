@@ -2,12 +2,12 @@
 # D-29 PixelLab landing manifest
 
 - Fetch plan: `fetch_plans/D-29_fetch_plan.json`
-- Fetch plan SHA-256: `cdfef8b9aea0277e2a330867dea3727b7ba8c7d39de33c530f8b0199a1b68686`
+- Fetch plan SHA-256: `f12e30067023914e2c410f8b9dcc3b687a9fa481a713f6a681fe5be1a2d9a7fa`
 - Landing report: `docs/assets/D-29_LAND_REPORT.json`
 - Palette: `art/palette.gpl` (22 locked colors)
 
 | Item | Target | Status | Tool | Real ID | Actual usage | Source | Output SHA-256 |
 |---|---|---|---|---|---:|---|---|
-| `title_background_master` | `—` | FAIL | `UNREPORTED` | `UNREPORTED` | UNREPORTED | `https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download` | `—` |
+| `title_background_master` | `art/source/background_title_source.png` | PASS | `create_image_pixflux` | `f9979329-be15-4e32-bbe7-bdbcf88de454` | 1 | `https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download` | `93574798f7be19475c3628e42c66de3cd5c0d2f502f832af3b908a59af0403f3` |
 
 The committed fetch plan is the source of truth for full raw create/status responses and any base64 payload. This manifest never fabricates missing fields.

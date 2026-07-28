@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T16:41:03+00:00",
+  "generated_at": "2026-07-28T16:42:45+00:00",
   "generated_by": "tools/pixellab_fetch.py",
   "items": [
     {
@@ -25,10 +25,6 @@
         "sha256": "aaaaec1c7e43f119c6a85930bb3b2de90dd0438451179e45048cf777da4d3fce",
         "status": "downloaded"
       },
-      "error": {
-        "message": "refusing to overwrite unknown existing file /home/runner/work/Metabolis_final/Metabolis_final/art/source/organ_lungs_operating_source.png; provide matching expected_existing_sha256",
-        "type": "LandError"
-      },
       "generation": {
         "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12003, actual usage=20",
         "job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
@@ -44,6 +40,11 @@
         "file_name": "organ_lungs_operating_source.png",
         "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
         "status": "PASS"
+      },
+      "output": {
+        "bytes": 1224,
+        "sha256": "74ca9e59162e264accc298c9c4f87349d62bc4b13f62796af5537498ccf1db5a",
+        "status": "unchanged_identical"
       },
       "palette": {
         "locked_palette_color_count": 22,
@@ -63,7 +64,7 @@
         "kind": "url",
         "url": "https://api.pixellab.ai/mcp/images/166c6a8e-7854-4fa1-a84e-a80196fee2e2/download"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "target": "art/source/organ_lungs_operating_source.png",
       "transparency": {
         "alpha_threshold": 128,
@@ -97,10 +98,6 @@
         "sha256": "9189af4ddcd7f7ebe6a2b02d41a46eeeacfe496369966c38794816bf33548b04",
         "status": "downloaded"
       },
-      "error": {
-        "message": "refusing to overwrite unknown existing file /home/runner/work/Metabolis_final/Metabolis_final/art/source/organ_lungs_folded_source.png; provide matching expected_existing_sha256",
-        "type": "LandError"
-      },
       "generation": {
         "create_response": "UNREPORTED; P-F00 retained tool=edit_image, seed=12010, actual usage=20",
         "job_id": "c758eb58-236e-42a4-80a5-b79de4ebde16",
@@ -116,6 +113,11 @@
         "file_name": "organ_lungs_folded_source.png",
         "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
         "status": "PASS"
+      },
+      "output": {
+        "bytes": 1026,
+        "sha256": "1dc1b2ca60d054c2d61fb601fae38fe66484fc8500154421faba2b7312154d71",
+        "status": "unchanged_identical"
       },
       "palette": {
         "locked_palette_color_count": 22,
@@ -135,7 +137,7 @@
         "kind": "url",
         "url": "https://api.pixellab.ai/mcp/images/c758eb58-236e-42a4-80a5-b79de4ebde16/download"
       },
-      "status": "FAIL",
+      "status": "PASS",
       "target": "art/source/organ_lungs_folded_source.png",
       "transparency": {
         "alpha_threshold": 128,
@@ -154,14 +156,14 @@
   },
   "plan": {
     "path": "fetch_plans/D-12_fetch_plan.json",
-    "sha256": "36c22bdf8d73b4956e2e5ce4bad8fb31e0357092309ca14801411675e999ba66"
+    "sha256": "96e679d865c20b1b279faa20d5742db6781d06d9881e67cbca065077387e2d58"
   },
   "report_version": 1,
-  "status": "FAIL",
+  "status": "PASS",
   "summary": {
-    "failure_count": 2,
+    "failure_count": 0,
     "item_count": 2,
-    "success_count": 0
+    "success_count": 2
   },
   "task_id": "D-12"
 }

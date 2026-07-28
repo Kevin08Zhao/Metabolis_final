@@ -151,6 +151,13 @@
       "attempts": 2,
       "accepted_job_id": "166c6a8e-7854-4fa1-a84e-a80196fee2e2",
       "status": "RESOLVED"
+    },
+    {
+      "task_id": "P-F00_GITHUB_ACTION",
+      "source_commit": "5a3638e27f955114f9a4959724db174d6c7da586",
+      "reason": "The first automatic landing rerun refused existing files because their expected hashes were stale or absent; D-29 also lacked a source target.",
+      "resolution": "Updated all expected_existing_sha256 values, gave D-29 a valid source target, and reran all affected 0-call landing plans successfully.",
+      "status": "RESOLVED"
     }
   ],
   "landed_tasks": [
