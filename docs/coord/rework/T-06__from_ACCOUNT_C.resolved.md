@@ -1,7 +1,17 @@
 upstream_task: T-06
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 01c14574874b208bb50c95ad9b0c093f3655da4d
+resolved_by: ACCOUNT_C
+resolved_at: 2026-07-27T22:20:00-04:00
+resolved_under: |
+  Explicit authorization from the project owner, who asked ACCOUNT_C to carry out
+  the repair directly rather than wait for a CODEX round. This is a deliberate
+  exception to file ownership and is recorded here and in docs/coord/done/T-06.md
+  so the T-06 owner is not surprised by an edit it did not make.
+  There was no judgment to exercise: all six values were already fixed by table
+  B2 of docs/BIRTH_STATES.md, an accepted specification, and the repair is the
+  mechanical act of writing them down.
 failed_files:
 - docs/BALANCE.json
 - docs/BALANCE_VALIDATION.md
@@ -58,6 +68,18 @@ required_resolution: |
   Then document all six paths and their unit in BALANCE_VALIDATION.md, rerun the
   T-06 validation, update docs/coord/done/T-06.md, and rename this marker to
   T-06__from_ACCOUNT_C.resolved.md in the same repair commit.
+resolution: |
+  Added chapters.stage_birth.birth_sequence with the six values above. The block
+  sits inside chapters, already one of the twelve permitted top-level blocks, so
+  the twelve-key schema is unchanged and was re-counted after the edit.
+  The five window values sum to 45000, which equals total_budget_ms, verified
+  arithmetically and again at runtime through BirthMachine.total_timeline_ms().
+  BALANCE_VALIDATION.md documents all six paths and their unit in the chapters
+  section.
+  birth_machine.missing_duration_paths() now returns empty, and the beats that
+  were running zero-length windows now hold their configured length. T-21-2 was
+  revalidated against a real 10000 ms window as part of this repair; see the
+  revalidations block of docs/coord/done/T-21_umbilical_stop.md.
 notes: |
   This is a completeness gap rather than a defect. T-06 ran before T-20 existed,
   so there was no birth-sequence specification to draw placeholders from at the
