@@ -229,6 +229,7 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `assist.knowledge.immediate_prompt_display_sec` | How long the T-30 immediate knowledge prompt stays up before dismissing itself. The prompt has no close control, so this is the only way it leaves. Its container geometry is fixed by table G1 and is deliberately not configurable; only the dwell time is | seconds |
 | `assist.audio.max_concurrent_one_shots` | Maximum number of reusable one-shot players created by T-37. The value is a positive integer; six permits short overlaps while keeping the soundscape restrained | players |
 | `assist.audio.high_frequency_min_interval_sec` | Minimum interval between playbacks of the same event whose EVENT_API frequency is `repeatable within one tick`. The value is positive and no greater than one settlement tick | seconds |
+| `assist.ui.resource_change_highlight_sec` | Duration of the T-29 resource-cell change highlight. The value is positive and shorter than one settlement tick so adjacent updates remain distinguishable | seconds |
 
 ## Zero-Reward Production and Reachability Calculation
 

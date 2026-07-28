@@ -1869,6 +1869,9 @@
     "audio": {
       "max_concurrent_one_shots": 6,
       "high_frequency_min_interval_sec": 0.1
+    },
+    "ui": {
+      "resource_change_highlight_sec": 0.35
     }
   }
 }
