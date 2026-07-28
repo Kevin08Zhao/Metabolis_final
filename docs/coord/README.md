@@ -37,3 +37,9 @@ This directory records tasks from the complete prompt list that have passed acce
 | T-08 · Event and Signal API | `docs/EVENT_API.md` | [`done/T-08.md`](done/T-08.md) |
 | T-09 · Core Data Structure Definitions | `src/data/resource_pool.gd`, `src/data/organ_data.gd`, `src/data/network_data.gd`, `src/data/chapter_data.gd`, `src/data/game_state.gd` | [`done/T-09.md`](done/T-09.md) |
 | T-10 · EventBus Singleton | `src/autoload/event_bus.gd`, `src/autoload/event_bus.gd.uid` | [`done/T-10.md`](done/T-10.md) |
+| D-01 · Locked Palette and Hex Definitions | `art/palette.gpl`, `docs/PALETTE.md` | [`done/D-01.md`](done/D-01.md) |
+| D-02 · Color-Vision and Grayscale Validation | `docs/PALETTE_ACCESSIBILITY.md`, `docs/PALETTE_HEX_ADJUSTMENTS.md` | [`done/D-02.md`](done/D-02.md) |
+| D-03 · Visual Bible | `docs/ART_BIBLE.md` | [`done/D-03.md`](done/D-03.md) |
+| D-04 · Asset Technical Specification | `docs/ASSET_SPEC.md` | [`done/D-04.md`](done/D-04.md) |
+| D-05 · Shape and State Encoding | `docs/ENCODING_SPEC.md` | [`done/D-05.md`](done/D-05.md) |
+| D-06 · Single Concept-Scene Style Validation | `docs/D-06_PIXELLAB_CONCEPT_PROMPT.md` | [`done/D-06.md`](done/D-06.md) |
