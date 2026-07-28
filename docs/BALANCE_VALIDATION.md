@@ -225,6 +225,10 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `challenges.by_stage.stage_birth` | Locked empty Stage Four challenge list | identifier list |
 | `assist.hint_levels` | D7 hint levels available to assistance UI | identifier list |
 | `assist.default_hint_level` | Default D7 hint level | identifier |
+| `assist.mode.failures_before_assist` | Consecutive failures inside one stage after which T-33a offers assist mode. Held equal to `minigames.failure.failures_before_ease` so the assist offer and the table M5 eased tier arrive together rather than at two different moments | failures |
+| `assist.mode.speed_scale` | Factor T-33a publishes for the assist-mode speed reduction. Greater than zero and less than one, since assist mode only ever slows a run down | unitless factor |
+| `assist.mode.time_limit_scale` | Factor T-33a publishes for the assist-mode time-limit extension. At least one, since assist mode only ever lengthens a run. It scales the effective limit of a running attempt; the configured `minigames.<id>.duration_limit_sec` is unchanged, exactly as the table M5 eased tier changes windows and targets without rewriting the configured value | unitless factor |
+| `assist.mode.show_full_route` | Whether assist mode publishes the complete operation route for a minigame prototype. Boolean | flag |
 | `assist.knowledge.{initial_unlocked_entry_ids\|read_tracking_policy\|selection_policy}` | T-09 knowledge initialization and tracking policies | identifier list or identifier |
 | `assist.knowledge.immediate_prompt_display_sec` | How long the T-30 immediate knowledge prompt stays up before dismissing itself. The prompt has no close control, so this is the only way it leaves. Its container geometry is fixed by table G1 and is deliberately not configurable; only the dwell time is | seconds |
 | `assist.audio.max_concurrent_one_shots` | Maximum number of reusable one-shot players created by T-37. The value is a positive integer; six permits short overlaps while keeping the soundscape restrained | players |

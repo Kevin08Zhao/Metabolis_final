@@ -1860,6 +1860,12 @@
       "hint_consequence"
     ],
     "default_hint_level": "hint_observe",
+    "mode": {
+      "failures_before_assist": 2,
+      "speed_scale": 0.75,
+      "time_limit_scale": 1.5,
+      "show_full_route": true
+    },
     "knowledge": {
       "initial_unlocked_entry_ids": [],
       "read_tracking_policy": "explicit_id_set",
