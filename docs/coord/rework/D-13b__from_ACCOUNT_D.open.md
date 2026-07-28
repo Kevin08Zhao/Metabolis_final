@@ -1,6 +1,6 @@
 target_task: D-13b
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: d13bb366833e0fec1e89d234495b827bcdefd502
 failed_contract:
   - docs/BUILD_DECISION_SPEC.md Table D8 defines the three metric rows, units, directions, normalization, and comparison bars.

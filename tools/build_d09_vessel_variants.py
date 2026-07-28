@@ -184,12 +184,13 @@ def build() -> dict:
                     image.save(path, format="PNG", optimize=False)
 
                     reopened = Image.open(path).convert("RGBA")
+                    flat = list(reopened.getdata())
                     colors = {
                         (r, g, b)
-                        for r, g, b, a in reopened.get_flattened_data()
+                        for r, g, b, a in flat
                         if a
                     }
-                    alphas = {a for _, _, _, a in reopened.get_flattened_data()}
+                    alphas = {a for _, _, _, a in flat}
                     checks = {
                         "dimensions_16x16": reopened.size == (16, 16),
                         "binary_alpha": alphas <= {0, 255},
