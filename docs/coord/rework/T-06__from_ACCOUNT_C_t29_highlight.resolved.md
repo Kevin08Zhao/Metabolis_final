@@ -1,6 +1,6 @@
 reported_task: T-06
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 discovered_while: T-29
 base_main_commit: 3430759bd798c72c3cc12d8e7d02452dedb21458
 failed_files:
@@ -33,3 +33,10 @@ requested_resolution: |
   BALANCE_VALIDATION.md. Resolve this record and revalidate done/T-06.md before
   Account C resumes T-29.
 reported_at: 2026-07-28T13:25:00-04:00
+resolved_at: 2026-07-28T14:50:00-04:00
+resolved_by: ACCOUNT_C
+authorization: The project owner explicitly authorized ACCOUNT_C to repair the upstream omission.
+resolution:
+  - Added assist.ui.resource_change_highlight_sec = 0.35 to docs/BALANCE.json.
+  - Documented the path, seconds unit, and validation bounds in docs/BALANCE_VALIDATION.md.
+  - Revalidated docs/coord/done/T-06.md before resuming T-29.
