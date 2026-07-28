@@ -112,7 +112,7 @@ Section 9 of `docs/EVENT_API.md` carries the birth sequence. Four events:
 
 | Event | Emitted at |
 |---|---|
-| `birth_sequence_started` | The first transition out of `IDLE`, before the per-beat event, so a listener that swaps the soundtrack has done so by the time the first beat arrives |
+| `birth_sequence_started` | Every entry into `ready_check`, whether from `start()` or from an acknowledged rollback, before the per-beat event. A retry is a fresh attempt and must close input again, so this fires once per attempt rather than once per run |
 | `birth_state_changed` | Every accepted transition, from `transition_to`. Carries `window_ms`, which is zero for `ready_check` and `failure_rollback` |
 | `birth_sequence_completed` | Entering `ending` |
 | `birth_rolled_back` | Entering `failure_rollback`, with `gate_check_failed` or `precondition_lost` |

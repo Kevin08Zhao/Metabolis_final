@@ -154,9 +154,13 @@ func transition_to(next_state: int, reason_code: StringName = &"") -> bool:
 
 	print("%s %s -> %s" % [LOG_PREFIX, STATE_IDS[previous_state], STATE_IDS[_current_state]])
 
-	# The sequence opens before the per-beat event, so a listener that swaps the
-	# soundtrack has done so by the time the first beat arrives.
-	if previous_state == State.IDLE:
+	# Fired on entering the gate, not on leaving IDLE. A rollback returns the
+	# machine to ready_check, and that retry is a fresh attempt at the sequence
+	# which must close input again just like the first one. Keying this on IDLE
+	# left every attempt after the first one playing with input open.
+	# Emitted before the per-beat event, so a listener that swaps the soundtrack
+	# has done so by the time the first beat arrives.
+	if _current_state == State.READY_CHECK:
 		EventBus.birth_sequence_started.emit(STAGE_ID, total_budget_ms())
 
 	EventBus.birth_state_changed.emit(previous_state, _current_state, state_duration_ms(_current_state))
