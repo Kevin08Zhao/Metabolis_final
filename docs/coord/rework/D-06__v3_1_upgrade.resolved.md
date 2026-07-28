@@ -1,6 +1,6 @@
 target_task: D-06
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at: 2026-07-28T15:09:21Z
 discovered_at_main_commit: 0c0c6e757a36f657667815965cfd256739359bc0
 source: Metabolis D 轨道 Prompt v3.1 · P-02 (D-06)
@@ -25,5 +25,8 @@ actual:
 impact:
   - P-02 cannot SHIP under v3.1 until the mandatory human style gate passes.
 resolution:
-  - Preserve the legacy image and manifest as historical evidence until the v3.1 replacement is confirmed.
-  - Convert this file to .resolved.md only in the confirmed final LAND change.
+  - Candidate 04 was explicitly confirmed as-is by the user at 2026-07-28T15:56:20Z.
+  - The v3.1 lowercase target was atomically replaced only after matching the legacy SHA-256 guard.
+  - The legacy v2 manifest is preserved at docs/assets/archive/D-06_v2_MANIFEST.md.
+  - The new fetch plan, PASS report, managed manifest, quota evidence, preview, and DONE marker are committed together.
+resolved_at: 2026-07-28T15:56:20Z

@@ -1,5 +1,6 @@
 {
   "task_id": "D-06",
+  "review_disposition": "REJECTED_BY_USER",
   "palette": "art/palette.gpl",
   "report": "docs/assets/D-06_LAND_REPORT.json",
   "manifest": "docs/assets/D-06_MANIFEST.md",
