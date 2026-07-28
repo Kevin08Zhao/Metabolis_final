@@ -6,9 +6,10 @@ extends RefCounted
 ## Manual acceptance:
 ## 1. Call select_trunk_direction once, then again for the same stage. The first
 ##    result contains NetworkBuilder output; the second is rejected and disabled.
-## 2. Call increase_edge_capacity on an active mutable runtime edge. Its effective
-##    capacity rises by the E1 formula, development signal falls by the configured
-##    cost, and the console prints a [NET] success line.
+## 2. During an unconfirmed operation decision, call increase_edge_capacity on
+##    the selected active mutable runtime edge. The supplied routing transaction
+##    applies its preset plan and recomputes routing; capacity then rises by E1,
+##    development signal falls by the configured cost, and [NET] reports success.
 ## 3. Call prioritize_bottleneck_edges with multiple active mutable edge IDs.
 ##    The returned order matches the player's order; a second call is rejected.
 ## 4. Call reject_manual_route_edit for an existing edge. The UI feedback names
@@ -41,12 +42,22 @@ func configure(balance_access: Node, event_bus: Node) -> void:
 	_event_bus = event_bus
 
 
-func is_available(stage_id: StringName, intervention_id: StringName) -> bool:
+func is_available(
+	stage_id: StringName,
+	intervention_id: StringName,
+	network_data: NetworkData = null
+) -> bool:
+	if intervention_id == CAPACITY_INCREASE:
+		return (
+			network_data != null
+			and not network_data.transport_intervention_used
+			and _use_count(stage_id, intervention_id) < _max_uses_per_stage()
+		)
 	return _use_count(stage_id, intervention_id) < _max_uses_per_stage()
 
 
 func select_trunk_direction(
-	stage_id: StringName,
+	chapter_data: ChapterData,
 	organ_id: StringName,
 	decision_id: StringName,
 	option_id: StringName,
@@ -54,8 +65,24 @@ func select_trunk_direction(
 ) -> Dictionary:
 	if not _ready():
 		return {}
+	if chapter_data == null:
+		_reject(&"chapter_data_unavailable", FOCUS_DIRECTION)
+		return {}
+	var stage_id := chapter_data.stage_id
 	if not is_available(stage_id, TRUNK_DIRECTION):
 		_reject(&"usage_limit_reached", FOCUS_DIRECTION)
+		return {}
+	if chapter_data.phase != &"build_decision":
+		_reject(&"not_in_build_decision", FOCUS_DIRECTION)
+		return {}
+	if chapter_data.active_build_decision_id != decision_id:
+		_reject(&"build_decision_unavailable", FOCUS_DIRECTION)
+		return {}
+	if chapter_data.confirmed_build_decision_ids.has(decision_id):
+		_reject(&"build_decision_locked", FOCUS_DIRECTION)
+		return {}
+	if not chapter_data.available_build_option_ids.has(option_id):
+		_reject(&"build_option_unavailable", FOCUS_DIRECTION)
 		return {}
 	if (
 		network_builder == null
@@ -86,23 +113,34 @@ func select_trunk_direction(
 
 
 func increase_edge_capacity(
-	stage_id: StringName,
-	selected_edge_id: StringName,
+	chapter_data: ChapterData,
 	network_data: NetworkData,
-	resources: Dictionary
+	resources: Dictionary,
+	apply_plan_and_recompute: Callable
 ) -> Dictionary:
 	if not _ready():
+		return {}
+	if chapter_data == null:
+		_reject(&"chapter_data_unavailable", FOCUS_CAPACITY)
 		return {}
 	if network_data == null:
 		_reject(&"network_data_unavailable", FOCUS_CAPACITY)
 		return {}
-	if (
-		network_data.transport_intervention_used
-		or not is_available(stage_id, CAPACITY_INCREASE)
-	):
+	var stage_id := chapter_data.stage_id
+	if not is_available(stage_id, CAPACITY_INCREASE, network_data):
 		_reject(&"usage_limit_reached", FOCUS_CAPACITY)
 		return {}
-
+	if chapter_data.phase != &"operation_decision":
+		_reject(&"not_in_operation_decision", FOCUS_CAPACITY)
+		return {}
+	var operation_id := chapter_data.active_operation_decision_id
+	if operation_id.is_empty():
+		_reject(&"operation_decision_unavailable", FOCUS_CAPACITY)
+		return {}
+	if chapter_data.confirmed_operation_decision_ids.has(operation_id):
+		_reject(&"operation_decision_locked", FOCUS_CAPACITY)
+		return {}
+	var selected_edge_id := network_data.selected_transport_edge_id
 	if selected_edge_id.is_empty():
 		_reject(&"edge_not_selected", FOCUS_CAPACITY)
 		return {}
@@ -118,14 +156,16 @@ func increase_edge_capacity(
 	if bool(network_data.disconnects_required_organs[selected_edge_id]):
 		_reject(&"required_organ_would_disconnect", FOCUS_ROUTE)
 		return {}
-	var plan_id := StringName(
-		network_data.transport_intervention_plan_by_edge.get(
-			selected_edge_id,
-			""
-		)
+	var plan: Variant = network_data.transport_intervention_plan_by_edge.get(
+		selected_edge_id,
+		null
 	)
+	var plan_id := _plan_id(plan)
 	if plan_id.is_empty():
 		_reject(&"intervention_plan_unavailable", FOCUS_ROUTE)
+		return {}
+	if not apply_plan_and_recompute.is_valid():
+		_reject(&"routing_transaction_unavailable", FOCUS_ROUTE)
 		return {}
 	var selected_edge := _find_runtime_edge(network_data.edges, selected_edge_id)
 	if selected_edge.is_empty():
@@ -157,12 +197,16 @@ func increase_edge_capacity(
 			-1.0
 		)
 	)
+	var unlock_pressure := float(
+		_read("network.transport.intervention.unlock_pressure", -1.0)
+	)
 	if (
 		spec_tier_id.is_empty()
 		or capacity_before < 0.0
 		or base_increment < 0.0
 		or spec_multiplier < 0.0
 		or signal_cost < 0.0
+		or unlock_pressure < 0.0
 		or capacity_min < 0.0
 		or capacity_max < capacity_min
 		or not _is_range(response_input)
@@ -171,6 +215,9 @@ func increase_edge_capacity(
 		_reject(&"invalid_balance_configuration", FOCUS_CAPACITY)
 		return {}
 
+	if network_data.transport_pressure < unlock_pressure:
+		_reject(&"transport_pressure_below_unlock", &"transport_pressure")
+		return {}
 	var available_signal := float(resources.get("development_signal", 0.0))
 	if available_signal < signal_cost:
 		_reject(&"insufficient_development_signal", &"development_signal")
@@ -190,10 +237,21 @@ func increase_edge_capacity(
 		capacity_max
 	)
 
-	# Commit only after every precondition and calculation has passed. The edge
-	# comes from NetworkData.edges itself, never NetworkBuilder's deep-copy getter.
+	# The routing owner performs the document-defined preset-plan application and
+	# one route recomputation as a single transaction. The plan is passed through
+	# unchanged because its internal representation is not defined by T-15.
+	var routing_committed: Variant = apply_plan_and_recompute.call(
+		selected_edge_id,
+		plan,
+		capacity_after
+	)
+	if routing_committed != true:
+		_reject(&"routing_transaction_failed", FOCUS_ROUTE)
+		return {}
+
+	# Commit local runtime, resource, and usage state only after routing succeeds.
+	# The edge comes from NetworkData.edges, never NetworkBuilder's copy getter.
 	selected_edge["effective_capacity"] = capacity_after
-	network_data.recalculate_routes()
 	resources["development_signal"] = available_signal - signal_cost
 	network_data.transport_intervention_used = true
 	_record_use(stage_id, CAPACITY_INCREASE)
@@ -217,15 +275,29 @@ func increase_edge_capacity(
 
 
 func prioritize_bottleneck_edges(
-	stage_id: StringName,
+	chapter_data: ChapterData,
 	ordered_edge_ids: Array[StringName],
 	active_transport_edge_ids: Array[StringName],
 	mutable_transport_edge_ids: Array[StringName]
 ) -> Array[StringName]:
 	if not _ready():
 		return []
+	if chapter_data == null:
+		_reject(&"chapter_data_unavailable", FOCUS_PRIORITY)
+		return []
+	var stage_id := chapter_data.stage_id
 	if not is_available(stage_id, BOTTLENECK_PRIORITY):
 		_reject(&"usage_limit_reached", FOCUS_PRIORITY)
+		return []
+	if chapter_data.phase != &"operation_decision":
+		_reject(&"not_in_operation_decision", FOCUS_PRIORITY)
+		return []
+	var operation_id := chapter_data.active_operation_decision_id
+	if operation_id.is_empty():
+		_reject(&"operation_decision_unavailable", FOCUS_PRIORITY)
+		return []
+	if chapter_data.confirmed_operation_decision_ids.has(operation_id):
+		_reject(&"operation_decision_locked", FOCUS_PRIORITY)
 		return []
 	if ordered_edge_ids.is_empty():
 		_reject(&"no_bottleneck_edges_selected", FOCUS_PRIORITY)
@@ -310,6 +382,14 @@ func _map_clamped(
 		1.0
 	)
 	return lerpf(output_min, output_max, ratio)
+
+
+func _plan_id(plan: Variant) -> StringName:
+	if plan is String or plan is StringName:
+		return StringName(plan)
+	if plan is Dictionary:
+		return StringName(plan.get("plan_id", ""))
+	return &""
 
 
 func _find_runtime_edge(
