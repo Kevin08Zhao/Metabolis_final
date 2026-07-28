@@ -8,6 +8,6 @@
 
 | Item | Target | Status | Tool | Real ID | Actual usage | Source | Output SHA-256 |
 |---|---|---|---|---|---:|---|---|
-| `construction_landmark_source` | `art/source/construction_landmark_source.png` | PASS | `create_image_pixflux` | `6ea2fd7c-2e90-40e7-90e0-407e1f07ca05` | 1 | `https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download` | `f9a51e91b87325ca626667017a22b500bd220634fcbc727622a1c8c4dff93f28` |
+| `construction_landmark_source` | `art/source/construction_landmark_source.png` | PASS | `create_image_pixflux` | `6ea2fd7c-2e90-40e7-90e0-407e1f07ca05` | 1 | `https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download` | `6eda114db24db624bbbdf28ce74b38e9b4fa596170b431f6aded595cf29e0b8e` |
 
 The committed fetch plan is the source of truth for full raw create/status responses and any base64 payload. This manifest never fabricates missing fields.

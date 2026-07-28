@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T16:42:47+00:00",
+  "generated_at": "2026-07-28T16:43:50+00:00",
   "generated_by": "tools/pixellab_fetch.py",
   "items": [
     {
@@ -25,6 +25,10 @@
         "sha256": "f13a9143fa4d75564f7b334b24be345baf8dcb483a6a2059ca4d67b456b895dc",
         "status": "downloaded"
       },
+      "error": {
+        "message": "refusing to overwrite unknown existing file /home/runner/work/Metabolis_final/Metabolis_final/art/source/background_title_source.png; provide matching expected_existing_sha256",
+        "type": "LandError"
+      },
       "generation": {
         "job_id": "f9979329-be15-4e32-bbe7-bdbcf88de454",
         "seed": 29001,
@@ -39,11 +43,6 @@
         "file_name": "background_title_source.png",
         "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
         "status": "PASS"
-      },
-      "output": {
-        "bytes": 6988,
-        "sha256": "93574798f7be19475c3628e42c66de3cd5c0d2f502f832af3b908a59af0403f3",
-        "status": "created"
       },
       "palette": {
         "locked_palette_color_count": 22,
@@ -63,7 +62,7 @@
         "kind": "url",
         "url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "target": "art/source/background_title_source.png",
       "transparency": {
         "alpha_threshold": 128,
@@ -85,11 +84,11 @@
     "sha256": "f12e30067023914e2c410f8b9dcc3b687a9fa481a713f6a681fe5be1a2d9a7fa"
   },
   "report_version": 1,
-  "status": "PASS",
+  "status": "FAIL",
   "summary": {
-    "failure_count": 0,
+    "failure_count": 1,
     "item_count": 1,
-    "success_count": 1
+    "success_count": 0
   },
   "task_id": "D-29"
 }
