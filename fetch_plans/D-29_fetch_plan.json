@@ -32,7 +32,7 @@
         "width": 320,
         "height": 180
       },
-      "expected_existing_sha256": "93574798f7be19475c3628e42c66de3cd5c0d2f502f832af3b908a59af0403f3",
+      "expected_existing_sha256": "6d649b3e07ee8502c6c4271aa2e6a9597e22231d0b6e0b9abf7c2816b9e1cb66",
       "alpha_threshold": 128,
       "operations": []
     }

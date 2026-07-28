@@ -26,7 +26,7 @@
         "width": 48,
         "height": 48
       },
-      "expected_existing_sha256": "74ca9e59162e264accc298c9c4f87349d62bc4b13f62796af5537498ccf1db5a",
+      "expected_existing_sha256": "4397120a04df2b3abc58746868dc85012efcd7f3e5f22b513ad53bdbb655342f",
       "alpha_threshold": 128,
       "operations": []
     },
@@ -51,7 +51,7 @@
         "width": 48,
         "height": 48
       },
-      "expected_existing_sha256": "1dc1b2ca60d054c2d61fb601fae38fe66484fc8500154421faba2b7312154d71",
+      "expected_existing_sha256": "724dfd35f5aa861d5e6ddcddb106f4fc0b52a533e67525558c37bf933d9c2dc5",
       "alpha_threshold": 128,
       "operations": []
     }
