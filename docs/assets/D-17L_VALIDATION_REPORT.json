@@ -1,0 +1,59 @@
+{
+  "task_id": "D-17L",
+  "status": "PASS",
+  "generation": {
+    "method": "DERIVED_DETERMINISTIC_NINE_SLICE",
+    "script": "tools/build_d14l_d17l_ui.py",
+    "pixellab_calls": 0,
+    "style_source": "art/candidates/pf00/ui_frame_shared_candidate01_raw.png",
+    "style_source_job_id": "3a44ef17-752e-4d36-95b8-6f096a52fdf7"
+  },
+  "png_count": 3,
+  "files": [
+    {
+      "id": "knowledge_prompt",
+      "path": "art/ui/ui_knowledge_prompt_frame.png",
+      "size": [
+        224,
+        32
+      ],
+      "sha256": "787cc50ff0957b18166773825612de809258cf9c2490fb07a25362757292b633",
+      "checks": {
+        "dimensions": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "lowercase_snake_case": "PASS"
+      }
+    },
+    {
+      "id": "organ_archive_panel",
+      "path": "art/ui/ui_organ_archive_panel_frame.png",
+      "size": [
+        560,
+        304
+      ],
+      "sha256": "3d71ce48e27f4bf44de3cfb4837f03cede0515a19eb29e0738514e79f2ad5a23",
+      "checks": {
+        "dimensions": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "lowercase_snake_case": "PASS"
+      }
+    },
+    {
+      "id": "chapter_summary_panel",
+      "path": "art/ui/ui_chapter_summary_panel_frame.png",
+      "size": [
+        544,
+        304
+      ],
+      "sha256": "8aae1ad1510f57dd965ea15ef85bb8ffd2ba3060f5edcf43b0d7b0249468e400",
+      "checks": {
+        "dimensions": "PASS",
+        "binary_alpha": "PASS",
+        "locked_palette_only": "PASS",
+        "lowercase_snake_case": "PASS"
+      }
+    }
+  ]
+}

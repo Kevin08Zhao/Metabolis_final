@@ -1,0 +1,17 @@
+{
+  "frame_size": {
+    "width": 48,
+    "height": 48
+  },
+  "frame_count": 4,
+  "frame_durations_ms": [
+    120,
+    80,
+    200,
+    400
+  ],
+  "loop": true,
+  "trigger_event": "system_observation_started",
+  "fallback_frame_index": 0,
+  "palette_checked": true
+}
