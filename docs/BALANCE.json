@@ -1865,6 +1865,10 @@
       "read_tracking_policy": "explicit_id_set",
       "selection_policy": "empty_until_player_selection",
       "immediate_prompt_display_sec": 4.0
+    },
+    "audio": {
+      "max_concurrent_one_shots": 6,
+      "high_frequency_min_interval_sec": 0.1
     }
   }
 }
