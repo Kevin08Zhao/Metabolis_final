@@ -77,6 +77,14 @@ signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, car
 # ---------------------------------------------------------------------------
 signal action_rejected(action_id: StringName, reason_code: StringName, focus_element: StringName)
 
+# ---------------------------------------------------------------------------
+# 9 · Birth transition
+# ---------------------------------------------------------------------------
+signal birth_sequence_started(stage_id: StringName, total_budget_ms: int)
+signal birth_state_changed(previous_state: int, current_state: int, window_ms: int)
+signal birth_sequence_completed(stage_id: StringName)
+signal birth_rolled_back(from_state: int, reason_code: StringName)
+
 
 # ---------------------------------------------------------------------------
 # Debug helpers
@@ -121,6 +129,10 @@ const EVENT_NAMES := [
 	&"knowledge_entry_opened",
 	&"carryover_applied",
 	&"action_rejected",
+	&"birth_sequence_started",
+	&"birth_state_changed",
+	&"birth_sequence_completed",
+	&"birth_rolled_back",
 ]
 
 ## Debug switch, changeable at any time while running. When true, every emit
