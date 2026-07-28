@@ -1,0 +1,103 @@
+{
+  "task_id": "D-21",
+  "status": "PASS",
+  "generated_at": "2026-07-28T18:11:10+00:00",
+  "generated_by": "tools/build_d21_heartbeat_states.py",
+  "source": {
+    "path": "anim/heart_pump_active.png",
+    "sha256": "84dd84ee5e2b3fc0564d59dcd59e3d49e6ec2a3d669dff4be3b2e7b06a3e0961"
+  },
+  "stability_thresholds": {
+    "stable_enter": 75.0,
+    "stable_exit": 65.0,
+    "strained_recover": 70.0,
+    "critical_enter": 30.0,
+    "critical_recover": 40.0,
+    "hysteresis": 5.0
+  },
+  "reuse_decision": {
+    "stable_and_strained": "Share the complete D-20 sheet; timing alone distinguishes them.",
+    "critical": "Reuse only the D-20 relaxed and shallow-contraction poses so the amplitude is smaller without generating or scaling any image."
+  },
+  "outputs": {
+    "stable": {
+      "png": "anim/heart_pump_stable.png",
+      "json": "anim/heart_pump_stable.json",
+      "source_frame_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_durations_ms": [
+        420,
+        120,
+        100,
+        360
+      ],
+      "total_loop_ms": 1000,
+      "fallback_frame_index": 0,
+      "png_sha256": "84dd84ee5e2b3fc0564d59dcd59e3d49e6ec2a3d669dff4be3b2e7b06a3e0961",
+      "json_sha256": "445de4f9049b85d72b34cdb3f3bf0135bd0d67891057da3da38baba31d9cbe01",
+      "out_of_palette_pixels": 0,
+      "partially_transparent_pixels": 0
+    },
+    "strained": {
+      "png": "anim/heart_pump_strained.png",
+      "json": "anim/heart_pump_strained.json",
+      "source_frame_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "frame_durations_ms": [
+        140,
+        60,
+        80,
+        160
+      ],
+      "total_loop_ms": 440,
+      "fallback_frame_index": 2,
+      "png_sha256": "84dd84ee5e2b3fc0564d59dcd59e3d49e6ec2a3d669dff4be3b2e7b06a3e0961",
+      "json_sha256": "fb45223f19fd17d8dff072782440975f3d58c5583fcb3422e3aae2d072f74841",
+      "out_of_palette_pixels": 0,
+      "partially_transparent_pixels": 0
+    },
+    "critical": {
+      "png": "anim/heart_pump_critical.png",
+      "json": "anim/heart_pump_critical.json",
+      "source_frame_indices": [
+        0,
+        1,
+        1,
+        0
+      ],
+      "frame_durations_ms": [
+        680,
+        200,
+        220,
+        700
+      ],
+      "total_loop_ms": 1800,
+      "fallback_frame_index": 1,
+      "png_sha256": "5a898c3be7b3e7e467df287476207672a1ad45e8d2d01e129c2ec4a839fb9d01",
+      "json_sha256": "2fff1fe1eeb0332e95d18d48e70943eb582d341a75559dc1a435db32b0e0586e",
+      "out_of_palette_pixels": 0,
+      "partially_transparent_pixels": 0
+    }
+  },
+  "checks": {
+    "stable_sheet_reuses_d20_exactly": true,
+    "strained_sheet_reuses_d20_exactly": true,
+    "critical_uses_only_relaxed_and_shallow_contraction": true,
+    "fallback_poses_are_pairwise_distinct": true,
+    "stable_is_slower_than_strained": true,
+    "critical_is_slowest": true,
+    "strained_timing_is_non_uniform": true,
+    "all_outputs_use_locked_palette": true,
+    "all_outputs_use_binary_alpha": true,
+    "table_e4_thresholds_match_balance": true,
+    "no_pixellab_generation_required": true
+  }
+}

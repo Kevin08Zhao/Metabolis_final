@@ -19,5 +19,6 @@
 | `2026-07-28T16:29:39Z` | P-F00 local deterministic work and validation | D-07/D-08/D-15 local generation and validation | 0 | 0 | `156 / 4844` | No PixelLab generation call; D-07/D-08 are already on main, and D-15 is validated on `codex/d-fast-static` |
 | `2026-07-28T17:03:00Z` | P-F01 deterministic static wave | D-09 art matrix, D-14L, D-15a, D-16, D-17L, and D-18 validator; followed by `get_balance({})` | 0 | 0 | `156 / 4844` | Real MCP balance response is unchanged. D-09 is retained with an upstream runtime-contract blocker; all other named outputs are locally validated with zero PixelLab calls. |
 | `2026-07-28T18:00:49Z` | D-20 heartbeat loop | `animate_image`, followed by `get_balance({})` | 1 | 1 | `157 / 4843` | Job `97436fcf-d7c1-44ba-84cd-5a66f44d0a6e`; create response states `cost: 1 generation`; balance delta matches; evidence is in `fetch_plans/D-20_fetch_plan.json` and `docs/assets/D-20_MANIFEST.md`. |
+| `2026-07-28T18:10:11Z` | D-21 heartbeat state variants | Reuse and deterministic sheet assembly, followed by `get_balance({})` | 0 | 0 | `157 / 4843` | Real MCP balance is unchanged; `docs/assets/D-21_MANIFEST.md` records the stable, strained, and critical reuse decision and outputs. |
 
 下一项生产任务必须增加一行：任务号、真实工具名、创建调用数、响应中的 actual usage/cost、调用后余额以及对应 fetch plan/MANIFEST 路径。余额变化与任务响应冲突时停止 SHIP 并保留两份原始证据。
