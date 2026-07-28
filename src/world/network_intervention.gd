@@ -6,7 +6,7 @@ extends RefCounted
 ## Manual acceptance:
 ## 1. Call select_trunk_direction once, then again for the same stage. The first
 ##    result contains NetworkBuilder output; the second is rejected and disabled.
-## 2. Call increase_edge_capacity on an active mutable edge. Its effective
+## 2. Call increase_edge_capacity on an active mutable runtime edge. Its effective
 ##    capacity rises by the E1 formula, development signal falls by the configured
 ##    cost, and the console prints a [NET] success line.
 ## 3. Call prioritize_bottleneck_edges with multiple active mutable edge IDs.
@@ -87,27 +87,49 @@ func select_trunk_direction(
 
 func increase_edge_capacity(
 	stage_id: StringName,
-	selected_edge: Dictionary,
-	active_transport_edge_ids: Array,
-	mutable_transport_edge_ids: Array,
-	transport_pressure: float,
+	selected_edge_id: StringName,
+	network_data: NetworkData,
 	resources: Dictionary
 ) -> Dictionary:
 	if not _ready():
 		return {}
-	if not is_available(stage_id, CAPACITY_INCREASE):
+	if network_data == null:
+		_reject(&"network_data_unavailable", FOCUS_CAPACITY)
+		return {}
+	if (
+		network_data.transport_intervention_used
+		or not is_available(stage_id, CAPACITY_INCREASE)
+	):
 		_reject(&"usage_limit_reached", FOCUS_CAPACITY)
 		return {}
 
-	var edge_id := StringName(selected_edge.get("edge_id", ""))
-	if edge_id.is_empty():
+	if selected_edge_id.is_empty():
 		_reject(&"edge_not_selected", FOCUS_CAPACITY)
 		return {}
-	if not active_transport_edge_ids.has(edge_id):
+	if not network_data.active_transport_edge_ids.has(selected_edge_id):
 		_reject(&"edge_not_active", FOCUS_ROUTE)
 		return {}
-	if not mutable_transport_edge_ids.has(edge_id):
+	if not network_data.mutable_transport_edge_ids.has(selected_edge_id):
 		_reject(&"edge_not_mutable", FOCUS_ROUTE)
+		return {}
+	if not network_data.disconnects_required_organs.has(selected_edge_id):
+		_reject(&"connectivity_not_validated", FOCUS_ROUTE)
+		return {}
+	if bool(network_data.disconnects_required_organs[selected_edge_id]):
+		_reject(&"required_organ_would_disconnect", FOCUS_ROUTE)
+		return {}
+	var plan_id := StringName(
+		network_data.transport_intervention_plan_by_edge.get(
+			selected_edge_id,
+			""
+		)
+	)
+	if plan_id.is_empty():
+		_reject(&"intervention_plan_unavailable", FOCUS_ROUTE)
+		return {}
+	var selected_edge := _find_runtime_edge(network_data.edges, selected_edge_id)
+	if selected_edge.is_empty():
+		_reject(&"runtime_edge_not_found", FOCUS_ROUTE)
 		return {}
 
 	var spec_tier_id := StringName(selected_edge.get("spec_tier_id", ""))
@@ -155,7 +177,7 @@ func increase_edge_capacity(
 		return {}
 
 	var pressure_response := _map_clamped(
-		transport_pressure,
+		network_data.transport_pressure,
 		float(response_input[0]),
 		float(response_input[1]),
 		float(response_output[0]),
@@ -168,21 +190,25 @@ func increase_edge_capacity(
 		capacity_max
 	)
 
-	# Commit only after every precondition and calculation has passed.
+	# Commit only after every precondition and calculation has passed. The edge
+	# comes from NetworkData.edges itself, never NetworkBuilder's deep-copy getter.
 	selected_edge["effective_capacity"] = capacity_after
+	network_data.recalculate_routes()
 	resources["development_signal"] = available_signal - signal_cost
+	network_data.transport_intervention_used = true
 	_record_use(stage_id, CAPACITY_INCREASE)
 	_feedback = "Capacity intervention applied; this entry is now disabled."
 	_emit(
 		&"transport_network_intervened",
-		[edge_id, CAPACITY_INCREASE, capacity_after]
+		[selected_edge_id, plan_id, capacity_after]
 	)
 	print(
 		"[NET] capacity edge=%s before=%.3f delta=%.3f after=%.3f"
-		% [edge_id, capacity_before, capacity_delta, capacity_after]
+		% [selected_edge_id, capacity_before, capacity_delta, capacity_after]
 	)
 	return {
-		"edge_id": edge_id,
+		"edge_id": selected_edge_id,
+		"plan_id": plan_id,
 		"capacity_before": capacity_before,
 		"capacity_delta": capacity_delta,
 		"capacity_after": capacity_after,
@@ -192,22 +218,21 @@ func increase_edge_capacity(
 
 func prioritize_bottleneck_edges(
 	stage_id: StringName,
-	ordered_edge_ids: Array,
-	active_transport_edge_ids: Array,
-	mutable_transport_edge_ids: Array
-) -> PackedStringArray:
+	ordered_edge_ids: Array[StringName],
+	active_transport_edge_ids: Array[StringName],
+	mutable_transport_edge_ids: Array[StringName]
+) -> Array[StringName]:
 	if not _ready():
-		return PackedStringArray()
+		return []
 	if not is_available(stage_id, BOTTLENECK_PRIORITY):
 		_reject(&"usage_limit_reached", FOCUS_PRIORITY)
-		return PackedStringArray()
+		return []
 	if ordered_edge_ids.is_empty():
 		_reject(&"no_bottleneck_edges_selected", FOCUS_PRIORITY)
-		return PackedStringArray()
+		return []
 
-	var result := PackedStringArray()
-	for value: Variant in ordered_edge_ids:
-		var edge_id := StringName(value)
+	var result: Array[StringName] = []
+	for edge_id: StringName in ordered_edge_ids:
 		if (
 			edge_id.is_empty()
 			or result.has(edge_id)
@@ -215,7 +240,7 @@ func prioritize_bottleneck_edges(
 			or not mutable_transport_edge_ids.has(edge_id)
 		):
 			_reject(&"edge_not_prioritizable", FOCUS_PRIORITY)
-			return PackedStringArray()
+			return []
 		result.append(edge_id)
 
 	_record_use(stage_id, BOTTLENECK_PRIORITY)
@@ -230,11 +255,6 @@ func reject_manual_route_edit(edge_id: StringName) -> bool:
 		edge_id if not edge_id.is_empty() else FOCUS_ROUTE
 	)
 	return false
-
-
-func reset_stage(stage_id: StringName) -> void:
-	_uses_by_stage.erase(stage_id)
-	_feedback = ""
 
 
 func _ready() -> bool:
@@ -290,6 +310,16 @@ func _map_clamped(
 		1.0
 	)
 	return lerpf(output_min, output_max, ratio)
+
+
+func _find_runtime_edge(
+	edges: Array,
+	edge_id: StringName
+) -> Dictionary:
+	for edge: Variant in edges:
+		if edge is Dictionary and StringName(edge.get("edge_id", "")) == edge_id:
+			return edge
+	return {}
 
 
 func _emit(signal_name: StringName, arguments: Array) -> void:
