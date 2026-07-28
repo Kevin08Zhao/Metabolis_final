@@ -120,6 +120,7 @@ clearing event.
 | `system_observation_ended` | The collaboration demonstration finishes playing and `system_observation_complete` is set to `true` | `organ_id: StringName`, `observation_id: StringName` | once per stage | The collaboration path converges and the city map returns to its normal loop | The ambient layer fades out |
 | `knowledge_entry_unlocked` | The matching organ archive entry and timeline entry unlock and are written into `unlocked_knowledge_entry_ids` | `entry_id: StringName`, `organ_id: StringName`, `stage_id: StringName` | repeatable within one tick (one stage may unlock several entries at once) | A "new" badge appears on the timeline archive marker and pops once | `sfx_knowledge_unlock` (only one playback per tick regardless of count) |
 | `knowledge_entry_opened` | `view_knowledge_archive` passes its preconditions and the archive detail opens. `first_read` is `true` when this call flips `is_read` from false to true | `entry_id: StringName`, `first_read: bool` | repeatable within one tick | `knowledge_card_unfold` expands `KnowledgeArchivePanel` to the entry; the "new" badge switches to "read" | `sfx_knowledge_open` |
+| `delayed_feedback_shown` | A carryover value first actually bites in the stage that received it — not when the stage opens. One per carryover field per stage at most. Renders in the same non-blocking container as the immediate knowledge hints of table E11, so it never interrupts an action | `carryover_field: StringName` (one of the three table F1 names), `source_stage_id: StringName` (the stage whose decisions produced it), `source_decision_ids: Array[StringName]` (that stage's build decisions, so the player can connect cause to effect) | at most once per carryover field per stage, so at most three times in a stage and never in stage one, which has no predecessor | The hint card slides into the shared container and dismisses itself | `sfx_knowledge_open`, the same cue the immediate hints use |
 | `carryover_applied` | All three table F1 values have reached `current_city_state.operation_start_conditions` at their respective application positions — network efficiency before the first production tick, operating pressure after the base network is instantiated, waste after organs and waste routes are instantiated — and before the first E3 settlement tick of the entered stage. On a first visit it follows `stage_snapshot_written` in the same transaction; on replay it fires alone, carrying values read from `chapter_snapshots` | `from_stage_id: StringName`, `to_stage_id: StringName`, `carryover: Dictionary` (the three values of table F1 of `docs/CARRYOVER_SPEC.md`: `network_efficiency_coefficient`, `initial_operation_pressure`, `initial_waste_accumulation`) | once per stage (three times across the run; `stage_birth` produces no record for a successor, and `stage_origin` receives none) | The three carryover summary lines of `StageSummaryPanel` push into the new stage's starting readouts | `sfx_carryover_apply` |
 
 ## 8 · Action rejection
@@ -219,7 +220,7 @@ sources are named at the top of section 9.
 
 ## GDScript signal declarations
 
-The thirty-six lines below can be pasted straight into
+The thirty-seven lines below can be pasted straight into
 `src/autoload/event_bus.gd`. Parameter types are complete, with nothing elided.
 
 ```gdscript
@@ -267,6 +268,7 @@ signal system_observation_ended(organ_id: StringName, observation_id: StringName
 signal knowledge_entry_unlocked(entry_id: StringName, organ_id: StringName, stage_id: StringName)
 signal knowledge_entry_opened(entry_id: StringName, first_read: bool)
 signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, carryover: Dictionary)
+signal delayed_feedback_shown(carryover_field: StringName, source_stage_id: StringName, source_decision_ids: Array[StringName])
 
 # 8 · Action rejection
 signal action_rejected(action_id: StringName, reason_code: StringName, focus_element: StringName)
