@@ -1,0 +1,150 @@
+{
+  "checks": {
+    "crop_and_nine_slice_are_pixel_exact": true,
+    "failed_item_reported": true,
+    "mixed_plan_returns_failure": true,
+    "no_done_marker_created": true,
+    "output_has_binary_alpha": true,
+    "output_has_no_visible_out_of_palette_pixels": true,
+    "palette_has_exactly_22_colors": true,
+    "palette_strip_has_22_ordered_blocks": true,
+    "successful_item_still_landed": true,
+    "unknown_existing_file_is_not_overwritten": true,
+    "workflow_will_end_red_after_commit": true
+  },
+  "failed_item_report": {
+    "dimensions": {
+      "status": "not_checked"
+    },
+    "download": {
+      "error": "download failed: <urlopen error [Errno 1] Operation not permitted>",
+      "status": "FAIL"
+    },
+    "error": {
+      "message": "download failed: <urlopen error [Errno 1] Operation not permitted>",
+      "type": "LandError"
+    },
+    "generation": {
+      "job_id": "NOT_APPLICABLE",
+      "tool": "synthetic_self_test_fixture",
+      "usage": {
+        "generation_units": 0
+      }
+    },
+    "id": "deliberate_failed_url",
+    "naming": {
+      "file_name": "reference_pipeline_failed.png",
+      "rule": "{category}_{subject}_{variant}.png in lowercase snake_case",
+      "status": "PASS"
+    },
+    "palette": {
+      "locked_palette_color_count": 22,
+      "status": "not_checked"
+    },
+    "source": {
+      "kind": "url",
+      "url": "https://127.0.0.1:9/intentionally-unreachable.png"
+    },
+    "status": "FAIL",
+    "target": "art/reference/reference_pipeline_failed.png",
+    "transparency": {
+      "status": "not_checked"
+    }
+  },
+  "generated_at": "2026-07-28T14:49:04+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "generation_units_used": 0,
+  "palette_color_count": 22,
+  "report_version": 1,
+  "scenario": {
+    "deliberate_failure_source": "https://127.0.0.1:9/intentionally-unreachable.png",
+    "items": 2,
+    "land_command_expected_exit_code": 1,
+    "valid_small_image_source": "base64",
+    "workflow_expected_conclusion": "failure (red)"
+  },
+  "status": "PASS",
+  "task_id": "D-05a",
+  "valid_item_report": {
+    "dimensions": {
+      "expected": {
+        "height": 4,
+        "width": 6
+      },
+      "operations": [
+        {
+          "factor": 2,
+          "kind": "integer_scale"
+        }
+      ],
+      "output": {
+        "height": 4,
+        "width": 6
+      },
+      "source": {
+        "height": 2,
+        "width": 3
+      },
+      "status": "PASS"
+    },
+    "download": {
+      "bytes": 92,
+      "final_url": null,
+      "sha256": "de19ad7153d07c4117b756750dd38438c17f8f07a98d8d9383acfa10139d4170",
+      "status": "downloaded"
+    },
+    "generation": {
+      "job_id": "NOT_APPLICABLE",
+      "tool": "synthetic_self_test_fixture",
+      "usage": {
+        "generation_units": 0
+      }
+    },
+    "id": "valid_base64_small_image",
+    "naming": {
+      "file_name": "reference_pipeline_valid.png",
+      "rule": "{category}_{subject}_{variant}.png in lowercase snake_case",
+      "status": "PASS"
+    },
+    "output": {
+      "bytes": 112,
+      "sha256": "5467b9386097143b519493d5d789fb4f4050986d2cf30088be3f13eef5dec554",
+      "status": "created"
+    },
+    "palette": {
+      "locked_palette_color_count": 22,
+      "max_over_threshold_percent": 0.0,
+      "out_of_palette_pixels_after": 0,
+      "out_of_palette_pixels_before": 2,
+      "over_threshold_percent": 0.0,
+      "over_threshold_pixels": 0,
+      "palette_distance_metric": "CIE76 Delta E",
+      "palette_distance_threshold": 12.0,
+      "status": "PASS",
+      "visible_output_color_count": 4,
+      "visible_pixels_after": 16,
+      "visible_pixels_before": 5
+    },
+    "source": {
+      "encoded_characters": 124,
+      "encoded_sha256": "424d7a878ee7cd941fdb0b01db47705d076fe4c5becc96706b87a897578abe93",
+      "kind": "base64"
+    },
+    "status": "PASS",
+    "target": "art/reference/reference_pipeline_valid.png",
+    "transparency": {
+      "alpha_threshold": 128,
+      "opaque_pixels_after": 16,
+      "partially_transparent_pixels_after": 0,
+      "partially_transparent_pixels_before": 2,
+      "status": "PASS",
+      "transparent_pixels_after": 8
+    }
+  },
+  "workflow_static_checks": {
+    "done_paths_rejected": true,
+    "failed_land_step_is_deferred": true,
+    "final_failure_step_exists": true,
+    "permissions_only_contents_write": true
+  }
+}
