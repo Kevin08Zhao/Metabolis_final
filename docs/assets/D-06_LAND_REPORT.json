@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T15:56:09+00:00",
+  "generated_at": "2026-07-28T16:41:01+00:00",
   "generated_by": "tools/pixellab_fetch.py",
   "items": [
     {
@@ -24,6 +24,10 @@
         "final_url": null,
         "sha256": "e2f098e021e65aad910b3824b76a19131bd51dbfee9d91034a4283d23ac75221",
         "status": "downloaded"
+      },
+      "error": {
+        "message": "refusing to overwrite unknown existing file /home/runner/work/Metabolis_final/Metabolis_final/art/reference/style_master.png; provide matching expected_existing_sha256",
+        "type": "LandError"
       },
       "generation": {
         "create_response": {
@@ -63,11 +67,6 @@
         "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
         "status": "PASS"
       },
-      "output": {
-        "bytes": 12056,
-        "sha256": "f646a0d1a81d322e00c6becb54bfb737a061e89c9a64a57422b9fd76fb4d580c",
-        "status": "replaced_known_hash"
-      },
       "palette": {
         "locked_palette_color_count": 22,
         "max_over_threshold_percent": 10.0,
@@ -87,7 +86,7 @@
         "encoded_sha256": "1d53ab1e2389c57a41916428163028c4cdaacc8f2d6c4d3cb1951ca3d1c1ec28",
         "kind": "base64"
       },
-      "status": "PASS",
+      "status": "FAIL",
       "target": "art/reference/style_master.png",
       "transparency": {
         "alpha_threshold": 128,
@@ -109,11 +108,11 @@
     "sha256": "e314aadf83612010762d15ff6640e5040e511b4da186a6e247fec56bbfd50255"
   },
   "report_version": 1,
-  "status": "PASS",
+  "status": "FAIL",
   "summary": {
-    "failure_count": 0,
+    "failure_count": 1,
     "item_count": 1,
-    "success_count": 1
+    "success_count": 0
   },
   "task_id": "D-06"
 }

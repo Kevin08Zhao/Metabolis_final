@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-28T16:41:04+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "status": "not_checked"
+      },
+      "download": {
+        "status": "not_attempted"
+      },
+      "error": {
+        "message": "path must be a non-empty repository-relative string",
+        "type": "LandError"
+      },
+      "id": "title_background_master",
+      "naming": {
+        "status": "not_checked"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "status": "not_checked"
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
+      },
+      "status": "FAIL",
+      "transparency": {
+        "status": "not_checked"
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-29_fetch_plan.json",
+    "sha256": "cdfef8b9aea0277e2a330867dea3727b7ba8c7d39de33c530f8b0199a1b68686"
+  },
+  "report_version": 1,
+  "status": "FAIL",
+  "summary": {
+    "failure_count": 1,
+    "item_count": 1,
+    "success_count": 0
+  },
+  "task_id": "D-29"
+}

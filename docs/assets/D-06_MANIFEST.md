@@ -8,6 +8,6 @@
 
 | Item | Target | Status | Tool | Real ID | Actual usage | Source | Output SHA-256 |
 |---|---|---|---|---|---:|---|---|
-| `style_master` | `art/reference/style_master.png` | PASS | `edit_image` | `ca5ffa91-0a59-4871-96be-5d76aca31592` | 20 | `base64` | `f646a0d1a81d322e00c6becb54bfb737a061e89c9a64a57422b9fd76fb4d580c` |
+| `style_master` | `art/reference/style_master.png` | FAIL | `edit_image` | `ca5ffa91-0a59-4871-96be-5d76aca31592` | 20 | `base64` | `—` |
 
 The committed fetch plan is the source of truth for full raw create/status responses and any base64 payload. This manifest never fabricates missing fields.
