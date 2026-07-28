@@ -226,6 +226,7 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `assist.hint_levels` | D7 hint levels available to assistance UI | identifier list |
 | `assist.default_hint_level` | Default D7 hint level | identifier |
 | `assist.knowledge.{initial_unlocked_entry_ids\|read_tracking_policy\|selection_policy}` | T-09 knowledge initialization and tracking policies | identifier list or identifier |
+| `assist.knowledge.immediate_prompt_display_sec` | How long the T-30 immediate knowledge prompt stays up before dismissing itself. The prompt has no close control, so this is the only way it leaves. Its container geometry is fixed by table G1 and is deliberately not configurable; only the dwell time is | seconds |
 
 ## Zero-Reward Production and Reachability Calculation
 

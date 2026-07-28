@@ -1863,7 +1863,8 @@
     "knowledge": {
       "initial_unlocked_entry_ids": [],
       "read_tracking_policy": "explicit_id_set",
-      "selection_policy": "empty_until_player_selection"
+      "selection_policy": "empty_until_player_selection",
+      "immediate_prompt_display_sec": 4.0
     }
   }
 }
