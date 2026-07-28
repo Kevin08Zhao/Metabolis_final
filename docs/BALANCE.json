@@ -107,7 +107,15 @@
       "system_observation_complete_initial": false,
       "knowledge_unlock_resolved_initial": false,
       "operation_time_sec": 252,
-      "tick_count": 252
+      "tick_count": 252,
+      "birth_sequence": {
+        "umbilical_stop_ms": 10000,
+        "pulmonary_flow_ms": 10000,
+        "fetal_shunts_ms": 10000,
+        "systems_online_ms": 5000,
+        "ending_ms": 10000,
+        "total_budget_ms": 45000
+      }
     },
     "total_operation_time_sec": 1068,
     "save": {

@@ -363,9 +363,56 @@ func _on_enter_umbilical_stop() -> void:
 	transition_to(State.PULMONARY_FLOW)
 
 
-## Filled by T-21-3.
+## Implemented by T-21-3.
+##
+## Entry action: open the second observable beat of the 45-second timeline. Exit
+## judgement: the beat's configured window has elapsed.
+##
+## Same shape as the first beat, deliberately. The window comes from
+## state_duration_ms, the wait yields on an engine SceneTreeTimer, and on resume
+## the beat checks the same four interruption conditions before touching the
+## machine: still the current beat by token, still in this state, not queued for
+## deletion, still inside the tree. Any of them failing means something took over
+## or tore down the machine while the timer ran, so the beat exits without
+## advancing and without rewinding anything.
+##
+## The repetition is not an oversight. T-21 assigns one state per task and
+## forbids touching another state's function, so folding the three timed beats
+## into a shared helper is not this task's to make. Whoever owns the refactor can
+## take all three at once later.
+##
+## Nothing is played. Sound and animation belong to D-22 and D-26 and hang off
+## birth_state_changed, which transition_to has already emitted by now.
 func _on_enter_pulmonary_flow() -> void:
-	pass
+	_beat_token += 1
+	var token := _beat_token
+	var window_ms := state_duration_ms(State.PULMONARY_FLOW)
+
+	var tree := get_tree()
+	if tree == null:
+		push_warning("%s Not inside a scene tree; the beat cannot time itself." % LOG_PREFIX)
+		return
+
+	if window_ms > 0:
+		print("%s beat %s running for %d ms" % [LOG_PREFIX, STATE_IDS[State.PULMONARY_FLOW], window_ms])
+		await tree.create_timer(float(window_ms) / MS_PER_SECOND).timeout
+	else:
+		push_warning(
+			"%s No window configured for %s; advancing on the next frame. See missing_duration_paths()."
+			% [LOG_PREFIX, STATE_IDS[State.PULMONARY_FLOW]]
+		)
+		await tree.process_frame
+
+	if (
+		token != _beat_token
+		or _current_state != State.PULMONARY_FLOW
+		or is_queued_for_deletion()
+		or not is_inside_tree()
+	):
+		print("%s beat %s was interrupted; exiting without advancing." % [LOG_PREFIX, STATE_IDS[State.PULMONARY_FLOW]])
+		return
+
+	transition_to(State.FETAL_SHUNTS)
 
 
 ## Filled by T-21-4.
