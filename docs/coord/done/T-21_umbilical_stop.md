@@ -53,7 +53,25 @@ force_quit_residue: |
   gate rather than to the middle of the sequence. That matches BIRTH_STATES,
   where failure_rollback also routes back to the gate, and it means the four E5
   checks are re-evaluated honestly rather than resumed on stale results.
-pending_verification: |
+revalidations:
+  - revalidated_at: 2026-07-27T22:20:00-04:00
+    base_main_commit: f2c07f5
+    trigger: The T-06 rework this task filed was resolved, so the birth sequence windows now have configured lengths and the one item left pending below could finally be measured.
+    measured: |
+      umbilical_stop was entered and held for 9931 ms against a configured 10000,
+      measured from the birth_state_changed that opened it to the one that opened
+      the next beat. The 69 ms shortfall is frame quantisation on a SceneTreeTimer,
+      well inside the 500 ms tolerance the acceptance driver applied. The beat now
+      genuinely occupies its slot on the 45-second timeline instead of advancing
+      on the next frame.
+    checks:
+      - missing_duration_paths() returns empty where it previously returned five paths: PASS
+      - state_duration_ms(UMBILICAL_STOP) reads 10000, taken from Balance and not from the script: PASS
+      - The beat holds its full configured window before advancing, 9931 ms measured: PASS
+      - total_timeline_ms() is 45000 and equals total_budget_ms(): PASS
+      - Live run on Godot 4.7.1.stable, headless, 0 script errors: PASS
+    closes: The pending_verification item below is now closed. It is left in place rather than deleted so the record of what was and was not proven at first acceptance survives.
+pending_verification_closed_by_revalidation_above: |
   One thing could not be demonstrated and is recorded rather than glossed over.
   docs/BALANCE.json still has no chapters.stage_birth.birth_sequence keys, so
   state_duration_ms returns 0 for this beat and the acceptance run exercised a
