@@ -38,6 +38,7 @@ SCRIPT_ID = "tools/pixellab_fetch.py"
 REPORT_VERSION = 1
 MAX_SOURCE_BYTES = 25 * 1024 * 1024
 STATIC_PNG_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+){2,}\.png$")
+D06_STYLE_MASTER_TARGET = "art/reference/style_master.png"
 TASK_ID_RE = re.compile(r"^[A-Z]-[0-9]{2}[A-Za-z]?$")
 MANIFEST_MARKER = "<!-- generated-by: tools/pixellab_fetch.py -->"
 
@@ -94,6 +95,12 @@ def relative_posix(repo_root: Path, path: Path) -> str:
 def require_directory(relative_path: str, directory: str) -> None:
     if not relative_path.startswith(f"{directory}/"):
         raise LandError(f"{relative_path} must be inside {directory}/")
+
+
+def valid_static_png_name(relative_path: str, file_name: str) -> bool:
+    return bool(STATIC_PNG_RE.fullmatch(file_name)) or (
+        relative_path == D06_STYLE_MASTER_TARGET
+    )
 
 
 def parse_gpl(path: Path) -> list[tuple[int, int, int]]:
@@ -563,11 +570,15 @@ def process_item(
         target_relative = relative_posix(repo_root, target)
         require_directory(target_relative, "art")
         result["target"] = target_relative
-        name_ok = bool(STATIC_PNG_RE.fullmatch(target.name))
+        name_ok = valid_static_png_name(target_relative, target.name)
         result["naming"] = {
             "status": "PASS" if name_ok else "FAIL",
             "file_name": target.name,
-            "rule": "{category}_{subject}_{variant}.png in lowercase snake_case",
+            "rule": (
+                "{category}_{subject}_{variant}.png in lowercase snake_case; "
+                "D-06 additionally permits the exact v3.1 path "
+                "art/reference/style_master.png"
+            ),
         }
         if not name_ok:
             raise LandError(f"target file name violates CONTEXT.md: {target.name}")
@@ -1031,6 +1042,12 @@ def run_self_test(
             and all(
                 strip_rgba.getpixel((index * 16, 0))[:3] == color
                 for index, color in enumerate(operation_palette)
+            ),
+            "d06_v3_1_style_master_exact_path_is_allowed": valid_static_png_name(
+                "art/reference/style_master.png", "style_master.png"
+            )
+            and not valid_static_png_name(
+                "art/reference/other_master.png", "other_master.png"
             ),
             "workflow_will_end_red_after_commit": all(workflow_checks.values()),
         }

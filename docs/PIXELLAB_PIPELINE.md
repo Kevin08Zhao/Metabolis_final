@@ -35,7 +35,7 @@
 }
 ```
 
-Plan 必须位于 `fetch_plans/`，并且只能引用锁定的 `art/palette.gpl`。静态 PNG 的 `target` 必须位于 `art/`，且符合 `CONTEXT.md` 的 `{category}_{subject}_{variant}.png` 小写 snake_case 模板；report 与 MANIFEST 必须位于 `docs/assets/`。所有路径必须相对仓库、不得含 `..`。已存在的目标只有两种可写情况：新内容与现有文件逐字节相同；或 plan 的 `expected_existing_sha256` 精确等于现有文件哈希。其他情况一律失败，防止覆盖未知文件。
+Plan 必须位于 `fetch_plans/`，并且只能引用锁定的 `art/palette.gpl`。静态 PNG 的 `target` 必须位于 `art/`，且符合 `CONTEXT.md` 的 `{category}_{subject}_{variant}.png` 小写 snake_case 模板；唯一例外是 D-06 v3.1 明确锁定的精确路径 `art/reference/style_master.png`，校验器不得把该任务规定路径泛化为其他双片段文件名。report 与 MANIFEST 必须位于 `docs/assets/`。所有路径必须相对仓库、不得含 `..`。已存在的目标只有两种可写情况：新内容与现有文件逐字节相同；或 plan 的 `expected_existing_sha256` 精确等于现有文件哈希。其他情况一律失败，防止覆盖未知文件。
 
 ## 2. 确定性处理顺序
 
