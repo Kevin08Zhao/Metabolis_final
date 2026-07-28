@@ -33,7 +33,11 @@ var active_results: Dictionary:
 
 var _balance_access: Node
 var _event_bus: Node
-var _active_results: Dictionary = {}
+var _active_results: Dictionary = {
+	TRANSPORT: {},
+	WASTE: {},
+	SIGNAL: {},
+}
 var _episode_hint_emitted: Dictionary = {}
 var _signal_hint_stages: Dictionary = {}
 var _neural_hint_emitted := false
@@ -66,6 +70,9 @@ func snapshot_state() -> Dictionary:
 
 func restore_state(state: Dictionary) -> void:
 	_active_results = state.get("active_results", {}).duplicate(true)
+	for bottleneck_id in [TRANSPORT, WASTE, SIGNAL]:
+		if not _active_results.has(bottleneck_id):
+			_active_results[bottleneck_id] = {}
 	_episode_hint_emitted = state.get(
 		"episode_hint_emitted",
 		{}
@@ -92,7 +99,12 @@ func _evaluate_transport(
 		"operations.bottlenecks.transport_pressure.organ_coverage_recover",
 		INF
 	)
-	var target_organ := _lowest_value_id(coverages)
+	var lowest_organs := _lowest_value_ids(coverages)
+	var target_organ := _highest_utilization_organ(
+		lowest_organs,
+		edges,
+		edge_flows
+	)
 	var target_edge := _highest_utilization_edge(edges, edge_flows, target_organ)
 	var under_covered := (
 		not target_organ.is_empty()
@@ -108,13 +120,25 @@ func _evaluate_transport(
 		pressure <= recover
 		and _all_values_at_least(coverages, organ_recover)
 	)
-	_transition(
+	var candidates: Array[Dictionary] = []
+	for edge: Variant in edges:
+		if not edge is Dictionary:
+			continue
+		var edge_id := StringName(edge.get("edge_id", ""))
+		if _edge_is_overloaded(edge_id, edges, edge_flows):
+			candidates.append({
+				"target_id": edge_id,
+				"target_organ_id": StringName(edge.get("organ_id", "")),
+				"target_edge_id": edge_id,
+			})
+	if under_covered and not target_edge.is_empty():
+		_append_unique_candidate(candidates, target_edge, target_organ, target_edge)
+	_sync_targets(
 		TRANSPORT,
 		stage_id,
 		active_now,
 		recovered,
-		target_organ,
-		target_edge,
+		candidates,
 		pressure,
 		enter,
 		&"transport_pressure_appeared",
@@ -155,14 +179,20 @@ func _evaluate_waste(
 		{}
 	)
 	var target_edge := _highest_value_id(waste_route_utilization)
-	_transition(
+	var candidates: Array[Dictionary] = []
+	if not target_organ.is_empty():
+		candidates.append({
+			"target_id": target_organ,
+			"target_organ_id": target_organ,
+			"target_edge_id": target_edge,
+		})
+	_sync_targets(
 		WASTE,
 		stage_id,
 		(waste >= enter or net_rate > rate_enter)
 		and not target_organ.is_empty(),
 		waste <= recover and net_rate <= rate_recover,
-		target_organ,
-		target_edge,
+		candidates,
 		waste,
 		enter,
 		&"waste_buildup_appeared",
@@ -207,23 +237,30 @@ func _evaluate_signal(
 			""
 		)
 	)
-	var first := not _active_results.has(SIGNAL)
 	var active_now := (
 		coverage <= enter
 		and not target_organ.is_empty()
+		and not target_edge.is_empty()
 		and float(ratios[target_organ]) < organ_recover
 	)
 	var recovered := coverage >= recover and _all_values_at_least(
 		ratios,
 		organ_recover
 	)
-	_transition(
+	var candidates: Array[Dictionary] = []
+	if active_now:
+		candidates.append({
+			"target_id": target_organ,
+			"target_organ_id": target_organ,
+			"target_edge_id": target_edge,
+		})
+	var was_active := not _targets_for(SIGNAL).is_empty()
+	_sync_targets(
 		SIGNAL,
 		stage_id,
 		active_now,
 		recovered,
-		target_organ,
-		target_edge,
+		candidates,
 		coverage,
 		enter,
 		&"signal_gap_appeared",
@@ -231,7 +268,7 @@ func _evaluate_signal(
 		&"",
 		results
 	)
-	if not active_now or not first:
+	if not active_now:
 		return
 	var compensation := (
 		stage_id == &"stage_circulation"
@@ -241,18 +278,17 @@ func _evaluate_signal(
 	if compensation:
 		_neural_hint_emitted = true
 		_emit_hint(HINT_NEURAL, target_organ, stage_id)
-	elif not bool(_signal_hint_stages.get(stage_id, false)):
+	elif not was_active and not bool(_signal_hint_stages.get(stage_id, false)):
 		_signal_hint_stages[stage_id] = true
 		_emit_hint(HINT_SIGNAL, target_organ, stage_id)
 
 
-func _transition(
+func _sync_targets(
 	bottleneck_id: StringName,
 	stage_id: StringName,
 	active_now: bool,
 	recovered: bool,
-	target_organ: StringName,
-	target_edge: StringName,
+	candidates: Array[Dictionary],
 	current_value: float,
 	threshold: float,
 	appeared_event: StringName,
@@ -260,38 +296,55 @@ func _transition(
 	hint_id: StringName,
 	results: Array[Dictionary]
 ) -> void:
-	var was_active := _active_results.has(bottleneck_id)
-	if was_active and recovered:
-		var previous: Dictionary = _active_results[bottleneck_id]
-		var clear_target := StringName(
-			previous.get(
-				"target_edge_id" if bottleneck_id == TRANSPORT else "target_organ_id",
-				""
-			)
-		)
-		_emit(cleared_event, [clear_target])
-		_active_results.erase(bottleneck_id)
+	var active_targets := _targets_for(bottleneck_id)
+	var was_active := not active_targets.is_empty()
+	if recovered:
+		for target_id: Variant in active_targets.keys():
+			_emit(cleared_event, [StringName(target_id)])
+		active_targets.clear()
 		_episode_hint_emitted.erase(bottleneck_id)
+		_active_results[bottleneck_id] = active_targets
 		return
 	if not active_now:
+		for result: Variant in active_targets.values():
+			var held: Dictionary = result.duplicate(true)
+			held["first_occurrence"] = false
+			results.append(held)
 		return
-	var result := {
-		"bottleneck_id": bottleneck_id,
-		"target_organ_id": target_organ,
-		"target_edge_id": target_edge,
-		"current_value": current_value,
-		"threshold": threshold,
-		"first_occurrence": not was_active,
-	}
-	_active_results[bottleneck_id] = result
-	results.append(result.duplicate(true))
-	if was_active:
-		return
-	var event_target := target_edge if bottleneck_id == TRANSPORT else target_organ
-	_emit(appeared_event, [event_target, current_value])
-	if not hint_id.is_empty():
+	var candidate_ids: Dictionary = {}
+	for candidate in candidates:
+		var target_id := StringName(candidate["target_id"])
+		candidate_ids[target_id] = true
+		var first := not active_targets.has(target_id)
+		var result := {
+			"bottleneck_id": bottleneck_id,
+			"target_organ_id": candidate["target_organ_id"],
+			"target_edge_id": candidate["target_edge_id"],
+			"current_value": current_value,
+			"threshold": threshold,
+			"first_occurrence": first,
+		}
+		active_targets[target_id] = result
+		results.append(result.duplicate(true))
+		if first:
+			_emit(appeared_event, [target_id, current_value])
+	for target_id: Variant in active_targets.keys():
+		if not candidate_ids.has(target_id):
+			_emit(cleared_event, [StringName(target_id)])
+			active_targets.erase(target_id)
+	_active_results[bottleneck_id] = active_targets
+	if not was_active and not hint_id.is_empty() and not candidates.is_empty():
 		_episode_hint_emitted[bottleneck_id] = true
-		_emit_hint(hint_id, target_organ, stage_id)
+		_emit_hint(
+			hint_id,
+			StringName(candidates[0]["target_organ_id"]),
+			stage_id
+		)
+
+
+func _targets_for(bottleneck_id: StringName) -> Dictionary:
+	var value: Variant = _active_results.get(bottleneck_id, {})
+	return value if value is Dictionary else {}
 
 
 func _emit_hint(
@@ -324,6 +377,20 @@ func _lowest_value_id(values: Dictionary) -> StringName:
 	return result
 
 
+func _lowest_value_ids(values: Dictionary) -> Array[StringName]:
+	var result: Array[StringName] = []
+	var best := INF
+	for key: Variant in values:
+		var value := float(values[key])
+		if value < best and not is_equal_approx(value, best):
+			best = value
+			result = [StringName(key)]
+		elif is_equal_approx(value, best):
+			result.append(StringName(key))
+	result.sort()
+	return result
+
+
 func _highest_value_id(values: Dictionary) -> StringName:
 	var result := &""
 	var best := -INF
@@ -333,6 +400,44 @@ func _highest_value_id(values: Dictionary) -> StringName:
 			result = StringName(key)
 			best = value
 	return result
+
+
+func _highest_utilization_organ(
+	organ_ids: Array[StringName],
+	edges: Array,
+	flows: Dictionary
+) -> StringName:
+	var result := &""
+	var best := -INF
+	for organ_id in organ_ids:
+		var edge_id := _highest_utilization_edge(edges, flows, organ_id)
+		var utilization := _edge_utilization(edge_id, edges, flows)
+		if (
+			utilization > best
+			or (
+				is_equal_approx(utilization, best)
+				and String(organ_id) < String(result)
+			)
+		):
+			result = organ_id
+			best = utilization
+	return result
+
+
+func _append_unique_candidate(
+	candidates: Array[Dictionary],
+	target_id: StringName,
+	organ_id: StringName,
+	edge_id: StringName
+) -> void:
+	for candidate in candidates:
+		if StringName(candidate["target_id"]) == target_id:
+			return
+	candidates.append({
+		"target_id": target_id,
+		"target_organ_id": organ_id,
+		"target_edge_id": edge_id,
+	})
 
 
 func _all_values_at_least(values: Dictionary, threshold: float) -> bool:
@@ -379,3 +484,16 @@ func _edge_is_overloaded(
 				> float(edge.get("effective_capacity", INF))
 			)
 	return false
+
+
+func _edge_utilization(
+	edge_id: StringName,
+	edges: Array,
+	flows: Dictionary
+) -> float:
+	for edge: Variant in edges:
+		if edge is Dictionary and StringName(edge.get("edge_id", "")) == edge_id:
+			var capacity := float(edge.get("effective_capacity", 0.0))
+			if capacity > 0.0:
+				return float(flows.get(edge_id, 0.0)) / capacity
+	return -INF
