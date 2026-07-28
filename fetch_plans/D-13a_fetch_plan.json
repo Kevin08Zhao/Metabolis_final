@@ -1,0 +1,34 @@
+{
+  "task_id": "D-13a",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-13a_SOURCE_LAND_REPORT.json",
+  "manifest": "docs/assets/D-13a_SOURCE_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "items": [
+    {
+      "id": "construction_landmark_source",
+      "target": "art/source/construction_landmark_source.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download"
+      },
+      "generation": {
+        "tool": "create_image_pixflux",
+        "job_id": "6ea2fd7c-2e90-40e7-90e0-407e1f07ca05",
+        "seed": 13101,
+        "usage": {
+          "generation_units": 1
+        },
+        "create_response": "UNREPORTED; P-F00 retained tool=create_image_pixflux, seed=13101, cost=1",
+        "status_response": "UNREPORTED; P-F00 retained raw file art/candidates/pf00/construction_landmark_candidate01_raw.png"
+      },
+      "expected_size": {
+        "width": 80,
+        "height": 80
+      },
+      "expected_existing_sha256": "6eda114db24db624bbbdf28ce74b38e9b4fa596170b431f6aded595cf29e0b8e",
+      "alpha_threshold": 128,
+      "operations": []
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-07-28T16:46:32+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 80,
+          "width": 80
+        },
+        "operations": [],
+        "output": {
+          "height": 80,
+          "width": 80
+        },
+        "source": {
+          "height": 80,
+          "width": 80
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 5129,
+        "final_url": "https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download",
+        "sha256": "f18e4936f863b297d96bba3f7b7d760b25c53f9aac75ba9aaade14a981457291",
+        "status": "downloaded"
+      },
+      "generation": {
+        "create_response": "UNREPORTED; P-F00 retained tool=create_image_pixflux, seed=13101, cost=1",
+        "job_id": "6ea2fd7c-2e90-40e7-90e0-407e1f07ca05",
+        "seed": 13101,
+        "status_response": "UNREPORTED; P-F00 retained raw file art/candidates/pf00/construction_landmark_candidate01_raw.png",
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "construction_landmark_source",
+      "naming": {
+        "file_name": "construction_landmark_source.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 4931,
+        "sha256": "6eda114db24db624bbbdf28ce74b38e9b4fa596170b431f6aded595cf29e0b8e",
+        "status": "unchanged_identical"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 16,
+        "visible_pixels_after": 2718,
+        "visible_pixels_before": 2718
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/6ea2fd7c-2e90-40e7-90e0-407e1f07ca05/download"
+      },
+      "status": "PASS",
+      "target": "art/source/construction_landmark_source.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 2718,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 3682
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-13a_fetch_plan.json",
+    "sha256": "b54f7159d7175e74cdfd09ea0438cd1bfaef1c341655349a7491499fd73082ff"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 1,
+    "success_count": 1
+  },
+  "task_id": "D-13a"
+}

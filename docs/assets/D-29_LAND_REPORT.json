@@ -1,0 +1,95 @@
+{
+  "generated_at": "2026-07-28T16:46:33+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 180,
+          "width": 320
+        },
+        "operations": [],
+        "output": {
+          "height": 180,
+          "width": 320
+        },
+        "source": {
+          "height": 180,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 7522,
+        "final_url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download",
+        "sha256": "f13a9143fa4d75564f7b334b24be345baf8dcb483a6a2059ca4d67b456b895dc",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "f9979329-be15-4e32-bbe7-bdbcf88de454",
+        "seed": 29001,
+        "status_response": "completed",
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "title_background_master",
+      "naming": {
+        "file_name": "background_title_source.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 7085,
+        "sha256": "6d649b3e07ee8502c6c4271aa2e6a9597e22231d0b6e0b9abf7c2816b9e1cb66",
+        "status": "unchanged_identical"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 12,
+        "visible_pixels_after": 57600,
+        "visible_pixels_before": 57600
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
+      },
+      "status": "PASS",
+      "target": "art/source/background_title_source.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 57600,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-29_fetch_plan.json",
+    "sha256": "98d16fa275b96f05399e63fa7c5da87d65d80dcde702754cd538e1ddef1e8e4c"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 1,
+    "success_count": 1
+  },
+  "task_id": "D-29"
+}

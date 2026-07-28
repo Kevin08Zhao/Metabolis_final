@@ -1,0 +1,29 @@
+{
+  "task_id": "D-14L/D-17L",
+  "status": "SOURCE_ONLY_BLOCKED_CONTRACT",
+  "final_use": "SHARED_NINE_SLICE_STYLE_SOURCE",
+  "items": [
+    {
+      "id": "shared_ui_frame_source",
+      "raw_file": "art/candidates/pf00/ui_frame_shared_candidate01_raw.png",
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/ui-assets/3a44ef17-752e-4d36-95b8-6f096a52fdf7/download"
+      },
+      "generation": {
+        "tool": "create_ui_asset",
+        "job_id": "3a44ef17-752e-4d36-95b8-6f096a52fdf7",
+        "seed": 141701,
+        "usage": {
+          "generation_units": 20
+        },
+        "status_response": "completed"
+      },
+      "observed_size": {
+        "width": 192,
+        "height": 192
+      }
+    }
+  ],
+  "blocker": "Repository main does not define the exact output list, source-border contract, or nine-slice cut coordinates. Preserve the source; do not fabricate final PNGs or DONE."
+}
