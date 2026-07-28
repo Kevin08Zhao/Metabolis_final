@@ -42,6 +42,7 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `chapters.{stage_id}.{build_confirmation_policy\|operation_confirmation_policy}` | Irreversible confirmation policies | identifier |
 | `chapters.{stage_id}.{first_build_decision_id\|operation_decision_id\|minigame_id}` | Opening action and optional task IDs | identifier or null |
 | `chapters.{stage_id}.{system_observation_complete_initial\|knowledge_unlock_resolved_initial}` | Initial completion flags | Boolean |
+| `operations.ui.input_lock_timeout_sec` | Watchdog ceiling for the T-22 input lock; exceeding it forces an unlock. Must stay above `chapters.stage_birth.birth_sequence.total_budget_ms` | seconds |
 | `chapters.stage_birth.birth_sequence.{umbilical_stop_ms\|pulmonary_flow_ms\|fetal_shunts_ms\|systems_online_ms\|ending_ms}` | Window length of each beat on the birth timeline, per table B2 of `docs/BIRTH_STATES.md` | milliseconds |
 | `chapters.stage_birth.birth_sequence.total_budget_ms` | Ending-sequence budget the five windows must sum to | milliseconds |
 | `chapters.total_operation_time_sec` | Sum of the four active-operation budgets | seconds |
