@@ -122,6 +122,7 @@ clearing event.
 | `knowledge_entry_opened` | `view_knowledge_archive` passes its preconditions and the archive detail opens. `first_read` is `true` when this call flips `is_read` from false to true | `entry_id: StringName`, `first_read: bool` | repeatable within one tick | `knowledge_card_unfold` expands `KnowledgeArchivePanel` to the entry; the "new" badge switches to "read" | `sfx_knowledge_open` |
 | `season_completed` | All six completion conditions of the first season hold and the run has been frozen. Distinct from `birth_sequence_completed`, which marks only the ending picture starting; this marks the whole run being over, with the summary built | `summary: Dictionary` (the fields fixed by T-25; contains no score, rating, or title) | once per run | The ending screen with the summary and the teaching-model disclaimer | The ending theme settles; no new cue |
 | `delayed_feedback_shown` | A carryover value first actually bites in the stage that received it — not when the stage opens. One per carryover field per stage at most. Renders in the same non-blocking container as the immediate knowledge hints of table E11, so it never interrupts an action | `carryover_field: StringName` (one of the three table F1 names), `source_stage_id: StringName` (the stage whose decisions produced it), `source_decision_ids: Array[StringName]` (that stage's build decisions, so the player can connect cause to effect) | at most once per carryover field per stage, so at most three times in a stage and never in stage one, which has no predecessor | The hint card slides into the shared container and dismisses itself | `sfx_knowledge_open`, the same cue the immediate hints use |
+| `save_loaded` | A load attempt has finished, whichever way it went. Fires for a clean load, a version mismatch, a corrupt file, and no file at all, so a listener never has to poll to learn the outcome | `outcome: StringName` (`loaded`, `version_mismatch`, `corrupt`, or `absent`), `chapter_select_available: bool` (false whenever the snapshots were discarded or never read) | once per load attempt | The title screen shows the degradation explanation when the outcome is not `loaded`, and greys out chapter select when it is unavailable | None; a degraded load is not a failure to announce with a sting |
 | `carryover_applied` | All three table F1 values have reached `current_city_state.operation_start_conditions` at their respective application positions — network efficiency before the first production tick, operating pressure after the base network is instantiated, waste after organs and waste routes are instantiated — and before the first E3 settlement tick of the entered stage. On a first visit it follows `stage_snapshot_written` in the same transaction; on replay it fires alone, carrying values read from `chapter_snapshots` | `from_stage_id: StringName`, `to_stage_id: StringName`, `carryover: Dictionary` (the three values of table F1 of `docs/CARRYOVER_SPEC.md`: `network_efficiency_coefficient`, `initial_operation_pressure`, `initial_waste_accumulation`) | once per stage (three times across the run; `stage_birth` produces no record for a successor, and `stage_origin` receives none) | The three carryover summary lines of `StageSummaryPanel` push into the new stage's starting readouts | `sfx_carryover_apply` |
 
 ## 8 · Action rejection
@@ -221,7 +222,7 @@ sources are named at the top of section 9.
 
 ## GDScript signal declarations
 
-The thirty-eight lines below can be pasted straight into
+The thirty-nine lines below can be pasted straight into
 `src/autoload/event_bus.gd`. Parameter types are complete, with nothing elided.
 
 ```gdscript
@@ -269,6 +270,7 @@ signal system_observation_ended(organ_id: StringName, observation_id: StringName
 signal knowledge_entry_unlocked(entry_id: StringName, organ_id: StringName, stage_id: StringName)
 signal knowledge_entry_opened(entry_id: StringName, first_read: bool)
 signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, carryover: Dictionary)
+signal save_loaded(outcome: StringName, chapter_select_available: bool)
 signal season_completed(summary: Dictionary)
 signal delayed_feedback_shown(carryover_field: StringName, source_stage_id: StringName, source_decision_ids: Array[StringName])
 

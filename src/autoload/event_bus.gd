@@ -71,6 +71,7 @@ signal system_observation_ended(organ_id: StringName, observation_id: StringName
 signal knowledge_entry_unlocked(entry_id: StringName, organ_id: StringName, stage_id: StringName)
 signal knowledge_entry_opened(entry_id: StringName, first_read: bool)
 signal carryover_applied(from_stage_id: StringName, to_stage_id: StringName, carryover: Dictionary)
+signal save_loaded(outcome: StringName, chapter_select_available: bool)
 signal season_completed(summary: Dictionary)
 signal delayed_feedback_shown(carryover_field: StringName, source_stage_id: StringName, source_decision_ids: Array[StringName])
 
@@ -130,6 +131,7 @@ const EVENT_NAMES := [
 	&"knowledge_entry_unlocked",
 	&"knowledge_entry_opened",
 	&"carryover_applied",
+	&"save_loaded",
 	&"season_completed",
 	&"delayed_feedback_shown",
 	&"action_rejected",
