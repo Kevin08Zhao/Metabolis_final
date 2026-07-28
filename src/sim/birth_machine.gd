@@ -101,6 +101,16 @@ var city_metrics: Dictionary = {}
 ## when the gate has not run or could not run.
 var gate_report: Dictionary = {}
 
+## Added by T-21-2. Unit conversion, not a gameplay parameter: window lengths are
+## configured in milliseconds and SceneTreeTimer takes seconds.
+const MS_PER_SECOND := 1000.0
+
+## Added by T-21-2. Incremented whenever a timed beat starts. A beat's waiter
+## captures the value and advances the machine only if it still matches, so a
+## beat that was interrupted and later restarted can never be advanced by the
+## stale timer of an earlier attempt.
+var _beat_token: int = 0
+
 var _current_state: int = State.IDLE
 var _gate_passed: bool = false
 
@@ -300,9 +310,57 @@ func _on_enter_ready_check() -> void:
 	submit_gate_result.call_deferred(passed)
 
 
-## Filled by T-21-2.
+## Implemented by T-21-2.
+##
+## Entry action: open the first observable beat of the 45-second timeline. Exit
+## judgement: the beat's configured window has elapsed.
+##
+## The window is read through state_duration_ms, which reads Balance. Nothing
+## about the length is decided here, so retuning the beat needs no script edit.
+##
+## The wait is interruptible. A SceneTreeTimer yields control rather than
+## blocking, and on resume this beat checks four things before touching the
+## machine: that it is still the current beat, by token; that the machine is
+## still in this state; that the machine has not been queued for deletion; and
+## that it is still inside the tree. Any of them failing means something took
+## over or tore down the machine while the timer ran, so the beat exits without
+## advancing and without rewinding anything.
+##
+## Being freed counts as an interruption. Without the last two checks a machine
+## freed mid-beat would still resume and emit a state change on its way out.
+##
+## Nothing is played. Sound and animation belong to D-22 and D-26 and hang off
+## birth_state_changed, which transition_to has already emitted by now.
 func _on_enter_umbilical_stop() -> void:
-	pass
+	_beat_token += 1
+	var token := _beat_token
+	var window_ms := state_duration_ms(State.UMBILICAL_STOP)
+
+	var tree := get_tree()
+	if tree == null:
+		push_warning("%s Not inside a scene tree; the beat cannot time itself." % LOG_PREFIX)
+		return
+
+	if window_ms > 0:
+		print("%s beat %s running for %d ms" % [LOG_PREFIX, STATE_IDS[State.UMBILICAL_STOP], window_ms])
+		await tree.create_timer(float(window_ms) / MS_PER_SECOND).timeout
+	else:
+		push_warning(
+			"%s No window configured for %s; advancing on the next frame. See missing_duration_paths()."
+			% [LOG_PREFIX, STATE_IDS[State.UMBILICAL_STOP]]
+		)
+		await tree.process_frame
+
+	if (
+		token != _beat_token
+		or _current_state != State.UMBILICAL_STOP
+		or is_queued_for_deletion()
+		or not is_inside_tree()
+	):
+		print("%s beat %s was interrupted; exiting without advancing." % [LOG_PREFIX, STATE_IDS[State.UMBILICAL_STOP]])
+		return
+
+	transition_to(State.PULMONARY_FLOW)
 
 
 ## Filled by T-21-3.
