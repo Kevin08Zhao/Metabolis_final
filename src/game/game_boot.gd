@@ -51,7 +51,6 @@ func _advance() -> void:
 
 
 func _jump_to_build() -> void:
-	# Jump directly to the build-decision step (step index 4).
 	if not _flow.has_method("advance_to"):
 		print("%s ChapterFlow does not support jump-to-build." % LOG_PREFIX)
 		return
