@@ -3,6 +3,7 @@
 ; Playable stage host.
 ;
 ; Game node: root Control with game_boot.gd, boots ChapterFlow on ready.
+; GameBackground: solid fill so the grid is visible against the canvas.
 ; ChapterFlow: the ten-step state machine driving every stage.
 ; ResourceStatusBar: six-resource bar (resource_bar.gd).
 ; CityMap: 40x20 grid at 16px tiles rendered by grid_manager.gd.
@@ -20,6 +21,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="GameBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.12, 1.0)
+mouse_filter = 2
 
 [node name="ChapterFlow" type="Node" parent="."]
 script = ExtResource("2")

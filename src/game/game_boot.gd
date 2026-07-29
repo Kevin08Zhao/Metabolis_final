@@ -9,9 +9,13 @@ extends Control
 const LOG_PREFIX := "[GAME]"
 
 var _flow: Node = null
+var _input_count := 0
 
 
 func _ready() -> void:
+	# Enable unhandled input for keyboard events.
+	set_process_unhandled_input(true)
+
 	_flow = get_node_or_null("ChapterFlow")
 	if _flow == null:
 		push_error("%s No ChapterFlow node found; game cannot start." % LOG_PREFIX)
@@ -25,7 +29,7 @@ func _ready() -> void:
 	print("%s Run started. Press Space to advance, Shift+Space to jump to build step." % LOG_PREFIX)
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if _flow == null:
 		return
 
