@@ -14,10 +14,53 @@ Task-produced files are not listed here. Their owner is the account recorded in
 |---|---|---|
 | `src/project.godot` | ACCOUNT_C | Every new autoload singleton requires a line in `[autoload]`. The file was produced by T-03, which is closed, and no other task declares it as an output. Account C owns the release chain (T-38, T-39, T-40), so it is the account that most needs the project to boot and the first to notice when it does not |
 | `docs/coord/OWNERSHIP.md` | ACCOUNT_C | This file |
+| `src/main.tscn` | ACCOUNT_C | The boot scene, and the project's main scene. It holds `SceneRouter` and nothing else. Produced by no task; it existed as a bare placeholder that every route pointed at |
+| `src/ui/title.tscn` | ACCOUNT_C | See the note below on the three runtime scenes |
+| `src/game/main.tscn` | ACCOUNT_C | Same |
+| `src/ui/ending.tscn` | ACCOUNT_C | Same |
 
 `docs/coord/README.md` and the markers under `docs/coord/done/` remain with
 ACCOUNT_A and with each task's own account respectively. This document does not
 change either.
+
+## The three runtime scenes
+
+`res://ui/title.tscn`, `res://game/main.tscn`, and `res://ui/ending.tscn` are
+here for the same reason `src/project.godot` is: every account needs them to
+exist, and no task in any queue declares them as an output.
+
+The gap was a deadlock rather than an oversight, and both halves of it are on
+record. T-32 delivers `src/core/scene_router.gd` alone, and its marker says the
+three scene paths are placeholders and that creating the scenes is "D-29's and
+the integration pass's work". D-29 delivers a PixelLab description, a font plan,
+and a screenshot plan, and `docs/coord/rework/D-29__from_ACCOUNT_D.open.md` says
+it cannot proceed because "the title, game, and ending scenes do not exist".
+Each task was waiting for the other to produce a file neither was asked to
+produce.
+
+ACCOUNT_C takes them for the reason already recorded for `src/project.godot`: it
+owns the release chain, T-38 through T-40. T-38 is marked DONE only after a
+complete playthrough and T-39 requires evidence of one, so the release chain
+cannot finish without real scenes either. The account that most needs them is
+the account that holds them.
+
+What is owned here is structure and wiring, not appearance. The scenes carry
+named nodes at the rectangles of section 2 of `docs/UI_LAYOUT.md`, engine
+default styling throughout, and no texture assigned to either background slot.
+The title's visual treatment, font sizing, letter spacing, pulse, and the
+background image itself remain D-29's, and landing them needs no change to the
+node structure.
+
+### How the title scene reaches the router
+
+`SceneRouter.scene_paths` now carries all three routes. The title entry is
+optional: leave it empty and the title stays what T-32 delivered, a menu the
+router builds under itself with no scene resident. Point it at a scene and the
+router loads that scene and puts the entry buttons into whichever node inside it
+carries the group `title_menu_anchor`.
+
+That is the whole contract. A replacement title scene needs one node in that
+group and nothing else.
 
 ## How to request a change to `src/project.godot`
 

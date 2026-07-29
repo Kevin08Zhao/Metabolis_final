@@ -1,3 +1,22 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
 
-[node name="Main" type="Node2D"]
+; Boot scene, and the project's main scene.
+;
+; It holds SceneRouter and nothing else. The three real scenes - title, game and
+; ending - are loaded by the router into the SceneHost it creates on ready, so
+; exactly one of them is resident at a time and none of them is the root.
+;
+; This file used to be a bare Node2D standing in for all three routes. Every
+; route now has its own scene and this one only boots them.
+
+[ext_resource type="Script" path="res://core/scene_router.gd" id="1"]
+
+[node name="Main" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SceneRouter" type="Node" parent="."]
+script = ExtResource("1")

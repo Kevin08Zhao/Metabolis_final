@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+; Playable stage host.
+;
+; Structure only. The named children are the six regions of section 2 of
+; docs/UI_LAYOUT.md plus the city map, each an empty Control at its documented
+; rectangle. The panels that fill them already exist as scripts - resource_bar,
+; timeline_panel, minigame_panel, info_containers, chapter_summary, tutorial and
+; hint_system - and attaching them is integration work rather than part of
+; landing the scene.
+;
+; This scene is what SceneRouter loads for the game route. It replaces the bare
+; res://main.tscn placeholder that route pointed at.
+
+[node name="Game" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CityMap" type="Control" parent="."]
+offset_top = 40.0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="ResourceStatusBar" type="Control" parent="."]
+offset_right = 640.0
+offset_bottom = 16.0
+
+[node name="DevelopmentTimeline" type="Control" parent="."]
+offset_top = 16.0
+offset_right = 640.0
+offset_bottom = 24.0
+
+[node name="TaskOperationsPanel" type="Control" parent="."]
+offset_top = 24.0
+offset_right = 608.0
+offset_bottom = 40.0
+
+[node name="OrganArchiveButton" type="Control" parent="."]
+offset_left = 608.0
+offset_top = 24.0
+offset_right = 624.0
+offset_bottom = 40.0
+
+[node name="ChapterRecapButton" type="Control" parent="."]
+offset_left = 624.0
+offset_top = 24.0
+offset_right = 640.0
+offset_bottom = 40.0
+
+[node name="GuidanceLayer" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
