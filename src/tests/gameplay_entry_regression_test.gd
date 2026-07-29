@@ -8,10 +8,14 @@ func _ready() -> void:
 
 
 func _run() -> void:
+	if not _run_verifier_self_test():
+		await _finish()
+		return
+	AudioRouter.set_muted(true)
 	var packed_main := load("res://main.tscn") as PackedScene
 	_expect(packed_main != null, "main scene must load")
 	if packed_main == null:
-		_finish()
+		await _finish()
 		return
 
 	var main := packed_main.instantiate()
@@ -22,17 +26,164 @@ func _run() -> void:
 	var router := main.get_node_or_null("SceneRouter")
 	_expect(router != null, "main scene must contain SceneRouter")
 	if router == null:
-		_finish()
+		await _finish()
 		return
 
 	_test_new_game_button_is_deferred(main, router)
 	await get_tree().process_frame
 	await _test_space_advances_gameplay(main)
 	await _test_first_stage_interactions(main)
+	if OS.get_cmdline_user_args().has("--full-lifecycle"):
+		await _test_full_lifecycle(main, router)
 
+	var game_before_cleanup := main.find_child("Game", true, false)
+	if game_before_cleanup != null:
+		var runtime_before_cleanup := game_before_cleanup.get_node_or_null(
+			"GameRuntime"
+		) as GameAssembly
+		if (
+			runtime_before_cleanup != null
+			and runtime_before_cleanup.input_lock != null
+			and runtime_before_cleanup.input_lock.input_locked
+		):
+			runtime_before_cleanup.input_lock.set_input_locked(false)
 	main.queue_free()
 	await get_tree().process_frame
-	_finish()
+	await _finish()
+
+
+func _run_verifier_self_test() -> bool:
+	var failure_count_before := _failures.size()
+	_expect(1 == 2, "Verifier self-test: deliberate 1 == 2 failure")
+	var detected_expected_failure := _failures.size() == failure_count_before + 1
+	if detected_expected_failure:
+		_failures.remove_at(_failures.size() - 1)
+	var sample := (
+		"var kept = \"# not a comment\" # remove this\n"
+		+ "# remove this line\n"
+		+ "var also_kept = 1\n"
+	)
+	var stripped := _strip_comments(sample)
+	var comment_strip_passed := (
+		stripped.contains("\"# not a comment\"")
+		and not stripped.contains("remove this")
+		and stripped.contains("var also_kept = 1")
+	)
+	if not detected_expected_failure:
+		_failures.append("Verifier self-test did not detect deliberate 1 == 2")
+	if not comment_strip_passed:
+		_failures.append("Verifier comment stripper failed its quoted-string fixture")
+	print(
+		"[VERIFIER] 1 == 2: %s; comment stripping: %s"
+		% [
+			"FAIL-EXPECTED" if detected_expected_failure else "BROKEN",
+			"PASS" if comment_strip_passed else "FAIL",
+		]
+	)
+	return detected_expected_failure and comment_strip_passed
+
+
+func _strip_comments(source: String) -> String:
+	var output := ""
+	var in_string := false
+	var escaped := false
+	var index := 0
+	while index < source.length():
+		var character := source[index]
+		if character == "\n":
+			output += character
+			escaped = false
+			index += 1
+			continue
+		if in_string:
+			output += character
+			if escaped:
+				escaped = false
+			elif character == "\\":
+				escaped = true
+			elif character == "\"":
+				in_string = false
+			index += 1
+			continue
+		if character == "\"":
+			in_string = true
+			output += character
+			index += 1
+			continue
+		if character == "#":
+			while index < source.length() and source[index] != "\n":
+				index += 1
+			continue
+		output += character
+		index += 1
+	return output
+
+
+func _test_integration_contract(game: Node) -> void:
+	var runtime := game.get_node_or_null("GameRuntime") as GameAssembly
+	_expect(runtime != null and runtime.is_assembled(), "GameRuntime must be assembled in the main scene")
+	if runtime == null:
+		return
+	var snapshot := runtime.integration_snapshot()
+	_expect(
+		int(snapshot.get("carryover_applications", 0)) == 3,
+		"All three cross-stage carryover records must be generated and applied"
+	)
+	_expect(
+		int(snapshot.get("organ_observations", 0)) == 4,
+		"Each stage must complete one real organ collaboration observation"
+	)
+	_expect(
+		int(snapshot.get("bottleneck_evaluations", 0)) > 0,
+		"Live settlement metrics must reach BottleneckDetector"
+	)
+	_expect(
+		int(snapshot.get("birth_attempts", 0)) == 1,
+		"Run completion must start exactly one birth attempt"
+	)
+	_expect(
+		runtime.input_lock != null and runtime.input_lock.input_locked,
+		"Birth start must lock every opted-in gameplay button"
+	)
+	_expect(
+		runtime.network_intervention != null
+		and runtime.option_preview != null
+		and runtime.info_containers != null
+		and runtime.chapter_summary != null
+		and runtime.tutorial != null
+		and runtime.hint_system != null,
+		"Network intervention and all major auxiliary UI systems must be wired"
+	)
+
+
+func _test_full_lifecycle(main: Node, router: Node) -> void:
+	await get_tree().create_timer(46.0).timeout
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_expect(
+		router.current_route() == SceneRouter.ROUTE_ENDING,
+		"The real 45-second birth state machine must route to the ending scene"
+	)
+	var summary: Dictionary = router.ending_summary()
+	_expect(
+		summary.has(&"completion_time")
+		and summary.has(&"build_choices_by_stage")
+		and summary.has(&"final_resources")
+		and summary.has(&"birth_check_values")
+		and summary.has(&"minigames"),
+		"Ending route must receive the complete unscored season summary"
+	)
+	_expect(
+		not summary.has("score")
+		and not summary.has("grade")
+		and not summary.has("title"),
+		"Ending summary must not introduce a score, grade, or title"
+	)
+	var summary_container := main.find_child("Summary", true, false)
+	_expect(
+		summary_container != null and summary_container.get_child_count() == 5,
+		"Ending screen must render all five summary groups"
+	)
 
 
 func _test_new_game_button_is_deferred(main: Node, router: Node) -> void:
@@ -295,13 +446,14 @@ func _complete_remaining_run(game: Node, flow: Node) -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var birth_art := game.get_node_or_null("BirthArt") as TextureRect
-	var birth_machine := game.get_node_or_null("BirthMachine") as BirthMachine
+	var runtime := game.get_node_or_null("GameRuntime") as GameAssembly
+	var birth_machine: BirthMachine = null if runtime == null else runtime.birth_machine
 	var gameplay_controller := game.get_node_or_null("GuidanceLayer")
 	_expect(
-		gameplay_controller != null,
-		"Game scene must expose the authoritative gameplay controller"
+		gameplay_controller != null and birth_machine != null,
+		"Game scene must expose one controller and one runtime-owned BirthMachine"
 	)
-	if gameplay_controller == null:
+	if gameplay_controller == null or birth_machine == null:
 		return
 	var allocation_input: Dictionary = gameplay_controller.call(
 		"_settlement_input"
@@ -349,17 +501,19 @@ func _complete_remaining_run(game: Node, flow: Node) -> void:
 			return
 	_expect(
 		birth_art != null
-		and birth_machine != null
 		and birth_machine.gate_passed()
 		and birth_machine.current_state() == BirthMachine.State.UMBILICAL_STOP
-		and recovery_cycles > 0
 		and recovery_cycles < 20
 		and birth_art.visible
 		and birth_art.texture != null
 		and birth_art.texture.get_size() == Vector2(640, 320)
 		and birth_art.call("current_frame_id") == &"stage1_umbilical_stop_00000",
-		"Run completion must begin the timed PixelLab birth sequence"
+		"Run completion must pass directly or recover into the timed PixelLab birth sequence"
 	)
+	_test_integration_contract(game)
+	if OS.get_cmdline_user_args().has("--full-lifecycle"):
+		return
+
 	var birth_states: Array[int] = []
 	var birth_completions: Array[StringName] = []
 	var state_receiver := func(
@@ -426,8 +580,8 @@ func _complete_remaining_run(game: Node, flow: Node) -> void:
 		first_breath_seen[0]
 		and ending_frames < 60
 		and router != null
-		and router.current_route() == SceneRouter.ROUTE_TITLE,
-		"BirthMachine completion must fade back to the title route"
+		and router.current_route() == SceneRouter.ROUTE_ENDING,
+		"BirthMachine completion must open the unscored ending summary"
 	)
 
 
@@ -505,6 +659,10 @@ func _expect(condition: bool, message: String) -> void:
 
 
 func _finish() -> void:
+	AudioRouter.prepare_for_shutdown()
+	await get_tree().create_timer(
+		AudioRouter.AUDIO_RELEASE_GRACE_SEC
+	).timeout
 	if _failures.is_empty():
 		print("[REGRESSION] PASS")
 		get_tree().quit(0)

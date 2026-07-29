@@ -18,6 +18,7 @@ Task-produced files are not listed here. Their owner is the account recorded in
 | `src/ui/title.tscn` | ACCOUNT_C | See the note below on the three runtime scenes |
 | `src/game/main.tscn` | ACCOUNT_C | Same |
 | `src/ui/ending.tscn` | ACCOUNT_C | Same |
+| `src/game/game_assembly.gd` | ACCOUNT_C | The wiring that turns the accepted scripts into a running game. Produced by no task, needed by every one downstream of the loop. See the note below |
 
 `docs/coord/README.md` and the markers under `docs/coord/done/` remain with
 ACCOUNT_A and with each task's own account respectively. This document does not
@@ -50,6 +51,30 @@ default styling throughout, and no texture assigned to either background slot.
 The title's visual treatment, font sizing, letter spacing, pulse, and the
 background image itself remain D-29's, and landing them needs no change to the
 node structure.
+
+## The assembly
+
+`src/game/game_assembly.gd` is here for the same reason as the scenes: it is the
+lifecycle wiring needed by every downstream full-run task. It does not own
+player input or the visible action flow. `GameplayController` is the sole owner
+of build and operation choices, minigames, resource settlement, buttons, and
+their presentation.
+
+The assembly adopts the controller's live `ResourceTick` and
+`ThresholdWatcher`, then wires the systems surrounding that playable core:
+bottleneck detection, organ cooperation, carryover, birth, ending, input lock,
+network intervention, and the event-driven auxiliary UI. It registers handlers
+only for lifecycle-owned steps and never constructs a second BuildDecision,
+OperationDecision, MinigameRuntime, or ResourceTick.
+
+### The step handler seam
+
+`ChapterFlow.register_step_handler(step, callable)` is what lets a system take
+over a step. A step with a handler calls it and never reaches its placeholder;
+a step without one behaves exactly as it did before. That is the seam the
+placeholder comments were written against — each says the owning task's handler
+replaces the body — so registering one is the sanctioned route rather than
+editing the flow for every system.
 
 ### How the title scene reaches the router
 

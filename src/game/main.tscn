@@ -17,7 +17,7 @@
 [ext_resource type="Script" path="res://world/network_builder.gd" id="6"]
 [ext_resource type="Script" path="res://world/city_art_layer.gd" id="7"]
 [ext_resource type="Script" path="res://ui/birth_art_presenter.gd" id="8"]
-[ext_resource type="Script" path="res://sim/birth_machine.gd" id="9"]
+[ext_resource type="Script" path="res://game/game_assembly.gd" id="9"]
 
 [node name="Game" type="Control"]
 anchors_preset = 15
@@ -39,7 +39,7 @@ mouse_filter = 2
 [node name="ChapterFlow" type="Node" parent="."]
 script = ExtResource("2")
 
-[node name="BirthMachine" type="Node" parent="."]
+[node name="GameRuntime" type="Node" parent="."]
 script = ExtResource("9")
 
 [node name="ResourceStatusBar" type="Control" parent="."]

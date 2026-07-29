@@ -253,10 +253,26 @@ func _leave_final_step() -> bool:
 		run_completed.emit(from_stage_id)
 		return true
 
+	var carryover_record: Dictionary = {}
+	if _carryover_generate_handler.is_valid():
+		var generated: Variant = _carryover_generate_handler.call(
+			from_stage_id,
+			to_stage_id
+		)
+		if generated is Dictionary:
+			carryover_record = generated
+
 	EventBus.stage_advanced.emit(from_stage_id, to_stage_id)
 	_stage_index += 1
 	_enter_stage(to_stage_id)
-	_placeholder_apply_carryover(from_stage_id, to_stage_id)
+	if _carryover_apply_handler.is_valid():
+		_carryover_apply_handler.call(
+			from_stage_id,
+			to_stage_id,
+			carryover_record
+		)
+	else:
+		_placeholder_apply_carryover(from_stage_id, to_stage_id)
 	return true
 
 
@@ -300,7 +316,63 @@ func _apply_stage_config(stage_config: Dictionary, stage_id: StringName) -> void
 # step. When the owning task lands, its handler replaces the body here.
 # ---------------------------------------------------------------------------
 
+## Handlers registered for a step, keyed by the `Step` ordinal. A step with a
+## handler calls it and never reaches its placeholder.
+##
+## This is the seam the placeholders below were written against. Their comments
+## say the owning task's handler replaces the body; registering one does exactly
+## that, without this class learning what any system is. An unassembled run,
+## which is every acceptance driver written before the systems were wired
+## together, registers nothing and behaves exactly as it did.
+var _step_handlers: Dictionary = {}
+var _carryover_generate_handler: Callable = Callable()
+var _carryover_apply_handler: Callable = Callable()
+
+
+## Register the real behaviour of a step. Passing an invalid callable clears the
+## registration and returns the step to its placeholder.
+func register_step_handler(step: int, handler: Callable) -> bool:
+	if step < 0 or step >= STEP_IDS.size():
+		push_error("%s Rejected a handler for an out-of-range step: %s" % [LOG_PREFIX, step])
+		return false
+	if not handler.is_valid():
+		_step_handlers.erase(step)
+		return true
+	_step_handlers[step] = handler
+	return true
+
+
+func has_step_handler(step: int) -> bool:
+	return _step_handlers.has(step)
+
+
+## Register the two halves of the real carryover transaction. Generation runs
+## before stage_advanced; persistence/application runs after stage_loaded.
+func register_carryover_handlers(
+	generate_handler: Callable,
+	apply_handler: Callable
+) -> bool:
+	if not generate_handler.is_valid() or not apply_handler.is_valid():
+		_carryover_generate_handler = Callable()
+		_carryover_apply_handler = Callable()
+		return false
+	_carryover_generate_handler = generate_handler
+	_carryover_apply_handler = apply_handler
+	return true
+
+
 func _run_step_placeholder(step: int) -> void:
+	if _step_handlers.has(step):
+		var handler: Callable = _step_handlers[step]
+		if handler.is_valid():
+			handler.call()
+			return
+		push_warning(
+			"%s The handler for step %s became invalid; falling back to the placeholder."
+			% [LOG_PREFIX, STEP_IDS[step]]
+		)
+		_step_handlers.erase(step)
+
 	match step:
 		Step.OBSERVE_STATE:
 			_placeholder_observe_state()

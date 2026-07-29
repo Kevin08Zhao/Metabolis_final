@@ -6,6 +6,7 @@ extends Control
 ## for validation, costs, irreversible confirmation, settlement, and events.
 
 signal visual_state_changed()
+signal birth_retry_requested()
 
 const LOG_PREFIX := "[PLAY]"
 const RESOURCE_IDS: Array[StringName] = [
@@ -24,7 +25,7 @@ var _grid_manager: GridManager = null
 var _city_art: Node2D = null
 var _network_builder: NetworkBuilder = null
 var _birth_art: TextureRect = null
-var _birth_machine: BirthMachine = null
+var _option_preview: OptionPreview = null
 
 var _build_decision: BuildDecision = null
 var _operation_decision: OperationDecision = null
@@ -47,14 +48,15 @@ var _selected_build_option_id: StringName = &""
 var _operation_presented_id: StringName = &""
 var _minigame_progress := 0.0
 var _built_organs: Array[Dictionary] = []
-var _birth_metrics: Dictionary = {}
+var _stage_start_conditions: Dictionary = {}
+var _birth_gate_report: Dictionary = {}
+var _birth_retry_available := false
 
 
 func _ready() -> void:
 	_build_panel()
 	EventBus.stage_loaded.connect(_on_stage_loaded)
 	EventBus.phase_changed.connect(_on_phase_changed)
-	EventBus.birth_rolled_back.connect(_on_birth_rolled_back)
 
 
 func _process(delta: float) -> void:
@@ -72,8 +74,7 @@ func configure(
 	grid_manager: GridManager,
 	city_art: Node2D,
 	network_builder: NetworkBuilder,
-	birth_art: TextureRect,
-	birth_machine: BirthMachine
+	birth_art: TextureRect
 ) -> void:
 	_flow = flow
 	_resources = resources
@@ -82,7 +83,6 @@ func configure(
 	_city_art = city_art
 	_network_builder = network_builder
 	_birth_art = birth_art
-	_birth_machine = birth_machine
 
 	_build_decision = BuildDecision.new()
 	_build_decision.name = "BuildDecision"
@@ -143,6 +143,182 @@ func request_advance() -> bool:
 	return changed
 
 
+## Integration surface for the lifecycle layer. These methods expose copies or
+## already-public simulation objects; they do not transfer input ownership.
+func attach_option_preview(option_preview: OptionPreview) -> void:
+	_option_preview = option_preview
+	if _option_preview != null:
+		_option_preview.configure(Balance, _grid_manager)
+
+
+func resource_tick_system() -> ResourceTick:
+	return _resource_tick
+
+
+func threshold_watcher_system() -> ThresholdWatcher:
+	return _threshold_watcher
+
+
+func build_decision_records() -> Dictionary:
+	return (
+		{}
+		if _build_decision == null
+		else _build_decision.confirmed_decisions
+	)
+
+
+func operation_settlement_snapshot() -> Dictionary:
+	return (
+		{}
+		if _resource_tick == null
+		else _resource_tick.carryover_source_snapshot
+	)
+
+
+func built_organs_snapshot() -> Array[Dictionary]:
+	return _built_organs.duplicate(true)
+
+
+func resource_snapshot() -> Dictionary:
+	return _resource_snapshot()
+
+
+func apply_stage_start_conditions(record: Dictionary) -> void:
+	_stage_start_conditions = record.duplicate(true)
+	if _resources != null and record.has(&"initial_waste_accumulation"):
+		_resources.waste = float(record[&"initial_waste_accumulation"])
+	_sync_resource_bar()
+
+
+func stage_start_conditions_readback() -> Dictionary:
+	if _stage_start_conditions.is_empty():
+		return {}
+	return {
+		&"network_efficiency_coefficient": float(
+			_stage_start_conditions.get(
+				&"network_efficiency_coefficient",
+				0.0
+			)
+		),
+		&"transport_pressure": float(
+			_stage_start_conditions.get(
+				&"initial_operation_pressure",
+				0.0
+			)
+		),
+		&"waste": float(
+			_stage_start_conditions.get(
+				&"initial_waste_accumulation",
+				0.0
+			)
+		),
+	}
+
+
+func lifecycle_metrics() -> Dictionary:
+	var metrics := _settlement_input()
+	var waste_generation: Dictionary = {}
+	var waste_processing: Dictionary = {}
+	var required_signal: Dictionary = {}
+	var weakest_edges: Dictionary = {}
+	var edges: Array = metrics.get("edges", [])
+	for organ in _built_organs:
+		var organ_id := StringName(organ.get("organ_id", ""))
+		waste_generation[organ_id] = float(
+			Balance.get_value(
+				"organs.%s.per_tick_output.waste" % organ_id,
+				0.0
+			)
+		)
+		waste_processing[organ_id] = float(
+			Balance.get_value(
+				"organs.%s.per_tick_consumption.waste" % organ_id,
+				0.0
+			)
+		)
+		required_signal[organ_id] = float(
+			organ.get("required_development_signal", 0.0)
+		)
+		for edge in edges:
+			if StringName(edge.get("organ_id", "")) == organ_id:
+				weakest_edges[organ_id] = StringName(edge.get("edge_id", ""))
+				break
+	metrics.merge({
+		"transport_pressure": (
+			0.0 if _resource_tick == null else _resource_tick.transport_pressure
+		),
+		"transport_coverage": (
+			0.0 if _resource_tick == null else _resource_tick.transport_coverage
+		),
+		"signal_coverage": (
+			0.0 if _resource_tick == null else _resource_tick.signal_coverage
+		),
+		"organ_transport_coverage": (
+			{} if _resource_tick == null else _resource_tick.organ_transport_coverage
+		),
+		"edge_flow_by_id": (
+			{} if _resource_tick == null else _resource_tick.settled_edge_flow
+		),
+		"delivered_development_signal_by_organ": (
+			{}
+			if _resource_tick == null
+			else _resource_tick.settled_delivered_development_signal
+		),
+		"required_development_signal_by_organ": required_signal,
+		"weakest_signal_edge_by_organ": weakest_edges,
+		"organ_waste_generation": waste_generation,
+		"organ_waste_processing": waste_processing,
+		"waste": 0.0 if _resources == null else _resources.waste,
+		"stability": 0.0 if _resources == null else _resources.stability,
+		"net_waste_rate": (
+			float(Balance.get_value("resources.waste.accumulation_per_tick", 0.0))
+			+ _sum_values(waste_generation)
+			- _sum_values(waste_processing)
+		),
+	}, true)
+	return metrics
+
+
+func birth_metrics() -> Dictionary:
+	var built_ids: Array[StringName] = []
+	for organ in _built_organs:
+		built_ids.append(StringName(organ.get("organ_id", "")))
+	var required: Array[StringName] = []
+	var configured: Variant = Balance.get_value(
+		"chapters.stage_birth.required_organ_ids",
+		[]
+	)
+	if configured is Array:
+		for organ_id in configured:
+			required.append(StringName(organ_id))
+	var ready_count := 0
+	for organ_id in required:
+		if built_ids.has(organ_id):
+			ready_count += 1
+	return {
+		&"transport_coverage": (
+			0.0 if _resource_tick == null else _resource_tick.transport_coverage
+		),
+		&"waste": 0.0 if _resources == null else _resources.waste,
+		&"stability": 0.0 if _resources == null else _resources.stability,
+		&"signal_coverage": (
+			0.0 if _resource_tick == null else _resource_tick.signal_coverage
+		),
+		&"pulmonary_system_readiness": (
+			0.0
+			if required.is_empty()
+			else float(ready_count) / float(required.size())
+		),
+	}
+
+
+func show_birth_gate_report(report: Dictionary, retry_available: bool) -> void:
+	_birth_gate_report = report.duplicate(true)
+	_birth_retry_available = retry_available
+	_refresh()
+	visual_state_changed.emit()
+
+
 func _on_stage_loaded(_stage_id: StringName, _stage_index: int) -> void:
 	if _flow == null or _flow.chapter == null:
 		return
@@ -179,23 +355,22 @@ func _refresh() -> void:
 	_feedback.text = ""
 	_refresh_birth_art()
 	if _flow.is_run_complete():
-		if (
-			_birth_machine != null
-			and _birth_machine.current_state() == BirthMachine.State.FAILURE_ROLLBACK
-		):
-			_title.text = "Birth Readiness Recovery"
+		_title.text = "Run Complete"
+		if _birth_gate_report.is_empty():
+			_body.text = "All four development stages are complete. Evaluating birth readiness."
+		else:
+			var passed := bool(_birth_gate_report.get("passed", false))
 			_body.text = (
-				"The whole-body check found a recoverable gap. "
-				+ "Run another recovery cycle, then the same legal gate retries."
+				"Birth readiness passed. The transition is in progress."
+				if passed
+				else "Birth readiness needs recovery before the transition can continue."
 			)
+		if _birth_retry_available:
 			_add_action_button(
 				"RecoverBirth",
 				"Run Recovery Cycle",
 				_recover_birth_readiness
 			)
-			return
-		_title.text = "Run Complete"
-		_body.text = "All four development stages are complete."
 		return
 
 	var step_id := _flow.current_step_id()
@@ -238,42 +413,12 @@ func _refresh() -> void:
 func _refresh_birth_art() -> void:
 	if _birth_art == null:
 		return
-	if _flow.is_run_complete():
-		if (
-			_birth_machine != null
-			and _birth_machine.current_state() == BirthMachine.State.IDLE
-		):
-			_birth_metrics = _current_birth_metrics()
-			_birth_machine.city_metrics = _birth_metrics.duplicate(true)
-			_birth_machine.start()
-		return
-	_birth_art.call("hide_frame")
-
-
-func _current_birth_metrics() -> Dictionary:
-	var pulmonary_ready := 0.0
-	var built_ids: Array[StringName] = []
-	for organ in _built_organs:
-		built_ids.append(StringName(organ.get("organ_id", &"")))
-	if (
-		built_ids.has(&"lung_exchange")
-		and built_ids.has(&"pulmonary_interface")
-	):
-		pulmonary_ready = 1.0
-	return {
-		&"transport_coverage": clampf(_resource_tick.transport_coverage, 0.0, 1.0),
-		&"signal_coverage": clampf(_resource_tick.signal_coverage, 0.0, 1.0),
-		&"pulmonary_system_readiness": pulmonary_ready,
-		&"waste": _resources.waste,
-		&"stability": _resources.stability,
-	}
+	if not _flow.is_run_complete():
+		_birth_art.call("hide_frame")
 
 
 func _recover_birth_readiness() -> void:
-	if (
-		_birth_machine == null
-		or _birth_machine.current_state() != BirthMachine.State.FAILURE_ROLLBACK
-	):
+	if not _birth_retry_available:
 		return
 	var option_path := "operations.options.waste_priority"
 	var cost := _dictionary_value("%s.cost" % option_path)
@@ -325,11 +470,7 @@ func _recover_birth_readiness() -> void:
 	var settled := _resource_tick.settle_tick(tick_delta, settlement_input)
 	_apply_resource_snapshot(settled)
 	_sync_resource_bar()
-	_birth_metrics = _current_birth_metrics()
-	_birth_machine.city_metrics = _birth_metrics.duplicate(true)
-	_birth_machine.acknowledge_rollback()
-	_refresh()
-	visual_state_changed.emit()
+	_request_birth_retry()
 
 
 func _can_afford_recovery(resources: Dictionary, cost: Dictionary) -> bool:
@@ -341,14 +482,6 @@ func _can_afford_recovery(resources: Dictionary, cost: Dictionary) -> bool:
 		if float(resources.get(resource_id, 0.0)) < float(cost.get(resource_id, INF)):
 			return false
 	return true
-
-
-func _on_birth_rolled_back(
-	_from_state: int,
-	_reason_code: StringName
-) -> void:
-	_refresh()
-	visual_state_changed.emit()
 
 
 func _activate_stage_art() -> void:
@@ -430,6 +563,7 @@ func _render_build_decision() -> void:
 			label,
 			func() -> void: _choose_build_option(option_id)
 		)
+	_refresh_option_preview(decision_id)
 
 	if _selected_build_option_id != &"":
 		var slots := _string_name_array(
@@ -694,6 +828,8 @@ func _add_option_button(
 	var button := Button.new()
 	button.name = "Option_%s" % option_id
 	button.text = text
+	button.add_to_group(InputLock.LOCKABLE_GROUP)
+	button.add_to_group("tutorial_target_build_candidate_cards")
 	button.pressed.connect(handler, CONNECT_DEFERRED)
 	_options.add_child(button)
 
@@ -702,6 +838,8 @@ func _add_slot_button(slot_id: StringName, handler: Callable) -> void:
 	var button := Button.new()
 	button.name = "Slot_%s" % slot_id
 	button.text = _display_name(slot_id)
+	button.add_to_group(InputLock.LOCKABLE_GROUP)
+	button.add_to_group("tutorial_target_build_candidate_cards")
 	button.pressed.connect(handler, CONNECT_DEFERRED)
 	_slots.add_child(button)
 
@@ -716,6 +854,9 @@ func _add_action_button(
 	button.name = button_name
 	button.text = text
 	button.disabled = disabled
+	button.add_to_group(InputLock.LOCKABLE_GROUP)
+	if button_name == "ConfirmOperation":
+		button.add_to_group("tutorial_target_resource_allocation_entry")
 	button.pressed.connect(handler, CONNECT_DEFERRED)
 	_actions.add_child(button)
 
@@ -737,6 +878,33 @@ func _clear_container(container: Container) -> void:
 
 func _set_feedback(text: String) -> void:
 	_feedback.text = text
+
+
+func _request_birth_retry() -> void:
+	_birth_retry_available = false
+	birth_retry_requested.emit()
+	_refresh()
+	visual_state_changed.emit()
+
+
+func _refresh_option_preview(decision_id: StringName) -> void:
+	if _option_preview == null:
+		return
+	var contexts: Dictionary = {}
+	for option_id in _flow.chapter.available_build_option_ids:
+		var slots := _string_name_array(
+			Balance.get_value(
+				"build_options.%s.%s.available_slot_ids"
+				% [decision_id, option_id],
+				[]
+			)
+		)
+		for slot_id in slots:
+			contexts[slot_id] = {
+				"decision_id": decision_id,
+				"option_id": option_id,
+			}
+	_option_preview.set_candidates(contexts)
 
 
 func _sync_resource_bar() -> void:
@@ -924,3 +1092,10 @@ func _string_name_array(value: Variant) -> Array[StringName]:
 		for item in value:
 			result.append(StringName(item))
 	return result
+
+
+func _sum_values(values: Dictionary) -> float:
+	var total := 0.0
+	for value in values.values():
+		total += float(value)
+	return total

@@ -85,6 +85,7 @@ var _awaiting_new_game_confirmation: bool = false
 var _scene_host: Node = null
 var _title_menu: VBoxContainer = null
 var _resident_scene: Node = null
+var _ending_summary: Dictionary = {}
 
 
 func _ready() -> void:
@@ -228,8 +229,13 @@ func open_chapter_select() -> bool:
 	return _enter_route(ROUTE_GAME)
 
 
-func go_to_ending() -> bool:
+func go_to_ending(summary: Dictionary = {}) -> bool:
+	_ending_summary = summary.duplicate(true)
 	return _enter_route(ROUTE_ENDING)
+
+
+func ending_summary() -> Dictionary:
+	return _ending_summary.duplicate(true)
 
 
 func current_route() -> StringName:
@@ -328,10 +334,49 @@ func _enter_route(route: StringName) -> bool:
 
 	_resident_scene = packed.instantiate()
 	_scene_host.add_child(_resident_scene)
+	if route == ROUTE_ENDING:
+		_populate_ending_summary()
 	_route = route
 	print("%s %s -> %s" % [LOG_PREFIX, route, path])
 	route_changed.emit(_route)
 	return true
+
+
+func _populate_ending_summary() -> void:
+	if _resident_scene == null or _ending_summary.is_empty():
+		return
+	var container := _resident_scene.get_node_or_null("Column/Summary")
+	if container == null:
+		return
+	for child in container.get_children():
+		child.queue_free()
+	var rows := [
+		[
+			"Completion time",
+			_ending_summary.get(&"completion_time", {})
+		],
+		[
+			"Build choices by stage",
+			_ending_summary.get(&"build_choices_by_stage", {})
+		],
+		[
+			"Final resources",
+			_ending_summary.get(&"final_resources", {})
+		],
+		[
+			"Birth check values",
+			_ending_summary.get(&"birth_check_values", {})
+		],
+		[
+			"Minigames",
+			_ending_summary.get(&"minigames", {})
+		],
+	]
+	for row in rows:
+		var label := Label.new()
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.text = "%s: %s" % [row[0], JSON.stringify(row[1])]
+		container.add_child(label)
 
 
 ## How many main scenes are resident. Must never exceed one; exposed so a test can
