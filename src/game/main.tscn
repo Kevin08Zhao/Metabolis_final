@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[node name="Game" type="Node2D"]
+
+[node name="MapLayer" type="Node2D" parent="."]
+
+[node name="OrganLayer" type="Node2D" parent="."]
+
+[node name="VesselLayer" type="Node2D" parent="."]
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="ResourceBar" type="Control" parent="UILayer"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 16.0
+
+[node name="TimelinePanel" type="Control" parent="UILayer"]
+layout_mode = 0
+offset_top = 16.0
+offset_right = 640.0
+offset_bottom = 24.0
+
+[node name="TaskPanel" type="Control" parent="UILayer"]
+layout_mode = 0
+offset_top = 24.0
+offset_right = 608.0
+offset_bottom = 40.0
+
+[node name="ArchiveButton" type="Button" parent="UILayer"]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 24.0
+offset_right = 624.0
+offset_bottom = 40.0
+text = "A"
+
+[node name="RecapButton" type="Button" parent="UILayer"]
+layout_mode = 0
+offset_left = 624.0
+offset_top = 24.0
+offset_right = 640.0
+offset_bottom = 40.0
+text = "R"

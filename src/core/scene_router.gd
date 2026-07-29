@@ -51,8 +51,9 @@ const CONFIRM_NO := "No, go back"
 ## use so an integrator can repoint them; the registration steps in
 ## docs/coord/done/T-32.md say which scenes to create.
 var scene_paths := {
-	ROUTE_GAME: "res://main.tscn",
-	ROUTE_ENDING: "res://main.tscn",
+	ROUTE_TITLE: "res://ui/title.tscn",
+	ROUTE_GAME: "res://game/main.tscn",
+	ROUTE_ENDING: "res://ui/ending.tscn",
 }
 
 signal route_changed(route: StringName)
