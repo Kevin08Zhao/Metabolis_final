@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 ; Playable stage host.
 ;
@@ -7,13 +7,14 @@
 ; ChapterFlow: the ten-step state machine driving every stage.
 ; ResourceStatusBar: six-resource bar (resource_bar.gd).
 ; CityMap: 40x20 grid at 16px tiles rendered by grid_manager.gd.
-; Remaining panels are structural placeholders for future integration.
+; Contextual gameplay actions are rendered by gameplay_controller.gd.
 
 [ext_resource type="Script" path="res://game/game_boot.gd" id="1"]
 [ext_resource type="Script" path="res://core/chapter_flow.gd" id="2"]
 [ext_resource type="Script" path="res://ui/resource_bar.gd" id="3"]
 [ext_resource type="Script" path="res://world/grid_manager.gd" id="4"]
 [ext_resource type="Script" path="res://ui/gameplay_controller.gd" id="5"]
+[ext_resource type="Script" path="res://world/network_builder.gd" id="6"]
 
 [node name="Game" type="Control"]
 anchors_preset = 15
@@ -73,6 +74,10 @@ offset_top = 40.0
 offset_right = 640.0
 offset_bottom = 360.0
 script = ExtResource("4")
+
+[node name="CityNetwork" type="Node2D" parent="."]
+position = Vector2(0, 40)
+script = ExtResource("6")
 
 [node name="GuidanceLayer" type="Control" parent="."]
 anchors_preset = 15

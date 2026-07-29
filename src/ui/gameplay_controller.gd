@@ -20,6 +20,8 @@ const RESOURCE_IDS: Array[StringName] = [
 var _flow: ChapterFlow = null
 var _resources: ResourcePool = null
 var _resource_bar: ResourceBar = null
+var _grid_manager: GridManager = null
+var _network_builder: NetworkBuilder = null
 
 var _build_decision: BuildDecision = null
 var _operation_decision: OperationDecision = null
@@ -40,6 +42,8 @@ var _resource_settled := false
 var _build_presented_id: StringName = &""
 var _selected_build_option_id: StringName = &""
 var _operation_presented_id: StringName = &""
+var _minigame_progress := 0.0
+var _built_organs: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -48,14 +52,26 @@ func _ready() -> void:
 	EventBus.phase_changed.connect(_on_phase_changed)
 
 
+func _process(delta: float) -> void:
+	if (
+		_minigame_runtime != null
+		and _minigame_runtime.state() == MinigameRuntime.State.RUNNING
+	):
+		_minigame_runtime.advance_time(delta)
+
+
 func configure(
 	flow: ChapterFlow,
 	resources: ResourcePool,
-	resource_bar: ResourceBar
+	resource_bar: ResourceBar,
+	grid_manager: GridManager,
+	network_builder: NetworkBuilder
 ) -> void:
 	_flow = flow
 	_resources = resources
 	_resource_bar = resource_bar
+	_grid_manager = grid_manager
+	_network_builder = network_builder
 
 	_build_decision = BuildDecision.new()
 	_build_decision.name = "BuildDecision"
@@ -118,6 +134,7 @@ func _on_stage_loaded(_stage_id: StringName, _stage_index: int) -> void:
 	_build_presented_id = &""
 	_selected_build_option_id = &""
 	_operation_presented_id = &""
+	_minigame_progress = 0.0
 	_build_decision.configure(Balance, EventBus, _flow.chapter, _resources)
 	_operation_decision.configure(
 		Balance,
@@ -198,7 +215,10 @@ func _render_minigame() -> void:
 	)
 	if resolution == &"pending":
 		if _minigame_runtime.state() == MinigameRuntime.State.RUNNING:
-			_add_action_button("CompleteTask", "Complete Task", _complete_minigame)
+			_body.text += "\nProgress: %.0f%%" % (
+				_minigame_runtime.completion_accuracy() * 100.0
+			)
+			_add_action_button("ProgressTask", "Perform Task", _progress_minigame)
 		else:
 			_add_action_button("StartTask", "Start Task", _start_minigame)
 		_add_action_button("SkipTask", "Skip Task", _skip_minigame)
@@ -317,6 +337,7 @@ func _render_operation_decision() -> void:
 
 
 func _start_minigame() -> void:
+	_minigame_progress = 0.0
 	if _minigame_runtime.begin(
 		_flow.chapter.stage_minigame_id,
 		_flow.chapter.stage_id
@@ -324,8 +345,10 @@ func _start_minigame() -> void:
 		_refresh()
 
 
-func _complete_minigame() -> void:
-	_minigame_runtime.report_progress(INF)
+func _progress_minigame() -> void:
+	_minigame_progress += 1.0
+	_minigame_runtime.report_progress(_minigame_progress)
+	_refresh()
 
 
 func _skip_minigame() -> void:
@@ -344,18 +367,6 @@ func _on_minigame_resolved(
 	if _flow == null or _flow.chapter == null:
 		return
 	_flow.chapter.minigame_resolution = _minigame_runtime.resolution_id()
-	var reward := _minigame_runtime.pending_reward()
-	for resource_id in RESOURCE_IDS:
-		if not reward.has(resource_id):
-			continue
-		if resource_id == &"knowledge_badge_count":
-			_resources.knowledge_badge_count += int(reward[resource_id])
-		else:
-			_resources.set(
-				resource_id,
-				float(_resources.get(resource_id)) + float(reward[resource_id])
-			)
-	_sync_resource_bar()
 	_refresh()
 	visual_state_changed.emit()
 
@@ -373,8 +384,22 @@ func _settle_stage_resources() -> void:
 	)
 	var settled := _resource_tick.settle_tick(
 		maxf(duration, float(Balance.get_value("tick_interval_sec", 1.0))),
-		_empty_settlement_input()
+		_settlement_input()
 	)
+	var reward := _minigame_runtime.pending_reward()
+	for resource_id in RESOURCE_IDS:
+		if not reward.has(resource_id):
+			continue
+		if resource_id == &"knowledge_badge_count":
+			settled[resource_id] = (
+				int(settled.get(resource_id, 0))
+				+ int(reward[resource_id])
+			)
+		else:
+			settled[resource_id] = (
+				float(settled.get(resource_id, 0.0))
+				+ float(reward[resource_id])
+			)
 	_apply_resource_snapshot(settled)
 	_resource_settled = true
 	var after := _resource_snapshot()
@@ -392,6 +417,13 @@ func _choose_build_option(option_id: StringName) -> void:
 	_selected_build_option_id = option_id
 	_flow.chapter.selected_build_option_id = &""
 	_flow.chapter.selected_build_slot_id = &""
+	if _grid_manager != null:
+		_grid_manager.present_candidates(
+			_flow.chapter.active_build_decision_id,
+			option_id,
+			_grid_manager.occupied_cells(),
+			[]
+		)
 	_refresh()
 
 
@@ -402,8 +434,12 @@ func _choose_build_slot(slot_id: StringName) -> void:
 
 
 func _confirm_build() -> void:
+	var decision_id := _flow.chapter.active_build_decision_id
+	var option_id := _flow.chapter.selected_build_option_id
+	var slot_id := _flow.chapter.selected_build_slot_id
 	var confirmed := _build_decision.request_confirmation()
 	if confirmed:
+		_register_built_organ(decision_id, option_id, slot_id)
 		_sync_resource_bar()
 	_feedback.text = _build_decision.feedback_text()
 	_refresh()
@@ -418,7 +454,7 @@ func _choose_operation(option_id: StringName) -> void:
 
 func _confirm_operation() -> void:
 	var confirmed := _operation_decision.request_confirmation(
-		_empty_settlement_input()
+		_settlement_input()
 	)
 	if confirmed:
 		_sync_resource_bar()
@@ -554,20 +590,65 @@ func _resource_deltas(before: Dictionary, after: Dictionary) -> Dictionary:
 	return deltas
 
 
-func _empty_settlement_input() -> Dictionary:
+func _settlement_input() -> Dictionary:
+	var nodes: Array = [] if _network_builder == null else _network_builder.nodes
+	var edges: Array = [] if _network_builder == null else _network_builder.edges
+	var requested_flow: Dictionary = {}
+	var requested_signal: Dictionary = {}
+	var satisfaction: Dictionary = {}
+	for organ in _built_organs:
+		var organ_id := StringName(organ.get("organ_id", ""))
+		requested_flow[organ_id] = float(organ.get("required_flow", 0.0))
+		requested_signal[organ_id] = float(
+			organ.get("required_development_signal", 0.0)
+		)
+		satisfaction[organ_id] = 1.0
+	var transport_capacity := 0.0
+	for edge in edges:
+		transport_capacity += float(edge.get("effective_capacity", 0.0))
+	var source_ids: Array[StringName] = []
+	for node in nodes:
+		if int(node.get("sequence", -1)) == 0:
+			source_ids.append(StringName(node.get("node_id", "")))
 	return {
-		"organs": [],
-		"required_organ_ids": [],
-		"nodes": [],
-		"edges": [],
-		"source_node_ids": [],
-		"requested_flow_by_organ": {},
-		"available_transport_flow": 0.0,
-		"requested_development_signal_by_organ": {},
-		"available_development_signal_flow": 0.0,
-		"resource_satisfaction_by_organ": {},
+		"organs": _built_organs.duplicate(true),
+		"required_organ_ids": _flow.chapter.required_organ_ids.duplicate(),
+		"nodes": nodes,
+		"edges": edges,
+		"source_node_ids": source_ids,
+		"requested_flow_by_organ": requested_flow,
+		"available_transport_flow": transport_capacity,
+		"requested_development_signal_by_organ": requested_signal,
+		"available_development_signal_flow": maxf(
+			float(_resources.development_signal),
+			0.0
+		),
+		"resource_satisfaction_by_organ": satisfaction,
 		"intervention_waste_removal": 0.0,
 	}
+
+
+func _register_built_organ(
+	decision_id: StringName,
+	option_id: StringName,
+	slot_id: StringName
+) -> void:
+	var organ_id := StringName(str(decision_id).trim_prefix("build_"))
+	var organ_config := _dictionary_value("organs.%s" % organ_id)
+	var cells: Array[Vector2i] = []
+	if _grid_manager != null:
+		cells = _grid_manager.commit_slot(decision_id, option_id, slot_id)
+	var grid_position := Vector2i.ZERO if cells.is_empty() else cells[0]
+	var organ := organ_config.duplicate(true)
+	organ["organ_id"] = organ_id
+	organ["state"] = &"operating"
+	organ["state_id"] = &"operating"
+	organ["grid_position"] = grid_position
+	organ["grid_origin"] = grid_position
+	organ["active_multiplier"] = 1.0
+	organ["tier_multiplier"] = 1.0
+	_built_organs.append(organ)
+	EventBus.organ_built.emit(organ_id, slot_id, option_id)
 
 
 func _dictionary_value(path: String) -> Dictionary:

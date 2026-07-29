@@ -43,8 +43,15 @@ func _ready() -> void:
 
 	_controller = get_node_or_null("GuidanceLayer")
 	var resource_bar := get_node_or_null("ResourceStatusBar") as ResourceBar
-	if _controller == null or resource_bar == null:
-		push_error("%s Gameplay controller or resource bar is missing." % LOG_PREFIX)
+	var grid_manager := get_node_or_null("CityMap") as GridManager
+	var network_builder := get_node_or_null("CityNetwork") as NetworkBuilder
+	if (
+		_controller == null
+		or resource_bar == null
+		or grid_manager == null
+		or network_builder == null
+	):
+		push_error("%s Gameplay controller, map, network, or resource bar is missing." % LOG_PREFIX)
 		return
 
 	if not _flow.has_method("start_new_run"):
@@ -53,7 +60,15 @@ func _ready() -> void:
 
 	_resources = ResourcePool.new()
 	_initialize_resources()
-	_controller.call("configure", _flow, _resources, resource_bar)
+	network_builder.configure(Balance, EventBus)
+	_controller.call(
+		"configure",
+		_flow,
+		_resources,
+		resource_bar,
+		grid_manager,
+		network_builder
+	)
 	_controller.connect("visual_state_changed", _refresh_status)
 	_flow.start_new_run()
 	_refresh_status()

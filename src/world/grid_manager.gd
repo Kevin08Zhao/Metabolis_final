@@ -198,6 +198,54 @@ func cell_state(grid_coordinate: Vector2i) -> CellState:
 	return _cell_states[grid_coordinate.y][grid_coordinate.x]
 
 
+func commit_slot(
+	decision_id: StringName,
+	option_id: StringName,
+	slot_id: StringName
+) -> Array[Vector2i]:
+	var option_path := "build_options.%s.%s" % [decision_id, option_id]
+	var slot_ids: Variant = _balance_access.call(
+		"get_value",
+		"%s.available_slot_ids" % option_path,
+		[]
+	)
+	var coordinates: Variant = _balance_access.call(
+		"get_value",
+		"%s.slot_candidates" % option_path,
+		[]
+	)
+	var footprint_id := StringName(
+		_balance_access.call("get_value", "%s.footprint_id" % option_path, "")
+	)
+	if (
+		not slot_ids is Array
+		or not coordinates is Array
+		or not FOOTPRINT_TILES.has(footprint_id)
+	):
+		return []
+	var slot_index := (slot_ids as Array).find(String(slot_id))
+	if slot_index < 0 or slot_index >= (coordinates as Array).size():
+		return []
+	var coordinate: Variant = (coordinates as Array)[slot_index]
+	if not coordinate is Array or coordinate.size() != 2:
+		return []
+	var cells := _expand_footprint(
+		Vector2i(int(coordinate[0]), int(coordinate[1])),
+		FOOTPRINT_TILES[footprint_id]
+	)
+	for cell_coordinate in cells:
+		if not _occupied_cells.has(cell_coordinate):
+			_occupied_cells.append(cell_coordinate)
+	_reset_candidate_rendering()
+	for cell_coordinate in _occupied_cells:
+		_set_cell_state(cell_coordinate, CellState.OCCUPIED)
+	return cells
+
+
+func occupied_cells() -> Array[Vector2i]:
+	return _occupied_cells.duplicate()
+
+
 func _candidate_is_legal(
 	candidate: Dictionary,
 	all_candidates: Array[Dictionary],

@@ -103,11 +103,23 @@ func _test_first_stage_interactions(main: Node) -> void:
 	)
 	if not await _press_button(game, "StartTask"):
 		return
-	if not await _press_button(game, "CompleteTask"):
-		return
+	var resource_bar := game.get_node_or_null("ResourceStatusBar")
+	var badges_before_task := int(
+		resource_bar.resource_values()[&"knowledge_badge_count"]
+	)
+	var task_actions := 0
+	while flow.chapter.minigame_resolution == &"pending" and task_actions < 100:
+		task_actions += 1
+		if not await _press_button(game, "ProgressTask"):
+			return
 	_expect(
 		flow.chapter.minigame_resolution == &"completed",
-		"Completing the optional task must settle its runtime result"
+		"Repeated task actions must settle the runtime result"
+	)
+	_expect(
+		int(resource_bar.resource_values()[&"knowledge_badge_count"])
+		== badges_before_task,
+		"Minigame rewards must remain pending until resource settlement"
 	)
 
 	if not await _press_button(game, "ContinueAction"):
@@ -118,6 +130,11 @@ func _test_first_stage_interactions(main: Node) -> void:
 	)
 	if not await _press_button(game, "SettleResources"):
 		return
+	_expect(
+		int(resource_bar.resource_values()[&"knowledge_badge_count"])
+		> badges_before_task,
+		"Resource settlement must apply the completed minigame reward"
+	)
 	if not await _press_button(game, "ContinueAction"):
 		return
 	_expect(
@@ -125,7 +142,6 @@ func _test_first_stage_interactions(main: Node) -> void:
 		"Settled resources must unlock the build decision step"
 	)
 
-	var resource_bar := game.get_node_or_null("ResourceStatusBar")
 	var resources_before: Dictionary = resource_bar.resource_values()
 	if not await _press_button(game, "Option_cluster_compact"):
 		return
@@ -144,6 +160,17 @@ func _test_first_stage_interactions(main: Node) -> void:
 		float(resources_after_build[&"nutrient_energy"])
 		< float(resources_before[&"nutrient_energy"]),
 		"Build confirmation must visibly deduct resources"
+	)
+	var city_map := game.get_node_or_null("CityMap") as GridManager
+	_expect(
+		city_map != null
+		and city_map.cell_state(Vector2i(2, 3)) == GridManager.CellState.OCCUPIED,
+		"Confirmed build footprint must become occupied on the city grid"
+	)
+	var network_builder := game.get_node_or_null("CityNetwork") as NetworkBuilder
+	_expect(
+		network_builder != null and not network_builder.edges.is_empty(),
+		"Confirmed build must publish a visible transport extension"
 	)
 
 	if not await _press_button(game, "ContinueAction"):
