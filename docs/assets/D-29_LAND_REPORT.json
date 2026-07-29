@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T13:40:13+00:00",
+  "generated_at": "2026-07-29T14:43:11+00:00",
   "generated_by": "tools/pixellab_fetch.py",
   "items": [
     {
@@ -48,7 +48,7 @@
       "output": {
         "bytes": 9346,
         "sha256": "d993a7035af01d58730c5fd8323b656ad23ed3915c3b7b0db74c18624ffd7738",
-        "status": "replaced_known_hash"
+        "status": "unchanged_identical"
       },
       "palette": {
         "locked_palette_color_count": 22,
@@ -87,7 +87,7 @@
   },
   "plan": {
     "path": "fetch_plans/D-29_fetch_plan.json",
-    "sha256": "b100dfdbbe012c72c6f9aea7d87cf6b43fcf0d21ca9ed9029f6300f750644757"
+    "sha256": "781096dbbe9fe91b6bdbd039ec0d2d2e0a5a53d19aa633dcbd5ed94c32f4b554"
   },
   "report_version": 1,
   "status": "PASS",
