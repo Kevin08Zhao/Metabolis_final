@@ -394,7 +394,7 @@ func _add_button(id: StringName, text: String, handler: Callable) -> void:
 	var button := Button.new()
 	button.name = "Entry_%s" % id
 	button.text = text
-	button.pressed.connect(func() -> void: handler.call())
+	button.pressed.connect(func() -> void: handler.call(), CONNECT_DEFERRED)
 	_title_menu.add_child(button)
 
 
