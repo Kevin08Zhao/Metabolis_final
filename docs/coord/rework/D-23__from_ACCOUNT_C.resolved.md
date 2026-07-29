@@ -1,6 +1,6 @@
 task_id: D-23
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 blocking_task: T-38
 base_main_commit: 27a4f5a
 failure_files:
@@ -30,3 +30,9 @@ required_resolution:
   - Produce docs/FALLBACK_SPEC.md from the D-23 prompt and current landed animation metadata.
   - Cover build completion, system collaboration, blood flow, heartbeat states, birth, particles, UI highlights, and timing behavior.
   - Run the D-23 acceptance and update docs/coord/done/D-23.md with the real output and checks.
+resolution: |
+  Added the missing authoritative specification and corrected the original
+  birth-only completion record without erasing its historical claim. The
+  specification covers all D-19 through D-22 effects, including honest static
+  treatments for the two D-19a groups that have no dedicated landed frames.
+resolved_at: 2026-07-29
