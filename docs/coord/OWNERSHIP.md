@@ -82,10 +82,24 @@ other at load time.
 |---|---|---|
 | `EventBus` | `res://autoload/event_bus.gd` | T-10 |
 | `Balance` | `res://autoload/balance.gd` | T-11 |
+| `SaveManager` | `res://autoload/save_manager.gd` | T-26 |
+| `AudioRouter` | `res://core/audio_router.gd` | T-37 |
+| `AssetLoader` | `res://core/asset_loader.gd` | T-36 |
 
 A script that references an unregistered autoload fails at **parse** time, not at
 run time, so a missing entry breaks every file that mentions it rather than only
 the code path that uses it. `src/core/chapter_flow.gd` references both.
+
+This table listed only the first two until 2026-07-28, while `src/project.godot`
+had carried `SaveManager` and `AudioRouter` for some time. The table was the
+thing that was wrong, not the project file, and it is corrected here rather than
+elsewhere.
+
+`AssetLoader` was registered on the same day, and it is the one entry that was
+genuinely missing from both. T-36 delivered it and its own header says to
+register it, but nothing had. It is required now because `art/` lives outside the
+Godot project root, so no scene can reach an image through `ext_resource`; the
+loader reading `res://../art` at runtime is the only route to one.
 
 ## Warning: the editor rewrites `src/project.godot`
 

@@ -216,6 +216,32 @@ What is lost without the copy is the naming, not the ability. A player can still
 pick a card, place it, and confirm, but nothing says the cluster is a cluster or
 that the stage wants one built.
 
+## Title Screen Copy
+
+The title screen is not one of the three information containers, so its lines
+are bounded by the rectangles in the layout table of
+`docs/D-29_TITLE_SCENE_INTEGRATION.md` rather than by a character count. The
+widths below were measured with the engine default font at `8 px`, the size that
+document specifies, and are recorded because the disclaimer band has almost no
+margin.
+
+| Placeholder key | Copy | Measured width | Band |
+|---|---|---:|---:|
+| `TITLE_HEADING_PLACEHOLDER` | `Metabolis: Birth of the City of Life` | 130 px | 320 px |
+| `TITLE_SUBTITLE_PLACEHOLDER` | `Birth of the City of Life` | 90 px | 320 px |
+| `TITLE_DISCLAIMER_PLACEHOLDER` | `A simplified educational model of human development. Not for medical judgement, diagnosis, or treatment.` | 418 px | 480 px |
+
+The disclaimer must say three things and may not drop any of them: that the
+model is simplified, that it is educational, and that it is not for medical
+judgement, diagnosis, or treatment. `docs/D-29_TITLE_SCENE_INTEGRATION.md`
+requires it on one line inside `Rect2(80, 300, 480, 20)`.
+
+The longer wording the scene first carried, `This game is a simplified
+educational model of human development. It is not for medical judgement,
+diagnosis, or treatment.`, measures 481 px and does not fit that band by one
+pixel. It was shortened rather than wrapped, because the band is 20 px tall and a
+second line would be clipped rather than shown.
+
 ## Closest to the Limit
 
 The three lines closest to their applicable hard maximum are:

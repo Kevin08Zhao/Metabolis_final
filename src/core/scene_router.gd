@@ -52,6 +52,16 @@ const CONFIRM_NO := "No, go back"
 ## under the router itself, which is what happened before the scenes existed.
 const TITLE_MENU_ANCHOR_GROUP := &"title_menu_anchor"
 
+## A TextureRect in this group inside the title scene gets the background filled
+## in at runtime. It cannot be filled in the scene file: art/ lives outside the
+## Godot project root, so no ext_resource can reach it, and AssetLoader reading
+## res://../art is the only route to an image there.
+const TITLE_BACKGROUND_GROUP := &"title_background"
+
+## The logical name AssetLoader resolves, in its {category}_{subject}_{variant}
+## form. docs/assets/D-29_MANIFEST.md records the landed file this names.
+const TITLE_BACKGROUND_ASSET := &"background_title_source"
+
 ## Where each route's scene lives. Assigned rather than hardcoded at the point of
 ## use so an integrator can repoint them; the registration steps in
 ## docs/coord/done/T-32.md say which scenes to create.
@@ -121,6 +131,34 @@ func _load_title_scene() -> void:
 
 	_resident_scene = packed.instantiate()
 	_scene_host.add_child(_resident_scene)
+	_fill_title_background()
+
+
+## Put the accepted background into the slot the title scene reserved for it.
+## A missing slot is silent, because a title scene is allowed not to have one.
+## A slot that stays empty is not: AssetLoader returns its placeholder rather
+## than null when the file is missing, so an empty texture here means the loader
+## is not registered, which is worth saying out loud.
+func _fill_title_background() -> void:
+	var tree := get_tree()
+	if tree == null or _resident_scene == null:
+		return
+	for node in tree.get_nodes_in_group(TITLE_BACKGROUND_GROUP):
+		if not (_resident_scene.is_ancestor_of(node) or node == _resident_scene):
+			continue
+		if not node is TextureRect:
+			push_warning(
+				"%s '%s' is in group '%s' but is not a TextureRect."
+				% [LOG_PREFIX, node.name, TITLE_BACKGROUND_GROUP]
+			)
+			continue
+		var slot: TextureRect = node
+		slot.texture = AssetLoader.get_static_texture(TITLE_BACKGROUND_ASSET)
+		if slot.texture == null:
+			push_error(
+				"%s The title background slot is still empty after asking for '%s'."
+				% [LOG_PREFIX, TITLE_BACKGROUND_ASSET]
+			)
 
 
 ## Where the entry buttons go. The anchor inside the title scene when there is

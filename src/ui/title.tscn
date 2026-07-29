@@ -2,16 +2,35 @@
 
 ; Title screen.
 ;
-; Structure only. The background texture is deliberately unassigned and every
-; label uses the engine default style, because the title's visual treatment,
-; font sizing, letter spacing and pulse belong to D-29. This scene exists so
-; that D-29 has a runtime scene to dress and so that the release chain has a
-; real boot target.
+; Geometry from the layout table of docs/D-29_TITLE_SCENE_INTEGRATION.md, on the
+; 640x360 reference canvas. Styling stays engine default: the font sizing,
+; letter spacing and pulse in that document are D-29's to apply through a theme
+; and need no change to the node structure below.
 ;
-; SceneRouter adds its entry buttons into MenuAnchor, which is why that node
-; carries the title_menu_anchor group. Without the group the router falls back
-; to building the menu under itself, which is what it did before this scene
-; existed.
+; The background is the accepted D-29 asset recorded by docs/assets/D-29_MANIFEST.md,
+; art/source/background_title_source.png. It cannot be an ext_resource: art/ sits
+; outside the Godot project root, so no scene can reach it through the import
+; pipeline. SceneRouter fills the slot at runtime through AssetLoader, which T-36
+; built to read res://../art for exactly this reason, and it finds this node by
+; its title_background group.
+;
+; The slot is empty at present, and that is the designed degradation rather than
+; an oversight. The accepted asset sits in art/source, which AssetLoader excludes
+; by design through SKIPPED_ART_DIRECTORIES along with candidates and reference,
+; so no runtime code can reach it there. AssetLoader returns its placeholder and
+; warns. The moment D-29 lands the file outside a skipped directory - the path
+; its own integration document already names - the slot fills with no change
+; here. The asset is 320x180, so filling the canvas will be an integer 2x scale
+; with the project's nearest-neighbour filter.
+;
+; The entry set is T-32's, not the two-button set in the D-29 table. T-32's
+; accepted behaviour offers continue, new game and chapter select, with chapter
+; select gated on a finished stage that can really be entered. MenuAnchor is
+; sized so that two entries land on the two rectangles D-29 specifies and a
+; third appears one pitch above them, clear of the disclaimer band. Both
+; differences are recorded in docs/coord/rework/D-29__from_ACCOUNT_C.open.md.
+;
+; SceneRouter puts the entry buttons into MenuAnchor because of its group.
 
 [node name="Title" type="Control"]
 anchors_preset = 15
@@ -20,32 +39,51 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Background" type="TextureRect" parent="." groups=["title_background"]]
+offset_right = 640.0
+offset_bottom = 360.0
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 1
 mouse_filter = 2
 
-[node name="Titles" type="VBoxContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="GameTitle" type="Label" parent="Titles"]
+[node name="TitleBand" type="Label" parent="."]
+theme_override_font_sizes/font_size = 8
+offset_left = 160.0
+offset_top = 80.0
+offset_right = 480.0
+offset_bottom = 120.0
 text = "Metabolis: Birth of the City of Life"
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
 
-[node name="Subtitle" type="Label" parent="Titles"]
+[node name="Subtitle" type="Label" parent="."]
+theme_override_font_sizes/font_size = 8
+offset_left = 160.0
+offset_top = 120.0
+offset_right = 480.0
+offset_bottom = 140.0
 text = "Birth of the City of Life"
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
 
-[node name="Disclaimer" type="Label" parent="Titles"]
-autowrap_mode = 3
-text = "This game is a simplified educational model of human development. It is not for medical judgement, diagnosis, or treatment."
+[node name="MenuAnchor" type="VBoxContainer" parent="." groups=["title_menu_anchor"]]
+offset_left = 240.0
+offset_top = 160.0
+offset_right = 400.0
+offset_bottom = 272.0
+alignment = 2
+theme_override_constants/separation = 8
 
-[node name="MenuAnchor" type="VBoxContainer" parent="Titles" groups=["title_menu_anchor"]]
+[node name="Disclaimer" type="Label" parent="."]
+theme_override_font_sizes/font_size = 8
+clip_text = true
+offset_left = 80.0
+offset_top = 300.0
+offset_right = 560.0
+offset_bottom = 320.0
+text = "A simplified educational model of human development. Not for medical judgement, diagnosis, or treatment."
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
