@@ -119,12 +119,12 @@ whose reading is empty shows an empty reading rather than a shortened set.
 
 | Key | Copy | Characters | Job |
 |---|---|---:|---|
-| `TUTORIAL_STAGE[stage_origin.developmental_time]` | `Week 1: the single cell` | 23 | names a structure |
+| `TUTORIAL_STAGE[stage_origin.developmental_time]` | `Week 1: cell to cluster` | 23 | names a structure |
 | `TUTORIAL_STAGE[stage_origin.existing_structures]` | `No structures stand yet` | 23 | names a structure |
 | `TUTORIAL_STAGE[stage_origin.new_demands]` | `Open space for division` | 23 | points at an action |
 | `TUTORIAL_STAGE[stage_origin.structures_to_form]` | `Build the cell cluster` | 22 | points at an action |
 | `TUTORIAL_STAGE[stage_origin.decision_count]` | `Two decisions to settle` | 23 | points at an action |
-| `TUTORIAL_STAGE[stage_harbor.developmental_time]` | `Weeks 2-3: the blastocyst` | 25 | names a structure |
+| `TUTORIAL_STAGE[stage_harbor.developmental_time]` | `Weeks 2-3: disc to layers` | 25 | names a structure |
 | `TUTORIAL_STAGE[stage_harbor.existing_structures]` | `The cell cluster stands` | 23 | names a structure |
 | `TUTORIAL_STAGE[stage_harbor.new_demands]` | `A supply route is needed` | 24 | names a structure |
 | `TUTORIAL_STAGE[stage_harbor.structures_to_form]` | `Build harbor, then layers` | 25 | points at an action |
@@ -134,7 +134,7 @@ whose reading is empty shows an empty reading rather than a shortened set.
 | `TUTORIAL_STAGE[stage_circulation.new_demands]` | `Carry supply to far cells` | 25 | points at an action |
 | `TUTORIAL_STAGE[stage_circulation.structures_to_form]` | `Build the pump and network` | 26 | points at an action |
 | `TUTORIAL_STAGE[stage_circulation.decision_count]` | `Three decisions to settle` | 25 | points at an action |
-| `TUTORIAL_STAGE[stage_birth.developmental_time]` | `Weeks 9-38: the lungs form` | 26 | names a structure |
+| `TUTORIAL_STAGE[stage_birth.developmental_time]` | `Weeks 9-38: lungs mature` | 24 | names a structure |
 | `TUTORIAL_STAGE[stage_birth.existing_structures]` | `Pump and network stand` | 22 | names a structure |
 | `TUTORIAL_STAGE[stage_birth.new_demands]` | `Ready the body for air` | 22 | points at an action |
 | `TUTORIAL_STAGE[stage_birth.structures_to_form]` | `Build lungs, then the link` | 26 | points at an action |
@@ -255,12 +255,11 @@ The three lines closest to their applicable hard maximum are:
 All three must render without truncation in the G1 container before this copy is
 integrated into runtime labels.
 
-Six guidance lines also sit exactly at 26, and carry the same requirement:
+Five guidance lines also sit exactly at 26, and carry the same requirement:
 
 | Key | Character count | Limit |
 |---|---:|---:|
 | `TUTORIAL_STAGE[stage_circulation.structures_to_form]` | 26 | 26 |
-| `TUTORIAL_STAGE[stage_birth.developmental_time]` | 26 | 26 |
 | `TUTORIAL_STAGE[stage_birth.structures_to_form]` | 26 | 26 |
 | `TUTORIAL_ACTION[confirm_build_decision.path]` | 26 | 26 |
 | `TUTORIAL_ACTION[resolve_optional_minigame.demonstration]` | 26 | 26 |

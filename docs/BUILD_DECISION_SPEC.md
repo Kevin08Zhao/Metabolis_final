@@ -1,6 +1,6 @@
 # Build Decision Candidate Specification
 
-This document is the single source of truth for seven build decisions, their candidates, preview dimensions, slot inputs, confirmation settlement, and science mappings. Candidates vary only in normal developmental sequence, specification tier, legal slot, and resource allocation. They are not disease grades and do not imply that a player can alter real organ topology, position, or the left-right body axis.
+This document is the single source of truth for seven build decisions, their candidates, preview dimensions, slot inputs, confirmation settlement, and science mappings. Current candidate IDs encode city-building alternatives in specification tier, legal slot, and resource allocation. T-35 found no candidate-specific evidence that their distinctive tiers or rates are normal human developmental variations; table D10 returns them to T-05d for redesign or deletion. They are not disease grades and do not imply that a player can alter real organ topology, position, or the left-right body axis.
 
 Every tunable value is read through `balance.build_options.*`. This specification defines configuration paths, formulas, and required inequalities without embedding balance constants. Fixed grid values come from `docs/GRID_BASELINE.md`; stage and decision IDs come from `docs/CHAPTER_TIMELINE.md`.
 
@@ -8,13 +8,13 @@ Every tunable value is read through `balance.build_options.*`. This specificatio
 
 | `build_decision_id` | `stage_id` | Build target | Candidate basis | Specification tiers | T-12 | T-13 | T-13a | T-15 | T-15a | T-19h | T-33a | D-13b | D-19a | T-35 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `build_cell_cluster` | `stage_origin` | Embryonic cell cluster | Compaction sequence and resource mix | `cluster_compact`, `cluster_wave` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_placenta_port` | `stage_harbor` | Placental foundation | Interface tier and resource mix | `placenta_exchange`, `placenta_interface` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_germ_layer_districts` | `stage_harbor` | Three germ-layer districts | Build order and resource mix | `layers_parallel`, `layers_staged` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_heart_pump` | `stage_circulation` | Central heart pump | Specification tier and resource mix | `heart_reinforced`, `heart_early_flow` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_neural_network` | `stage_circulation` | Neural tube, brain, and spinal cord foundation | Build order and resource mix | `neural_cranial`, `neural_distributed` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_lung_exchange` | `stage_birth` | Lung gas-exchange region | Specification tier and resource mix | `lung_branching`, `lung_maturation` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
-| `build_pulmonary_interface` | `stage_birth` | Pulmonary circulation interface | Build order and interface tier | `pulmonary_reserve`, `pulmonary_transition` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D9 |
+| `build_cell_cluster` | `stage_origin` | Embryonic cell cluster | Compaction sequence and resource mix | `cluster_compact`, `cluster_wave` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_placenta_port` | `stage_harbor` | Placental foundation | Interface tier and resource mix | `placenta_exchange`, `placenta_interface` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_germ_layer_districts` | `stage_harbor` | Three germ-layer districts | Build order and resource mix | `layers_parallel`, `layers_staged` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_heart_pump` | `stage_circulation` | Central heart pump | Specification tier and resource mix | `heart_reinforced`, `heart_early_flow` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_neural_network` | `stage_circulation` | Neural tube, brain, and spinal cord foundation | Build order and resource mix | `neural_cranial`, `neural_distributed` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_lung_exchange` | `stage_birth` | Lung gas-exchange region | Specification tier and resource mix | `lung_branching`, `lung_maturation` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
+| `build_pulmonary_interface` | `stage_birth` | Pulmonary circulation interface | Build order and interface tier | `pulmonary_reserve`, `pulmonary_transition` | D3 | D4 | D8 | D5 | D5 | D6 | D7 | D8 | D9 | D10 |
 
 Downstream tasks must read the numbered tables listed above. They must not copy and rename fields independently.
 
@@ -22,20 +22,20 @@ Downstream tasks must read the numbered tables listed above. They must not copy 
 
 | Decision | `build_option_id` | Allowed difference | Player tradeoff | `slot_candidates` | `cost` |
 |---|---|---|---|---|---|
-| `build_cell_cluster` | `cluster_compact` | Tier and resource mix | Denser early connections for a longer build | `balance.build_options.build_cell_cluster.cluster_compact.slot_candidates` | `balance.build_options.build_cell_cluster.cluster_compact.cost` |
-| `build_cell_cluster` | `cluster_wave` | Sequence and resource mix | Faster expansion for lower initial connection density | `balance.build_options.build_cell_cluster.cluster_wave.slot_candidates` | `balance.build_options.build_cell_cluster.cluster_wave.cost` |
-| `build_placenta_port` | `placenta_exchange` | Tier and resource mix | Stronger exchange trunk for a longer formation time | `balance.build_options.build_placenta_port.placenta_exchange.slot_candidates` | `balance.build_options.build_placenta_port.placenta_exchange.cost` |
-| `build_placenta_port` | `placenta_interface` | Sequence and resource mix | Earlier maternal-fetal interface for lower initial throughput | `balance.build_options.build_placenta_port.placenta_interface.slot_candidates` | `balance.build_options.build_placenta_port.placenta_interface.cost` |
-| `build_germ_layer_districts` | `layers_parallel` | Sequence and resource mix | Greater interconnection for a longer coordinated build | `balance.build_options.build_germ_layer_districts.layers_parallel.slot_candidates` | `balance.build_options.build_germ_layer_districts.layers_parallel.cost` |
-| `build_germ_layer_districts` | `layers_staged` | Sequence and resource mix | Faster staged formation with more later cross-district links | `balance.build_options.build_germ_layer_districts.layers_staged.slot_candidates` | `balance.build_options.build_germ_layer_districts.layers_staged.cost` |
-| `build_heart_pump` | `heart_reinforced` | Tier and resource mix | Stronger pump interface for a longer build | `balance.build_options.build_heart_pump.heart_reinforced.slot_candidates` | `balance.build_options.build_heart_pump.heart_reinforced.cost` |
-| `build_heart_pump` | `heart_early_flow` | Sequence and resource mix | Earlier flow with lower initial reserve | `balance.build_options.build_heart_pump.heart_early_flow.slot_candidates` | `balance.build_options.build_heart_pump.heart_early_flow.cost` |
-| `build_neural_network` | `neural_cranial` | Sequence and resource mix | Earlier cranial signal coverage with later trunk extension | `balance.build_options.build_neural_network.neural_cranial.slot_candidates` | `balance.build_options.build_neural_network.neural_cranial.cost` |
-| `build_neural_network` | `neural_distributed` | Sequence and resource mix | Easier distributed access with lower initial trunk efficiency | `balance.build_options.build_neural_network.neural_distributed.slot_candidates` | `balance.build_options.build_neural_network.neural_distributed.cost` |
-| `build_lung_exchange` | `lung_branching` | Tier and resource mix | Earlier branch coverage with later maturation support | `balance.build_options.build_lung_exchange.lung_branching.slot_candidates` | `balance.build_options.build_lung_exchange.lung_branching.cost` |
-| `build_lung_exchange` | `lung_maturation` | Sequence and resource mix | Earlier exchange-region maturation with lower branch coverage | `balance.build_options.build_lung_exchange.lung_maturation.slot_candidates` | `balance.build_options.build_lung_exchange.lung_maturation.cost` |
-| `build_pulmonary_interface` | `pulmonary_reserve` | Interface tier and resource mix | Greater birth-transition reserve for a longer build | `balance.build_options.build_pulmonary_interface.pulmonary_reserve.slot_candidates` | `balance.build_options.build_pulmonary_interface.pulmonary_reserve.cost` |
-| `build_pulmonary_interface` | `pulmonary_transition` | Sequence and resource mix | Faster pulmonary connection with greater later expansion demand | `balance.build_options.build_pulmonary_interface.pulmonary_transition.slot_candidates` | `balance.build_options.build_pulmonary_interface.pulmonary_transition.cost` |
+| `build_cell_cluster` | `cluster_compact` | Tier and resource mix | Denser city links for a longer build | `balance.build_options.build_cell_cluster.cluster_compact.slot_candidates` | `balance.build_options.build_cell_cluster.cluster_compact.cost` |
+| `build_cell_cluster` | `cluster_wave` | Sequence and resource mix | Faster city expansion for lower initial link density | `balance.build_options.build_cell_cluster.cluster_wave.slot_candidates` | `balance.build_options.build_cell_cluster.cluster_wave.cost` |
+| `build_placenta_port` | `placenta_exchange` | Tier and resource mix | Stronger city exchange route for a longer build | `balance.build_options.build_placenta_port.placenta_exchange.slot_candidates` | `balance.build_options.build_placenta_port.placenta_exchange.cost` |
+| `build_placenta_port` | `placenta_interface` | Sequence and resource mix | Faster city interface build for lower initial throughput | `balance.build_options.build_placenta_port.placenta_interface.slot_candidates` | `balance.build_options.build_placenta_port.placenta_interface.cost` |
+| `build_germ_layer_districts` | `layers_parallel` | Sequence and resource mix | Greater city interconnection for a longer coordinated build | `balance.build_options.build_germ_layer_districts.layers_parallel.slot_candidates` | `balance.build_options.build_germ_layer_districts.layers_parallel.cost` |
+| `build_germ_layer_districts` | `layers_staged` | Sequence and resource mix | Faster district highlighting with more later links | `balance.build_options.build_germ_layer_districts.layers_staged.slot_candidates` | `balance.build_options.build_germ_layer_districts.layers_staged.cost` |
+| `build_heart_pump` | `heart_reinforced` | Tier and resource mix | Stronger city pump interface for a longer build | `balance.build_options.build_heart_pump.heart_reinforced.slot_candidates` | `balance.build_options.build_heart_pump.heart_reinforced.cost` |
+| `build_heart_pump` | `heart_early_flow` | Sequence and resource mix | Faster city interface activation with lower initial reserve | `balance.build_options.build_heart_pump.heart_early_flow.slot_candidates` | `balance.build_options.build_heart_pump.heart_early_flow.cost` |
+| `build_neural_network` | `neural_cranial` | Sequence and resource mix | Focused city route with later trunk extension | `balance.build_options.build_neural_network.neural_cranial.slot_candidates` | `balance.build_options.build_neural_network.neural_cranial.cost` |
+| `build_neural_network` | `neural_distributed` | Sequence and resource mix | Easier distributed city access with lower trunk efficiency | `balance.build_options.build_neural_network.neural_distributed.slot_candidates` | `balance.build_options.build_neural_network.neural_distributed.cost` |
+| `build_lung_exchange` | `lung_branching` | Tier and resource mix | Wider city branch coverage with later support | `balance.build_options.build_lung_exchange.lung_branching.slot_candidates` | `balance.build_options.build_lung_exchange.lung_branching.cost` |
+| `build_lung_exchange` | `lung_maturation` | Sequence and resource mix | Stronger city exchange support with lower branch coverage | `balance.build_options.build_lung_exchange.lung_maturation.slot_candidates` | `balance.build_options.build_lung_exchange.lung_maturation.cost` |
+| `build_pulmonary_interface` | `pulmonary_reserve` | Interface tier and resource mix | Greater city transition reserve for a longer build | `balance.build_options.build_pulmonary_interface.pulmonary_reserve.slot_candidates` | `balance.build_options.build_pulmonary_interface.pulmonary_reserve.cost` |
+| `build_pulmonary_interface` | `pulmonary_transition` | Sequence and resource mix | Faster city connection with greater later expansion demand | `balance.build_options.build_pulmonary_interface.pulmonary_transition.slot_candidates` | `balance.build_options.build_pulmonary_interface.pulmonary_transition.cost` |
 
 ## Table D3: Candidate coordinates and three grid states
 
@@ -124,17 +124,17 @@ T-06 supplies the tolerance and all concrete values.
 |---|---|---|---|---|
 | `cluster_compact` | `reinforced` | Contact surfaces tighten before the cluster lights | Human embryo compaction involves contractility and adhesion | Firmin et al., *Nature*, DOI `10.1038/s41586-024-07351-x` |
 | `cluster_wave` | `baseline` | Light propagates outward from local contacts | A timing expression of the same compaction process | Same source |
-| `placenta_exchange` | `reinforced` | Exchange trunk completes before pulsing | Placental development includes trophoblast differentiation and villous exchange | Turco and Moffett, *Development*, PMID `31049600` |
-| `placenta_interface` | `baseline` | Interface closes before connecting to the trunk | Implantation coordinates apposition, adhesion, and trophoblast differentiation | Huang et al., *Front Cell Dev Biol*, DOI `10.3389/fcell.2023.1200330` |
+| `placenta_exchange` | `reinforced` | Trunk and interface light together, then exchange pulses | Placental development includes trophoblast differentiation and villous exchange | Turco and Moffett, *Development*, PMID `31776138` |
+| `placenta_interface` | `baseline` | Trunk and interface light together with a shorter setup pulse | Implantation coordinates apposition, adhesion, and trophoblast differentiation | Huang et al., *Front Cell Dev Biol*, DOI `10.3389/fcell.2023.1200330` |
 | `layers_parallel` | `extended` | Three outlines expand together, then connect | Gastrulation organizes ectoderm, mesoderm, and endoderm | Tyser, *Semin Cell Dev Biol*, DOI `10.1016/j.semcdb.2022.05.004` |
-| `layers_staged` | `baseline` | Layers expand sequentially, then cross-connect | A teaching representation of formation timing; every layer completes | Same source |
-| `heart_reinforced` | `reinforced` | Tube bending, pumping, and interface ring complete in order | The embryonic heart tube bends, lengthens, and remodels | Hikspoors et al., *J Anat*, PMID `35277594` |
-| `heart_early_flow` | `baseline` | Pumping appears before the interface ring completes | Early cardiac pumping is shown without changing real pacemaking timing | Manner, *J Cardiovasc Dev Dis*, DOI `10.3390/jcdd9060187` |
-| `neural_cranial` | `extended` | Cranial folds close before trunkward signaling | Neural tube closure coordinates convergence, extension, and apical constriction | Nikolopoulou et al., *Development*, PMID `28196803` |
-| `neural_distributed` | `baseline` | Multiple closure lights join into one trunk | Spatial coordination only; no disputed human initiation model is asserted | Greene and Copp, *J Pathol*, PMID `23790957` |
-| `lung_branching` | `extended` | Airway branches appear before exchange tips light | Lung development uses signal-regulated branching morphogenesis | Morrisey and Hogan, *Dev Cell*, PMID `24449833` |
+| `layers_staged` | `baseline` | All completed outlines highlight in sequence, then cross-connect | A teaching representation of formation timing; every layer completes | Same source |
+| `heart_reinforced` | `reinforced` | Pumping begins, then the city interface shows a wider capacity pulse | The embryonic heart tube bends, lengthens, and remodels | Hikspoors et al., *Commun Biol*, PMID `35277594` |
+| `heart_early_flow` | `baseline` | Pumping begins at the same beat, then the city interface activates faster | Early cardiac pumping is shown without changing real pacemaking timing | Manner, *J Cardiovasc Dev Dis*, DOI `10.3390/jcdd9060187` |
+| `neural_cranial` | `extended` | One neutral fold closes, then one focused city route brightens | Neural tube closure coordinates convergence, extension, and apical constriction | Nikolopoulou et al., *Development*, PMID `28196803` |
+| `neural_distributed` | `baseline` | One neutral fold closes, then distributed city routes brighten | Spatial coordination only; no disputed human initiation model is asserted | Copp et al., *Lancet Neurol*, PMID `23790957` |
+| `lung_branching` | `extended` | Airway branches appear before exchange tips light | Lung development uses signal-regulated branching morphogenesis | Herriges and Morrisey, *Development*, PMID `24449833` |
 | `lung_maturation` | `reinforced` | Exchange tips pulse before branch coverage completes | Epithelial, mesenchymal, and stage coordination forms exchange structures | Same source |
-| `pulmonary_reserve` | `reinforced` | The vascular interface expands with a wider capacity ring | Fetal pulmonary vessels prepare for lower resistance and greater postnatal flow | Gao and Raj, *Physiol Rev*, PMID `27942377` |
+| `pulmonary_reserve` | `reinforced` | The vascular interface expands with a wider capacity ring | Fetal pulmonary vessels prepare for lower resistance and greater postnatal flow | Gao et al., *Pulm Circ*, PMID `27942377` |
 | `pulmonary_transition` | `baseline` | The interface connects quickly, then shows expansion demand | First breathing lowers pulmonary vascular resistance and raises pulmonary flow | Holmes et al., *Clin Perinatol*, DOI `10.1016/j.clp.2023.11.003` |
 
 Animations use only `baseline`, `extended`, and `reinforced`. Color is never the sole distinction; outline sequence, pulse rhythm, or capacity-ring shape must also change.
@@ -143,12 +143,43 @@ Animations use only `baseline`, `extended`, and `reinforced`. Color is never the
 
 | Difference | Three allowed examples | Three forbidden examples |
 |---|---|---|
-| Build order | Trunk before interface; exchange tips before branches; parallel districts before final links | Skip a required structure; build a later-stage organ early; replace a slower sequence with failure or malformation |
+| Build order | Trunk before interface; branches before exchange tips; parallel districts before final links | Skip a required structure; build a later-stage organ early; replace a slower sequence with failure or malformation |
 | Specification tier | Baseline versus reinforced trunk; standard versus reserve capacity; baseline versus extended coverage | Missing organ; reversed body axis; pathological closure, implantation, or malformation as a selectable tier |
 | Slot | Legal cells within one anatomical region; adjacent legal anchors in one corridor; display offset that preserves topology | Heart in the head; lungs in the pelvis; placenta detached from the maternal-fetal interface |
 | Resource mix | More nutrient energy with less material; more material with longer duration; more signal with greater later convenience | Zero cost; paying directly with waste or stability; lower cost plus better values in all three dimensions |
 
-Delete a candidate before D11 if it changes required organ identity, normal topology, left-right axis, stage membership, or presents pathology as an advantage. Science mappings explain normal timing and engineering analogies; they do not predict pregnancy outcomes.
+Delete a candidate before D11 if it changes required organ identity, normal topology, left-right axis, stage membership, or presents pathology as an advantage. Each candidate must map to a cited normal developmental process. Its tier, resource tradeoff, and visual timing remain engineering analogies, not claims of selectable human variation or pregnancy outcomes.
+
+### D10 candidate-to-evidence review matrix
+
+The matrix makes the T-35 boundary explicit. “Supported process” identifies the
+real developmental observation. “Candidate-specific evidence” asks the stricter
+question required by T-05d and T-35: whether the source establishes the option's
+distinctive tier, order, or rate as a normal human developmental variation. A
+general process citation cannot answer that question.
+
+| Candidate | Supported process | Review source | Source-supported step | Candidate-specific normal variation evidence | T-35 verdict |
+|---|---|---|---|---|---|
+| `cluster_compact` | Human embryo compaction uses contractility and cell adhesion | Firmin et al., DOI `10.1038/s41586-024-07351-x` | Contact surfaces tighten during compaction | Not established for the reinforced city tier | `MUST_REDESIGN_OR_DELETE` |
+| `cluster_wave` | The same cells participate in one compaction process | Firmin et al., DOI `10.1038/s41586-024-07351-x` | Cells come into close contact during compaction | Not established for outward timing or lower link density | `MUST_REDESIGN_OR_DELETE` |
+| `placenta_exchange` | Trophoblast differentiation and villous development establish placental exchange structures | Turco and Moffett, PMID `31776138` | Villous exchange structures develop from differentiated trophoblast lineages | Not established for a stronger exchange route | `MUST_REDESIGN_OR_DELETE` |
+| `placenta_interface` | Implantation includes apposition, adhesion, penetration, and trophoblast differentiation | Huang et al., DOI `10.3389/fcell.2023.1200330` | The interface is established through coordinated implantation events | Not established for faster interface construction | `MUST_REDESIGN_OR_DELETE` |
+| `layers_parallel` | Gastrulation establishes ectoderm, mesoderm, and endoderm through coordinated remodeling | Tyser and Srinivas, DOI `10.1016/j.semcdb.2022.05.004` | All three germ layers arise during the overlapping gastrulation process | Not established for the extended city tier | `MUST_REDESIGN_OR_DELETE` |
+| `layers_staged` | Germ-layer establishment contains distinguishable cell movements and differentiation steps | Tyser and Srinivas, DOI `10.1016/j.semcdb.2022.05.004` | Gastrulation remodels the embryo into three primary germ layers | Not established for sequential option timing | `MUST_REDESIGN_OR_DELETE` |
+| `heart_reinforced` | The human embryonic heart tube bends, grows, and remodels between 3.5 and 8 post-fertilization weeks | Hikspoors et al., PMID `35277594` | Human heart-tube structures remodel across this period | Not established for a reinforced pump interface | `MUST_REDESIGN_OR_DELETE` |
+| `heart_early_flow` | Human embryonic pumping begins during the fourth post-fertilization week | Manner, DOI `10.3390/jcdd9060187` | Pumping begins while later heart remodeling continues | Not established as an earlier-onset normal option | `MUST_REDESIGN_OR_DELETE` |
+| `neural_cranial` | Neural-tube closure uses convergence, extension, bending, and apical constriction | Nikolopoulou et al., PMID `28196803` | Closure involves neural-fold bending, convergence/extension, and apical constriction | Not established for earlier cranial coverage | `MUST_REDESIGN_OR_DELETE` |
+| `neural_distributed` | Human neural-tube closure initiation remains scientifically disputed | Copp et al., PMID `23790957` | A Closure-2-like initiation event in humans remains controversial | No disputed multi-initiation pattern can support an option | `MUST_REDESIGN_OR_DELETE` |
+| `lung_branching` | Signal-regulated branching morphogenesis builds the airway tree | Herriges and Morrisey, PMID `24449833` | Branches appear before exchange-region maturation | Not established for the extended city tier | `MUST_REDESIGN_OR_DELETE` |
+| `lung_maturation` | Epithelial, mesenchymal, and vascular development overlap after airway branching has begun | Herriges and Morrisey, PMID `24449833` | Exchange structures develop after branching begins | Not established for a reinforced city tier | `MUST_REDESIGN_OR_DELETE` |
+| `pulmonary_reserve` | Fetal pulmonary vessels develop and prepare for the postnatal change in flow and resistance | Gao et al., PMID `27942377` | Vascular development supports later postnatal pulmonary flow | Not established as a greater-reserve normal option | `MUST_REDESIGN_OR_DELETE` |
+| `pulmonary_transition` | Initial breathing lowers pulmonary vascular resistance and increases pulmonary flow | Holmes et al., DOI `10.1016/j.clp.2023.11.003` | Ventilation is linked with changing pulmonary flow | Not established as a faster-connection normal option | `MUST_REDESIGN_OR_DELETE` |
+
+T-35 therefore returns all current candidate distinctions to T-05d. The
+candidate IDs remain in D11 only to preserve the current runnable build while
+replacement evidence or redesigned, non-biological decision semantics are
+approved and synchronized across every downstream consumer. D11's existing
+`KEEP_BOTH` flags are gameplay-balance results, not T-35 scientific approval.
 
 ## Table D11: Non-dominance and equal-weight balance matrix
 
