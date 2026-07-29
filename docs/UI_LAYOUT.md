@@ -186,7 +186,79 @@ Create one native-resolution paused organ-archive modal frame for “Metabolis: 
 
 Create one native-resolution paused chapter-summary modal frame for “Metabolis: Birth of the City of Life,” exactly 544 × 304 pixels for placement at reference-canvas Rect2(48,28,544,304), with a fully opaque #514854 backing, a consistent 2-pixel #140F1D exterior outline, 12-pixel horizontal and 8-pixel vertical inner padding, a 20-pixel header followed by a 4-pixel gap, and exactly six fixed top-to-bottom item blocks separated by 4 pixels. Reserve exactly four 10-pixel lines per item for the Godot built-in font at 8-pixel size, keep all six items visible at once, and place a persistent two-bar pause symbol in the header using existing palette colors so the paused state remains visible without text; opening this modal pauses operation time and resource settlement, and closing it resumes both. The six visual slots must remain fixed for current stage, structures formed, new system connection, three core knowledge points, before/after body-city change, and newly unlocked encyclopedia content, with no seventh slot even when Stage Two combines placental and germ-layer content. Use exactly and only the locked palette #340106, #BA3A3F, #C25453, #48A5CF, #7AD1FD, #CDD9E1, #29314A, #404586, #53548C, #91465F, #BE6E87, #C98197, #B26C09, #E2953A, #DDAD7E, #73CD9B, #B1FFD1, #F4FFF8, #140F1D, #514854, #817582, #E8DCCF. Apply one uniform 2-pixel exterior outline in #140F1D and 1-pixel #514854 internal separators, with no colored exterior outline and no mixed outline width on the modal perimeter. Forbidden elements: seventh item, scrollbar, pagination, page dots, tabs, folding, collapsible sections, auto-expanding items, font shrinking, gradients, rounded-corner shadows, semi-transparent blur, frosted glass, feathering, anti-aliasing, glow, colors outside the locked palette, baked prose, anatomy, blood, or an invisible pause state.
 
-## 9. D-17 acceptance
+## 9. D-13b Candidate-card comparison area
+
+The build-decision phase overlays a row of candidate cards on top of the main city map. Every card shares one identical outer frame and one identical internal row template. Runtime composable rows and the PixelLab card-art slot must not alter the per-card rectangle, grid-aligned placement, or layout rule.
+
+### Card outer rectangle
+
+| Property | Value | px |
+|---|---:|---:|
+| Card width | `148 px` | 148 |
+| Card height | `256 px` | 256 |
+| Exterior border | `2 px` uniform `#140F1D` | 2 |
+| Inner padding | `8 px` horizontal / `8 px` vertical | 8 |
+| Content width | `148 − 2 × 2 − 2 × 8 = 128 px` | 128 |
+| Content height | `256 − 2 × 2 − 2 × 8 = 236 px` | 236 |
+
+Godot notation: `Rect2(0, 0, 148, 256)` before placement.
+
+### Card-to-card spacing
+
+| Candidate count | Gap between cards | px |
+|---|---:|---:|
+| 2 | `248 px` | 248 |
+| 3 | `16 px` | 16 |
+| 4 | `16 px` | 16 |
+
+### Deterministic placement rule
+
+The card row is centered on the reference canvas. For `N` cards at width `148 px` each:
+
+```
+total_width = N × 148 + (N − 1) × gap
+margin_x = (640 − total_width) / 2
+card_x[i] = margin_x + i × (148 + gap)   for i = 0 … N−1
+card_y = 40 + (320 − 256) / 2 = 72
+```
+
+| N | `total_width` | `margin_x` | `card_x` positions |
+|---|---:|---:|---|
+| 2 | `544` | `48` | `48`, `344` |
+| 3 | `476` | `82` | `82`, `246`, `410` |
+| 4 | `640` | `0` | `0`, `164`, `328`, `492` |
+
+All card `card_y` coordinates are `72`. The card row does not overlap the persistent top-40-pixel UI strip. All coordinates are integer pixels.
+
+### Card internal row template
+
+Every card reserves the following vertical allocation inside its `128 × 236 px` content area. The PixelLab concept-art slot occupies the largest flat rectangle.
+
+| Row | Height | Content | Runtime label or slot |
+|---|---:|---|---|
+| Concept art | `128 px` | PixelLab-generated candidate illustration at `128 × 128 px`, integer-pixel placement, `22`-color locked palette | Image slot, no text |
+| Art-to-name gap | `4 px` | Transparent spacer | — |
+| Candidate name | `12 px` | `8 px` Godot built-in font, left-aligned, one line | Runtime option name |
+| Name-to-metrics gap | `4 px` | Transparent spacer | — |
+| Metric row (×3) | `22 px` each | `8 px` font label left, `128 × 12 px` comparison bar below; three rows for network efficiency, build duration, future convenience | Runtime values, units, and normalized bars |
+| Metrics-to-cost gap | `4 px` | Transparent spacer | — |
+| Resource cost row | `24 px` | Three `36 × 16 px` cost cells (nutrient energy, cell material, developmental signal), each with a `16 × 16 px` resource-icon slot and a runtime-value slot | Runtime cost values |
+
+Total content height: `128 + 4 + 12 + 4 + 3 × 22 + 4 + 24 = 242 px`. With `236 px` available, the remaining `6 px` are distributed equally above the art slot and below the cost row as `3 px` top and `3 px` bottom internal margins.
+
+### Required PixelLab card art (D-13b)
+
+The concept-art slot is `128 × 128 px` and must contain exactly one PixelLab-generated candidate illustration per build option. Each illustration shows the candidate organ, district, or interface in a top-down orthographic view matching the main city-map style. Every illustration uses the locked `22`-color palette, binary alpha, `1`-pixel `#140F1D` exterior outlines, and `#514854` internal structure lines. Forbidden: baked text, baked metric numbers, comparison bars, cost icons, minimap elements, gradients, anti-aliasing, partial transparency, or colors outside the palette. The art distinguishes candidates through silhouette, structure, and construction-stage markers without text.
+
+Seven build decisions × two options = fourteen `128 × 128 px` candidate art slots. Each slot is addressed by `build_decision_id` and `build_option_id` from `BUILD_DECISION_SPEC.md` Table D1.
+
+### D-13b acceptance
+
+- Draw the six region rectangles from Section 2 plus the card placement rectangle for `N = 2, 3, 4`. No overlap with the persistent top-40-pixel UI strip, and all rectangles must remain within `Rect2(0, 0, 640, 360)`.
+- Fill one card with Chinese test characters in the `8 px` Godot font and verify that `128 px` accommodates 16 characters at full width and that three metric labels, three `128 px` comparison bars, one candidate name, and three cost cells fit without clipping.
+- Verify that the art slot is square at `128 × 128 px` and contains no baked text, baked metrics, or out-of-palette colors.
+
+## 10. D-17 acceptance
 
 - Draw the three containers at their exact native sizes and fill them with monospaced `8 px` full-width Chinese test characters. G1 must fit exactly 26 characters on each of two lines; G2 must fit exactly 66 characters per line and three lines in each of seven fields; G3 must fit exactly 64 characters per line and four lines in each of six items.
 - Open the organ archive and chapter summary for 30 real-time seconds each. Their two-bar pause symbols must remain visible, and operation time, resource settlement, and map simulation values must remain unchanged until close.

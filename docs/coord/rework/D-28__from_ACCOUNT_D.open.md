@@ -1,6 +1,6 @@
 target_task: D-28
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 88041591dbfb688449484e66fa0cc8fc6aeb24a3
 completed_work:
   - tools/check_assets.py
