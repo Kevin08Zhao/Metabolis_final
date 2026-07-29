@@ -300,7 +300,46 @@ func _apply_stage_config(stage_config: Dictionary, stage_id: StringName) -> void
 # step. When the owning task lands, its handler replaces the body here.
 # ---------------------------------------------------------------------------
 
+## Handlers registered for a step, keyed by the `Step` ordinal. A step with a
+## handler calls it and never reaches its placeholder.
+##
+## This is the seam the placeholders below were written against. Their comments
+## say the owning task's handler replaces the body; registering one does exactly
+## that, without this class learning what any system is. An unassembled run,
+## which is every acceptance driver written before the systems were wired
+## together, registers nothing and behaves exactly as it did.
+var _step_handlers: Dictionary = {}
+
+
+## Register the real behaviour of a step. Passing an invalid callable clears the
+## registration and returns the step to its placeholder.
+func register_step_handler(step: int, handler: Callable) -> bool:
+	if step < 0 or step >= STEP_IDS.size():
+		push_error("%s Rejected a handler for an out-of-range step: %s" % [LOG_PREFIX, step])
+		return false
+	if not handler.is_valid():
+		_step_handlers.erase(step)
+		return true
+	_step_handlers[step] = handler
+	return true
+
+
+func has_step_handler(step: int) -> bool:
+	return _step_handlers.has(step)
+
+
 func _run_step_placeholder(step: int) -> void:
+	if _step_handlers.has(step):
+		var handler: Callable = _step_handlers[step]
+		if handler.is_valid():
+			handler.call()
+			return
+		push_warning(
+			"%s The handler for step %s became invalid; falling back to the placeholder."
+			% [LOG_PREFIX, STEP_IDS[step]]
+		)
+		_step_handlers.erase(step)
+
 	match step:
 		Step.OBSERVE_STATE:
 			_placeholder_observe_state()

@@ -18,6 +18,7 @@ Task-produced files are not listed here. Their owner is the account recorded in
 | `src/ui/title.tscn` | ACCOUNT_C | See the note below on the three runtime scenes |
 | `src/game/main.tscn` | ACCOUNT_C | Same |
 | `src/ui/ending.tscn` | ACCOUNT_C | Same |
+| `src/game/game_assembly.gd` | ACCOUNT_C | The wiring that turns the accepted scripts into a running game. Produced by no task, needed by every one downstream of the loop. See the note below |
 
 `docs/coord/README.md` and the markers under `docs/coord/done/` remain with
 ACCOUNT_A and with each task's own account respectively. This document does not
@@ -50,6 +51,36 @@ default styling throughout, and no texture assigned to either background slot.
 The title's visual treatment, font sizing, letter spacing, pulse, and the
 background image itself remain D-29's, and landing them needs no change to the
 node structure.
+
+## The assembly
+
+`src/game/game_assembly.gd` is here for the same reason as the scenes. Every
+script in this repository was delivered and accepted on its own, and nothing
+ever put them together: before it, only the boot scene carried a script, no
+script instantiated another system, and all ten steps of `ChapterFlow` called
+placeholders that returned immediately. Nothing in any queue declares the
+wiring, and every task downstream of the loop needs it — T-38 is marked DONE
+only after a complete playthrough, and T-39 requires evidence of one.
+
+It does three things and no more. It constructs each system once through the
+`configure` entry point that system already declared, it puts each panel into
+the region `src/game/main.tscn` names for it, and it registers a handler for
+each of the ten steps in table C1 of `docs/CHAPTER_FLOW_STEPS.md`. It implements
+no rule, owns no value, and replaces no task's logic. The flow's own exit
+conditions still decide when a step may be left.
+
+Where a step's owning task left a stub, the step is driven as far as that stub
+allows and the shortfall is reported through `unimplemented_steps` rather than
+filled in silently.
+
+### The step handler seam
+
+`ChapterFlow.register_step_handler(step, callable)` is what lets a system take
+over a step. A step with a handler calls it and never reaches its placeholder;
+a step without one behaves exactly as it did before. That is the seam the
+placeholder comments were written against — each says the owning task's handler
+replaces the body — so registering one is the sanctioned route rather than
+editing the flow for every system.
 
 ### How the title scene reaches the router
 
