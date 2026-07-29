@@ -162,7 +162,7 @@ func _build_default_layout() -> void:
 		var comparison_bar := ProgressBar.new()
 		comparison_bar.name = "ComparisonBar"
 		comparison_bar.show_percentage = false
-		comparison_bar.custom_minimum_size = Vector2(160.0, 12.0)
+		comparison_bar.custom_minimum_size = Vector2(128.0, 12.0)
 		row.add_child(value_label)
 		row.add_child(comparison_bar)
 		add_child(row)

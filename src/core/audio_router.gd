@@ -30,6 +30,38 @@ const AMBIENT_LOOP_DURATION_SEC_BY_STABILITY_BAND: Array[float] = [
 	1.8,
 ]
 const AMBIENT_VOLUME_DB_BY_STABILITY_BAND: Array[float] = [-16.0, -12.0, -8.0]
+const BIRTH_PULMONARY_FLOW_STATE := 3
+const BIRTH_DUCK_DB := 6.0
+const BIRTH_DUCK_FADE_SEC := 0.10
+const BIRTH_CUE_DURATION_SEC := 0.85
+const EVENT_VOLUME_DB := {
+	&"birth_sequence_completed": -13.0,
+	&"birth_state_changed": -15.0,
+	&"resource_shortage_raised": -16.0,
+	&"build_decision_confirmed": -17.0,
+	&"minigame_rated": -17.0,
+	&"transport_pressure_appeared": -18.0,
+	&"waste_buildup_appeared": -18.0,
+	&"signal_gap_appeared": -18.0,
+	&"stage_advanced": -19.0,
+	&"system_observation_started": -19.0,
+}
+const EVENT_PRIORITY := {
+	&"birth_sequence_completed": 1,
+	&"birth_state_changed": 2,
+	&"resource_shortage_raised": 3,
+	&"build_decision_confirmed": 4,
+	&"minigame_rated": 4,
+	&"transport_pressure_appeared": 5,
+	&"waste_buildup_appeared": 5,
+	&"signal_gap_appeared": 5,
+	&"stage_advanced": 6,
+	&"system_observation_started": 6,
+}
+const IGNORE_WHILE_PLAYING_EVENTS: Array[StringName] = [
+	&"birth_sequence_completed",
+	&"birth_state_changed",
+]
 
 ## EVENT_API marks these events as repeatable within one tick.
 const HIGH_FREQUENCY_EVENTS: Array[StringName] = [
@@ -62,11 +94,13 @@ var _ambient_band := 0
 var _pending_ambient_band := -1
 var _ambient_transition_count := 0
 var _one_shot_players: Array[AudioStreamPlayer] = []
-var _next_reuse_index := 0
+var _one_shot_event_names: Array[StringName] = []
+var _one_shot_priorities: Array[int] = []
 var _high_frequency_interval_msec := 0
 var _last_played_at_msec: Dictionary = {}
 var _warned_paths: Dictionary = {}
 var _ambient_tween: Tween
+var _birth_duck_tween: Tween
 var _graceful_quit_started := false
 
 
@@ -149,6 +183,9 @@ func set_muted(value: bool) -> void:
 		for player in _one_shot_players:
 			player.stop()
 			player.stream = null
+		for index in _one_shot_event_names.size():
+			_one_shot_event_names[index] = &""
+			_one_shot_priorities[index] = 0
 		return
 
 	_start_ambient()
@@ -206,8 +243,11 @@ func _create_players() -> void:
 	for player_index in pool_size:
 		var player := AudioStreamPlayer.new()
 		player.name = "OneShot%02d" % (player_index + 1)
+		player.finished.connect(_on_one_shot_finished.bind(player_index))
 		add_child(player)
 		_one_shot_players.append(player)
+		_one_shot_event_names.append(&"")
+		_one_shot_priorities.append(0)
 
 
 func _connect_event_bus() -> void:
@@ -229,10 +269,17 @@ func _connect_event_bus() -> void:
 func _route_event(event_name: StringName, arguments: Array) -> void:
 	if event_name == &"stability_band_changed":
 		_update_ambient_for_stability(int(arguments[1]))
-	_play_event_sfx(event_name)
+	if (
+		event_name == &"birth_state_changed"
+		and int(arguments[1]) != BIRTH_PULMONARY_FLOW_STATE
+	):
+		return
+	if event_name == &"birth_sequence_completed":
+		_duck_ambient_for_birth()
+	_play_event_sfx(event_name, arguments)
 
 
-func _play_event_sfx(event_name: StringName) -> void:
+func _play_event_sfx(event_name: StringName, arguments: Array = []) -> void:
 	if _muted or _one_shot_players.is_empty():
 		return
 	if _is_debounced(event_name):
@@ -241,11 +288,14 @@ func _play_event_sfx(event_name: StringName) -> void:
 	var stream := _load_wav(event_audio_path(event_name), false)
 	if stream == null:
 		return
+	if event_name == &"minigame_rated" and arguments.size() >= 2:
+		stream = _trim_minigame_rating(stream, int(arguments[1]))
 
-	var player := _acquire_one_shot_player()
+	var player := _acquire_one_shot_player(event_name)
 	if player == null:
 		return
 	player.stream = stream
+	player.volume_db = float(EVENT_VOLUME_DB.get(event_name, -18.0))
 	player.play()
 
 
@@ -265,15 +315,48 @@ func _is_debounced(event_name: StringName) -> bool:
 	return false
 
 
-func _acquire_one_shot_player() -> AudioStreamPlayer:
-	for player in _one_shot_players:
-		if not player.playing:
-			return player
+func _acquire_one_shot_player(event_name: StringName) -> AudioStreamPlayer:
+	var incoming_priority := int(EVENT_PRIORITY.get(event_name, 99))
+	for index in _one_shot_players.size():
+		if (
+			_one_shot_players[index].playing
+			and _one_shot_event_names[index] == event_name
+		):
+			if IGNORE_WHILE_PLAYING_EVENTS.has(event_name):
+				return null
+			_one_shot_players[index].stop()
+			_assign_one_shot(index, event_name, incoming_priority)
+			return _one_shot_players[index]
 
-	var player := _one_shot_players[_next_reuse_index]
-	_next_reuse_index = (_next_reuse_index + 1) % _one_shot_players.size()
-	player.stop()
-	return player
+	for index in _one_shot_players.size():
+		if not _one_shot_players[index].playing:
+			_assign_one_shot(index, event_name, incoming_priority)
+			return _one_shot_players[index]
+
+	var replacement_index := -1
+	var lowest_importance := -1
+	for index in _one_shot_priorities.size():
+		if _one_shot_priorities[index] > lowest_importance:
+			lowest_importance = _one_shot_priorities[index]
+			replacement_index = index
+	if replacement_index < 0 or lowest_importance <= incoming_priority:
+		return null
+
+	_one_shot_players[replacement_index].stop()
+	_assign_one_shot(replacement_index, event_name, incoming_priority)
+	return _one_shot_players[replacement_index]
+
+
+func _assign_one_shot(index: int, event_name: StringName, priority: int) -> void:
+	_one_shot_event_names[index] = event_name
+	_one_shot_priorities[index] = priority
+
+
+func _on_one_shot_finished(index: int) -> void:
+	if index < 0 or index >= _one_shot_event_names.size():
+		return
+	_one_shot_event_names[index] = &""
+	_one_shot_priorities[index] = 0
 
 
 func _start_ambient() -> void:
@@ -397,12 +480,42 @@ func _load_ambient_stream(stability_band: int) -> AudioStreamWAV:
 	return stream
 
 
+func _duck_ambient_for_birth() -> void:
+	if _muted or _ambient_players.is_empty():
+		return
+	var player := _ambient_players[_active_ambient_player_index]
+	if not player.playing:
+		return
+	if _birth_duck_tween != null:
+		_birth_duck_tween.kill()
+	var normal_volume := AMBIENT_VOLUME_DB_BY_STABILITY_BAND[_ambient_band]
+	_birth_duck_tween = create_tween()
+	_birth_duck_tween.tween_property(
+		player,
+		"volume_db",
+		normal_volume - BIRTH_DUCK_DB,
+		BIRTH_DUCK_FADE_SEC
+	)
+	_birth_duck_tween.tween_interval(
+		BIRTH_CUE_DURATION_SEC - BIRTH_DUCK_FADE_SEC
+	)
+	_birth_duck_tween.tween_property(
+		player,
+		"volume_db",
+		normal_volume,
+		BIRTH_DUCK_FADE_SEC
+	)
+
+
 func _stop_ambient() -> void:
 	if _ambient_cycle_timer != null:
 		_ambient_cycle_timer.stop()
 	if _ambient_tween != null:
 		_ambient_tween.kill()
 		_ambient_tween = null
+	if _birth_duck_tween != null:
+		_birth_duck_tween.kill()
+		_birth_duck_tween = null
 	for player in _ambient_players:
 		player.stop()
 		player.stream = null
@@ -411,9 +524,12 @@ func _stop_ambient() -> void:
 
 func _shutdown_audio() -> void:
 	_stop_ambient()
-	for player in _one_shot_players:
+	for index in _one_shot_players.size():
+		var player := _one_shot_players[index]
 		player.stop()
 		player.stream = null
+		_one_shot_event_names[index] = &""
+		_one_shot_priorities[index] = 0
 	_last_played_at_msec.clear()
 	_warned_paths.clear()
 
@@ -443,6 +559,8 @@ func _release_audio_nodes() -> void:
 			remove_child(player)
 		player.free()
 	_one_shot_players.clear()
+	_one_shot_event_names.clear()
+	_one_shot_priorities.clear()
 
 
 func _valid_ambient_band(stability_band: int) -> bool:
@@ -466,6 +584,20 @@ func _load_wav(path: String, loop: bool) -> AudioStreamWAV:
 		stream.loop_end = maxi(1, roundi(stream.get_length() * float(stream.mix_rate)))
 		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	return stream
+
+
+func _trim_minigame_rating(stream: AudioStreamWAV, stars: int) -> AudioStreamWAV:
+	if stream.format != AudioStreamWAV.FORMAT_16_BITS or stream.stereo:
+		return stream
+	var durations_msec: Array[int] = [90, 190, 360]
+	var duration_msec: int = durations_msec[clampi(stars, 1, 3) - 1]
+	var byte_count := mini(
+		stream.data.size(),
+		roundi(float(stream.mix_rate) * float(duration_msec) / 1000.0) * 2
+	)
+	var trimmed := stream.duplicate() as AudioStreamWAV
+	trimmed.data = stream.data.slice(0, byte_count)
+	return trimmed
 
 
 func _warn_missing_once(path: String) -> void:

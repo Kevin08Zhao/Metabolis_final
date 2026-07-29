@@ -166,38 +166,32 @@
     "D-06",
     "D-07",
     "D-08",
+    "D-09",
     "D-10",
     "D-11",
     "D-12",
     "D-13a",
+    "D-13b",
     "D-14L",
     "D-15",
     "D-15a",
     "D-16",
     "D-17L",
     "D-18",
+    "D-19",
+    "D-19a",
     "D-20",
     "D-21",
-    "D-24"
+    "D-22",
+    "D-23",
+    "D-24",
+    "D-25",
+    "D-26",
+    "D-27",
+    "D-28",
+    "D-29"
   ],
-  "blocked_tasks": [
-    {
-      "task_id": "D-09",
-      "reason": "All 132 deterministic vessel variants pass art validation, but T-15a edge records do not expose flow_direction, passage_state, route_role, or an unambiguous tee/fourway entry-exit rule. Runtime selection cannot be completed without upstream contract work."
-    },
-    {
-      "task_id": "D-13b",
-      "reason": "Table D8 defines metric content and bars, but UI_LAYOUT and the live option preview do not define the candidate-card allocation rectangle, card height, spacing, or the 2-4 card arrangement required for exact static output."
-    },
-    {
-      "task_id": "D-29",
-      "reason": "The background source is complete, but T-32 confirms title, game, and ending scenes are still placeholders. The full title/disclaimer/font/screenshot task cannot receive DONE until those runtime scenes exist."
-    },
-    {
-      "task_id": "D-25",
-      "reason": "The stable heartbeat fallback passes PCM and loop checks, but T-37 exposes one fixed-cadence ambient stream. It cannot match the 1000/440/1800 ms D-21 loops without state-specific playback and crossfade support."
-    }
-  ],
+  "blocked_tasks": [],
   "actual_usage": {
     "baseline_generations_used": 65,
     "baseline_generations_remaining": 4935,
@@ -211,8 +205,8 @@
     "pf03_generation_calls": 0,
     "pf03_jobs_created": 0,
     "pf03_actual_generation_units": 0,
-    "current_generations_used": 157,
-    "current_generations_remaining": 4843,
+    "current_generations_used": 170,
+    "current_generations_remaining": 4830,
     "subscription": "active Tier 2 Pixel Artisan",
     "credits_usd": 0.0
   },

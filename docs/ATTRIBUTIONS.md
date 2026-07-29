@@ -42,6 +42,19 @@ field; the authoritative P-F00 batch total is 91 generation units.
 | 2026-07-28 | D-15 knowledge reference | `create_image_pixflux` | `14fc8cef-04b8-4063-986f-350161038466` | 15006 | UNREPORTED INDIVIDUALLY | Style reference |
 | 2026-07-28 | D-29 title background source | `create_image_pixflux` | `f9979329-be15-4e32-bbe7-bdbcf88de454` | 29001 | UNREPORTED INDIVIDUALLY | Accepted background source |
 | 2026-07-28 | D-20 heartbeat motion source | `animate_image` | `97436fcf-d7c1-44ba-84cd-5a66f44d0a6e` | 20001 | 1 | Accepted four generated frames |
+| 2026-07-29 | D-22 umbilical keyframe 1 | `create_image_pixflux` | `f8554fcb-a0e6-49e4-90c7-7f2ff2eed431` | 22001 | 1 | Accepted |
+| 2026-07-29 | D-22 umbilical keyframe 2 | `create_image_pixflux` | `286884f7-be39-4af4-be15-7e29a01b43a2` | 22002 | 1 | Accepted |
+| 2026-07-29 | D-22 umbilical keyframe 3 | `create_image_pixflux` | `29e588cb-3476-43b4-a117-c2f2538876fb` | 22003 | 1 | Accepted |
+| 2026-07-29 | D-22 pulmonary keyframe 1 | `create_image_pixflux` | `cd6da867-c9a9-404e-b32d-35b5dc0cacdb` | 22101 | 1 | Accepted |
+| 2026-07-29 | D-22 pulmonary keyframe 2 | `create_image_pixflux` | `4f5e5385-f1b9-4730-adb8-c5b6b58a1754` | 22102 | 1 | Accepted |
+| 2026-07-29 | D-22 pulmonary keyframe 3 | `create_image_pixflux` | `995e3ac0-8ac5-44eb-80dc-09baf410ed17` | 22103 | 1 | Accepted |
+| 2026-07-29 | D-22 shunt keyframe 1 | `create_image_pixflux` | `86826c3d-0f52-4fd1-92f5-06d897c860cb` | 22201 | 1 | Accepted |
+| 2026-07-29 | D-22 shunt keyframe 2 | `create_image_pixflux` | `cde977b9-ec02-45ea-84ea-bb74139fdec8` | 22202 | 1 | Accepted |
+| 2026-07-29 | D-22 shunt keyframe 3 | `create_image_pixflux` | `f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd` | 22203 | 1 | Accepted |
+| 2026-07-29 | D-22 systems-online keyframe | `create_image_pixflux` | `2f4429be-17be-4b4a-83e3-43c896b9d9e3` | 22301 | 1 | Accepted |
+| 2026-07-29 | D-22 ending keyframe 1 | `create_image_pixflux` | `30542acc-cd3e-490a-8481-ef5441a71bec` | 22401 | 1 | Accepted |
+| 2026-07-29 | D-22 ending keyframe 2 | `create_image_pixflux` | `9242e92c-0e8e-4eca-957e-4224907a3097` | 22402 | 1 | Accepted |
+| 2026-07-29 | D-22 ending keyframe 3 | `create_image_pixflux` | `ffc51dab-5355-40e6-9c62-f6e4b89c8cb8` | 22403 | 1 | Accepted |
 
 P-F00 usage reconciliation: 65 used before the accelerated batch, 91 used by
 the batch, and 156 used afterward. D-20 then used one additional generation.
@@ -65,6 +78,9 @@ the exact output paths and hashes.
 | D-15a/D-16 | Deterministic task-rating and bottleneck icons | `tools/build_d15a_d16_icons.py`, task manifests |
 | D-20/D-21 | Deterministic heartbeat sheet assembly and timing/state variants | `tools/build_d20_heartbeat.py`, `tools/build_d21_heartbeat_states.py`, task manifests |
 | D-25 three-band loops | Deterministic PCM heartbeat loops with no external sample | `tools/build_d25_heartbeat_audio.py`, `docs/HEARTBEAT_AUDIO_SPEC.md`, `docs/assets/D-25_MANIFEST.md` |
+| D-26/D-27 event audio | Ten deterministic PCM one-shots with no external samples | `tools/build_d26_d27_audio.py`, `docs/BIRTH_AUDIO_SPEC.md`, `docs/AUDIO_MIX.md` |
+| D-23 birth fallbacks | Deterministic copies of the accepted D-22 endpoints | `tools/build_d23_fallbacks.py`, `docs/assets/D-23_MANIFEST.md` |
+| D-29 screenshots | Godot 4.7.1 runtime captures; no generated screenshot content | `tools/capture_d29_screenshots.gd`, `art/screenshots/` |
 | D-29 | Quantized and validated title background derived from the attributed source | `fetch_plans/D-29_fetch_plan.json`, `docs/assets/D-29_MANIFEST.md` |
 
 ## License Rules

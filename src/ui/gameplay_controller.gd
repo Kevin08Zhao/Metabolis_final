@@ -24,6 +24,7 @@ var _grid_manager: GridManager = null
 var _city_art: Node2D = null
 var _network_builder: NetworkBuilder = null
 var _birth_art: TextureRect = null
+var _birth_machine: BirthMachine = null
 
 var _build_decision: BuildDecision = null
 var _operation_decision: OperationDecision = null
@@ -46,12 +47,14 @@ var _selected_build_option_id: StringName = &""
 var _operation_presented_id: StringName = &""
 var _minigame_progress := 0.0
 var _built_organs: Array[Dictionary] = []
+var _birth_metrics: Dictionary = {}
 
 
 func _ready() -> void:
 	_build_panel()
 	EventBus.stage_loaded.connect(_on_stage_loaded)
 	EventBus.phase_changed.connect(_on_phase_changed)
+	EventBus.birth_rolled_back.connect(_on_birth_rolled_back)
 
 
 func _process(delta: float) -> void:
@@ -69,7 +72,8 @@ func configure(
 	grid_manager: GridManager,
 	city_art: Node2D,
 	network_builder: NetworkBuilder,
-	birth_art: TextureRect
+	birth_art: TextureRect,
+	birth_machine: BirthMachine
 ) -> void:
 	_flow = flow
 	_resources = resources
@@ -78,6 +82,7 @@ func configure(
 	_city_art = city_art
 	_network_builder = network_builder
 	_birth_art = birth_art
+	_birth_machine = birth_machine
 
 	_build_decision = BuildDecision.new()
 	_build_decision.name = "BuildDecision"
@@ -174,6 +179,21 @@ func _refresh() -> void:
 	_feedback.text = ""
 	_refresh_birth_art()
 	if _flow.is_run_complete():
+		if (
+			_birth_machine != null
+			and _birth_machine.current_state() == BirthMachine.State.FAILURE_ROLLBACK
+		):
+			_title.text = "Birth Readiness Recovery"
+			_body.text = (
+				"The whole-body check found a recoverable gap. "
+				+ "Run another recovery cycle, then the same legal gate retries."
+			)
+			_add_action_button(
+				"RecoverBirth",
+				"Run Recovery Cycle",
+				_recover_birth_readiness
+			)
+			return
 		_title.text = "Run Complete"
 		_body.text = "All four development stages are complete."
 		return
@@ -219,10 +239,116 @@ func _refresh_birth_art() -> void:
 	if _birth_art == null:
 		return
 	if _flow.is_run_complete():
-		if _birth_art.call("current_frame_id") == &"":
-			_birth_art.call("start_sequence")
+		if (
+			_birth_machine != null
+			and _birth_machine.current_state() == BirthMachine.State.IDLE
+		):
+			_birth_metrics = _current_birth_metrics()
+			_birth_machine.city_metrics = _birth_metrics.duplicate(true)
+			_birth_machine.start()
 		return
 	_birth_art.call("hide_frame")
+
+
+func _current_birth_metrics() -> Dictionary:
+	var pulmonary_ready := 0.0
+	var built_ids: Array[StringName] = []
+	for organ in _built_organs:
+		built_ids.append(StringName(organ.get("organ_id", &"")))
+	if (
+		built_ids.has(&"lung_exchange")
+		and built_ids.has(&"pulmonary_interface")
+	):
+		pulmonary_ready = 1.0
+	return {
+		&"transport_coverage": clampf(_resource_tick.transport_coverage, 0.0, 1.0),
+		&"signal_coverage": clampf(_resource_tick.signal_coverage, 0.0, 1.0),
+		&"pulmonary_system_readiness": pulmonary_ready,
+		&"waste": _resources.waste,
+		&"stability": _resources.stability,
+	}
+
+
+func _recover_birth_readiness() -> void:
+	if (
+		_birth_machine == null
+		or _birth_machine.current_state() != BirthMachine.State.FAILURE_ROLLBACK
+	):
+		return
+	var option_path := "operations.options.waste_priority"
+	var cost := _dictionary_value("%s.cost" % option_path)
+	var outcome := _dictionary_value("%s.outcome" % option_path)
+	var allocation := _dictionary_value("%s.allocation_weights" % option_path)
+	var before := _resource_snapshot()
+	var prepared := before.duplicate(true)
+	var tick_delta := maxf(
+		float(Balance.get_value("tick_interval_sec", 1.0)),
+		0.001
+	)
+	_resource_tick.initialize_from_balance(prepared)
+	var wait_ticks := 0
+	while not _can_afford_recovery(prepared, cost) and wait_ticks < 120:
+		var wait_result := _resource_tick.settle_tick(
+			tick_delta,
+			_settlement_input()
+		)
+		_apply_resource_snapshot(wait_result)
+		prepared = _resource_snapshot()
+		wait_ticks += 1
+	var can_operate := _can_afford_recovery(prepared, cost)
+	if can_operate:
+		for resource_id in [
+			&"nutrient_energy",
+			&"cell_material",
+			&"development_signal",
+		]:
+			prepared[resource_id] = (
+				float(prepared[resource_id])
+				- float(cost.get(resource_id, 0.0))
+			)
+		prepared[&"waste"] = clampf(
+			float(prepared[&"waste"]) + float(outcome.get("waste", 0.0)),
+			0.0,
+			100.0
+		)
+		prepared[&"stability"] = clampf(
+			float(prepared[&"stability"]) + float(outcome.get("stability", 0.0)),
+			0.0,
+			100.0
+		)
+
+	_resource_tick.initialize_from_balance(prepared)
+	var settlement_input := _settlement_input()
+	if can_operate:
+		settlement_input["operation_id"] = &"waste_priority"
+		_apply_operation_allocation(settlement_input, allocation)
+	var settled := _resource_tick.settle_tick(tick_delta, settlement_input)
+	_apply_resource_snapshot(settled)
+	_sync_resource_bar()
+	_birth_metrics = _current_birth_metrics()
+	_birth_machine.city_metrics = _birth_metrics.duplicate(true)
+	_birth_machine.acknowledge_rollback()
+	_refresh()
+	visual_state_changed.emit()
+
+
+func _can_afford_recovery(resources: Dictionary, cost: Dictionary) -> bool:
+	for resource_id in [
+		&"nutrient_energy",
+		&"cell_material",
+		&"development_signal",
+	]:
+		if float(resources.get(resource_id, 0.0)) < float(cost.get(resource_id, INF)):
+			return false
+	return true
+
+
+func _on_birth_rolled_back(
+	_from_state: int,
+	_reason_code: StringName
+) -> void:
+	_refresh()
+	visual_state_changed.emit()
 
 
 func _activate_stage_art() -> void:
@@ -659,6 +785,21 @@ func _settlement_input() -> Dictionary:
 	var transport_capacity := 0.0
 	for edge in edges:
 		transport_capacity += float(edge.get("effective_capacity", 0.0))
+	var waste_processing_capacity := 0.0
+	for organ in _built_organs:
+		if StringName(organ.get("state", organ.get("state_id", ""))) != &"operating":
+			continue
+		var organ_id := StringName(organ.get("organ_id", ""))
+		waste_processing_capacity += (
+			float(
+				Balance.get_value(
+					"organs.%s.per_tick_consumption.waste" % organ_id,
+					0.0
+				)
+			)
+			* maxf(float(organ.get("active_multiplier", 1.0)), 0.0)
+			* maxf(float(organ.get("tier_multiplier", 1.0)), 0.0)
+		)
 	var source_ids: Array[StringName] = []
 	for node in nodes:
 		if int(node.get("sequence", -1)) == 0:
@@ -676,9 +817,33 @@ func _settlement_input() -> Dictionary:
 			float(_resources.development_signal),
 			0.0
 		),
+		"available_waste_processing": waste_processing_capacity,
 		"resource_satisfaction_by_organ": satisfaction,
 		"intervention_waste_removal": 0.0,
 	}
+
+
+func _apply_operation_allocation(
+	settlement_input: Dictionary,
+	allocation: Dictionary
+) -> void:
+	settlement_input["operation_allocation"] = allocation.duplicate(true)
+	if settlement_input.has("available_transport_flow"):
+		settlement_input["available_transport_flow"] = (
+			float(settlement_input["available_transport_flow"])
+			* float(allocation.get("transport", 0.0))
+		)
+	if settlement_input.has("available_development_signal_flow"):
+		settlement_input["available_development_signal_flow"] = (
+			float(settlement_input["available_development_signal_flow"])
+			* float(allocation.get("signal", 0.0))
+		)
+	if settlement_input.has("available_waste_processing"):
+		settlement_input["intervention_waste_removal"] = (
+			float(settlement_input.get("intervention_waste_removal", 0.0))
+			+ float(settlement_input["available_waste_processing"])
+			* float(allocation.get("waste", 0.0))
+		)
 
 
 func _register_built_organ(

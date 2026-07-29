@@ -288,24 +288,146 @@ func _complete_remaining_run(game: Node, flow: Node) -> void:
 	_expect(flow.is_run_complete(), "Interactive controls must complete all four stages")
 	var action_title := game.find_child("ActionTitle", true, false) as Label
 	_expect(
-		action_title != null and action_title.text == "Run Complete",
-		"Completing stage four must replace the action panel with a run-complete state"
+		action_title != null
+		and action_title.text in ["Run Complete", "Birth Readiness Recovery"],
+		"Completing stage four must expose completion or a recoverable birth gate"
 	)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	var birth_art := game.get_node_or_null("BirthArt") as TextureRect
+	var birth_machine := game.get_node_or_null("BirthMachine") as BirthMachine
+	var gameplay_controller := game.get_node_or_null("GuidanceLayer")
+	_expect(
+		gameplay_controller != null,
+		"Game scene must expose the authoritative gameplay controller"
+	)
+	if gameplay_controller == null:
+		return
+	var allocation_input: Dictionary = gameplay_controller.call(
+		"_settlement_input"
+	)
+	var base_transport := float(allocation_input["available_transport_flow"])
+	var base_signal := float(
+		allocation_input["available_development_signal_flow"]
+	)
+	var base_waste_processing := float(
+		allocation_input["available_waste_processing"]
+	)
+	var waste_allocation: Dictionary = gameplay_controller.call(
+		"_dictionary_value",
+		"operations.options.waste_priority.allocation_weights",
+	)
+	gameplay_controller.call(
+		"_apply_operation_allocation",
+		allocation_input,
+		waste_allocation
+	)
+	_expect(
+		is_equal_approx(
+			float(allocation_input["available_transport_flow"]),
+			base_transport * float(waste_allocation["transport"])
+		)
+		and is_equal_approx(
+			float(allocation_input["available_development_signal_flow"]),
+			base_signal * float(waste_allocation["signal"])
+		)
+		and base_waste_processing > 0.0
+		and is_equal_approx(
+			float(allocation_input["intervention_waste_removal"]),
+			base_waste_processing * float(waste_allocation["waste"])
+		),
+		"Waste recovery must apply its allocation to the immediate E3 settlement"
+	)
+	var recovery_cycles := 0
+	while (
+		birth_machine != null
+		and birth_machine.current_state() == BirthMachine.State.FAILURE_ROLLBACK
+		and recovery_cycles < 20
+	):
+		recovery_cycles += 1
+		if not await _press_button(game, "RecoverBirth"):
+			return
 	_expect(
 		birth_art != null
+		and birth_machine != null
+		and birth_machine.gate_passed()
+		and birth_machine.current_state() == BirthMachine.State.UMBILICAL_STOP
+		and recovery_cycles > 0
+		and recovery_cycles < 20
 		and birth_art.visible
 		and birth_art.texture != null
 		and birth_art.texture.get_size() == Vector2(640, 320)
-		and birth_art.call("current_frame_id") == &"stage1_umbilical_stop",
+		and birth_art.call("current_frame_id") == &"stage1_umbilical_stop_00000",
 		"Run completion must begin the timed PixelLab birth sequence"
 	)
-	birth_art.call("advance_time", 35.0)
+	var birth_states: Array[int] = []
+	var birth_completions: Array[StringName] = []
+	var state_receiver := func(
+		_previous_state: int,
+		current_state: int,
+		_window_ms: int
+	) -> void:
+		birth_states.append(current_state)
+	var completion_receiver := func(stage_id: StringName) -> void:
+		birth_completions.append(stage_id)
+	EventBus.birth_state_changed.connect(state_receiver)
+	EventBus.birth_sequence_completed.connect(completion_receiver)
+
+	birth_art.call("advance_time", 9.999)
+	_expect(
+		birth_machine.transition_to(BirthMachine.State.PULMONARY_FLOW),
+		"BirthMachine must own the legal pulmonary-flow transition"
+	)
+	birth_art.call("advance_time", 9.999)
+	_expect(
+		birth_machine.transition_to(BirthMachine.State.FETAL_SHUNTS),
+		"BirthMachine must own the legal fetal-shunt transition"
+	)
+	birth_art.call("advance_time", 9.999)
+	_expect(
+		birth_machine.transition_to(BirthMachine.State.SYSTEMS_ONLINE),
+		"BirthMachine must own the legal systems-online transition"
+	)
+	birth_art.call("advance_time", 4.999)
+	_expect(
+		birth_machine.transition_to(BirthMachine.State.ENDING),
+		"BirthMachine must own the legal ending transition"
+	)
 	_expect(
 		birth_art.texture != null
 		and birth_art.texture.get_size() == Vector2(640, 360)
-		and birth_art.call("current_frame_id") == &"stage5_ending",
+		and birth_art.call("current_frame_id") == &"stage5_ending_35000",
 		"The 35-second mark must display the landed first-breath ending"
+	)
+	_expect(
+		birth_states == [3, 4, 5, 6],
+		"Birth timeline must publish every visual state boundary"
+	)
+	_expect(
+		birth_completions == [&"stage_birth"],
+		"The first-breath frame must publish its dedicated completion cue"
+	)
+	EventBus.birth_state_changed.disconnect(state_receiver)
+	EventBus.birth_sequence_completed.disconnect(completion_receiver)
+
+	var router := game.get_parent().get_parent() as SceneRouter
+	var first_breath_seen: Array[bool] = [false]
+	birth_machine.first_breath_completed.connect(
+		func() -> void: first_breath_seen[0] = true
+	)
+	Engine.time_scale = 1000.0
+	var ending_frames := 0
+	while not first_breath_seen[0] and ending_frames < 60:
+		ending_frames += 1
+		await get_tree().process_frame
+	Engine.time_scale = 1.0
+	await get_tree().process_frame
+	_expect(
+		first_breath_seen[0]
+		and ending_frames < 60
+		and router != null
+		and router.current_route() == SceneRouter.ROUTE_TITLE,
+		"BirthMachine completion must fade back to the title route"
 	)
 
 

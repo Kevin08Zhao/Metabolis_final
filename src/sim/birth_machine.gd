@@ -26,6 +26,8 @@ extends Node
 ##
 ## Requires the `EventBus` and `Balance` autoloads.
 
+signal first_breath_completed()
+
 enum State {
 	IDLE,
 	READY_CHECK,
@@ -583,6 +585,7 @@ func _on_enter_ending() -> void:
 
 	first_breath_complete = true
 	print("%s first breath complete; the run is ready for T-25 to close." % LOG_PREFIX)
+	first_breath_completed.emit()
 
 
 ## Implemented by T-21-7.

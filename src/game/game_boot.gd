@@ -25,6 +25,7 @@ var _flow: Node = null
 var _status_label: Label = null
 var _controller: Node = null
 var _resources: ResourcePool = null
+var _birth_machine: BirthMachine = null
 
 
 func _ready() -> void:
@@ -47,6 +48,7 @@ func _ready() -> void:
 	var city_art := get_node_or_null("CityArt") as Node2D
 	var network_builder := get_node_or_null("CityNetwork") as NetworkBuilder
 	var birth_art := get_node_or_null("BirthArt") as TextureRect
+	_birth_machine = get_node_or_null("BirthMachine") as BirthMachine
 	if (
 		_controller == null
 		or resource_bar == null
@@ -54,6 +56,7 @@ func _ready() -> void:
 		or city_art == null
 		or network_builder == null
 		or birth_art == null
+		or _birth_machine == null
 	):
 		push_error(
 			"%s Gameplay controller, map art, network, birth art, or resource bar is missing."
@@ -68,6 +71,7 @@ func _ready() -> void:
 	_resources = ResourcePool.new()
 	_initialize_resources()
 	network_builder.configure(Balance, EventBus)
+	_configure_birth_machine()
 	_controller.call(
 		"configure",
 		_flow,
@@ -76,12 +80,30 @@ func _ready() -> void:
 		grid_manager,
 		city_art,
 		network_builder,
-		birth_art
+		birth_art,
+		_birth_machine
 	)
 	_controller.connect("visual_state_changed", _refresh_status)
 	_flow.start_new_run()
 	_refresh_status()
 	print("%s Run started. Use the action panel or press Space to continue." % LOG_PREFIX)
+
+
+func _configure_birth_machine() -> void:
+	var birth_check := BirthCheck.new()
+	birth_check.configure(Balance, EventBus)
+	_birth_machine.birth_check = birth_check
+	_birth_machine.first_breath_completed.connect(_on_first_breath_completed)
+
+
+func _on_first_breath_completed() -> void:
+	var ancestor := get_parent()
+	while ancestor != null:
+		if ancestor is SceneRouter:
+			ancestor.call_deferred("go_to_title")
+			return
+		ancestor = ancestor.get_parent()
+	push_warning("%s Birth sequence ended without a SceneRouter ancestor." % LOG_PREFIX)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -1,0 +1,1386 @@
+{
+  "generated_at": "2026-07-29T13:37:13+00:00",
+  "generated_by": "tools/pixellab_fetch.py",
+  "items": [
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 74100,
+        "final_url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/e7f1314a-0a7d-4385-a5e6-7f87e9925e7d/rotations/unknown.png",
+        "sha256": "435463c1640be1aa376d2b1c66136b0b136a84a412c1af3f88768eedb0ce2080",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "e7f1314a-0a7d-4385-a5e6-7f87e9925e7d",
+        "tool": "create_map_object",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage1_umbilical_stop_00000",
+      "naming": {
+        "file_name": "stage1_umbilical_stop_00000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 13979,
+        "sha256": "b5bf07f74af64fb75b3ce863dedf070f88762450eec004a6eeecc6032f674ad7",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 51200,
+        "over_threshold_percent": 39.392578,
+        "over_threshold_pixels": 20169,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 9,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/e7f1314a-0a7d-4385-a5e6-7f87e9925e7d/rotations/unknown.png"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage1_umbilical_stop_00000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 23725,
+        "final_url": "https://api.pixellab.ai/mcp/images/f8554fcb-a0e6-49e4-90c7-7f2ff2eed431/download",
+        "sha256": "ccedb701ebdc4f92565a5d4fba9667bbedeb44ffbfb5b01b65fff96f126aecbb",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "f8554fcb-a0e6-49e4-90c7-7f2ff2eed431",
+        "seed": 22001,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage1_umbilical_stop_03333",
+      "naming": {
+        "file_name": "stage1_umbilical_stop_03333_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 28437,
+        "sha256": "351b91b966838fa2be85f6c8550f01b1534bdf286fae7809977f4636a5c092b9",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 17,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f8554fcb-a0e6-49e4-90c7-7f2ff2eed431/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage1_umbilical_stop_03333_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 21488,
+        "final_url": "https://api.pixellab.ai/mcp/images/286884f7-be39-4af4-be15-7e29a01b43a2/download",
+        "sha256": "65f969d381ac522f397af5070cf199816767c40f5116a687d43573a2c7d1363b",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "286884f7-be39-4af4-be15-7e29a01b43a2",
+        "seed": 22002,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage1_umbilical_stop_06666",
+      "naming": {
+        "file_name": "stage1_umbilical_stop_06666_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 25863,
+        "sha256": "2f9f24b687e41a01fb2546c82303d7bab3c645e2261015869076ea4abb59f5e8",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 13,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/286884f7-be39-4af4-be15-7e29a01b43a2/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage1_umbilical_stop_06666_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 30500,
+        "final_url": "https://api.pixellab.ai/mcp/images/29e588cb-3476-43b4-a117-c2f2538876fb/download",
+        "sha256": "740bc5693547f8b184edb537dece90f8429c90f47f092711ac18a686c7e996af",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "29e588cb-3476-43b4-a117-c2f2538876fb",
+        "seed": 22003,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage1_umbilical_stop_09999",
+      "naming": {
+        "file_name": "stage1_umbilical_stop_09999_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 35676,
+        "sha256": "ddce7757157974745ed381e91d4df94c40e904c1e0fdf9898d1b0e38ab29011a",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 17,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/29e588cb-3476-43b4-a117-c2f2538876fb/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage1_umbilical_stop_09999_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 51845,
+        "final_url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/19826158-9762-41a6-a4db-6e289e76f1d0/rotations/unknown.png",
+        "sha256": "02ebc2ff62c680ff3885c8fa82042ffcdae02bdda8c3dcbe66349ec6285070ea",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "19826158-9762-41a6-a4db-6e289e76f1d0",
+        "tool": "create_map_object",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage2_pulmonary_flow_10000",
+      "naming": {
+        "file_name": "stage2_pulmonary_flow_10000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 14813,
+        "sha256": "5f97f3563692071b4dcbbd4b2f51fb2be8ecc584014cdcb4cc51ca1b69807765",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 51200,
+        "over_threshold_percent": 39.941406,
+        "over_threshold_pixels": 20450,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 15,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/19826158-9762-41a6-a4db-6e289e76f1d0/rotations/unknown.png"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage2_pulmonary_flow_10000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 20029,
+        "final_url": "https://api.pixellab.ai/mcp/images/cd6da867-c9a9-404e-b32d-35b5dc0cacdb/download",
+        "sha256": "16d713ed81705659571575a869c336755af03366399b930337719e1e28604c08",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "cd6da867-c9a9-404e-b32d-35b5dc0cacdb",
+        "seed": 22101,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage2_pulmonary_flow_13333",
+      "naming": {
+        "file_name": "stage2_pulmonary_flow_13333_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 24338,
+        "sha256": "a94676167ac4c7d585cf06cefcdd2829364a65ca289d700db331f35cb07a4440",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 19,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/cd6da867-c9a9-404e-b32d-35b5dc0cacdb/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage2_pulmonary_flow_13333_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 9779,
+        "final_url": "https://api.pixellab.ai/mcp/images/4f5e5385-f1b9-4730-adb8-c5b6b58a1754/download",
+        "sha256": "f201762cb66b6397985eb992d9aa400d562b1ca1f07a3aeb759c968daf3cd8c7",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "4f5e5385-f1b9-4730-adb8-c5b6b58a1754",
+        "seed": 22102,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage2_pulmonary_flow_16666",
+      "naming": {
+        "file_name": "stage2_pulmonary_flow_16666_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 12359,
+        "sha256": "4000a2993955c92e1cecf019f9b7736f7b6fcd7daba16f9c803b9a00c28c0239",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 20,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/4f5e5385-f1b9-4730-adb8-c5b6b58a1754/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage2_pulmonary_flow_16666_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 29814,
+        "final_url": "https://api.pixellab.ai/mcp/images/995e3ac0-8ac5-44eb-80dc-09baf410ed17/download",
+        "sha256": "fa8a08f07e00cf238ac99d12059caa33009ceecd49c1730531c544020454305e",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "995e3ac0-8ac5-44eb-80dc-09baf410ed17",
+        "seed": 22103,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage2_pulmonary_flow_19999",
+      "naming": {
+        "file_name": "stage2_pulmonary_flow_19999_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 35695,
+        "sha256": "bd742d954d34ed18c9f31596e3e1e1ffb63f7bd8a7a896e0aabccc727323fde5",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 19,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/995e3ac0-8ac5-44eb-80dc-09baf410ed17/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage2_pulmonary_flow_19999_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 19670,
+        "final_url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/7cfe3295-e0b7-4b12-856d-3473c291c183/rotations/unknown.png",
+        "sha256": "78ddd534c9029e79f568204dce7f3fdb7aa682996f07fa37addb6d655475779c",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "7cfe3295-e0b7-4b12-856d-3473c291c183",
+        "tool": "create_map_object",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage3_shunt_closure_20000",
+      "naming": {
+        "file_name": "stage3_shunt_closure_20000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 8927,
+        "sha256": "7e6b994007e5eb1a6326a5ff92d0da7218c5bb36dfa9f56ae65eb7bd2a2b303d",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 51200,
+        "over_threshold_percent": 99.714844,
+        "over_threshold_pixels": 51054,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 16,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/7cfe3295-e0b7-4b12-856d-3473c291c183/rotations/unknown.png"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage3_shunt_closure_20000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 22797,
+        "final_url": "https://api.pixellab.ai/mcp/images/86826c3d-0f52-4fd1-92f5-06d897c860cb/download",
+        "sha256": "205df84cb38bf5ddfcc1f8cb6fca9049681bb35d53a56baff703d7aa7cbe3d0d",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "86826c3d-0f52-4fd1-92f5-06d897c860cb",
+        "seed": 22201,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage3_shunt_closure_23333",
+      "naming": {
+        "file_name": "stage3_shunt_closure_23333_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 26916,
+        "sha256": "9395ab3dee719751ffaa5b264a4c8bec44a26c5cdf6368affc2da9f7904b6955",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 13,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/86826c3d-0f52-4fd1-92f5-06d897c860cb/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage3_shunt_closure_23333_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 30819,
+        "final_url": "https://api.pixellab.ai/mcp/images/cde977b9-ec02-45ea-84ea-bb74139fdec8/download",
+        "sha256": "471b5c7dfc26cf76f81668309a7c89c8a1ae4ab377e0ce8dc0bf36b2d3a6bb23",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "cde977b9-ec02-45ea-84ea-bb74139fdec8",
+        "seed": 22202,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage3_shunt_closure_26666",
+      "naming": {
+        "file_name": "stage3_shunt_closure_26666_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 36553,
+        "sha256": "4fa7141c8ab74674cb100ba122f29c583053751465c63ff3884958bd44e6edc8",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 15,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/cde977b9-ec02-45ea-84ea-bb74139fdec8/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage3_shunt_closure_26666_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 35708,
+        "final_url": "https://api.pixellab.ai/mcp/images/f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd/download",
+        "sha256": "a32db1f3da8a59677510bd8a33a6cc8bba2745742defdb08d5da7e06daf71412",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd",
+        "seed": 22203,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage3_shunt_closure_29999",
+      "naming": {
+        "file_name": "stage3_shunt_closure_29999_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 41690,
+        "sha256": "fdb459ed5e15ae344549cb6991d0d1fbb170d5368cf2b60fe76c4f3da0c45b7c",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 16,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage3_shunt_closure_29999_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 27740,
+        "final_url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/ea8d9392-2ba3-4720-98b4-57a3151b6361/rotations/unknown.png",
+        "sha256": "75063cb65bcb46fa076327c0f5664f38dfff7215e57f2539336a8f81c8d33de0",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "ea8d9392-2ba3-4720-98b4-57a3151b6361",
+        "tool": "create_map_object",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage4_systems_online_30000",
+      "naming": {
+        "file_name": "stage4_systems_online_30000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 10105,
+        "sha256": "75d53201ad21a92ddc03739d552a02b9dc322cca33c34e2aa337b9715ad5547a",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 51200,
+        "over_threshold_percent": 34.441406,
+        "over_threshold_pixels": 17634,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 13,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/ea8d9392-2ba3-4720-98b4-57a3151b6361/rotations/unknown.png"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage4_systems_online_30000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 320,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 320,
+          "width": 640
+        },
+        "source": {
+          "height": 160,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 51355,
+        "final_url": "https://api.pixellab.ai/mcp/images/2f4429be-17be-4b4a-83e3-43c896b9d9e3/download",
+        "sha256": "07fbb551ca1275f55b7061b430c87f52341308bd0b7f9a0489522e4539e0514b",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "2f4429be-17be-4b4a-83e3-43c896b9d9e3",
+        "seed": 22301,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage4_systems_online_34999",
+      "naming": {
+        "file_name": "stage4_systems_online_34999_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 59660,
+        "sha256": "945e4d013ea11a0549ed5155443f1b852ee1670ae684c60f5f774945e712fe9a",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 21,
+        "visible_pixels_after": 204800,
+        "visible_pixels_before": 51200
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/2f4429be-17be-4b4a-83e3-43c896b9d9e3/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage4_systems_online_34999_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 204800,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 360,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 360,
+          "width": 640
+        },
+        "source": {
+          "height": 180,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 22325,
+        "final_url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/df99f80d-b4c2-42be-8120-5d7033731bfa/rotations/unknown.png",
+        "sha256": "a4a974b4c85a4ac25bf34e2484d8aaa46fa8a61ceee5ccff0322e24b23ae5db7",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "df99f80d-b4c2-42be-8120-5d7033731bfa",
+        "tool": "create_map_object",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage5_ending_35000",
+      "naming": {
+        "file_name": "stage5_ending_35000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 8114,
+        "sha256": "2d9721cef37cdb4e3b241b6cd3102b8f30fc2c64ef0079c5e095d25af9b2ba73",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 57600,
+        "over_threshold_percent": 4.751736,
+        "over_threshold_pixels": 2737,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 9,
+        "visible_pixels_after": 230400,
+        "visible_pixels_before": 57600
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/df99f80d-b4c2-42be-8120-5d7033731bfa/rotations/unknown.png"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage5_ending_35000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 230400,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 360,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 360,
+          "width": 640
+        },
+        "source": {
+          "height": 180,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 45197,
+        "final_url": "https://api.pixellab.ai/mcp/images/30542acc-cd3e-490a-8481-ef5441a71bec/download",
+        "sha256": "60b8fb48743a8083362cd685abed46c5453a4e8fb42a161ee6af883012c76965",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "30542acc-cd3e-490a-8481-ef5441a71bec",
+        "seed": 22401,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage5_ending_37500",
+      "naming": {
+        "file_name": "stage5_ending_37500_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 52173,
+        "sha256": "9da84cb8dc379df8bb3c6037264caf2fe89b885260bc50f909b548bdcc6ce570",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 16,
+        "visible_pixels_after": 230400,
+        "visible_pixels_before": 57600
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/30542acc-cd3e-490a-8481-ef5441a71bec/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage5_ending_37500_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 230400,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 360,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 360,
+          "width": 640
+        },
+        "source": {
+          "height": 180,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 51090,
+        "final_url": "https://api.pixellab.ai/mcp/images/9242e92c-0e8e-4eca-957e-4224907a3097/download",
+        "sha256": "cf72e6e73ada3d7ffe1ffcac0bd133033c6fde4719adcae04f37507afe312a5b",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "9242e92c-0e8e-4eca-957e-4224907a3097",
+        "seed": 22402,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage5_ending_39000",
+      "naming": {
+        "file_name": "stage5_ending_39000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 60017,
+        "sha256": "d2114087444f97d1a4f541e5d0c9d77914f3c52dc2afdf2f9e325effd4376fdf",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 20,
+        "visible_pixels_after": 230400,
+        "visible_pixels_before": 57600
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/9242e92c-0e8e-4eca-957e-4224907a3097/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage5_ending_39000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 230400,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    },
+    {
+      "dimensions": {
+        "expected": {
+          "height": 360,
+          "width": 640
+        },
+        "operations": [
+          {
+            "factor": 2,
+            "kind": "integer_scale"
+          }
+        ],
+        "output": {
+          "height": 360,
+          "width": 640
+        },
+        "source": {
+          "height": 180,
+          "width": 320
+        },
+        "status": "PASS"
+      },
+      "download": {
+        "bytes": 50600,
+        "final_url": "https://api.pixellab.ai/mcp/images/ffc51dab-5355-40e6-9c62-f6e4b89c8cb8/download",
+        "sha256": "db33c44f98340589cb26fd5e74c2d08176a65f972028c901106c8a2bfb810d35",
+        "status": "downloaded"
+      },
+      "generation": {
+        "job_id": "ffc51dab-5355-40e6-9c62-f6e4b89c8cb8",
+        "seed": 22403,
+        "tool": "create_image_pixflux",
+        "usage": {
+          "generation_units": 1
+        }
+      },
+      "id": "stage5_ending_42000",
+      "naming": {
+        "file_name": "stage5_ending_42000_2x.png",
+        "rule": "{category}_{subject}_{variant}.png in lowercase snake_case; D-06 additionally permits the exact v3.1 path art/reference/style_master.png",
+        "status": "PASS"
+      },
+      "output": {
+        "bytes": 58556,
+        "sha256": "305d902edd53c47dec421e848354d8546df65c0e79d8377739045c4fffeaf1ed",
+        "status": "created"
+      },
+      "palette": {
+        "locked_palette_color_count": 22,
+        "max_over_threshold_percent": 100.0,
+        "out_of_palette_pixels_after": 0,
+        "out_of_palette_pixels_before": 0,
+        "over_threshold_percent": 0.0,
+        "over_threshold_pixels": 0,
+        "palette_distance_metric": "CIE76 Delta E",
+        "palette_distance_threshold": 12.0,
+        "status": "PASS",
+        "visible_output_color_count": 22,
+        "visible_pixels_after": 230400,
+        "visible_pixels_before": 57600
+      },
+      "source": {
+        "kind": "url",
+        "url": "https://api.pixellab.ai/mcp/images/ffc51dab-5355-40e6-9c62-f6e4b89c8cb8/download"
+      },
+      "status": "PASS",
+      "target": "art/birth/frames/stage5_ending_42000_2x.png",
+      "transparency": {
+        "alpha_threshold": 128,
+        "opaque_pixels_after": 230400,
+        "partially_transparent_pixels_after": 0,
+        "partially_transparent_pixels_before": 0,
+        "status": "PASS",
+        "transparent_pixels_after": 0
+      }
+    }
+  ],
+  "palette": {
+    "color_count": 22,
+    "path": "art/palette.gpl",
+    "status": "PASS"
+  },
+  "plan": {
+    "path": "fetch_plans/D-22_fetch_plan.json",
+    "sha256": "863c72f61ebeae42ced8499faeaa050e4f5ee9d066adb305934f51d13299aff9"
+  },
+  "report_version": 1,
+  "status": "PASS",
+  "summary": {
+    "failure_count": 0,
+    "item_count": 18,
+    "success_count": 18
+  },
+  "task_id": "D-22"
+}

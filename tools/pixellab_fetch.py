@@ -39,6 +39,7 @@ REPORT_VERSION = 1
 MAX_SOURCE_BYTES = 25 * 1024 * 1024
 STATIC_PNG_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+){2,}\.png$")
 D06_STYLE_MASTER_TARGET = "art/reference/style_master.png"
+D29_TITLE_BACKGROUND_TARGET = "art/backgrounds/background_title.png"
 TASK_ID_RE = re.compile(r"^[A-Z]-[0-9]{2}[A-Za-z]?$")
 MANIFEST_MARKER = "<!-- generated-by: tools/pixellab_fetch.py -->"
 
@@ -99,7 +100,7 @@ def require_directory(relative_path: str, directory: str) -> None:
 
 def valid_static_png_name(relative_path: str, file_name: str) -> bool:
     return bool(STATIC_PNG_RE.fullmatch(file_name)) or (
-        relative_path == D06_STYLE_MASTER_TARGET
+        relative_path in (D06_STYLE_MASTER_TARGET, D29_TITLE_BACKGROUND_TARGET)
     )
 
 

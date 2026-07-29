@@ -1,7 +1,7 @@
 {
   "task_id": "D-29",
-  "status": "SOURCE_ONLY_BLOCKED_RUNTIME_CONTRACT",
-  "final_use": "TITLE_BACKGROUND_SOURCE",
+  "status": "PRODUCTION_READY",
+  "final_use": "TITLE_BACKGROUND",
   "palette": "art/palette.gpl",
   "report": "docs/assets/D-29_LAND_REPORT.json",
   "manifest": "docs/assets/D-29_MANIFEST.md",
@@ -10,10 +10,10 @@
     {
       "id": "title_background_master",
       "raw_file": "art/candidates/pf00/background_title_candidate01_raw.png",
-      "target": "art/source/background_title_source.png",
+      "target": "art/backgrounds/background_title.png",
       "source": {
         "kind": "url",
-        "url": "https://api.pixellab.ai/mcp/images/f9979329-be15-4e32-bbe7-bdbcf88de454/download"
+        "url": "https://raw.githubusercontent.com/Kevin08Zhao/Metabolis_final/main/art/source/background_title_source.png"
       },
       "generation": {
         "tool": "create_image_pixflux",
@@ -29,13 +29,18 @@
         "height": 180
       },
       "expected_size": {
-        "width": 320,
-        "height": 180
+        "width": 640,
+        "height": 360
       },
-      "expected_existing_sha256": "6d649b3e07ee8502c6c4271aa2e6a9597e22231d0b6e0b9abf7c2816b9e1cb66",
+      "expected_existing_sha256": "47e41dc16e9d26303b176cd234a2c725f2f24e7549a55f5fa87fde24b641728f",
       "alpha_threshold": 128,
-      "operations": []
+      "operations": [
+        {
+          "kind": "integer_scale",
+          "factor": 2
+        }
+      ]
     }
   ],
-  "blocker": "The background source is accepted, but final DONE also requires the runtime title, disclaimer, font, and screenshot contract."
+  "blocker": null
 }

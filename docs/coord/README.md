@@ -46,9 +46,13 @@ This directory records tasks from the complete prompt list that have passed acce
 | D-14 · UI Framework and Six Regions | `docs/UI_LAYOUT.md` sections 1–6, `docs/assets/D-14_MANIFEST.md` | [`done/D-14.md`](done/D-14.md) |
 | D-17 · Tooltip and Information-Panel Visual Style | `docs/UI_LAYOUT.md` sections 7–9, `docs/assets/D-17_MANIFEST.md` | [`done/D-17.md`](done/D-17.md) |
 
-## Open D-Track Rework
+## Historical D-Track Rework
+
+No D-track rework remains open after the 2026-07-29 audit. The two rows below
+are retained as historical planning records; both linked records have been
+resolved and renamed accordingly. See `docs/D_TRACK_AUDIT.md`.
 
 | Task | Planning artifact retained | Blocking record |
 |---|---|---|
-| D-07 · Terrain and Tissue Tiles | `docs/D-07_TERRAIN_TILE_PROMPTS.md` | [`rework/D-07__from_ACCOUNT_D.open.md`](rework/D-07__from_ACCOUNT_D.open.md) |
-| D-08 · Vessel Geometry Tiles | `docs/D-08_VESSEL_TILE_PROMPTS.md` | [`rework/D-08__from_ACCOUNT_D.open.md`](rework/D-08__from_ACCOUNT_D.open.md) |
+| D-07 · Terrain and Tissue Tiles | `docs/D-07_TERRAIN_TILE_PROMPTS.md` | [`rework/D-07__from_ACCOUNT_D.resolved.md`](rework/D-07__from_ACCOUNT_D.resolved.md) |
+| D-08 · Vessel Geometry Tiles | `docs/D-08_VESSEL_TILE_PROMPTS.md` | [`rework/D-08__from_ACCOUNT_D.resolved.md`](rework/D-08__from_ACCOUNT_D.resolved.md) |

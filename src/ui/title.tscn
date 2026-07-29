@@ -1,27 +1,22 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/title_pulse.gd" id="1_pulse"]
 
 ; Title screen.
 ;
 ; Geometry from the layout table of docs/D-29_TITLE_SCENE_INTEGRATION.md, on the
-; 640x360 reference canvas. Styling stays engine default: the font sizing,
-; letter spacing and pulse in that document are D-29's to apply through a theme
-; and need no change to the node structure below.
+; 640x360 reference canvas. Font sizing remains engine-native and the D-29 pulse
+; is provided by res://ui/title_pulse.gd.
 ;
 ; The background is the accepted D-29 asset recorded by docs/assets/D-29_MANIFEST.md,
-; art/source/background_title_source.png. It cannot be an ext_resource: art/ sits
+; art/backgrounds/background_title.png. It cannot be an ext_resource: art/ sits
 ; outside the Godot project root, so no scene can reach it through the import
 ; pipeline. SceneRouter fills the slot at runtime through AssetLoader, which T-36
 ; built to read res://../art for exactly this reason, and it finds this node by
 ; its title_background group.
 ;
-; The slot is empty at present, and that is the designed degradation rather than
-; an oversight. The accepted asset sits in art/source, which AssetLoader excludes
-; by design through SKIPPED_ART_DIRECTORIES along with candidates and reference,
-; so no runtime code can reach it there. AssetLoader returns its placeholder and
-; warns. The moment D-29 lands the file outside a skipped directory - the path
-; its own integration document already names - the slot fills with no change
-; here. The asset is 320x180, so filling the canvas will be an integer 2x scale
-; with the project's nearest-neighbour filter.
+; The production file is 640x360 and palette-quantized. AssetLoader supplies it
+; by logical name when the route enters the title.
 ;
 ; The entry set is T-32's, not the two-button set in the D-29 table. T-32's
 ; accepted behaviour offers continue, new game and chapter select, with chapter
@@ -45,6 +40,10 @@ offset_bottom = 360.0
 expand_mode = 1
 stretch_mode = 1
 mouse_filter = 2
+
+[node name="HeartPulse" type="Node2D" parent="."]
+position = Vector2(320, 180)
+script = ExtResource("1_pulse")
 
 [node name="TitleBand" type="Label" parent="."]
 theme_override_font_sizes/font_size = 8

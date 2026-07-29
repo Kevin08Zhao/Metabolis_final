@@ -109,7 +109,7 @@ func get_animation_frames(logical_name: StringName) -> SpriteFrames:
 
 
 func _is_valid_static_name(stem: String) -> bool:
-	return _is_valid_stem(stem, 3, false)
+	return stem == "background_title" or _is_valid_stem(stem, 3, false)
 
 
 func _is_valid_animation_name(stem: String) -> bool:

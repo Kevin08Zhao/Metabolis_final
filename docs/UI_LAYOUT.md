@@ -195,13 +195,13 @@ The build-decision phase overlays a row of candidate cards on top of the main ci
 | Property | Value | px |
 |---|---:|---:|
 | Card width | `148 px` | 148 |
-| Card height | `256 px` | 256 |
+| Card height | `262 px` | 262 |
 | Exterior border | `2 px` uniform `#140F1D` | 2 |
 | Inner padding | `8 px` horizontal / `8 px` vertical | 8 |
 | Content width | `148 − 2 × 2 − 2 × 8 = 128 px` | 128 |
-| Content height | `256 − 2 × 2 − 2 × 8 = 236 px` | 236 |
+| Content height | `262 - 2 x 2 - 2 x 8 = 242 px` | 242 |
 
-Godot notation: `Rect2(0, 0, 148, 256)` before placement.
+Godot notation: `Rect2(0, 0, 148, 262)` before placement.
 
 ### Card-to-card spacing
 
@@ -219,7 +219,7 @@ The card row is centered on the reference canvas. For `N` cards at width `148 px
 total_width = N × 148 + (N − 1) × gap
 margin_x = (640 − total_width) / 2
 card_x[i] = margin_x + i × (148 + gap)   for i = 0 … N−1
-card_y = 40 + (320 − 256) / 2 = 72
+card_y = 40 + (320 - 262) / 2 = 69
 ```
 
 | N | `total_width` | `margin_x` | `card_x` positions |
@@ -228,11 +228,11 @@ card_y = 40 + (320 − 256) / 2 = 72
 | 3 | `476` | `82` | `82`, `246`, `410` |
 | 4 | `640` | `0` | `0`, `164`, `328`, `492` |
 
-All card `card_y` coordinates are `72`. The card row does not overlap the persistent top-40-pixel UI strip. All coordinates are integer pixels.
+All card `card_y` coordinates are `69`. The card row does not overlap the persistent top-40-pixel UI strip. All coordinates are integer pixels.
 
 ### Card internal row template
 
-Every card reserves the following vertical allocation inside its `128 × 236 px` content area. The PixelLab concept-art slot occupies the largest flat rectangle.
+Every card reserves the following vertical allocation inside its `128 x 242 px` content area. The PixelLab concept-art slot occupies the largest flat rectangle.
 
 | Row | Height | Content | Runtime label or slot |
 |---|---:|---|---|
@@ -244,7 +244,7 @@ Every card reserves the following vertical allocation inside its `128 × 236 px`
 | Metrics-to-cost gap | `4 px` | Transparent spacer | — |
 | Resource cost row | `24 px` | Three `36 × 16 px` cost cells (nutrient energy, cell material, developmental signal), each with a `16 × 16 px` resource-icon slot and a runtime-value slot | Runtime cost values |
 
-Total content height: `128 + 4 + 12 + 4 + 3 × 22 + 4 + 24 = 242 px`. With `236 px` available, the remaining `6 px` are distributed equally above the art slot and below the cost row as `3 px` top and `3 px` bottom internal margins.
+Total content height: `128 + 4 + 12 + 4 + 3 x 22 + 4 + 24 = 242 px`, exactly matching the available content height.
 
 ### Required PixelLab card art (D-13b)
 
