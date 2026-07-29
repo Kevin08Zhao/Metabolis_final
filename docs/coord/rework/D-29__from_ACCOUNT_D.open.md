@@ -1,6 +1,6 @@
 target_task: D-29
 reported_by: ACCOUNT_D
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: d13bb366833e0fec1e89d234495b827bcdefd502
 completed_art:
   - art/backgrounds/background_title.png

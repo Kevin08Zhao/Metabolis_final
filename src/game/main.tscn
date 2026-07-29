@@ -1,15 +1,23 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=10 format=3]
 
 ; Playable stage host.
 ;
-; The named children are the six regions of section 2 of docs/UI_LAYOUT.md plus
-; the city map, each an empty Control at its documented rectangle. GameAssembly
-; builds the systems and the panels and puts each panel into the region named
-; for it, so the regions stay empty here and are filled at runtime.
-;
-; This scene is what SceneRouter loads for the game route.
+; Game node: root Control with game_boot.gd, boots ChapterFlow on ready.
+; GameBackground: solid fill so the grid is visible against the canvas.
+; ChapterFlow: the ten-step state machine driving every stage.
+; ResourceStatusBar: six-resource bar (resource_bar.gd).
+; CityMap: 40x20 grid at 16px tiles rendered by grid_manager.gd.
+; Contextual gameplay actions are rendered by gameplay_controller.gd.
 
-[ext_resource type="Script" path="res://game/game_assembly.gd" id="1"]
+[ext_resource type="Script" path="res://game/game_boot.gd" id="1"]
+[ext_resource type="Script" path="res://core/chapter_flow.gd" id="2"]
+[ext_resource type="Script" path="res://ui/resource_bar.gd" id="3"]
+[ext_resource type="Script" path="res://world/grid_manager.gd" id="4"]
+[ext_resource type="Script" path="res://ui/gameplay_controller.gd" id="5"]
+[ext_resource type="Script" path="res://world/network_builder.gd" id="6"]
+[ext_resource type="Script" path="res://world/city_art_layer.gd" id="7"]
+[ext_resource type="Script" path="res://ui/birth_art_presenter.gd" id="8"]
+[ext_resource type="Script" path="res://game/game_assembly.gd" id="9"]
 
 [node name="Game" type="Control"]
 anchors_preset = 15
@@ -17,37 +25,81 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1")
 
-[node name="CityMap" type="Control" parent="."]
-offset_top = 40.0
-offset_right = 640.0
-offset_bottom = 360.0
+[node name="GameBackground" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.12, 1.0)
+mouse_filter = 2
+
+[node name="ChapterFlow" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="GameRuntime" type="Node" parent="."]
+script = ExtResource("9")
 
 [node name="ResourceStatusBar" type="Control" parent="."]
+layout_mode = 0
 offset_right = 640.0
 offset_bottom = 16.0
+script = ExtResource("3")
 
 [node name="DevelopmentTimeline" type="Control" parent="."]
+layout_mode = 0
 offset_top = 16.0
 offset_right = 640.0
 offset_bottom = 24.0
 
 [node name="TaskOperationsPanel" type="Control" parent="."]
+layout_mode = 0
 offset_top = 24.0
 offset_right = 608.0
 offset_bottom = 40.0
 
 [node name="OrganArchiveButton" type="Control" parent="."]
+layout_mode = 0
 offset_left = 608.0
 offset_top = 24.0
 offset_right = 624.0
 offset_bottom = 40.0
 
 [node name="ChapterRecapButton" type="Control" parent="."]
+layout_mode = 0
 offset_left = 624.0
 offset_top = 24.0
 offset_right = 640.0
 offset_bottom = 40.0
+
+[node name="CityMap" type="Control" parent="."]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 640.0
+offset_bottom = 360.0
+script = ExtResource("4")
+
+[node name="CityArt" type="Node2D" parent="."]
+position = Vector2(0, 40)
+script = ExtResource("7")
+
+[node name="CityNetwork" type="Node2D" parent="."]
+position = Vector2(0, 40)
+script = ExtResource("6")
+
+[node name="BirthArt" type="TextureRect" parent="."]
+visible = false
+z_index = 5
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+texture_filter = 1
+script = ExtResource("8")
 
 [node name="GuidanceLayer" type="Control" parent="."]
 anchors_preset = 15
@@ -56,12 +108,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("5")
 
-[node name="GameAssembly" type="Control" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="GameplayStatus" type="Label" parent="GuidanceLayer"]
+z_index = 10
+layout_mode = 0
+offset_left = 16.0
+offset_top = 52.0
+offset_right = 624.0
+offset_bottom = 108.0
 mouse_filter = 2
-script = ExtResource("1")
+theme_override_colors/font_color = Color(0.956863, 1, 0.972549, 1)
+theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "Stage 1 - Observe State
+SPACE: Continue or use the action panel"
+horizontal_alignment = 1
+vertical_alignment = 1

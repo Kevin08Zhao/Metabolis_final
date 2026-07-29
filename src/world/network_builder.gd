@@ -15,13 +15,28 @@ extends Node2D
 ## - edge_id, start_node_id, end_node_id
 ## - organ_id, trunk_route_id, extension_profile_id, spec_tier_id
 ## - coverage_radius, base_capacity, capacity_multiplier, effective_capacity
+## - flow_direction: "outbound" (placenta → tissue) or "return" (tissue → placenta)
+## - passage_state: "open", "restricted", or "blocked" (default "open" on creation)
+## - route_role: "trunk" (main route) or "branch" (secondary arm)
+## - branch_parent_id: edge_id of the trunk edge this branch stems from (empty for trunk)
+##
+## Junction direction rule (D-09 contract):
+## At tee and four-way junctions, the participating edge with the lowest sequence
+## number designates the entry arm; all other participating edges are exit arms.
+## This uniquely maps every undirected junction mask to a directed entry/exit
+## combination for flow-direction arrow selection.
 ##
 ## test_determinism() generates the same input twice and compares every node and
 ## edge field. Tier acceptance: heart_reinforced reads six tiles and radius 2.5;
 ## heart_early_flow reads five tiles and radius 2.0 from Balance.
 
-const PLACEHOLDER_COLOR := Color("#6f8f9d")
-const PLACEHOLDER_WIDTH_PX := 2.0
+const TILE_SIZE_PX := 16
+const DIRECTION_BITS := {
+	Vector2i.UP: 1,
+	Vector2i.RIGHT: 2,
+	Vector2i.DOWN: 4,
+	Vector2i.LEFT: 8,
+}
 
 var nodes: Array:
 	get:
@@ -35,7 +50,9 @@ var _balance_access: Node
 var _event_bus: Node
 var _nodes: Array[Dictionary] = []
 var _edges: Array[Dictionary] = []
-var _route_lines: Dictionary = {}
+var _route_paths: Dictionary = {}
+var _vessel_tiles_root: Node2D = null
+var _texture_cache: Dictionary = {}
 
 
 func configure(balance_access: Node, event_bus: Node) -> void:
@@ -76,6 +93,12 @@ func generate_extension(
 	var extension_profile_id := StringName(network.get("extension_profile_id", ""))
 	var spec_tier_id := StringName(network.get("spec_tier_id", ""))
 	var base_capacity := _read_number(network.get("network_capacity"))
+	var flow_direction := StringName(network.get("flow_direction", "outbound"))
+	var route_role := StringName(network.get("route_role", "trunk"))
+	if not flow_direction in ["outbound", "return"]:
+		flow_direction = StringName("outbound")
+	if not route_role in ["trunk", "branch"]:
+		route_role = StringName("trunk")
 	var extension_length := int(
 		_balance_access.call(
 			"get_value",
@@ -147,6 +170,10 @@ func generate_extension(
 			"base_capacity": base_capacity,
 			"capacity_multiplier": capacity_multiplier,
 			"effective_capacity": base_capacity * capacity_multiplier,
+			"flow_direction": flow_direction,
+			"passage_state": StringName("open"),
+			"route_role": route_role,
+			"branch_parent_id": StringName(),
 		})
 
 	return {
@@ -191,7 +218,7 @@ func _publish_extension(extension: Dictionary) -> void:
 	if route_nodes.is_empty():
 		return
 	var trunk_route_id: StringName = route_nodes[0]["trunk_route_id"]
-	if _route_lines.has(trunk_route_id):
+	if _route_paths.has(trunk_route_id):
 		push_warning("[NETWORK] Route '%s' is already published." % trunk_route_id)
 		return
 	for node_record in route_nodes:
@@ -199,16 +226,8 @@ func _publish_extension(extension: Dictionary) -> void:
 	for edge_record in route_edges:
 		_edges.append((edge_record as Dictionary).duplicate(true))
 
-	var line := Line2D.new()
-	line.name = "Route_%s" % trunk_route_id
-	line.default_color = PLACEHOLDER_COLOR
-	line.width = PLACEHOLDER_WIDTH_PX
-	var points := PackedVector2Array()
-	for node_record in route_nodes:
-		points.append(Vector2(node_record["pixel_position"]))
-	line.points = points
-	add_child(line)
-	_route_lines[trunk_route_id] = line
+	_route_paths[trunk_route_id] = _route_grid_path(route_nodes)
+	_rebuild_vessel_tiles()
 	print(
 		"[NETWORK] published route=",
 		trunk_route_id,
@@ -217,6 +236,144 @@ func _publish_extension(extension: Dictionary) -> void:
 		" edges=",
 		route_edges.size()
 	)
+
+
+func _route_grid_path(route_nodes: Array) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	if route_nodes.is_empty():
+		return result
+	var current: Vector2i = route_nodes[0]["grid_position"]
+	result.append(current)
+	for node_index in range(1, route_nodes.size()):
+		var target: Vector2i = route_nodes[node_index]["grid_position"]
+		while current.x != target.x:
+			current.x += signi(target.x - current.x)
+			if result[-1] != current:
+				result.append(current)
+		while current.y != target.y:
+			current.y += signi(target.y - current.y)
+			if result[-1] != current:
+				result.append(current)
+	return result
+
+
+func _rebuild_vessel_tiles() -> void:
+	if _vessel_tiles_root != null:
+		remove_child(_vessel_tiles_root)
+		_vessel_tiles_root.queue_free()
+	_vessel_tiles_root = Node2D.new()
+	_vessel_tiles_root.name = "VesselTiles"
+	_vessel_tiles_root.z_index = 2
+	add_child(_vessel_tiles_root)
+
+	var masks: Dictionary = {}
+	for route_path_value in _route_paths.values():
+		var route_path: Array = route_path_value
+		for index in route_path.size():
+			var coordinate: Vector2i = route_path[index]
+			var mask := int(masks.get(coordinate, 0))
+			if index > 0:
+				mask |= _direction_bit(route_path[index - 1] - coordinate)
+			if index + 1 < route_path.size():
+				mask |= _direction_bit(route_path[index + 1] - coordinate)
+			masks[coordinate] = mask
+
+	var coordinates: Array = masks.keys()
+	coordinates.sort_custom(
+		func(first: Vector2i, second: Vector2i) -> bool:
+			return (
+				first.y < second.y
+				or (first.y == second.y and first.x < second.x)
+			)
+	)
+	for coordinate: Vector2i in coordinates:
+		var tile := Sprite2D.new()
+		tile.name = "Vessel_%02d_%02d" % [coordinate.x, coordinate.y]
+		tile.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		tile.position = (
+			Vector2(coordinate * TILE_SIZE_PX)
+			+ Vector2(TILE_SIZE_PX, TILE_SIZE_PX) * 0.5
+		)
+		var visual := _tile_visual(int(masks[coordinate]))
+		tile.texture = _vessel_texture(visual["texture"])
+		tile.rotation = float(visual["rotation"])
+		_vessel_tiles_root.add_child(tile)
+
+
+func _tile_visual(mask: int) -> Dictionary:
+	match mask:
+		1, 4, 5:
+			return {
+				"texture": &"tile_vessel_straight_ns_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		2, 8, 10:
+			return {
+				"texture": &"tile_vessel_straight_ew_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		3:
+			return {
+				"texture": &"tile_vessel_corner_ne_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		6:
+			return {
+				"texture": &"tile_vessel_corner_es_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		12:
+			return {
+				"texture": &"tile_vessel_corner_sw_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		9:
+			return {
+				"texture": &"tile_vessel_corner_wn_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		7:
+			return {
+				"texture": &"tile_vessel_tee_nes_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		14:
+			return {
+				"texture": &"tile_vessel_tee_esw_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		13:
+			return {
+				"texture": &"tile_vessel_tee_swn_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		11:
+			return {
+				"texture": &"tile_vessel_tee_wne_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		15:
+			return {
+				"texture": &"tile_vessel_fourway_nesw_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+		_:
+			return {
+				"texture": &"tile_vessel_straight_ns_outbound_trunk_open",
+				"rotation": 0.0,
+			}
+
+
+func _direction_bit(delta: Vector2i) -> int:
+	return int(DIRECTION_BITS.get(delta, 0))
+
+
+func _vessel_texture(logical_name: StringName) -> Texture2D:
+	if not _texture_cache.has(logical_name):
+		_texture_cache[logical_name] = AssetLoader.get_static_texture(
+			logical_name
+		)
+	return _texture_cache[logical_name]
 
 
 func _find_decision_id(option_id: StringName) -> StringName:

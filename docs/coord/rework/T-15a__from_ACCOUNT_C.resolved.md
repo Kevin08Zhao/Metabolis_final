@@ -1,6 +1,6 @@
 target_task: T-15a
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 959ef0ddd3d3672d7836efc3c4721ce42701655c
 subject: |
   src/game/game_assembly.gd now drives a complete run through all four stages.
@@ -67,3 +67,12 @@ impact:
   - T-39 and T-40 sit behind T-38.
   - The five demonstrable items are demonstrable now, where none was before.
 opened_at: 2026-07-29T00:20:00-04:00
+resolved_at: 2026-07-29T10:00:00-04:00
+resolution: |
+  The landed NetworkBuilder now listens to organ_built and publishes every
+  generated route into its live nodes and edges. GameplayController supplies
+  those records to ResourceTick settlement. The integrated run observed
+  non-empty paths for all four OrganCheck demonstrations, passed BirthCheck
+  with waste 44.94434869248 below the maximum 50.0, completed the real
+  45-second birth state machine, and emitted season_completed before routing to
+  the ending scene.

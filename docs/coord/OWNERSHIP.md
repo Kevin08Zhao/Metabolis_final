@@ -54,24 +54,18 @@ node structure.
 
 ## The assembly
 
-`src/game/game_assembly.gd` is here for the same reason as the scenes. Every
-script in this repository was delivered and accepted on its own, and nothing
-ever put them together: before it, only the boot scene carried a script, no
-script instantiated another system, and all ten steps of `ChapterFlow` called
-placeholders that returned immediately. Nothing in any queue declares the
-wiring, and every task downstream of the loop needs it — T-38 is marked DONE
-only after a complete playthrough, and T-39 requires evidence of one.
+`src/game/game_assembly.gd` is here for the same reason as the scenes: it is the
+lifecycle wiring needed by every downstream full-run task. It does not own
+player input or the visible action flow. `GameplayController` is the sole owner
+of build and operation choices, minigames, resource settlement, buttons, and
+their presentation.
 
-It does three things and no more. It constructs each system once through the
-`configure` entry point that system already declared, it puts each panel into
-the region `src/game/main.tscn` names for it, and it registers a handler for
-each of the ten steps in table C1 of `docs/CHAPTER_FLOW_STEPS.md`. It implements
-no rule, owns no value, and replaces no task's logic. The flow's own exit
-conditions still decide when a step may be left.
-
-Where a step's owning task left a stub, the step is driven as far as that stub
-allows and the shortfall is reported through `unimplemented_steps` rather than
-filled in silently.
+The assembly adopts the controller's live `ResourceTick` and
+`ThresholdWatcher`, then wires the systems surrounding that playable core:
+bottleneck detection, organ cooperation, carryover, birth, ending, input lock,
+network intervention, and the event-driven auxiliary UI. It registers handlers
+only for lifecycle-owned steps and never constructs a second BuildDecision,
+OperationDecision, MinigameRuntime, or ResourceTick.
 
 ### The step handler seam
 

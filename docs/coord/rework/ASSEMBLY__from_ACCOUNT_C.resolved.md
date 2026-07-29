@@ -1,6 +1,6 @@
 target_task: none
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: c0653d605ede2d0569f065e1fa9add07a2106e8c
 subject: |
   Two accounts assembled the game in parallel, without either knowing the other
@@ -79,3 +79,12 @@ a_separate_finding: |
   T-38 now reads as READY under the three gating conditions while remaining
   impossible to write correctly.
 opened_at: 2026-07-29T00:45:00-04:00
+resolved_at: 2026-07-29T10:00:00-04:00
+resolution: |
+  The project owner selected the two audit actions that resolve this decision.
+  GameplayController is now the sole presentation and input owner. GameAssembly
+  was refactored into a lifecycle-only layer that adopts the controller's
+  ResourceTick and ThresholdWatcher instead of constructing duplicate build,
+  operation, minigame, or settlement systems. ChapterFlow handlers are
+  registered only for lifecycle-owned steps, and the complete interactive
+  regression plus the 45-second birth-to-ending run pass.

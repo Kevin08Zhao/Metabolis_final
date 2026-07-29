@@ -116,6 +116,17 @@ func register_organ(organ_id: StringName) -> bool:
 	return true
 
 
+## Synchronize an organ already completed by an authoritative build owner. This
+## emits no construction event: the owner has already published organ_built.
+func adopt_operating_organ(organ_id: StringName) -> bool:
+	if not ALLOWED_STATES_BY_ORGAN.has(organ_id):
+		push_warning("[ORGAN] Unknown organ '%s' cannot be adopted." % organ_id)
+		return false
+	_states[organ_id] = State.OPERATING
+	_construction_jobs.erase(organ_id)
+	return true
+
+
 func current_state(organ_id: StringName) -> State:
 	return _states.get(organ_id, State.BLUEPRINT) as State
 
