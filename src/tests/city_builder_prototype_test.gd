@@ -51,9 +51,19 @@ func _test_tools() -> void:
 		[]
 	)
 	_expect(route_tool.begin(Vector2i(13, 10)), "route must start at source port")
+	_expect(route_tool.extend_to(Vector2i(17, 10)), "route must accept a partial segment")
+	_expect(
+		route_tool.extend_to(Vector2i(15, 10))
+		and route_tool.segment_count() == 2,
+		"drawing backward over the route must erase the redundant tail"
+	)
 	_expect(route_tool.extend_to(Vector2i(19, 9)), "route must extend to target")
 	_expect(route_tool.finish(Vector2i(19, 9)), "route must finish at target port")
 	_expect(route_tool.is_contiguous(), "committed route must be orthogonally contiguous")
+	_expect(
+		route_tool.segment_count() == 7 and route_tool.turn_count() == 1,
+		"route tool must report length and bends for layout trade-offs"
+	)
 
 	var operation_tool := NetworkOperationTool.new()
 	operation_tool.configure(route_tool.path())
@@ -240,15 +250,146 @@ func _test_system_city_scene() -> void:
 		"locked body-system map must reject manual switching"
 	)
 	for index in range(4):
+		var before_build: Dictionary = prototype.debug_snapshot()
+		var placement := Vector2i(2, 2) if index == 0 else Vector2i(20, 8)
 		_expect(
-			prototype.debug_place_facility(Vector2i(20, 8)),
+			prototype.debug_place_facility(placement),
 			"system %d must accept a 6 x 6 facility" % index
 		)
+		var constructing: Dictionary = prototype.debug_snapshot()
+		var before_build_resources: Dictionary = before_build.get("resources", {})
+		var constructing_resources: Dictionary = constructing.get("resources", {})
+		var facility_cost: Dictionary = constructing.get("current_facility_cost", {})
+		_expect(
+			int(constructing.get("mode", -1))
+			== SystemCityPrototype.Mode.CONSTRUCTING
+			and is_equal_approx(
+				float(constructing.get("current_build_time_sec", 0.0)),
+				3.0
+			),
+			"system %d placement must begin a real three-second build" % index
+		)
+		_expect(
+			int(constructing_resources.get("nutrient_energy", 0))
+			== int(before_build_resources.get("nutrient_energy", 0))
+			- int(facility_cost.get("nutrient_energy", 0))
+			and int(constructing_resources.get("cell_material", 0))
+			== int(before_build_resources.get("cell_material", 0))
+			- int(facility_cost.get("cell_material", 0))
+			and int(constructing_resources.get("development_signal", 0))
+			== int(before_build_resources.get("development_signal", 0))
+			- int(facility_cost.get("development_signal", 0)),
+			"system %d placement must deduct the previewed building cost" % index
+		)
+		if index == 0:
+			await get_tree().create_timer(3.1).timeout
+			var built_after_wait: Dictionary = prototype.debug_snapshot()
+			_expect(
+				int(built_after_wait.get("mode", -1))
+				== SystemCityPrototype.Mode.ROUTING
+				and is_equal_approx(
+					float(built_after_wait.get("construction_progress", 0.0)),
+					1.0
+				),
+				"facility construction must finish after the real three-second wait"
+			)
+			var before_move_resources: Dictionary = built_after_wait.get(
+				"resources",
+				{}
+			)
+			_expect(
+				prototype.debug_place_facility(Vector2i(20, 8)),
+				"facility must relocate from outside the former build district"
+			)
+			var moved: Dictionary = prototype.debug_snapshot()
+			var moved_resources: Dictionary = moved.get("resources", {})
+			_expect(
+				is_equal_approx(
+					float(moved_resources.get("nutrient_energy", 0.0)),
+					float(before_move_resources.get("nutrient_energy", 0.0))
+				)
+				and is_equal_approx(
+					float(moved_resources.get("cell_material", 0.0)),
+					float(before_move_resources.get("cell_material", 0.0))
+				)
+				and is_equal_approx(
+					float(moved_resources.get("development_signal", 0.0)),
+					float(before_move_resources.get("development_signal", 0.0))
+				),
+				"relocation must refund the old facility before charging the new one"
+			)
+		_expect(
+			prototype.debug_finish_construction(),
+			"system %d test build must be finishable after construction starts" % index
+		)
+		_expect(
+			not prototype.debug_dispatch(),
+			"system %d must reject automatic dispatch before a route exists" % index
+		)
+		var waypoints: Array[Vector2i] = []
+		if index == 0:
+			waypoints = [Vector2i(26, 5)]
+		_expect(
+			prototype.debug_build_route(waypoints),
+			"system %d must accept a player-authored boundary route" % index
+		)
+		var planned: Dictionary = prototype.debug_snapshot()
+		var metrics: Dictionary = planned.get("route_metrics", {})
+		var route_cost: Dictionary = metrics.get("route_cost", {})
+		_expect(
+			int(metrics.get("road_cells", 0)) > 0
+			and int(metrics.get("throughput", 0)) > 0
+			and int(metrics.get("pressure", 0)) > 0,
+			"system %d route must expose cost and performance metrics" % index
+		)
+		_expect(
+			int(route_cost.get("cell_material", 0))
+			== int(metrics.get("road_cells", 0))
+			and int(route_cost.get("development_signal", 0)) == 0,
+			"road cost must depend only on the number of occupied road tiles"
+		)
+		if index == 0:
+			_expect(
+				int(metrics.get("excess_segments", 0)) > 0
+				and int(metrics.get("turns", 0)) >= 2
+				and int(metrics.get("throughput", 100)) < 100,
+				"a detoured route must be longer, bend more, and lose throughput"
+			)
 		_expect(
 			prototype.debug_dispatch(),
-			"system %d must dispatch a boundary delivery" % index
+			"system %d must commit its planned boundary network" % index
+		)
+		var committed: Dictionary = prototype.debug_snapshot()
+		var before_resources: Dictionary = planned.get("resources", {})
+		var after_resources: Dictionary = committed.get("resources", {})
+		var total_cost: Dictionary = metrics.get("total_cost", {})
+		_expect(
+			int(after_resources.get("nutrient_energy", 0))
+			== int(before_resources.get("nutrient_energy", 0))
+			- int(total_cost.get("nutrient_energy", 0))
+			and int(after_resources.get("cell_material", 0))
+			== int(before_resources.get("cell_material", 0))
+			- int(total_cost.get("cell_material", 0))
+			and int(after_resources.get("development_signal", 0))
+			== int(before_resources.get("development_signal", 0))
+			- int(total_cost.get("development_signal", 0)),
+			"system %d commit must deduct its displayed plan cost exactly once" % index
 		)
 		prototype.debug_finish_delivery()
+		var post_delivery: Dictionary = prototype.debug_snapshot()
+		if int(post_delivery.get("mode", -1)) == SystemCityPrototype.Mode.BOTTLENECK:
+			_expect(
+				bool(post_delivery.get("bottleneck_active", false)),
+				"scripted system %d fault must appear on the committed route" % index
+			)
+			_expect(
+				prototype.debug_select_bottleneck(),
+				"system %d bottleneck must be selected on the map" % index
+			)
+			_expect(
+				prototype.debug_repair_bottleneck(),
+				"system %d bottleneck must consume resources and restore flow" % index
+			)
 		if index < 3:
 			var unlocked: Dictionary = prototype.debug_snapshot()
 			_expect(
@@ -260,11 +401,17 @@ func _test_system_city_scene() -> void:
 
 	var complete: Dictionary = prototype.debug_snapshot()
 	_expect(
-		int(complete.get("mode", -1)) == 4
+		int(complete.get("mode", -1)) == SystemCityPrototype.Mode.COMPLETE
 		and int(complete.get("unlocked_count", 0)) == 4
 		and int(complete.get("facility_count", 0)) == 4
 		and int(complete.get("completed_dispatch_count", 0)) == 4,
 		"four facilities and four boundary dispatches must complete the body network"
+	)
+	var final_resources: Dictionary = complete.get("resources", {})
+	_expect(
+		int(final_resources.get("cell_material", 0)) > 0
+		and int(final_resources.get("development_signal", 0)) > 0,
+		"the four-system loop must remain economically completable"
 	)
 	_expect(
 		prototype.debug_switch_system(0),

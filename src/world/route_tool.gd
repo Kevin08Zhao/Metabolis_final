@@ -75,6 +75,23 @@ func path() -> Array[Vector2i]:
 	return _path.duplicate()
 
 
+func segment_count() -> int:
+	return maxi(_path.size() - 1, 0)
+
+
+func turn_count() -> int:
+	if _path.size() < 3:
+		return 0
+	var turns := 0
+	var previous_direction := _path[1] - _path[0]
+	for index in range(2, _path.size()):
+		var direction := _path[index] - _path[index - 1]
+		if direction != previous_direction:
+			turns += 1
+		previous_direction = direction
+	return turns
+
+
 func is_contiguous() -> bool:
 	if _path.is_empty():
 		return false
@@ -93,6 +110,11 @@ func _append_cell(cell: Vector2i) -> bool:
 		route_failed = true
 		return false
 	if not _path.is_empty() and _path[-1] == cell:
+		return true
+	var existing_index := _path.find(cell)
+	if existing_index >= 0:
+		_path.resize(existing_index + 1)
+		route_failed = false
 		return true
 	_path.append(cell)
 	return true
