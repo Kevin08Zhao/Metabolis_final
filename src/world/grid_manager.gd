@@ -32,10 +32,10 @@ enum CellState {
 	OCCUPIED,
 }
 
-const STATE_COLORS: Dictionary = {
-	CellState.UNAVAILABLE: Color("#242a30"),
-	CellState.CANDIDATE: Color("#3f9b8f"),
-	CellState.OCCUPIED: Color("#b87537"),
+const STATE_TEXTURE_NAMES: Dictionary = {
+	CellState.UNAVAILABLE: &"tile_tissue_ground",
+	CellState.CANDIDATE: &"tile_construction_focus",
+	CellState.OCCUPIED: &"tile_construction_background",
 }
 const FOOTPRINT_TILES: Dictionary = {
 	&"standard_building": Vector2i(2, 2),
@@ -50,6 +50,7 @@ var _cells: Array[Array] = []
 var _cell_states: Array[Array] = []
 var _slot_overlays: Dictionary = {}
 var _occupied_cells: Array[Vector2i] = []
+var _state_textures: Dictionary = {}
 
 
 func _ready() -> void:
@@ -78,15 +79,23 @@ func rebuild_grid() -> bool:
 	_clear_generated_nodes()
 	_cells.clear()
 	_cell_states.clear()
+	_state_textures.clear()
+	for state in STATE_TEXTURE_NAMES:
+		_state_textures[state] = AssetLoader.get_static_texture(
+			STATE_TEXTURE_NAMES[state]
+		)
 	for row in range(_rows):
-		var cell_row: Array[ColorRect] = []
+		var cell_row: Array[TextureRect] = []
 		var state_row: Array[CellState] = []
 		for column in range(_columns):
-			var cell := ColorRect.new()
+			var cell := TextureRect.new()
 			cell.name = "Cell_%d_%d" % [column, row]
 			cell.position = Vector2(column * _tile_size, row * _tile_size)
 			cell.size = Vector2(_tile_size, _tile_size)
-			cell.color = STATE_COLORS[CellState.UNAVAILABLE]
+			cell.texture = _state_textures[CellState.UNAVAILABLE]
+			cell.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			cell.stretch_mode = TextureRect.STRETCH_KEEP
+			cell.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			cell.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			add_child(cell)
 			cell_row.append(cell)
@@ -292,7 +301,9 @@ func _set_cell_state(grid_coordinate: Vector2i, state: CellState) -> void:
 	if not _is_in_bounds(grid_coordinate):
 		return
 	_cell_states[grid_coordinate.y][grid_coordinate.x] = state
-	(_cells[grid_coordinate.y][grid_coordinate.x] as ColorRect).color = STATE_COLORS[state]
+	(_cells[grid_coordinate.y][grid_coordinate.x] as TextureRect).texture = (
+		_state_textures[state]
+	)
 
 
 func _is_in_bounds(grid_coordinate: Vector2i) -> bool:

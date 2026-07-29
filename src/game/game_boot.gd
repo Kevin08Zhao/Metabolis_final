@@ -44,14 +44,21 @@ func _ready() -> void:
 	_controller = get_node_or_null("GuidanceLayer")
 	var resource_bar := get_node_or_null("ResourceStatusBar") as ResourceBar
 	var grid_manager := get_node_or_null("CityMap") as GridManager
+	var city_art := get_node_or_null("CityArt") as Node2D
 	var network_builder := get_node_or_null("CityNetwork") as NetworkBuilder
+	var birth_art := get_node_or_null("BirthArt") as TextureRect
 	if (
 		_controller == null
 		or resource_bar == null
 		or grid_manager == null
+		or city_art == null
 		or network_builder == null
+		or birth_art == null
 	):
-		push_error("%s Gameplay controller, map, network, or resource bar is missing." % LOG_PREFIX)
+		push_error(
+			"%s Gameplay controller, map art, network, birth art, or resource bar is missing."
+			% LOG_PREFIX
+		)
 		return
 
 	if not _flow.has_method("start_new_run"):
@@ -67,7 +74,9 @@ func _ready() -> void:
 		_resources,
 		resource_bar,
 		grid_manager,
-		network_builder
+		city_art,
+		network_builder,
+		birth_art
 	)
 	_controller.connect("visual_state_changed", _refresh_status)
 	_flow.start_new_run()

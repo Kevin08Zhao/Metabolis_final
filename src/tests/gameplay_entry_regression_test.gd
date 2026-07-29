@@ -59,6 +59,12 @@ func _test_space_advances_gameplay(main: Node) -> void:
 	if game == null:
 		return
 
+	var city_map := game.get_node_or_null("CityMap")
+	_expect(
+		city_map != null and _count_landed_textures(city_map) > 0,
+		"The playable city map must render landed pixel-art terrain textures"
+	)
+
 	var flow := game.get_node_or_null("ChapterFlow")
 	_expect(flow != null, "Game scene must contain ChapterFlow")
 	if flow == null:
@@ -161,6 +167,11 @@ func _test_first_stage_interactions(main: Node) -> void:
 		< float(resources_before[&"nutrient_energy"]),
 		"Build confirmation must visibly deduct resources"
 	)
+	var city_art := game.get_node_or_null("CityArt")
+	_expect(
+		city_art != null and _count_landed_textures(city_art) > 0,
+		"Confirmed construction must add a landed pixel-art visual to the city"
+	)
 	var city_map := game.get_node_or_null("CityMap") as GridManager
 	_expect(
 		city_map != null
@@ -171,6 +182,11 @@ func _test_first_stage_interactions(main: Node) -> void:
 	_expect(
 		network_builder != null and not network_builder.edges.is_empty(),
 		"Confirmed build must publish a visible transport extension"
+	)
+	_expect(
+		network_builder != null
+		and _count_landed_textures(network_builder) > 0,
+		"Published transport routes must use landed pixel-art vessel tiles"
 	)
 
 	if not await _press_button(game, "ContinueAction"):
@@ -275,6 +291,22 @@ func _complete_remaining_run(game: Node, flow: Node) -> void:
 		action_title != null and action_title.text == "Run Complete",
 		"Completing stage four must replace the action panel with a run-complete state"
 	)
+	var birth_art := game.get_node_or_null("BirthArt") as TextureRect
+	_expect(
+		birth_art != null
+		and birth_art.visible
+		and birth_art.texture != null
+		and birth_art.texture.get_size() == Vector2(640, 320)
+		and birth_art.call("current_frame_id") == &"stage1_umbilical_stop",
+		"Run completion must begin the timed PixelLab birth sequence"
+	)
+	birth_art.call("advance_time", 35.0)
+	_expect(
+		birth_art.texture != null
+		and birth_art.texture.get_size() == Vector2(640, 360)
+		and birth_art.call("current_frame_id") == &"stage5_ending",
+		"The 35-second mark must display the landed first-breath ending"
+	)
 
 
 func _balance_ids(path: String) -> Array[StringName]:
@@ -312,6 +344,35 @@ func _visible_text_signature(root_node: Node) -> PackedStringArray:
 			signature.append("%s=%s" % [root_node.get_path_to(node), node.text])
 	signature.sort()
 	return signature
+
+
+func _count_landed_textures(root_node: Node) -> int:
+	var count := 0
+	var pending: Array[Node] = [root_node]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		for child in node.get_children():
+			pending.append(child)
+		var texture: Texture2D = null
+		if node is TextureRect and node.is_visible_in_tree():
+			texture = node.texture
+		elif node is Sprite2D and node.is_visible_in_tree():
+			texture = node.texture
+		if texture != null and _texture_has_multiple_colors(texture):
+			count += 1
+	return count
+
+
+func _texture_has_multiple_colors(texture: Texture2D) -> bool:
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return false
+	var first_color := image.get_pixel(0, 0)
+	for y in image.get_height():
+		for x in image.get_width():
+			if image.get_pixel(x, y) != first_color:
+				return true
+	return false
 
 
 func _expect(condition: bool, message: String) -> void:

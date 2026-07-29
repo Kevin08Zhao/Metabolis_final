@@ -21,7 +21,9 @@ var _flow: ChapterFlow = null
 var _resources: ResourcePool = null
 var _resource_bar: ResourceBar = null
 var _grid_manager: GridManager = null
+var _city_art: Node2D = null
 var _network_builder: NetworkBuilder = null
+var _birth_art: TextureRect = null
 
 var _build_decision: BuildDecision = null
 var _operation_decision: OperationDecision = null
@@ -65,13 +67,17 @@ func configure(
 	resources: ResourcePool,
 	resource_bar: ResourceBar,
 	grid_manager: GridManager,
-	network_builder: NetworkBuilder
+	city_art: Node2D,
+	network_builder: NetworkBuilder,
+	birth_art: TextureRect
 ) -> void:
 	_flow = flow
 	_resources = resources
 	_resource_bar = resource_bar
 	_grid_manager = grid_manager
+	_city_art = city_art
 	_network_builder = network_builder
+	_birth_art = birth_art
 
 	_build_decision = BuildDecision.new()
 	_build_decision.name = "BuildDecision"
@@ -100,6 +106,11 @@ func request_advance() -> bool:
 	if _flow == null or _flow.chapter == null:
 		return false
 	var step_id := _flow.current_step_id()
+	if step_id == &"build_completion" and _city_art != null:
+		var completed_organ_id := StringName(
+			str(_flow.chapter.active_build_decision_id).trim_prefix("build_")
+		)
+		_city_art.set_organ_state(completed_organ_id, &"completed")
 	if step_id == &"resource_settlement" and not _resource_settled:
 		_set_feedback("Settle stage resources before continuing.")
 		return false
@@ -161,6 +172,7 @@ func _refresh() -> void:
 	_clear_container(_slots)
 	_clear_container(_actions)
 	_feedback.text = ""
+	_refresh_birth_art()
 	if _flow.is_run_complete():
 		_title.text = "Run Complete"
 		_body.text = "All four development stages are complete."
@@ -192,6 +204,7 @@ func _refresh() -> void:
 		&"operation_decision":
 			_render_operation_decision()
 		&"system_activation":
+			_activate_stage_art()
 			_body.text = "The new system is active and collaborating with the city."
 			_add_continue_button()
 		&"knowledge_unlock":
@@ -200,6 +213,27 @@ func _refresh() -> void:
 		&"stage_complete":
 			_body.text = "Stage requirements are complete. Continue to the next stage."
 			_add_continue_button()
+
+
+func _refresh_birth_art() -> void:
+	if _birth_art == null:
+		return
+	if _flow.is_run_complete():
+		if _birth_art.call("current_frame_id") == &"":
+			_birth_art.call("start_sequence")
+		return
+	_birth_art.call("hide_frame")
+
+
+func _activate_stage_art() -> void:
+	if _city_art == null:
+		return
+	for organ in _built_organs:
+		if StringName(organ.get("stage_id", &"")) == _flow.chapter.stage_id:
+			_city_art.set_organ_state(
+				StringName(organ.get("organ_id", &"")),
+				&"operating"
+			)
 
 
 func _render_minigame() -> void:
@@ -441,6 +475,25 @@ func _confirm_build() -> void:
 	if confirmed:
 		_register_built_organ(decision_id, option_id, slot_id)
 		_sync_resource_bar()
+	elif (
+		_city_art != null
+		and option_id != &""
+		and slot_id != &""
+	):
+		var preview_organ_id := StringName(
+			str(decision_id).trim_prefix("build_")
+		)
+		var preview_config := _dictionary_value(
+			"organs.%s" % preview_organ_id
+		)
+		_city_art.place_organ(
+			preview_organ_id,
+			_slot_grid_origin(decision_id, option_id, slot_id),
+			StringName(
+				preview_config.get("footprint_id", &"standard_building")
+			),
+			&"blueprint"
+		)
 	_feedback.text = _build_decision.feedback_text()
 	_refresh()
 	visual_state_changed.emit()
@@ -641,6 +694,7 @@ func _register_built_organ(
 	var grid_position := Vector2i.ZERO if cells.is_empty() else cells[0]
 	var organ := organ_config.duplicate(true)
 	organ["organ_id"] = organ_id
+	organ["stage_id"] = _flow.chapter.stage_id
 	organ["state"] = &"operating"
 	organ["state_id"] = &"operating"
 	organ["grid_position"] = grid_position
@@ -648,7 +702,39 @@ func _register_built_organ(
 	organ["active_multiplier"] = 1.0
 	organ["tier_multiplier"] = 1.0
 	_built_organs.append(organ)
+	if _city_art != null:
+		_city_art.place_organ(
+			organ_id,
+			grid_position,
+			StringName(organ.get("footprint_id", &"standard_building")),
+			&"under_construction"
+		)
 	EventBus.organ_built.emit(organ_id, slot_id, option_id)
+
+
+func _slot_grid_origin(
+	decision_id: StringName,
+	option_id: StringName,
+	slot_id: StringName
+) -> Vector2i:
+	var option_path := "build_options.%s.%s" % [decision_id, option_id]
+	var slot_ids: Variant = Balance.get_value(
+		"%s.available_slot_ids" % option_path,
+		[]
+	)
+	var coordinates: Variant = Balance.get_value(
+		"%s.slot_candidates" % option_path,
+		[]
+	)
+	if not slot_ids is Array or not coordinates is Array:
+		return Vector2i.ZERO
+	var index := (slot_ids as Array).find(String(slot_id))
+	if index < 0 or index >= (coordinates as Array).size():
+		return Vector2i.ZERO
+	var coordinate: Variant = (coordinates as Array)[index]
+	if not coordinate is Array or coordinate.size() != 2:
+		return Vector2i.ZERO
+	return Vector2i(int(coordinate[0]), int(coordinate[1]))
 
 
 func _dictionary_value(path: String) -> Dictionary:
