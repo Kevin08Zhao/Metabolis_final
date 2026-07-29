@@ -23,6 +23,8 @@ const STEP_LABELS := {
 
 var _flow: Node = null
 var _status_label: Label = null
+var _controller: Node = null
+var _resources: ResourcePool = null
 
 
 func _ready() -> void:
@@ -39,13 +41,23 @@ func _ready() -> void:
 		push_error("%s No GameplayStatus label found; gameplay changes will not be visible." % LOG_PREFIX)
 		return
 
+	_controller = get_node_or_null("GuidanceLayer")
+	var resource_bar := get_node_or_null("ResourceStatusBar") as ResourceBar
+	if _controller == null or resource_bar == null:
+		push_error("%s Gameplay controller or resource bar is missing." % LOG_PREFIX)
+		return
+
 	if not _flow.has_method("start_new_run"):
 		push_error("%s ChapterFlow node has no start_new_run method." % LOG_PREFIX)
 		return
 
+	_resources = ResourcePool.new()
+	_initialize_resources()
+	_controller.call("configure", _flow, _resources, resource_bar)
+	_controller.connect("visual_state_changed", _refresh_status)
 	_flow.start_new_run()
 	_refresh_status()
-	print("%s Run started. Press Space to advance, Shift+Space to jump to build step." % LOG_PREFIX)
+	print("%s Run started. Use the action panel or press Space to continue." % LOG_PREFIX)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -62,9 +74,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _advance() -> void:
-	if not _flow.has_method("advance"):
+	if _controller == null:
 		return
-	var ok: bool = _flow.advance()
+	var ok: bool = _controller.call("request_advance")
 	if ok:
 		var stage: int = _flow.call("stage_number") if _flow.has_method("stage_number") else 0
 		var step: StringName = _flow.call("current_step_id") if _flow.has_method("current_step_id") else &""
@@ -75,6 +87,9 @@ func _advance() -> void:
 
 
 func _jump_to_build() -> void:
+	if _controller != null:
+		_advance()
+		return
 	if not _flow.has_method("advance_to"):
 		print("%s ChapterFlow does not support jump-to-build." % LOG_PREFIX)
 		return
@@ -88,6 +103,18 @@ func _jump_to_build() -> void:
 	print("%s Jumped to build decision step." % LOG_PREFIX)
 
 
+func _initialize_resources() -> void:
+	for resource_id in ResourceBar.RESOURCE_IDS:
+		var initial: Variant = Balance.get_value(
+			"resources.%s.initial" % resource_id,
+			0
+		)
+		if resource_id == &"knowledge_badge_count":
+			_resources.set(resource_id, int(initial))
+		else:
+			_resources.set(resource_id, float(initial))
+
+
 func _refresh_status() -> void:
 	if _status_label == null or not is_instance_valid(_status_label):
 		return
@@ -95,6 +122,6 @@ func _refresh_status() -> void:
 	var step_id: StringName = _flow.call("current_step_id") if _flow.has_method("current_step_id") else &""
 	var step_label := str(STEP_LABELS.get(step_id, str(step_id).capitalize()))
 	_status_label.text = (
-		"Stage %d - %s\nSPACE: Continue    SHIFT+SPACE: Jump to Build"
+		"Stage %d - %s\nSPACE: Continue or use the action panel"
 		% [stage, step_label]
 	)

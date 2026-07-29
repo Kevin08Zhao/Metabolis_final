@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 ; Playable stage host.
 ;
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://core/chapter_flow.gd" id="2"]
 [ext_resource type="Script" path="res://ui/resource_bar.gd" id="3"]
 [ext_resource type="Script" path="res://world/grid_manager.gd" id="4"]
+[ext_resource type="Script" path="res://ui/gameplay_controller.gd" id="5"]
 
 [node name="Game" type="Control"]
 anchors_preset = 15
@@ -80,6 +81,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("5")
 
 [node name="GameplayStatus" type="Label" parent="GuidanceLayer"]
 z_index = 10
@@ -94,6 +96,6 @@ theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725,
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 18
 text = "Stage 1 - Observe State
-SPACE: Continue    SHIFT+SPACE: Jump to Build"
+SPACE: Continue or use the action panel"
 horizontal_alignment = 1
 vertical_alignment = 1
