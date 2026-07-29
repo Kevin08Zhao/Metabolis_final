@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+; Title screen.
+;
+; Structure only. The background texture is deliberately unassigned and every
+; label uses the engine default style, because the title's visual treatment,
+; font sizing, letter spacing and pulse belong to D-29. This scene exists so
+; that D-29 has a runtime scene to dress and so that the release chain has a
+; real boot target.
+;
+; SceneRouter adds its entry buttons into MenuAnchor, which is why that node
+; carries the title_menu_anchor group. Without the group the router falls back
+; to building the menu under itself, which is what it did before this scene
+; existed.
+
+[node name="Title" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Titles" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GameTitle" type="Label" parent="Titles"]
+text = "Metabolis: Birth of the City of Life"
+
+[node name="Subtitle" type="Label" parent="Titles"]
+text = "Birth of the City of Life"
+
+[node name="Disclaimer" type="Label" parent="Titles"]
+autowrap_mode = 3
+text = "This game is a simplified educational model of human development. It is not for medical judgement, diagnosis, or treatment."
+
+[node name="MenuAnchor" type="VBoxContainer" parent="Titles" groups=["title_menu_anchor"]]

@@ -47,12 +47,23 @@ const CONFIRM_LABEL := "New Game will overwrite your progress. Confirm?"
 const CONFIRM_YES := "Yes, start a new game"
 const CONFIRM_NO := "No, go back"
 
+## A node in this group inside the loaded title scene receives the entry
+## buttons. Without one, or without a title scene at all, the menu is built
+## under the router itself, which is what happened before the scenes existed.
+const TITLE_MENU_ANCHOR_GROUP := &"title_menu_anchor"
+
 ## Where each route's scene lives. Assigned rather than hardcoded at the point of
 ## use so an integrator can repoint them; the registration steps in
 ## docs/coord/done/T-32.md say which scenes to create.
+##
+## The title entry is optional. Leave it empty and the title stays what T-32
+## delivered: a menu the router builds itself, with no scene resident. Point it
+## at a scene and the title becomes a scene like the other two, which is what
+## D-29 needs in order to dress it.
 var scene_paths := {
-	ROUTE_GAME: "res://main.tscn",
-	ROUTE_ENDING: "res://main.tscn",
+	ROUTE_TITLE: "res://ui/title.tscn",
+	ROUTE_GAME: "res://game/main.tscn",
+	ROUTE_ENDING: "res://ui/ending.tscn",
 }
 
 signal route_changed(route: StringName)
@@ -77,13 +88,57 @@ func _ready() -> void:
 # ---------------------------------------------------------------------------
 
 ## Show the title and build its entries from what the save can support.
+##
+## The title scene is loaded when one is registered, and the entries go into its
+## anchor. When none is registered the router builds the menu under itself and
+## leaves nothing resident, which is the behaviour T-32 delivered and accepted.
 func go_to_title() -> void:
 	_awaiting_new_game_confirmation = false
+	_free_title_menu()
 	_free_resident_scene()
 	_route = ROUTE_TITLE
+	_load_title_scene()
 	_build_title_menu()
 	print("%s title" % LOG_PREFIX)
 	route_changed.emit(_route)
+
+
+## Put the title scene in the host, if there is one to put there. A registered
+## path that will not load is an error rather than a silent fallback: a title
+## that quietly loses its background is worse than one that says why.
+func _load_title_scene() -> void:
+	var path: String = str(scene_paths.get(ROUTE_TITLE, ""))
+	if path.is_empty():
+		return
+	if not ResourceLoader.exists(path):
+		push_error("%s Title scene '%s' is registered but does not exist." % [LOG_PREFIX, path])
+		return
+
+	var packed: PackedScene = load(path)
+	if packed == null:
+		push_error("%s Could not load the title scene '%s'." % [LOG_PREFIX, path])
+		return
+
+	_resident_scene = packed.instantiate()
+	_scene_host.add_child(_resident_scene)
+
+
+## Where the entry buttons go. The anchor inside the title scene when there is
+## one, and the router itself when there is not.
+func _title_menu_parent() -> Node:
+	if _resident_scene == null or not is_instance_valid(_resident_scene):
+		return self
+	var tree := get_tree()
+	if tree == null:
+		return self
+	for node in tree.get_nodes_in_group(TITLE_MENU_ANCHOR_GROUP):
+		if _resident_scene.is_ancestor_of(node) or node == _resident_scene:
+			return node
+	push_warning(
+		"%s The title scene has no node in group '%s'; the entries were built outside it."
+		% [LOG_PREFIX, TITLE_MENU_ANCHOR_GROUP]
+	)
+	return self
 
 
 ## Continue the existing run. Refused when there is nothing to continue.
@@ -267,14 +322,18 @@ func _free_resident_scene() -> void:
 func _build_title_menu() -> void:
 	_free_title_menu()
 
+	var parent := _title_menu_parent()
 	_title_menu = VBoxContainer.new()
 	_title_menu.name = "TitleMenu"
-	add_child(_title_menu)
+	parent.add_child(_title_menu)
 
-	var title := Label.new()
-	title.name = "GameTitle"
-	title.text = "Metabolis: Birth of the City of Life"
-	_title_menu.add_child(title)
+	# The scene carries the title when there is a scene. Adding a second one
+	# here would put the name on screen twice.
+	if parent == self:
+		var title := Label.new()
+		title.name = "GameTitle"
+		title.text = "Metabolis: Birth of the City of Life"
+		_title_menu.add_child(title)
 
 	if _awaiting_new_game_confirmation:
 		var prompt := Label.new()
@@ -310,10 +369,15 @@ func _handler_for(entry: StringName) -> Callable:
 			return func() -> void: pass
 
 
+## The menu's parent is the router when there is no title scene and the scene's
+## anchor when there is, so the removal asks the node where it lives rather than
+## assuming. Callers must free the menu before the scene that holds it.
 func _free_title_menu() -> void:
 	if _title_menu == null or not is_instance_valid(_title_menu):
 		_title_menu = null
 		return
-	remove_child(_title_menu)
+	var parent := _title_menu.get_parent()
+	if parent != null:
+		parent.remove_child(_title_menu)
 	_title_menu.free()
 	_title_menu = null

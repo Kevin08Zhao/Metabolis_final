@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+; Ending screen.
+;
+; Structure only, engine default style throughout. T-25 builds the summary and
+; docs/EVENT_API.md fixes its shape: season_completed carries a summary that
+; contains no score, no rating and no title, so this scene reserves a place for
+; the summary and nothing that could be mistaken for a grade.
+;
+; The teaching-model statement repeats here because the ending is the other
+; screen a player can reach without passing the title, through go_to_ending.
+
+[node name="Ending" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Heading" type="Label" parent="Column"]
+text = "Metabolis: Birth of the City of Life"
+
+[node name="Summary" type="VBoxContainer" parent="Column"]
+
+[node name="Disclaimer" type="Label" parent="Column"]
+autowrap_mode = 3
+text = "This game is a simplified educational model of human development. It is not for medical judgement, diagnosis, or treatment."
