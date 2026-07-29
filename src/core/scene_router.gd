@@ -91,6 +91,9 @@ func _ready() -> void:
 	_scene_host = Node.new()
 	_scene_host.name = "SceneHost"
 	add_child(_scene_host)
+	# Boot routing: always open the title on launch. Deferred so the autoloads
+	# that go_to_title reads (SaveManager, Balance) are fully ready.
+	call_deferred("go_to_title")
 
 
 # ---------------------------------------------------------------------------
