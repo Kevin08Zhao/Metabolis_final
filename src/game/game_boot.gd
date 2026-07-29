@@ -4,12 +4,25 @@ extends Control
 ## Attached to the root Game node. On ready it triggers ChapterFlow and wires
 ## keyboard input so the player can step through the stage loop with Space.
 ## All game logic lives in ChapterFlow and the simulation scripts; this file
-## only boots them and provides a debug advance key.
+## boots them, provides a debug advance key, and keeps the visible step status
+## synchronized with ChapterFlow.
 
 const LOG_PREFIX := "[GAME]"
+const STEP_LABELS := {
+	&"observe_state": "Observe State",
+	&"receive_targets": "Receive Targets",
+	&"optional_minigame": "Optional Minigame",
+	&"resource_settlement": "Resource Settlement",
+	&"build_decision": "Build Decision",
+	&"build_completion": "Build Completion",
+	&"operation_decision": "Operation Decision",
+	&"system_activation": "System Activation",
+	&"knowledge_unlock": "Knowledge Unlock",
+	&"stage_complete": "Stage Complete",
+}
 
 var _flow: Node = null
-var _input_count := 0
+var _status_label: Label = null
 
 
 func _ready() -> void:
@@ -21,11 +34,17 @@ func _ready() -> void:
 		push_error("%s No ChapterFlow node found; game cannot start." % LOG_PREFIX)
 		return
 
+	_status_label = get_node_or_null("GuidanceLayer/GameplayStatus") as Label
+	if _status_label == null:
+		push_error("%s No GameplayStatus label found; gameplay changes will not be visible." % LOG_PREFIX)
+		return
+
 	if not _flow.has_method("start_new_run"):
 		push_error("%s ChapterFlow node has no start_new_run method." % LOG_PREFIX)
 		return
 
 	_flow.start_new_run()
+	_refresh_status()
 	print("%s Run started. Press Space to advance, Shift+Space to jump to build step." % LOG_PREFIX)
 
 
@@ -49,6 +68,7 @@ func _advance() -> void:
 	if ok:
 		var stage: int = _flow.call("stage_number") if _flow.has_method("stage_number") else 0
 		var step: StringName = _flow.call("current_step_id") if _flow.has_method("current_step_id") else &""
+		_refresh_status()
 		print("%s stage %d  step=%s" % [LOG_PREFIX, stage, step])
 	else:
 		print("%s Cannot advance yet." % LOG_PREFIX)
@@ -64,4 +84,17 @@ func _jump_to_build() -> void:
 			return
 		_flow.advance()
 	_flow.call("advance_to", 4)
+	_refresh_status()
 	print("%s Jumped to build decision step." % LOG_PREFIX)
+
+
+func _refresh_status() -> void:
+	if _status_label == null or not is_instance_valid(_status_label):
+		return
+	var stage: int = _flow.call("stage_number") if _flow.has_method("stage_number") else 0
+	var step_id: StringName = _flow.call("current_step_id") if _flow.has_method("current_step_id") else &""
+	var step_label := str(STEP_LABELS.get(step_id, str(step_id).capitalize()))
+	_status_label.text = (
+		"Stage %d - %s\nSPACE: Continue    SHIFT+SPACE: Jump to Build"
+		% [stage, step_label]
+	)

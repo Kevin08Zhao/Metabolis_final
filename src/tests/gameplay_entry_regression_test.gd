@@ -27,7 +27,7 @@ func _run() -> void:
 
 	_test_new_game_button_is_deferred(main, router)
 	await get_tree().process_frame
-	_test_space_advances_gameplay(main)
+	await _test_space_advances_gameplay(main)
 
 	main.queue_free()
 	await get_tree().process_frame
@@ -63,13 +63,44 @@ func _test_space_advances_gameplay(main: Node) -> void:
 	if flow == null:
 		return
 
+	var gameplay_status := game.get_node_or_null("GuidanceLayer/GameplayStatus") as Label
+	_expect(gameplay_status != null, "Game scene must expose a visible gameplay status label")
 	var step_before: StringName = flow.current_step_id()
+	var visible_text_before := _visible_text_signature(game)
 	var event := InputEventKey.new()
 	event.keycode = KEY_SPACE
 	event.pressed = true
 	game.call("_unhandled_input", event)
+	await get_tree().process_frame
 	var step_after: StringName = flow.current_step_id()
+	var visible_text_after := _visible_text_signature(game)
 	_expect(step_after != step_before, "Space must advance the current gameplay step")
+	_expect(
+		visible_text_after != visible_text_before,
+		"Space must produce a visible text change when the gameplay step advances"
+	)
+	if gameplay_status != null:
+		_expect(
+			gameplay_status.text.contains("Receive Targets"),
+			"Gameplay status must describe the newly entered step"
+		)
+
+
+func _visible_text_signature(root_node: Node) -> PackedStringArray:
+	var signature := PackedStringArray()
+	var pending: Array[Node] = [root_node]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		for child in node.get_children():
+			pending.append(child)
+		if node is Label and node.is_visible_in_tree():
+			signature.append("%s=%s" % [root_node.get_path_to(node), node.text])
+		elif node is RichTextLabel and node.is_visible_in_tree():
+			signature.append("%s=%s" % [root_node.get_path_to(node), node.text])
+		elif node is Button and node.is_visible_in_tree():
+			signature.append("%s=%s" % [root_node.get_path_to(node), node.text])
+	signature.sort()
+	return signature
 
 
 func _expect(condition: bool, message: String) -> void:
