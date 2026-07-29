@@ -132,6 +132,31 @@ class CheckAssetsTests(unittest.TestCase):
                 {issue["code"] for issue in report["issues"]["error"]},
             )
 
+    def test_parent_directory_is_not_enough_provenance(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "art" / "tiles").mkdir(parents=True)
+            (root / "docs" / "assets").mkdir(parents=True)
+            (root / "art" / "palette.gpl").write_text(
+                "GIMP Palette\n#\n#140F1D\n", encoding="utf-8"
+            )
+            Image.new("RGBA", (16, 16), (20, 15, 29, 255)).save(
+                root / "art" / "tiles" / "tile_test_plain.png"
+            )
+            (root / "docs" / "assets" / "D-00_MANIFEST.md").write_text(
+                "All production tiles are stored under `art/tiles/`.",
+                encoding="utf-8",
+            )
+
+            result = self.run_checker(root)
+
+            self.assertEqual(result.returncode, 1, result.stderr)
+            report = json.loads(result.stdout)
+            self.assertIn(
+                "asset_provenance_missing",
+                {issue["code"] for issue in report["issues"]["error"]},
+            )
+
     def test_reports_wrong_tile_dimensions(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -162,10 +187,10 @@ class CheckAssetsTests(unittest.TestCase):
                 "GIMP Palette\n#\n#140F1D\n", encoding="utf-8"
             )
             (root / "docs" / "EVENT_API.md").write_text(
-                "| event | audio |\n| build_confirmed | sfx_build_confirm |\n",
+                "| Event | audio |\n| `build_confirmed` | sfx_build_confirm |\n",
                 encoding="utf-8",
             )
-            (root / "audio" / "sfx_unknown.wav").write_bytes(b"RIFF")
+            (root / "audio" / "unknown_event.wav").write_bytes(b"RIFF")
 
             result = self.run_checker(root)
 
@@ -186,7 +211,7 @@ class CheckAssetsTests(unittest.TestCase):
                 "GIMP Palette\n#\n#140F1D\n", encoding="utf-8"
             )
             (root / "docs" / "EVENT_API.md").write_text(
-                "| event | audio |\n| build_confirmed | sfx_build_confirm |\n",
+                "| Event | audio |\n| `build_confirmed` | sfx_build_confirm |\n",
                 encoding="utf-8",
             )
             for filename in (
@@ -215,7 +240,7 @@ class CheckAssetsTests(unittest.TestCase):
                 "GIMP Palette\n#\n#140F1D\n", encoding="utf-8"
             )
             (root / "docs" / "EVENT_API.md").write_text(
-                "| event | audio |\n| build_confirmed | sfx_build_confirm |\n",
+                "| Event | audio |\n| `build_confirmed` | sfx_build_confirm |\n",
                 encoding="utf-8",
             )
             (root / "audio" / "ambient" / "heartbeat_bed_fast.wav").write_bytes(

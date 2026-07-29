@@ -125,7 +125,10 @@ func retry_birth() -> bool:
 		return false
 	birth_machine.city_metrics = controller.birth_metrics()
 	_birth_attempts += 1
-	return birth_machine.acknowledge_rollback()
+	var retried := birth_machine.acknowledge_rollback()
+	if retried and birth_machine.gate_passed():
+		controller.show_birth_gate_report(birth_machine.gate_report, false)
+	return retried
 
 
 func _process(_delta: float) -> void:

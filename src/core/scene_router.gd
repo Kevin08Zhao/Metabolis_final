@@ -60,7 +60,7 @@ const TITLE_BACKGROUND_GROUP := &"title_background"
 
 ## The logical name AssetLoader resolves, in its {category}_{subject}_{variant}
 ## form. docs/assets/D-29_MANIFEST.md records the landed file this names.
-const TITLE_BACKGROUND_ASSET := &"background_title_source"
+const TITLE_BACKGROUND_ASSET := &"background_title"
 
 ## Where each route's scene lives. Assigned rather than hardcoded at the point of
 ## use so an integrator can repoint them; the registration steps in

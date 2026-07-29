@@ -367,9 +367,9 @@ func _refresh() -> void:
 			)
 		if _birth_retry_available:
 			_add_action_button(
-				"RetryBirth",
-				"Retry Birth Check",
-				_request_birth_retry
+				"RecoverBirth",
+				"Run Recovery Cycle",
+				_recover_birth_readiness
 			)
 		return
 
@@ -413,11 +413,75 @@ func _refresh() -> void:
 func _refresh_birth_art() -> void:
 	if _birth_art == null:
 		return
-	if _flow.is_run_complete():
-		if _birth_art.call("current_frame_id") == &"":
-			_birth_art.call("start_sequence")
+	if not _flow.is_run_complete():
+		_birth_art.call("hide_frame")
+
+
+func _recover_birth_readiness() -> void:
+	if not _birth_retry_available:
 		return
-	_birth_art.call("hide_frame")
+	var option_path := "operations.options.waste_priority"
+	var cost := _dictionary_value("%s.cost" % option_path)
+	var outcome := _dictionary_value("%s.outcome" % option_path)
+	var allocation := _dictionary_value("%s.allocation_weights" % option_path)
+	var before := _resource_snapshot()
+	var prepared := before.duplicate(true)
+	var tick_delta := maxf(
+		float(Balance.get_value("tick_interval_sec", 1.0)),
+		0.001
+	)
+	_resource_tick.initialize_from_balance(prepared)
+	var wait_ticks := 0
+	while not _can_afford_recovery(prepared, cost) and wait_ticks < 120:
+		var wait_result := _resource_tick.settle_tick(
+			tick_delta,
+			_settlement_input()
+		)
+		_apply_resource_snapshot(wait_result)
+		prepared = _resource_snapshot()
+		wait_ticks += 1
+	var can_operate := _can_afford_recovery(prepared, cost)
+	if can_operate:
+		for resource_id in [
+			&"nutrient_energy",
+			&"cell_material",
+			&"development_signal",
+		]:
+			prepared[resource_id] = (
+				float(prepared[resource_id])
+				- float(cost.get(resource_id, 0.0))
+			)
+		prepared[&"waste"] = clampf(
+			float(prepared[&"waste"]) + float(outcome.get("waste", 0.0)),
+			0.0,
+			100.0
+		)
+		prepared[&"stability"] = clampf(
+			float(prepared[&"stability"]) + float(outcome.get("stability", 0.0)),
+			0.0,
+			100.0
+		)
+
+	_resource_tick.initialize_from_balance(prepared)
+	var settlement_input := _settlement_input()
+	if can_operate:
+		settlement_input["operation_id"] = &"waste_priority"
+		_apply_operation_allocation(settlement_input, allocation)
+	var settled := _resource_tick.settle_tick(tick_delta, settlement_input)
+	_apply_resource_snapshot(settled)
+	_sync_resource_bar()
+	_request_birth_retry()
+
+
+func _can_afford_recovery(resources: Dictionary, cost: Dictionary) -> bool:
+	for resource_id in [
+		&"nutrient_energy",
+		&"cell_material",
+		&"development_signal",
+	]:
+		if float(resources.get(resource_id, 0.0)) < float(cost.get(resource_id, INF)):
+			return false
+	return true
 
 
 func _activate_stage_art() -> void:
@@ -819,6 +883,8 @@ func _set_feedback(text: String) -> void:
 func _request_birth_retry() -> void:
 	_birth_retry_available = false
 	birth_retry_requested.emit()
+	_refresh()
+	visual_state_changed.emit()
 
 
 func _refresh_option_preview(decision_id: StringName) -> void:
@@ -887,6 +953,21 @@ func _settlement_input() -> Dictionary:
 	var transport_capacity := 0.0
 	for edge in edges:
 		transport_capacity += float(edge.get("effective_capacity", 0.0))
+	var waste_processing_capacity := 0.0
+	for organ in _built_organs:
+		if StringName(organ.get("state", organ.get("state_id", ""))) != &"operating":
+			continue
+		var organ_id := StringName(organ.get("organ_id", ""))
+		waste_processing_capacity += (
+			float(
+				Balance.get_value(
+					"organs.%s.per_tick_consumption.waste" % organ_id,
+					0.0
+				)
+			)
+			* maxf(float(organ.get("active_multiplier", 1.0)), 0.0)
+			* maxf(float(organ.get("tier_multiplier", 1.0)), 0.0)
+		)
 	var source_ids: Array[StringName] = []
 	for node in nodes:
 		if int(node.get("sequence", -1)) == 0:
@@ -904,9 +985,33 @@ func _settlement_input() -> Dictionary:
 			float(_resources.development_signal),
 			0.0
 		),
+		"available_waste_processing": waste_processing_capacity,
 		"resource_satisfaction_by_organ": satisfaction,
 		"intervention_waste_removal": 0.0,
 	}
+
+
+func _apply_operation_allocation(
+	settlement_input: Dictionary,
+	allocation: Dictionary
+) -> void:
+	settlement_input["operation_allocation"] = allocation.duplicate(true)
+	if settlement_input.has("available_transport_flow"):
+		settlement_input["available_transport_flow"] = (
+			float(settlement_input["available_transport_flow"])
+			* float(allocation.get("transport", 0.0))
+		)
+	if settlement_input.has("available_development_signal_flow"):
+		settlement_input["available_development_signal_flow"] = (
+			float(settlement_input["available_development_signal_flow"])
+			* float(allocation.get("signal", 0.0))
+		)
+	if settlement_input.has("available_waste_processing"):
+		settlement_input["intervention_waste_removal"] = (
+			float(settlement_input.get("intervention_waste_removal", 0.0))
+			+ float(settlement_input["available_waste_processing"])
+			* float(allocation.get("waste", 0.0))
+		)
 
 
 func _register_built_organ(

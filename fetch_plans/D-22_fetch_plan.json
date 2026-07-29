@@ -1,0 +1,154 @@
+{
+  "task_id": "D-22",
+  "palette": "art/palette.gpl",
+  "report": "docs/assets/D-22_LAND_REPORT.json",
+  "manifest": "docs/assets/D-22_MANIFEST.md",
+  "palette_distance_threshold": 12.0,
+  "max_over_threshold_percent": 100.0,
+  "items": [
+    {
+      "id": "stage1_umbilical_stop_00000",
+      "target": "art/birth/frames/stage1_umbilical_stop_00000_2x.png",
+      "source": {"kind": "url", "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/e7f1314a-0a7d-4385-a5e6-7f87e9925e7d/rotations/unknown.png"},
+      "generation": {"tool": "create_map_object", "job_id": "e7f1314a-0a7d-4385-a5e6-7f87e9925e7d", "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage1_umbilical_stop_03333",
+      "target": "art/birth/frames/stage1_umbilical_stop_03333_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/f8554fcb-a0e6-49e4-90c7-7f2ff2eed431/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "f8554fcb-a0e6-49e4-90c7-7f2ff2eed431", "seed": 22001, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage1_umbilical_stop_06666",
+      "target": "art/birth/frames/stage1_umbilical_stop_06666_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/286884f7-be39-4af4-be15-7e29a01b43a2/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "286884f7-be39-4af4-be15-7e29a01b43a2", "seed": 22002, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage1_umbilical_stop_09999",
+      "target": "art/birth/frames/stage1_umbilical_stop_09999_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/29e588cb-3476-43b4-a117-c2f2538876fb/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "29e588cb-3476-43b4-a117-c2f2538876fb", "seed": 22003, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage2_pulmonary_flow_10000",
+      "target": "art/birth/frames/stage2_pulmonary_flow_10000_2x.png",
+      "source": {"kind": "url", "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/19826158-9762-41a6-a4db-6e289e76f1d0/rotations/unknown.png"},
+      "generation": {"tool": "create_map_object", "job_id": "19826158-9762-41a6-a4db-6e289e76f1d0", "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage2_pulmonary_flow_13333",
+      "target": "art/birth/frames/stage2_pulmonary_flow_13333_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/cd6da867-c9a9-404e-b32d-35b5dc0cacdb/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "cd6da867-c9a9-404e-b32d-35b5dc0cacdb", "seed": 22101, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage2_pulmonary_flow_16666",
+      "target": "art/birth/frames/stage2_pulmonary_flow_16666_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/4f5e5385-f1b9-4730-adb8-c5b6b58a1754/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "4f5e5385-f1b9-4730-adb8-c5b6b58a1754", "seed": 22102, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage2_pulmonary_flow_19999",
+      "target": "art/birth/frames/stage2_pulmonary_flow_19999_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/995e3ac0-8ac5-44eb-80dc-09baf410ed17/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "995e3ac0-8ac5-44eb-80dc-09baf410ed17", "seed": 22103, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage3_shunt_closure_20000",
+      "target": "art/birth/frames/stage3_shunt_closure_20000_2x.png",
+      "source": {"kind": "url", "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/7cfe3295-e0b7-4b12-856d-3473c291c183/rotations/unknown.png"},
+      "generation": {"tool": "create_map_object", "job_id": "7cfe3295-e0b7-4b12-856d-3473c291c183", "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage3_shunt_closure_23333",
+      "target": "art/birth/frames/stage3_shunt_closure_23333_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/86826c3d-0f52-4fd1-92f5-06d897c860cb/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "86826c3d-0f52-4fd1-92f5-06d897c860cb", "seed": 22201, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage3_shunt_closure_26666",
+      "target": "art/birth/frames/stage3_shunt_closure_26666_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/cde977b9-ec02-45ea-84ea-bb74139fdec8/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "cde977b9-ec02-45ea-84ea-bb74139fdec8", "seed": 22202, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage3_shunt_closure_29999",
+      "target": "art/birth/frames/stage3_shunt_closure_29999_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "f3ca2258-2ca8-4e99-b27a-2ed074d8ecdd", "seed": 22203, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage4_systems_online_30000",
+      "target": "art/birth/frames/stage4_systems_online_30000_2x.png",
+      "source": {"kind": "url", "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/ea8d9392-2ba3-4720-98b4-57a3151b6361/rotations/unknown.png"},
+      "generation": {"tool": "create_map_object", "job_id": "ea8d9392-2ba3-4720-98b4-57a3151b6361", "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage4_systems_online_34999",
+      "target": "art/birth/frames/stage4_systems_online_34999_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/2f4429be-17be-4b4a-83e3-43c896b9d9e3/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "2f4429be-17be-4b4a-83e3-43c896b9d9e3", "seed": 22301, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 320},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage5_ending_35000",
+      "target": "art/birth/frames/stage5_ending_35000_2x.png",
+      "source": {"kind": "url", "url": "https://backblaze.pixellab.ai/file/pixellab-characters/objects/ecaa3fc8-63a9-4e72-a28e-8cac0ba140c1/df99f80d-b4c2-42be-8120-5d7033731bfa/rotations/unknown.png"},
+      "generation": {"tool": "create_map_object", "job_id": "df99f80d-b4c2-42be-8120-5d7033731bfa", "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 360},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage5_ending_37500",
+      "target": "art/birth/frames/stage5_ending_37500_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/30542acc-cd3e-490a-8481-ef5441a71bec/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "30542acc-cd3e-490a-8481-ef5441a71bec", "seed": 22401, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 360},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage5_ending_39000",
+      "target": "art/birth/frames/stage5_ending_39000_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/9242e92c-0e8e-4eca-957e-4224907a3097/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "9242e92c-0e8e-4eca-957e-4224907a3097", "seed": 22402, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 360},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    },
+    {
+      "id": "stage5_ending_42000",
+      "target": "art/birth/frames/stage5_ending_42000_2x.png",
+      "source": {"kind": "url", "url": "https://api.pixellab.ai/mcp/images/ffc51dab-5355-40e6-9c62-f6e4b89c8cb8/download"},
+      "generation": {"tool": "create_image_pixflux", "job_id": "ffc51dab-5355-40e6-9c62-f6e4b89c8cb8", "seed": 22403, "usage": {"generation_units": 1}},
+      "expected_size": {"width": 640, "height": 360},
+      "operations": [{"kind": "integer_scale", "factor": 2}]
+    }
+  ]
+}

@@ -98,6 +98,20 @@ created for passage-state or direction variants — those are runtime parameters
 - 1-pixel outline (#140F1D) — darker outline than others
 - Shape: circle — distinct from square, rectangle, and diamond
 
+### Authoritative silhouette correction
+
+The global `docs/ENCODING_SPEC.md` resource silhouettes supersede the earlier
+tiny square/rectangle/diamond/circle descriptions above. Each production
+particle is a transparent 16 by 16 canvas containing the corresponding fixed
+8 by 8 silhouette centered at `(4, 4)`, with one opaque locked-palette color:
+
+- `particle_nutrient.png`: nutrient diamond in warm amber `#E2953A`
+- `particle_material.png`: lower-right-notched square in tissue pink `#BE6E87`
+- `particle_signal.png`: upward triangle in blue violet `#404586`
+- `particle_waste.png`: hollow hexagon in neutral dark `#514854`
+
+No outline color, glow, rotation, or partial alpha is added.
+
 ## Godot particle configuration (per substance)
 
 | Parameter | Open | Restricted | Blocked |

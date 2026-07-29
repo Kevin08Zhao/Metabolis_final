@@ -1,6 +1,6 @@
 target_task: D-29
 reported_by: ACCOUNT_C
-status: OPEN
+status: RESOLVED
 discovered_at_main_commit: 959ef0ddd3d3672d7836efc3c4721ce42701655c
 subject: |
   docs/D-29_TITLE_SCENE_INTEGRATION.md, landed by pull request 68, gives the
@@ -135,3 +135,13 @@ impact:
     findings 1, 2 and 3 are settled, because they would show a background at a
     path the document does not name and an entry set the document does not list.
 opened_at: 2026-07-28T11:20:00-04:00
+resolved_at: 2026-07-29T21:45:00+08:00
+resolution:
+  - The accepted background is landed at art/backgrounds/background_title.png,
+    palette-quantized and integer-scaled to 640 by 360.
+  - The runtime retains T-32's accepted entry set and wording.
+  - The measured 418-pixel disclaimer remains in its 480-pixel band.
+  - The title, game, and ending routes all exist.
+  - D-29 font sizing and the three-second two-pixel mint pulse are integrated.
+  - Five evidence images were captured from Godot 4.7.1; generated mockups are
+    not used as screenshots.

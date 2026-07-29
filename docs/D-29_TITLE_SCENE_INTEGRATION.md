@@ -4,7 +4,7 @@
 
 Background production is complete. Runtime title scene contract is documented below.
 The accepted text-free title background (`art/backgrounds/background_title.png`)
-must not be regenerated.
+is palette-quantized, integer-scaled to 640x360, and must not be regenerated.
 
 ## Title Scene Layout (640×360 px)
 
@@ -20,10 +20,10 @@ must not be regenerated.
 ## Required real screenshots (5)
 
 1. **Title idle**: Full 640×360, all elements visible, no interaction
-2. **Title with hover**: Start button highlighted, cursor visible
-3. **Title education disclaimer visible**: Scroll/pan to show full disclaimer  
-4. **Transition to game**: Fade between title and game scene
-5. **Ending screen with title**: Birth-complete overlay with title text
+2. **Title with hover**: New Game button focused
+3. **Title education disclaimer visible**: Full disclaimer visible without scrolling
+4. **Transition to game**: First playable game frame after New Game
+5. **Ending screen with title**: Ending scene with full title text
 
 ## Verification
 
@@ -35,8 +35,9 @@ must not be regenerated.
 6. Verify the subtle pulse does not overlap the entry buttons.
 7. Verify education disclaimer text fits in one line at 8px font.
 
-## Blockers
+## Completion
 
-- Runtime title scene must exist (T-32 routing currently points to res://main.tscn).
-- Godot scene file for title scene needed before screenshots can be taken.
-- This is a P2 integration task; background art production is complete.
+The runtime scenes and routing exist. The accepted background is loaded through
+`AssetLoader`, the title uses the engine font, the disclaimer fits its one-line
+band, the three-second mint pulse is active, and the five screenshots under
+`art/screenshots/` were captured from Godot 4.7.1.

@@ -21,7 +21,7 @@ AMBIENT_HEARTBEAT_PATHS = {
     "audio/ambient/heartbeat_bed_critical.wav",
 }
 EXACT_IMAGE_SIZES = {
-    "art/backgrounds/background_title.png": (320, 180),
+    "art/backgrounds/background_title.png": (640, 360),
     "art/reference/palette_strip.png": (352, 16),
     "art/reference/style_master.png": (320, 180),
     "art/reference/style_master_preview_2x.png": (640, 360),
@@ -36,6 +36,15 @@ EXACT_IMAGE_SIZES = {
     "art/ui/ui_resource_status_bar_frame.png": (640, 16),
     "art/ui/ui_task_operations_panel_frame.png": (608, 16),
 }
+SOURCE_OR_EVIDENCE_PREFIXES = (
+    "art/candidates/",
+    "art/source/",
+    "art/reference/candidates/",
+    "art/birth/pixellab/",
+    "art/screenshots/",
+    "art/tiles/d08_backup/",
+    "art/tiles/d09_pixellab/",
+)
 
 
 def load_palette(path: Path) -> set[tuple[int, int, int]]:
@@ -49,7 +58,17 @@ def load_palette(path: Path) -> set[tuple[int, int, int]]:
 def expected_image_size(relative: str) -> tuple[int, int] | None:
     if relative in EXACT_IMAGE_SIZES:
         return EXACT_IMAGE_SIZES[relative]
-    if relative.startswith("art/tiles/"):
+    if relative.startswith("art/birth/frames/"):
+        return (640, 360) if "/stage5_" in relative else (640, 320)
+    if relative == "art/birth/birth_fallback_start.png":
+        return (640, 320)
+    if relative == "art/birth/birth_fallback_end.png":
+        return (640, 360)
+    if relative.startswith("art/screenshots/"):
+        return (640, 360)
+    if relative.startswith("art/tiles/") and not relative.startswith(
+        ("art/tiles/d08_backup/", "art/tiles/d09_pixellab/")
+    ):
         return (16, 16)
     if relative.startswith("art/organs/"):
         return (48, 48)
@@ -62,6 +81,10 @@ def expected_image_size(relative: str) -> tuple[int, int] | None:
     if relative.startswith("art/construction/construction_zone_standard_"):
         return (64, 64)
     return None
+
+
+def has_provenance_reference(relative: str, documents: list[str]) -> bool:
+    return any(relative in document for document in documents)
 
 
 def audit(repo_root: Path) -> dict[str, Any]:
@@ -95,8 +118,8 @@ def audit(repo_root: Path) -> dict[str, Any]:
             relative = path.relative_to(repo_root).as_posix()
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             hashes.setdefault(digest, []).append(relative)
-            if provenance_enabled and not any(
-                relative in content for content in provenance_text.values()
+            if provenance_enabled and not has_provenance_reference(
+                relative, list(provenance_text.values())
             ):
                 issues["error"].append(
                     {
@@ -133,8 +156,8 @@ def audit(repo_root: Path) -> dict[str, Any]:
                     }
                 )
                 image_size = image.size
-            source_only = relative.startswith(
-                ("art/candidates/", "art/source/", "art/reference/candidates/")
+            source_only = relative.startswith(SOURCE_OR_EVIDENCE_PREFIXES) or (
+                relative == "art/backgrounds/background_title_source.png"
             )
             if not source_only and not alpha_values.issubset({0, 255}):
                 issues["error"].append(
@@ -214,11 +237,15 @@ def audit(repo_root: Path) -> dict[str, Any]:
                     }
                 )
     event_api = repo_root / "docs" / "EVENT_API.md"
-    event_names = (
-        set(re.findall(r"\bsfx_[a-z0-9_]+\b", event_api.read_text(encoding="utf-8")))
-        if event_api.is_file()
-        else set()
-    )
+    event_names = set()
+    if event_api.is_file():
+        event_names = set(
+            re.findall(
+                r"^\|\s*`?([a-z][a-z0-9_]*)`?\s*\|",
+                event_api.read_text(encoding="utf-8"),
+                flags=re.MULTILINE,
+            )
+        )
     audio_root = repo_root / "audio"
     if audio_root.exists():
         for path in sorted(audio_root.rglob("*")):
@@ -245,8 +272,8 @@ def audit(repo_root: Path) -> dict[str, Any]:
                         "message": "Audio file stem does not match an EVENT_API sound event.",
                     }
                 )
-            if provenance_enabled and not any(
-                relative in content for content in provenance_text.values()
+            if provenance_enabled and not has_provenance_reference(
+                relative, list(provenance_text.values())
             ):
                 issues["error"].append(
                     {

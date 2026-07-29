@@ -2,7 +2,7 @@
 
 - Status: `GENERATED`
 - Card layout geometry: `docs/UI_LAYOUT.md` Section 9
-- Art slots: 14 at 128 ¡Á 128 px, 22-color locked palette, binary alpha
+- Art slots: 14 at 128 Ã— 128 px, 22-color locked palette, binary alpha
 - PixelLab involvement: style exploration via tileset `8a680d2b` (D-09 session)
 
 | Candidate | SHA-256 | Colors | Binary alpha |

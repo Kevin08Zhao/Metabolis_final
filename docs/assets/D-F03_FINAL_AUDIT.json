@@ -2,8 +2,9 @@
   "control_id": "P-F03",
   "generated_at": "2026-07-28T19:00:00Z",
   "base_main_sha": "7464f53d7cadacb1239d05c8dc66ea880d246db4",
-  "status": "BLOCKED_UPSTREAM",
-  "final_done_created": false,
+  "status": "SUPERSEDED_BY_COMPLETED_REAUDIT",
+  "final_done_created": true,
+  "superseded_by": "docs/D_TRACK_AUDIT.md",
   "pixelLab": {
     "subscription": "active Tier 2 Pixel Artisan",
     "generations_total": 5000,
