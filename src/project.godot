@@ -22,6 +22,7 @@ Balance="*res://autoload/balance.gd"
 SaveManager="*res://autoload/save_manager.gd"
 AudioRouter="*res://core/audio_router.gd"
 AssetLoader="*res://core/asset_loader.gd"
+DebugFlags="*res://core/debug_flags.gd"
 
 [display]
 
