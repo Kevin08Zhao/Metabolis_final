@@ -8,7 +8,7 @@ extends Node
 ## no art, and its buttons use the engine's default style with placeholder text
 ## so that D-14 and D-17 can replace them without touching routing.
 ##
-## Exactly one main scene is resident at a time. The outgoing scene is removed
+## Exactly one primary scene is resident at a time. The outgoing scene is removed
 ## from the tree and freed before the incoming one is added, not queued for
 ## deletion alongside it, so there is never a frame with two of them present.
 ##
@@ -25,16 +25,21 @@ extends Node
 
 const LOG_PREFIX := "[ROUTE]"
 
-## The three routes. Nothing else exists: no settings, no volume panel, no
-## language switch, all of which the prompt rules out.
+## The original title, game, and ending routes remain unchanged. The local
+## builder sequence is a parallel entry used to migrate the four-stage flow one
+## playable map-first slice at a time.
 const ROUTE_TITLE := &"title"
 const ROUTE_GAME := &"game"
 const ROUTE_ENDING := &"ending"
+const ROUTE_ORIGIN_BUILDER := &"origin_builder"
+const ROUTE_BUILDER_PROTOTYPE := &"builder_prototype"
+const ROUTE_SYSTEM_CITY := &"system_city"
 
 ## Title entries, in the order they are offered.
 const ENTRY_CONTINUE := &"continue"
 const ENTRY_NEW_GAME := &"new_game"
 const ENTRY_CHAPTER_SELECT := &"chapter_select"
+const ENTRY_BUILDER_PROTOTYPE := &"builder_prototype"
 
 ## Placeholder text. The display name is the full one; the internal identifier
 ## stays Metabolis, per the naming rules in docs/CONTEXT.md.
@@ -42,6 +47,7 @@ const ENTRY_LABELS := {
 	ENTRY_CONTINUE: "Continue",
 	ENTRY_NEW_GAME: "New Game",
 	ENTRY_CHAPTER_SELECT: "Chapter Select",
+	ENTRY_BUILDER_PROTOTYPE: "Body-System City Builder",
 }
 const CONFIRM_LABEL := "New Game will overwrite your progress. Confirm?"
 const CONFIRM_YES := "Yes, start a new game"
@@ -74,6 +80,9 @@ var scene_paths := {
 	ROUTE_TITLE: "res://ui/title.tscn",
 	ROUTE_GAME: "res://game/main.tscn",
 	ROUTE_ENDING: "res://ui/ending.tscn",
+	ROUTE_ORIGIN_BUILDER: "res://game/origin_builder_prototype.tscn",
+	ROUTE_BUILDER_PROTOTYPE: "res://game/city_builder_prototype.tscn",
+	ROUTE_SYSTEM_CITY: "res://game/system_city_prototype.tscn",
 }
 
 signal route_changed(route: StringName)
@@ -229,6 +238,18 @@ func open_chapter_select() -> bool:
 	return _enter_route(ROUTE_GAME)
 
 
+func open_builder_prototype() -> bool:
+	return _enter_route(ROUTE_BUILDER_PROTOTYPE)
+
+
+func open_origin_builder() -> bool:
+	return _enter_route(ROUTE_ORIGIN_BUILDER)
+
+
+func open_system_city() -> bool:
+	return _enter_route(ROUTE_SYSTEM_CITY)
+
+
 func go_to_ending(summary: Dictionary = {}) -> bool:
 	_ending_summary = summary.duplicate(true)
 	return _enter_route(ROUTE_ENDING)
@@ -260,6 +281,7 @@ func title_entries() -> Array[StringName]:
 	if has_save():
 		entries.append(ENTRY_CONTINUE)
 	entries.append(ENTRY_NEW_GAME)
+	entries.append(ENTRY_BUILDER_PROTOTYPE)
 	if chapter_select_available():
 		entries.append(ENTRY_CHAPTER_SELECT)
 	return entries
@@ -451,6 +473,8 @@ func _handler_for(entry: StringName) -> Callable:
 			return request_new_game
 		ENTRY_CHAPTER_SELECT:
 			return open_chapter_select
+		ENTRY_BUILDER_PROTOTYPE:
+			return open_system_city
 		_:
 			return func() -> void: pass
 

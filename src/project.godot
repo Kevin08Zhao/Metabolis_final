@@ -26,10 +26,10 @@ DebugFlags="*res://core/debug_flags.gd"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
-window/size/window_width_override=1280
-window/size/window_height_override=720
+window/size/viewport_width=800
+window/size/viewport_height=450
+window/size/window_width_override=1600
+window/size/window_height_override=900
 window/dpi/allow_hidpi=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
@@ -42,7 +42,7 @@ window/stretch/scale_mode="integer"
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-textures/vram_compression/import_etc2_astc=true
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
