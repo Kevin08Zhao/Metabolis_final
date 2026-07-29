@@ -24,3 +24,10 @@ $RECYCLE.BIN/
 /agents-local.md
 /CLAUDE.md
 /.codex/config.toml
+/.mcp.json
+
+# Godot UID cache files
+*.uid
+
+# Python cache
+__pycache__/

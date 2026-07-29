@@ -7,10 +7,10 @@
     "pixellab_calls": 0
   },
   "source_canonical_sha256": {
-    "art/tiles/tile_vessel_straight.png": "2d3b415b2d71af3bb8e20f78d143ddef0022def9b244599ba7c476bc47d3b9b8",
-    "art/tiles/tile_vessel_corner.png": "5d3bbba96672992a5a27641baa5a2dce2937ea0f9adc912230ed2e2abf8c28a6",
-    "art/tiles/tile_vessel_tee.png": "225b80e0fe6e06b3b95f90e3ea338ab2b616535d89bdf9b0f939ab8e7aac37a3",
-    "art/tiles/tile_vessel_fourway.png": "c592551951c4a5843df55d38aaac44bae627bf908e4b9e3ddbb5b19aff6bbb8a"
+    "art/tiles/tile_vessel_straight.png": "da2ff88f468d4983a3b6813ed08204e77cfae5998a117af43b0ddf57ae8c14f3",
+    "art/tiles/tile_vessel_corner.png": "dd54b4677758493b8be80e6cb0060961c25e50442ab26903678c487c41e4f536",
+    "art/tiles/tile_vessel_tee.png": "9b8374487408da75326754e313080dfa6e613dd87be0c0dd930272a7049b3f6b",
+    "art/tiles/tile_vessel_fourway.png": "5d7b52599edffff0ea9d1fed63d443861454582ebcb4bf17b75cf27220aac0d7"
   },
   "matrix": {
     "logical_geometry_count": 11,
@@ -63,7 +63,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_trunk_open.png",
-      "sha256": "536fc991c8209be21d65c2689acf6fa13f20a105a809272780adb9b48669ec49",
+      "sha256": "f1a2c570b2d37ab5087098752dc68bc08d91d041c17b5e146592f79a00c3b7ca",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -78,7 +78,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_trunk_restricted.png",
-      "sha256": "42a132b77c43794fd76f861a1ab158a4da9b2a5e461e36b6b460ba0cf4b106a6",
+      "sha256": "fa2a15f41355b9dd6957231110ce4f3928365103576649aed2d732c42c9ab51b",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -93,7 +93,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_trunk_blocked.png",
-      "sha256": "1aa6de3913ec19d0313484770a1a5785f967d5206f15c53e884e655bebf94815",
+      "sha256": "ec2ae3df1ba9ebef07299dee3b479d55439739497299192243734eb396a98d38",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -108,7 +108,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_branch_open.png",
-      "sha256": "12b644694d24d6222ba2f5c128c31d4dce5c5e58d715fb2643141bb12d6f70c1",
+      "sha256": "521a7404e0287e381b4d90bd884b5670dda3b09a029e583fca01d714687bee48",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -123,7 +123,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_branch_restricted.png",
-      "sha256": "8a0af014350e01478070a3bfd8a98178e9f9db71bc847a49d41acd7cd2a8b820",
+      "sha256": "1cd6254a9ac0032895b03a4b3a2fdc839326afb1e6409449e48b97a0a04b1316",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -138,7 +138,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ns_outbound_branch_blocked.png",
-      "sha256": "4bba17ef872a95850a7ed5707df5b939179d42d19c422bcb47c2cb5f65ec0023",
+      "sha256": "947fba9803a15d1fc60ad1dff3c7c69d60d5d16d7a1fcf4a69ecb8d3e36e9bd8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -153,7 +153,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_trunk_open.png",
-      "sha256": "77753414b421dd5b680cdff47e4be715015cc35aac303baf5c66aba8df973a9b",
+      "sha256": "31cc4a4d78af9310be820b2f184617025dbf2a0cead8be136034c96ec2c6ddd7",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -168,7 +168,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_trunk_restricted.png",
-      "sha256": "faf27f470bb7f6df6fb6451f84ff04c578fad0213aad30bc517ba0be69bfebc2",
+      "sha256": "c80315c31ee2f927ead5bc5ecbefebfa61b61bdf145bb019a101ee423c0ee4b2",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -183,7 +183,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_trunk_blocked.png",
-      "sha256": "4e0a0956f44b1fb3e007921531eb5b97e07e1de1e7b128b5417cf8ee7532eaf6",
+      "sha256": "057046d8535fc52c8994c59e4798434cc711c11b028b2f853448467c568fb10a",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -198,7 +198,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_branch_open.png",
-      "sha256": "f30dccea938515b6c52ec218ede920fe24e3b1e29f770370f9c62cabe181c0c2",
+      "sha256": "a7df7bdd31dcd9a1fd485c4f826d2945ce5d40c8fc855bfa689fe3d54fa4a254",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -213,7 +213,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_branch_restricted.png",
-      "sha256": "50e944b0bd4018902419297fcc23a1b0c445c37e847ebf81b0034aa686fde644",
+      "sha256": "17dd13794feaa80cd6b7ee7ad6708ab2efa6b293d2c0241ad9f4ec00dd77cfb9",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -228,7 +228,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ns_return_branch_blocked.png",
-      "sha256": "197b3c5b125225ead22431d04f6e8f9059d741e563b1efcd199512858cc5add7",
+      "sha256": "59431e9cdb6e80af8b41da00cb334db202da3d442078e91a3330d1ddfee07b1f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -243,7 +243,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_trunk_open.png",
-      "sha256": "2178c8f882f0ed12ac4208f7240ac9a02f2abdb260b328081723d0245da8a94d",
+      "sha256": "cefc24ef391d1c9243ae73c248d076b97e3684eeb19da1222fd12e1a152d07f5",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -258,7 +258,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_trunk_restricted.png",
-      "sha256": "7f3358ce028585dda1561a794224916c62e2aa4faa34148c4390b069710ac6dc",
+      "sha256": "d065d144fc9c6d817130ee2a70d46c02c33a84213a59f203bd75e1827a882a51",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -273,7 +273,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_trunk_blocked.png",
-      "sha256": "d35ee3d81fc511a89640bc871bdd729deebcdedcb322eae769d83bb6e5389983",
+      "sha256": "1e7a9fb5993e44dfd255298ebddae6e9c6ac24a3717865e93f3e3e059439fed3",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -288,7 +288,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_branch_open.png",
-      "sha256": "ec5c613ae8aebbfb0d83ab2e0b2c097a1c5b4ea10d0fa204f307d571b327e7c2",
+      "sha256": "79a6bf2bcd4d7db6cae1a65ec45bb3a587a1151453ca4e648fcb706a60298a33",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -303,7 +303,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_branch_restricted.png",
-      "sha256": "df0634106702f2887995a211ebf64d5092b3b919ada2944d3089ebc4773e557e",
+      "sha256": "9ab1555ba76f633f055afcae70683414c5346b0d3ecb5c7c37c4fdcbcf3b9c06",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -318,7 +318,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ew_outbound_branch_blocked.png",
-      "sha256": "72b69eb34c3ade218c30f9cb4d9af8a1a0a12922e0126803d4818f51255d16e7",
+      "sha256": "58ae429369b91b5b7419f4965a9c720ea3ba8278fe8f1c987b387eb62d36738d",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -333,7 +333,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_trunk_open.png",
-      "sha256": "de09710c1c31c10aeaa85ec03e0fb21c83ca4600a11349452dfcbb13044fd5d8",
+      "sha256": "9219c8b200dc1349922b53849efeab22d0634c0a9be50ae0fdd849c188dc99cc",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -348,7 +348,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_trunk_restricted.png",
-      "sha256": "3d0eb238449be8b9bc5830c53df2c589f0f8bc0144eaa06b81737de34b25d125",
+      "sha256": "760cca7b33bf8b261c4db30a586adb9ff66ebd323ca1783cbbd400d71626d384",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -363,7 +363,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_trunk_blocked.png",
-      "sha256": "e286e25c845887509b99217d646e090d683c77de151a9f01a5cca75fafed5c92",
+      "sha256": "b799230b0ab12e1fd53f9dea9b6664b2ae605bb1ab676985188febdaa008b7a8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -378,7 +378,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_branch_open.png",
-      "sha256": "02b2b3a64bbf9e2d5461435789d5a801bbc17f7316bf534c070d7ded72d1c7c9",
+      "sha256": "62b9a3adcbc5da57199ade1e5a478bd3d2641bb3d42d4962adf21a34ead4d145",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -393,7 +393,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_branch_restricted.png",
-      "sha256": "db993a177f61d31555b7f1ce7959e3ef99e2f0f7312156fe28b06ef99b8b15d8",
+      "sha256": "5c76d03d3076e027ba2fed631dcaf0b57982ac6f332deea4b00a1911d21a7a59",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -408,7 +408,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_straight_ew_return_branch_blocked.png",
-      "sha256": "3bcee6752a36f41d52eadb94d999bcf2b092e970ae8445fa1ff8edf36c153740",
+      "sha256": "717cacccade354e53db286b6c3656aad1ffacabf5ef742fa31f9d39328ec295c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -423,7 +423,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_trunk_open.png",
-      "sha256": "8af4e09e6b155adeb9a4173649ad2ad4d4acdd7cce7d56cf8e7050802f95ee38",
+      "sha256": "614a07c4913ed20a73c7b551bfe44533c330b8bbe274f4974f86530151dd1619",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -438,7 +438,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_trunk_restricted.png",
-      "sha256": "0e0ded51e4d502a4f923488f916612d6074271840567a012cc1e2ef3f0773f43",
+      "sha256": "5cba7030f1784d26f1a78692eb49bd72318e9c731e29743911ed58b269ee0cff",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -453,7 +453,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_trunk_blocked.png",
-      "sha256": "b909f1a2f7200e9d7e431cd67affd2833eac1620418096c0c10f5b94e253d9d7",
+      "sha256": "4770178de1a965f21cca56b58b692fb8dcfdcc909b0a2bc8a2b2e4dbb4d77861",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -468,7 +468,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_branch_open.png",
-      "sha256": "00bbe4d64259de391771ce4cad7e610a3e5f4ea3c87cd6ce6d58c6c09f5e71a4",
+      "sha256": "a12b51e5d312e28cdd1273c48f5bf820273a83104dda3fba2b984e42daa89bc8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -483,7 +483,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_branch_restricted.png",
-      "sha256": "b6d19cb1d354d2cfa0ebfd9fed010e7dd4c697b019e6806b0d9b5745451e59a3",
+      "sha256": "057bd9a3acc84c54b9435f87298e30015ca1cbb8d7d441bbe60d3ae9b210faef",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -498,7 +498,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_ne_outbound_branch_blocked.png",
-      "sha256": "cc5137980600dce737c04b185b9e13ab1757ea6c60044dfd4f7f419ab2089389",
+      "sha256": "0a510c81c0aad979ed78ab8f9299f9f50ae79fd2875c9404e827a3db45b70bd0",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -513,7 +513,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_trunk_open.png",
-      "sha256": "a4017ad09e34b58810f22d6f059941905ec718c3e9a5bee1d7e83b1649a3bac2",
+      "sha256": "c5f0044e7c4c0d320b1bf1521b9b089e5f270c1a024079dc75e335898ce8286a",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -528,7 +528,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_trunk_restricted.png",
-      "sha256": "031d1adac77ff21891928f44e07268435f1b7424751c8653bd3ac3131ed18e7d",
+      "sha256": "56f28229853b5f736aa9b85d865af6281c8421b2f84a436e31ab2acd7729e9dd",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -543,7 +543,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_trunk_blocked.png",
-      "sha256": "59c5b5e17774bc3ed1353bfce232944a6b54d878465b9893adb3dfafc5956fdd",
+      "sha256": "99107b7add37a8413ef7d33094e840587f7fdf8343f254f141b89364719fdf2f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -558,7 +558,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_branch_open.png",
-      "sha256": "e9bddc4acd6926e3eed3fcf50b845199cf88bea527b78a7af07cb40601bc145b",
+      "sha256": "a4e0c71f7dfe2eac5102bc8871c633b80c3fe4933d6be53e585b2f5b24153033",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -573,7 +573,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_branch_restricted.png",
-      "sha256": "5f24333bc38099b467e5558d003616fd6342d634e8048d8cb45a20fc76fcd0bb",
+      "sha256": "9777f5c23980cb2b29c6647e6a0e83af141e8cc97bcf803fb84d3f588cbfe2dd",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -588,7 +588,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_ne_return_branch_blocked.png",
-      "sha256": "37c23c7f5c0c6d057f3d39335751fcb877f845564a4c74cbe31ffa05a7d85a87",
+      "sha256": "972109f7d47d1e732071fcc392e6150f09c4eef9900e99bb946754ae8dbc69e2",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -603,7 +603,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_trunk_open.png",
-      "sha256": "16f4b6d76bf853f7e166517f73aa22ded1e131743100561739ceb6f1e46bb669",
+      "sha256": "38c00a82d194e0a078f4a51abc333aa0b0b8f097c7419c7366b3a78477876ec2",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -618,7 +618,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_trunk_restricted.png",
-      "sha256": "5110d4f052c6a6672b61fe69f4c4ba9d4548bfb3e5e867c0c2d7872730ca0946",
+      "sha256": "989ae9daa2dd2967a5b32ef0b458f86ba78f11d8465de42c91d5d77cae8b9bb5",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -633,7 +633,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_trunk_blocked.png",
-      "sha256": "2a1f142444bae5b46d0adf05033da283ddfefe50292752fbb3e744b5d006489b",
+      "sha256": "491bd1bbf0eb4e21c32ae7604492673f3cf2f019dc5d11027a5143c2d6d1a322",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -648,7 +648,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_branch_open.png",
-      "sha256": "825fb7ec73654bd13b10b66ee4ec8129f662173a75d86d2b6b87e0e3ea72ed76",
+      "sha256": "1ce3cf32c48c095594cd7bcae54b4802feccbddf83b2b3be194617f0a905ebcf",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -663,7 +663,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_branch_restricted.png",
-      "sha256": "b12d30d6631567f14cda492962c1eb151b101be90c7bf35dc63966e11a9d877a",
+      "sha256": "513d8f666a825fa73d573cd68b800a9a758761cfaca173abd89adda0a4f00e08",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -678,7 +678,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_es_outbound_branch_blocked.png",
-      "sha256": "da52b620caa3afc874a693924537a8c234bdaa99cce85689fa70dc4eb0161b8b",
+      "sha256": "6cfcf3643b5604063f241b6e4f20b6afea497a0623bc4a95ca7386b6289ce99d",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -693,7 +693,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_trunk_open.png",
-      "sha256": "fc7c5de0e962c65754f9e49ad22184a76a52b4e2820316fd33c0d057a050d7d2",
+      "sha256": "f23e3a7a456cbf6dce5d010af54cc767badf2d472e2ab1d460772ea01881bb3d",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -708,7 +708,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_trunk_restricted.png",
-      "sha256": "30d7c1adde1e1e80393017bf69970ab9c2364f23c3651ad5b69f2f85df23b5bd",
+      "sha256": "ccf8243e9fb4636fce9a7283030b2e4fc09e5884c67bed5fe00a165282d544e3",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -723,7 +723,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_trunk_blocked.png",
-      "sha256": "2169977ecc1ac997dc3e9cfbf71eb9a8575d7d0c5cb03f32edc9b2f4a41f6f94",
+      "sha256": "48254feb05515d9853c96c40b141c7e2c57ee611b813eb8f7f91cf51671663da",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -738,7 +738,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_branch_open.png",
-      "sha256": "5490a89d77dd8dec7f888d7dec9d686dd1437e25cb5489ff10ef7772c74050df",
+      "sha256": "8e4c337a3676a9273c485eaf57e1b716cdb47e4af7cfd7ccf6b0b77e5a0d64e9",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -753,7 +753,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_branch_restricted.png",
-      "sha256": "f855add737b7153f7c6b9dbafc0fad211c729d1556a32e846cd642ba2f96c54c",
+      "sha256": "bba285a0de979341a1f5444adbd1dccd91d0b0149b59af87b16eb363c114663a",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -768,7 +768,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_es_return_branch_blocked.png",
-      "sha256": "b7849bbce8de79a9912988c7ebcd4deb020df4e65b0b7a66da1f301676744020",
+      "sha256": "ac69034d099e305e98bbb4837aa81f7a2158d394f05bbbe88c484ba398001cd3",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -783,7 +783,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_trunk_open.png",
-      "sha256": "1c3d9837d2a43d2fab66d02cdf36eb1483c78ce060156787e0fd3c1608e68153",
+      "sha256": "ac91d294366b1b7f10682c7dd17b0be6eb6832371b0cf227c3ab1ed10fb498cb",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -798,7 +798,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_trunk_restricted.png",
-      "sha256": "8761501c372118ed2743118125894a5e8765f74646ac09aff852fa16d6bd2514",
+      "sha256": "aefac788227d6c5b71a91a742558c9dd837c672a1b3f26f40ba5e4dd8462fd4c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -813,7 +813,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_trunk_blocked.png",
-      "sha256": "bafb8c090bffe543c6b59135f68b7b966311ef06ab6006cc7cbf4d7e3c4ae5de",
+      "sha256": "a315d3c94b2ffe6917fa3815da56b0c5ee83b3d997f86cfdb1ce27be0a6edaad",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -828,7 +828,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_branch_open.png",
-      "sha256": "fec734137ce7c96d3b9bdf41367e46415389060e035b95e21d959e79af606c95",
+      "sha256": "a1dfb0a24f6447b6cccf8998a8614654705fc52ffe47b16177a5b668ca33a5f4",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -843,7 +843,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_branch_restricted.png",
-      "sha256": "6446e08116cb7d169e3e29f10ba9f6d228e192b9d28cf6697f4f6d384839f637",
+      "sha256": "ce9926106d788b200d15bde0361d03254de994348de020fb2b4cb7c9aca6165c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -858,7 +858,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_sw_outbound_branch_blocked.png",
-      "sha256": "34686d39bd8f02191e061715f53c31dd2202711ed9cb0899881b2f85aec4d4de",
+      "sha256": "96facc8915285902da24cdc3a5067e56b010274fbc7bca19ab80ed60ce5b1834",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -873,7 +873,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_trunk_open.png",
-      "sha256": "208ad4f4580ecf656eba4f36449072bfa2bb32990dcc620f97cd42fd2e7314a2",
+      "sha256": "aba0b1ae29e345ab95654dfe208150c7b584191234521c6c119800ffa8bcf70d",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -888,7 +888,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_trunk_restricted.png",
-      "sha256": "c97bec02477fc0c692fdb4122959428ffcc733b1ef7df9f4557ad1ad0543a3c3",
+      "sha256": "f7f12e7b9aabc8a1eb7e245c4c35e4b9c02df79ec1c2eb8f5277b9395f6deef8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -903,7 +903,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_trunk_blocked.png",
-      "sha256": "320e7b2811c27bc9abd830345569322fdb582e0a64cabc94568caa4f129d685c",
+      "sha256": "34947ec371f91c79cf26db82004e3afc57e95286063d3fa4f93c20547ad714aa",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -918,7 +918,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_branch_open.png",
-      "sha256": "5324c9972a3607a8baa1e3aa09a003c627be325533a107fa7507e9a7bc5eda44",
+      "sha256": "56558f668ed10c9166ffe80f80f98aa1c9b637d11ba0db8ae3d50dc969c864ec",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -933,7 +933,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_branch_restricted.png",
-      "sha256": "a06f26ceb340a9990422628db96e32ef80e806b468506fc556dbca20163ce7a6",
+      "sha256": "92cbfa1c42d58aa33f19a968421f7f10ff25775bc04e71ce900beb80bfd873e8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -948,7 +948,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_sw_return_branch_blocked.png",
-      "sha256": "66a135629da24f8ea5fcba313aefbb8d9424146670335641fd9c3c1f2261fbdf",
+      "sha256": "fa1722af5ec443268f253fdeff7d5ff85556442a0721e7577dd6dbba4fb94f03",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -963,7 +963,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_trunk_open.png",
-      "sha256": "84ec3ca6b6f880d23cd7af311bfa60999ed0479c19110908a8105e662d4414e7",
+      "sha256": "33695477e468aa49ff03bee918233cd0d32fa234a79595d4c90ef1e3a23a511f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -978,7 +978,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_trunk_restricted.png",
-      "sha256": "6745728bd79bf54666be7f1d114b0b0b3efa5eb912efcd902ec10943d63211a2",
+      "sha256": "20a85f1a87742363508deeb0ac46a9d842ef732ae59ba6f8ca6a81274b3db188",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -993,7 +993,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_trunk_blocked.png",
-      "sha256": "03c3cc8e01246ff0b652ef5733414c9a88bc9854d92f32ec1f0bfc31dd05ff83",
+      "sha256": "cdb27bf507c98581faeadf412fec07cf30c97328b9ff902ea80538edb307b164",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1008,7 +1008,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_branch_open.png",
-      "sha256": "f638c38eff07c360809388b066b7b580f539288417510c0231fd4bb27a5fcc91",
+      "sha256": "f9a8d27d583c3c6c1bba2f52a39218248ac07006312cfe33b09d37b4681a60f3",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1023,7 +1023,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_branch_restricted.png",
-      "sha256": "7d8683ba4e780db5075e0f2d3675d7485210aa7817244dc32d1575c7caa72e5b",
+      "sha256": "8506bfab0a830dafcb0fd559c6f0b3ab9efbb98b1ecd5457db29ba9514d17898",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1038,7 +1038,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_wn_outbound_branch_blocked.png",
-      "sha256": "7d20da6ff97d5f6697cce4a6a8f24b6c2190019d7c6b8b5f33d3d48f10c93048",
+      "sha256": "87eaf4a5f9c8c00a9760eee49b08608eace8995f28f96db6e5f462a06ca36909",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1053,7 +1053,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_trunk_open.png",
-      "sha256": "eb86b747ad654d620463c80bfdb2e98ff276a03907b5f1b4c2d81f3e4b1c29eb",
+      "sha256": "c02f77a140a4cfba5d2c92830ea2cb18a3b7186be2797481228e897cf79af33f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1068,7 +1068,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_trunk_restricted.png",
-      "sha256": "4a0dd767eb76b3cc369372b9b1630daa92068cce236fa1305eb9914700d29fe7",
+      "sha256": "64b7f65f686c51a54b0f8bf1b4bf4436d208e5a9491d708db2296763056a15e3",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1083,7 +1083,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_trunk_blocked.png",
-      "sha256": "50456a8407e720257ecb6b306ff21770e55e316fccc9fb85e4db52928431a108",
+      "sha256": "02bd3382a7b2c4e4a181adf24275d9f0d0ceb568a576543baf835d6a38b925db",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1098,7 +1098,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_branch_open.png",
-      "sha256": "7bfb7251cc351fcbad674d9a086cb74ace554458342f23b754e4afb5022de000",
+      "sha256": "912162950681a44ecab1b83500953c64f03a0d4db2702097e7bca2752626e64b",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1113,7 +1113,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_branch_restricted.png",
-      "sha256": "6ec41c7102879aabb4780a06887d52481a1755fdb785976bcfa2777e55bd14ab",
+      "sha256": "5b69b44f2b31a09cc40fb73f1317a4d1aa9ccd48380f54c4678f61396c256a7f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1128,7 +1128,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_corner_wn_return_branch_blocked.png",
-      "sha256": "bc6eed098e7c220b11d4513d2895d2410498664c0c04c7e9bbebb5bdc6832ab4",
+      "sha256": "36f42cb26d587695202704995db9038e0f2844519baf817e71fe5011adf32f98",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1143,7 +1143,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_trunk_open.png",
-      "sha256": "7583e40423a227875f86da73a510d602d01d1c5a7dfb3ad861831677794abb36",
+      "sha256": "8802d4ccebeb3bdbc7fbf33db502f6259abbbae51592ea7a5b4aacceea4e7705",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1158,7 +1158,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_trunk_restricted.png",
-      "sha256": "12381258a3dfdda3e833c1f47f30f4dd38d19fe8a3337c27e2fc97ce3d941ff6",
+      "sha256": "c5bf353dc35f3bfe04c5d2fe30559741313abe74eb4db29a33fef12ba9d65f12",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1173,7 +1173,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_trunk_blocked.png",
-      "sha256": "ef1bdb29d301f8f582200682b504a3ef8ab9e7c12dc2de50b7451d63a95f3dd3",
+      "sha256": "190de49fb26a2f193a601547b8f78b7cc673ba21b3dcc50dc866b70c21e2c1ba",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1188,7 +1188,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_branch_open.png",
-      "sha256": "805dd69b24ede4133ca45db9901b033711ac245f3aebdec277e4354686ef2e62",
+      "sha256": "5381ad0c870bcd01886852c9a3409aadfc2530f379e8da658e1918c97e622382",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1203,7 +1203,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_branch_restricted.png",
-      "sha256": "79bae85f09391f1b07873b901c0d3eb007001a4cba1db743da91d39fb76fc243",
+      "sha256": "a1b0045442fdd8cbe0349f811940b92d4dd2fdd10e25fa71b484d1e3d0fcbef0",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1218,7 +1218,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_nes_outbound_branch_blocked.png",
-      "sha256": "075801f0e3a14d5a12ae78a65be8bdb2948d8d1797bb9b23606704b1f1fa5830",
+      "sha256": "20ca0605277a22f4234b90e9a21598d65dec4551f03bbf60af8f53757fd47fa0",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1233,7 +1233,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_trunk_open.png",
-      "sha256": "58723c867488cda33cd69115df0a7584b8c0994672d9304fed0bdfc9ff881b40",
+      "sha256": "89c3cb0c8e0a0f530cb7ebddf85c1b737d2b49e8c0fb55acc68c265c27244bec",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1248,7 +1248,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_trunk_restricted.png",
-      "sha256": "6b96e912216732780001b423a04abf7ee4cf94b1a96e3e66d549d0c6752ec707",
+      "sha256": "cedc7a2d4a4b7d1b44c21e4a9105a11eb360e76d8e66152e5045f615d5646931",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1263,7 +1263,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_trunk_blocked.png",
-      "sha256": "636bfe0533f2c4a3ee4936931adff648ee490f95042a943aaa4921661ec8ff04",
+      "sha256": "394c0e1d29c53b06af4baa31786875cd184df181dc8f3d1305f5c561b77ce41b",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1278,7 +1278,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_branch_open.png",
-      "sha256": "70359667c92631062e91a2e44da6cf738f7376de644fbf961e498e480d83ab7e",
+      "sha256": "20d1cdca1e7136691eab58e954b4a7421a4c5519a34fd68b8c037aa07f8aae92",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1293,7 +1293,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_branch_restricted.png",
-      "sha256": "a140b8caba08173a3305ccae43439e929b504e86bda80d4bace4989319858ed5",
+      "sha256": "bb1e847486cf4aff2f40c6baa251675597660f41e4bcf5dce657a02fb00682f0",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1308,7 +1308,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_nes_return_branch_blocked.png",
-      "sha256": "e25e707dcf469c42f2e34c7c5bbb9cfb1d6c9a72379fc9f31f24e882da6362b1",
+      "sha256": "cd96a60a8b1df1cfb3e9f14abe05d39d69fa1f62ffd4806dc8883d2887793b76",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1323,7 +1323,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_trunk_open.png",
-      "sha256": "3cbdbd8c7e083c41bf7eb738a7af0bb7eb39d907f0d9506f8453c17792b66a78",
+      "sha256": "4d09d4ed8834401dc1a510e825de6feded31ca547743e2044e6cf39a0875a62f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1338,7 +1338,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_trunk_restricted.png",
-      "sha256": "50f0376f886573f05c8d3261efb16bfa1652c7b9881eafbf55740b5b4902e70f",
+      "sha256": "dfed8607eb20fca312dfdd12a183d438a18264c5f421e4812b811d757a15ba6e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1353,7 +1353,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_trunk_blocked.png",
-      "sha256": "2523f00e5169ec165834e86c1e770ac301d636c4511731ce1d825da572f902f1",
+      "sha256": "44deb1da1db2cd3c2324943ba6fd70fdaa5b9f97f6a490b2bd2bf92b90cec956",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1368,7 +1368,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_branch_open.png",
-      "sha256": "56d514d089b1181f3a6d2dda23417e4165f66afe0a4e0d91efd2b3a3d780c4d8",
+      "sha256": "3115559f5511d232310356584bb02c633dc816acb841d1f77c0a834569b2a433",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1383,7 +1383,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_branch_restricted.png",
-      "sha256": "e769f65fa74c25564f87c06b5675123b20b7847dedc6a1118ef2889004577c73",
+      "sha256": "5cc72c00d6fbd69ebb008335915b1c9ff3df76987cb8c329d2e5d216724f3734",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1398,7 +1398,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_esw_outbound_branch_blocked.png",
-      "sha256": "7e65c8819362eefdb29f8a5e43b941d11fad5eedd62d12ce49f83bbe018da5bf",
+      "sha256": "3fbc75caf457412077a0d1cf0bf6b9405dd0c2be0f28fcc63e7fb852069d5af8",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1413,7 +1413,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_trunk_open.png",
-      "sha256": "b94e4bb3339016f6b9b0961da2f9d827ac521684ca35e3802a42feeef63e39dc",
+      "sha256": "2b2f6d10a3832424c554c37a33b40662f83e07c11945b79c8cf415d4b5d01e9a",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1428,7 +1428,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_trunk_restricted.png",
-      "sha256": "045f2e3936753da11657144e59ea8829260f753b3abb2acf7a4609fadb04b58e",
+      "sha256": "74532724845e6170379822a48c92a7063c39c6f728eeaf5dd7c77a42deb32b29",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1443,7 +1443,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_trunk_blocked.png",
-      "sha256": "ef4668d3c2e2a8e44f54cdd695cc1e7b4bee865eefeabdf2a5527bb362c2eda8",
+      "sha256": "53db2ea23c56f24d5565a12e077b1cb7c7230ddb6fbdde07af119f0ab8b9678e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1458,7 +1458,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_branch_open.png",
-      "sha256": "21970e827a8699e52c75ccd1e1541ff01f41e80f15f2127fbfa7a7050e772ea0",
+      "sha256": "a743fb52fc3210621f87ac046675d4ca303d51bb992e8667474d11bb985f2932",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1473,7 +1473,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_branch_restricted.png",
-      "sha256": "bee68708f16641396ad4fa0df05331baecf26ca659d6e1c9ec68df51ff6d7d12",
+      "sha256": "728210305d494ec8d226be9cf8c056e96866eb5acdc7e5f78b0e87b4a995ae77",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1488,7 +1488,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_esw_return_branch_blocked.png",
-      "sha256": "860df09df3568345f2fdbbf94014bfd60796fcd8123979ae9a028d8bbfa2c852",
+      "sha256": "df7e63d4c64a7ab47d734828782a4a32dcc82831ff6e24399e15248e74cd217e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1503,7 +1503,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_trunk_open.png",
-      "sha256": "8cf066018e928f893a660468d1642012bfed99c9e8d5fcd61acd54e920b74cec",
+      "sha256": "1130f8d0ed402f7f59776dcd324e5e8fccbd17a8672e504bbfff92697b69798f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1518,7 +1518,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_trunk_restricted.png",
-      "sha256": "c04bc3a6946b3cc0ba4e0de80160eb283d6c1eb7c55cf1b061713d3569404b37",
+      "sha256": "2b20bfcc6fef86c0e7d6f879ae3f2b40bd12f8821605421a9f0a46ae5d1d3167",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1533,7 +1533,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_trunk_blocked.png",
-      "sha256": "4c906348ff416fa1881368fdbfdc75b263765f865d6451f7c37dda5a363b0d8d",
+      "sha256": "d3bd1cf2f5e9bbce497d8d2948e925e4f422ba964ba76e42b22d8c1c649aee38",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1548,7 +1548,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_branch_open.png",
-      "sha256": "3a3f56e6381778e205bb163da47a5485e9841e35444daf2aa540eb6ea29aac17",
+      "sha256": "cd664e881a66cd5710db194f139c3fdea0c2268ef86f82764cf888ed00ffe073",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1563,7 +1563,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_branch_restricted.png",
-      "sha256": "95bc91848aa8980388bda0322145b4b3691fe939d1245814f3dbb0ba39466d89",
+      "sha256": "8233e6ab25bceac1c80cac714b74e32f47261670f4f11ac68f3ddfd178bc227b",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1578,7 +1578,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_swn_outbound_branch_blocked.png",
-      "sha256": "bbb864b2220182b6dd4d8f564f0f85f1e113931264a9a525924f8a2089d6b445",
+      "sha256": "771a12f3c3b7b974fc11d726d3822e1e37ee5737016299643751cfd15defaefe",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1593,7 +1593,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_trunk_open.png",
-      "sha256": "4669d894ca54b3c4eeb3d2e5703eb08a3a2a30a7fc20dbfcde9cc43f2b566a13",
+      "sha256": "b66f37e8beb3a612023affadfada9e05002d55e933d5c6a335100f688162ae85",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1608,7 +1608,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_trunk_restricted.png",
-      "sha256": "143f9e3064ea8ee678818e61bdc6b4404b013baace0adafd485cce1bc036a5fd",
+      "sha256": "c73f4c3f24617519cf7e05d1d17b76dcf48ff83ece7b6271171b5cc696e7104e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1623,7 +1623,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_trunk_blocked.png",
-      "sha256": "2a549f16268231c476d1ee72136bf0415ce1b9f37988e6423b8dd5f052194f3c",
+      "sha256": "8e69999a67da846ecfab64138cce4b63a6e8281cbe46506306361263ebccf3af",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1638,7 +1638,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_branch_open.png",
-      "sha256": "ef21e842a43e1bc0f0dd8ea15c61836208bd2c2ba40e78425cb2aff1753b62f2",
+      "sha256": "9ef117265e29028961d7899e224f92885c26a70ead4b17034733aa4378895c96",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1653,7 +1653,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_branch_restricted.png",
-      "sha256": "2c19c036e8a604414213f5ce40e8881df50fd8e97f4c67e050e4a29cf23c6d63",
+      "sha256": "1642298681347c82e921b087b1a8dcc2991b13283c4ca83444ee4b13993b4f7c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1668,7 +1668,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_swn_return_branch_blocked.png",
-      "sha256": "45de88f27cd6e822efebee7a738b81910dfef7fc208eaf85bf8d8ad5552d1b44",
+      "sha256": "a60910081dfff839a2da89b26a5fcbf6f8fa31fba3178abc5fde0e10d558d9d6",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1683,7 +1683,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_trunk_open.png",
-      "sha256": "1d87d113aa587ad74f40d61bb1f7bb1d65231a715dbb1463dd1e53ae0f154756",
+      "sha256": "56f969d6d3270deb1e1698f209b8c47e4ff83f61aec026629c964a40d0808530",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1698,7 +1698,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_trunk_restricted.png",
-      "sha256": "1200fbe2d41675fc93fb0452a77a29f744ff418ecc4baae71f538fc13368bb35",
+      "sha256": "5caecd4c35e2b4a009dcc89c3e7b94566245bece98020e6f82ac361be21a0e3c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1713,7 +1713,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_trunk_blocked.png",
-      "sha256": "869f846286a0cd1d00910e9fcf1c0753483999bed287c28936d0d5a461daae8e",
+      "sha256": "73141aa310d2af164b672396cdda297dd635f390f08f618776f7a095d90677c2",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1728,7 +1728,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_branch_open.png",
-      "sha256": "8803020b296dbd2ef5ed7eb2c7be13bc90c8d56de98fbb4b696a4b3df9b1c14b",
+      "sha256": "ce54c06ed1852ff4d1595e4912474e1ffe0a77ba34bce61abbf1058592008ff7",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1743,7 +1743,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_branch_restricted.png",
-      "sha256": "1e6d883c2f122dc43a212bd7893aa5e70d34992128987120f8672d535b29a53e",
+      "sha256": "77fba3bff2a46ba4c802bf40a30a888dc4bef47937d1e05cb00c573b2a6aa966",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1758,7 +1758,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_wne_outbound_branch_blocked.png",
-      "sha256": "5d47a4ac6e8bd4e46ef4ac304efc449e51ebc356f2a930a4e6cccd6a64de0fc2",
+      "sha256": "00f547e1e118bfbe9ce2e71abfe413f0891aae3c33f3a39ec2f9b4a7864304c6",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1773,7 +1773,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_trunk_open.png",
-      "sha256": "11c491fd91f505164a73b820abd93bf137026af3b0cdf4ca777aaf92df8bce1a",
+      "sha256": "a30cd5b97272f3a16e68960a654f7a30c2754798feb1261d0458870722979614",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1788,7 +1788,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_trunk_restricted.png",
-      "sha256": "d1dfc61822093b738f9e5001969db1db7d8ab58387b0bb0be1712d2f0d80c137",
+      "sha256": "0522e0f2f5f534b668c893cc70c7261ccf1a5799dd6cd128f3b80745616edc0e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1803,7 +1803,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_trunk_blocked.png",
-      "sha256": "69f706c061332004911d5f94c093a3fe9c8c9f92b74464d8b461205827de20e8",
+      "sha256": "c1a1b78028e8e7c36efee73903f4c567a6cd578db8ab0cf398f9e03a12c3468e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1818,7 +1818,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_branch_open.png",
-      "sha256": "b0745d31025ffd0048c7a81ec93d17fd2b89a958bb823c753c2dac4966022dc9",
+      "sha256": "d057e47379a69aaaf9279ce7232b9da173c9755808f45013c24b85734f51971c",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1833,7 +1833,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_branch_restricted.png",
-      "sha256": "7239aacee27c20919816529a4e10d19648e75524179da543175abf1243061fc0",
+      "sha256": "326c24c41103d165c30f27659502032d3b6d192f73bd0491a0b8c0ab3a4c3658",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1848,7 +1848,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_tee_wne_return_branch_blocked.png",
-      "sha256": "6d4299b8df47df0467eeca070cf913947e371cff5cef1610ecac61d82586aade",
+      "sha256": "babb5794607382b2760a45b25e0660071ff91c3b4a015d9d7b60f7d45a99150f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1863,7 +1863,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_trunk_open.png",
-      "sha256": "2fe8ab71e771e96539b2e713f4c978aafaf55ac25f7b20f8672d943d71377a46",
+      "sha256": "3446c2d7752b38657c3d5bd474a29f63900bf05681db39360c053fbc47a5756e",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1878,7 +1878,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_trunk_restricted.png",
-      "sha256": "dd603014d46a0c547e6a866914bf19a7a38b62ed89a55477d2c71ff39fb9669c",
+      "sha256": "110b6d6aa3be15592428b2ec02f6236516e1e96e5a2b167bcf3f755670525550",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1893,7 +1893,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_trunk_blocked.png",
-      "sha256": "6e28e51d5374ee7367a21643f755cece314f68c2f93849e96f48a4fef79c7be8",
+      "sha256": "6b3e3c6dc9f15a0bcf8b8b27d1881960515e480850ed5426ea56dfc9b84965a5",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1908,7 +1908,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_branch_open.png",
-      "sha256": "802bd238a306f039d44ddd3f274d4b808ded44e93361b424024ead0a8be2a4d9",
+      "sha256": "b7f69ac56c8896ff6938d0f9a00b30c2077a01f80b20c77049f8c736ce7ebfde",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1923,7 +1923,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_branch_restricted.png",
-      "sha256": "274817329f723c8796954888db9a51e066cfc02539387b42126fb5e0887ffc4e",
+      "sha256": "f31185ede22a53445f9344971ad60512273c222b67cd8cc9016e7baadfd406c9",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1938,7 +1938,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_outbound_branch_blocked.png",
-      "sha256": "9940c3edf8681c62c0d897c209afad11da9a6740ef43a4030f36388916df62e8",
+      "sha256": "181eb305b048cf461e68b5b648bf8a410c29724b24abdd6356861ff0ca49a9ff",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1953,7 +1953,7 @@
       "route_role": "trunk",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_trunk_open.png",
-      "sha256": "b718028453b90a3f87a825da12b3840ce775a61f282d27e3f93c4f3fce223c45",
+      "sha256": "b646cca838185348ef8ef40eb1e563d3562d83ebe58b281c1992a80cb418f2ac",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1968,7 +1968,7 @@
       "route_role": "trunk",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_trunk_restricted.png",
-      "sha256": "8d26b5117c34e933f7dc9a1124264f158167a7b99286d932648c3e66037f941e",
+      "sha256": "e3930838e185b8a1761bb5439cefadf8ea8f18d3c8a05c6c1cba28f787b9382f",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1983,7 +1983,7 @@
       "route_role": "trunk",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_trunk_blocked.png",
-      "sha256": "e7b2210c2753fccb8927a28446bdf95e6b91db2f8d1f37c0c9c6493d6dc2c581",
+      "sha256": "8078a22601eb775ed2008831d93979561d64f48d5c305cf444f28769f84e1823",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -1998,7 +1998,7 @@
       "route_role": "branch",
       "passage_state": "open",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_branch_open.png",
-      "sha256": "da45273bc29f7ce23191af0b2f3d2694263df2e4f1a743d14e3a3e66decf8eed",
+      "sha256": "e1b3ed94b07a5b0d00997471eafc43232e6dc97f79aa554e31127df98e62c3c1",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -2013,7 +2013,7 @@
       "route_role": "branch",
       "passage_state": "restricted",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_branch_restricted.png",
-      "sha256": "cc11efef9c3471318406a0d342b564bef144e6eb02180a07c74d96004bec1782",
+      "sha256": "c35106e3239171f267069b7dfe4bbf81d678463cd363811337d6fa1ab05cdadd",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
@@ -2028,7 +2028,7 @@
       "route_role": "branch",
       "passage_state": "blocked",
       "path": "art/tiles/d09/tile_vessel_fourway_nesw_return_branch_blocked.png",
-      "sha256": "50c93237adac89207784d8bd81f4f0cebf0d59634583f168fe870219621466f3",
+      "sha256": "957480f0610c57942d8726fed0641dc65b2e29a869ec2d78f51222f3983e355d",
       "checks": {
         "dimensions_16x16": "PASS",
         "binary_alpha": "PASS",
