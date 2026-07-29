@@ -24,7 +24,14 @@ $RECYCLE.BIN/
 /agents-local.md
 /CLAUDE.md
 /.codex/config.toml
+/.mcp.json
 
 # Per-account local session notes and private briefs
 *.local.md
 /docs/prompts/*.pdf
+
+# Godot UID cache files
+*.uid
+
+# Python cache
+__pycache__/

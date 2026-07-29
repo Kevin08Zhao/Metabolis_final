@@ -15,6 +15,16 @@ extends Node2D
 ## - edge_id, start_node_id, end_node_id
 ## - organ_id, trunk_route_id, extension_profile_id, spec_tier_id
 ## - coverage_radius, base_capacity, capacity_multiplier, effective_capacity
+## - flow_direction: "outbound" (placenta → tissue) or "return" (tissue → placenta)
+## - passage_state: "open", "restricted", or "blocked" (default "open" on creation)
+## - route_role: "trunk" (main route) or "branch" (secondary arm)
+## - branch_parent_id: edge_id of the trunk edge this branch stems from (empty for trunk)
+##
+## Junction direction rule (D-09 contract):
+## At tee and four-way junctions, the participating edge with the lowest sequence
+## number designates the entry arm; all other participating edges are exit arms.
+## This uniquely maps every undirected junction mask to a directed entry/exit
+## combination for flow-direction arrow selection.
 ##
 ## test_determinism() generates the same input twice and compares every node and
 ## edge field. Tier acceptance: heart_reinforced reads six tiles and radius 2.5;
@@ -76,6 +86,12 @@ func generate_extension(
 	var extension_profile_id := StringName(network.get("extension_profile_id", ""))
 	var spec_tier_id := StringName(network.get("spec_tier_id", ""))
 	var base_capacity := _read_number(network.get("network_capacity"))
+	var flow_direction := StringName(network.get("flow_direction", "outbound"))
+	var route_role := StringName(network.get("route_role", "trunk"))
+	if not flow_direction in ["outbound", "return"]:
+		flow_direction = StringName("outbound")
+	if not route_role in ["trunk", "branch"]:
+		route_role = StringName("trunk")
 	var extension_length := int(
 		_balance_access.call(
 			"get_value",
@@ -147,6 +163,10 @@ func generate_extension(
 			"base_capacity": base_capacity,
 			"capacity_multiplier": capacity_multiplier,
 			"effective_capacity": base_capacity * capacity_multiplier,
+			"flow_direction": flow_direction,
+			"passage_state": StringName("open"),
+			"route_role": route_role,
+			"branch_parent_id": StringName(),
 		})
 
 	return {
