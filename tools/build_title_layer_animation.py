@@ -63,6 +63,8 @@ ROAD_DASH_START = (0.0, 172.0)
 ROAD_DASH_END = (319.0, 85.21)
 ROAD_DASH_LENGTH_X = 14
 ROAD_DASH_PERIOD_X = 28
+ROAD_UPPER_GROUND_START = (0.0, 92.0)
+ROAD_UPPER_GROUND_END = (319.0, 75.58)
 
 BAYER_8 = (
     (0, 32, 8, 40, 2, 34, 10, 42),
@@ -297,6 +299,28 @@ def road_dash_y(x: float) -> float:
     )
 
 
+def road_upper_ground_y(x: float) -> float:
+    """Return the upper ground boundary at a source-image x coordinate."""
+    progress = (x - ROAD_UPPER_GROUND_START[0]) / (
+        ROAD_UPPER_GROUND_END[0] - ROAD_UPPER_GROUND_START[0]
+    )
+    return ROAD_UPPER_GROUND_START[1] + progress * (
+        ROAD_UPPER_GROUND_END[1] - ROAD_UPPER_GROUND_START[1]
+    )
+
+
+def redraw_road_upper_ground(image: Image.Image) -> Image.Image:
+    """Extend the upper roadside ground to its perspective-correct boundary."""
+    result = image.convert("RGBA").copy()
+    pixels = result.load()
+    for x in range(WIDTH):
+        top_y = round(road_upper_ground_y(x))
+        road_y = round(road_upper_y(x))
+        for y in range(top_y, road_y):
+            pixels[x, y] = TISSUE
+    return result
+
+
 def redraw_road_center_dashes(image: Image.Image) -> Image.Image:
     """Replace the baked center dashes with one deterministic perspective line."""
     result = image.convert("RGBA").copy()
@@ -323,7 +347,9 @@ def redraw_road_center_dashes(image: Image.Image) -> Image.Image:
 
 def build_terrain_frames(static: Path) -> list[Image.Image]:
     day = redraw_road_center_dashes(
-        Image.open(static / "terrain_road_afternoon.png")
+        redraw_road_upper_ground(
+            Image.open(static / "terrain_road_afternoon.png")
+        )
     )
     dusk = recolor(
         day,
@@ -712,6 +738,35 @@ def validate_layer_frames(
             3,
         )
         result["road_dash_follows_guide"] = maximum_deviation <= 0.5
+        upper_ground_pixels = [
+            (
+                x,
+                min(
+                    y
+                    for y in range(HEIGHT)
+                    if frames[0].getpixel((x, y))[3] == 255
+                ),
+            )
+            for x in range(WIDTH)
+        ]
+        upper_ground_maximum_deviation = max(
+            abs(y - road_upper_ground_y(x)) for x, y in upper_ground_pixels
+        )
+        result["road_upper_ground_guide"] = {
+            "start": list(ROAD_UPPER_GROUND_START),
+            "end": list(ROAD_UPPER_GROUND_END),
+        }
+        result["road_upper_ground_endpoint_pixels_present"] = all(
+            frames[0].getpixel((round(x), round(y)))[3] == 255
+            for x, y in (ROAD_UPPER_GROUND_START, ROAD_UPPER_GROUND_END)
+        )
+        result["road_upper_ground_maximum_raster_deviation_pixels"] = round(
+            upper_ground_maximum_deviation,
+            3,
+        )
+        result["road_upper_ground_follows_guide"] = (
+            upper_ground_maximum_deviation <= 0.5
+        )
     return result
 
 
@@ -1088,6 +1143,7 @@ def write_spec(
         "| Alpha | Binary only: `0` or `255` |",
         "| Sampling | Nearest-neighbor; integer source coordinates |",
         "| Vanishing point | `(1088/3, 220/3) = (362.6667, 73.3333)` |",
+        "| Upper roadside ground edge | `(0,92) → (319,75.58)` |",
         "| Road upper edge | `(0,130) → (320,80)` |",
         "| Road lower edge | `(160,200) → (320,100)` |",
         "| Road center-dash guide | `(0,172) → (319,85.21)` |",
@@ -1158,6 +1214,9 @@ def write_spec(
         "### 02_terrain",
         "",
         "- Road edges and center dashes MUST not move between frames.",
+        "- The upper roadside ground edge MUST pass through source coordinates",
+        "  `(0,92)` and `(319,75.58)`; rasterized edge pixels may differ by at",
+        "  most `0.5 px` vertically.",
         "- The continuous center-dash guide MUST pass through source coordinates",
         "  `(0,172)` and `(319,85.21)`; rasterized dash pixels may differ by at",
         "  most `0.5 px` vertically.",
@@ -1274,6 +1333,8 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
                 [
                     result["road_dash_endpoint_pixels_present"],
                     result["road_dash_follows_guide"],
+                    result["road_upper_ground_endpoint_pixels_present"],
+                    result["road_upper_ground_follows_guide"],
                 ]
             )
         if not all(required):
@@ -1339,6 +1400,11 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
             "start": list(ROAD_DASH_START),
             "end": list(ROAD_DASH_END),
             "equation": "y = 172 + (85.21 - 172) * x / 319",
+        },
+        "road_upper_ground_guide": {
+            "start": list(ROAD_UPPER_GROUND_START),
+            "end": list(ROAD_UPPER_GROUND_END),
+            "equation": "y = 92 + (75.58 - 92) * x / 319",
         },
         "layer_order": LAYER_ORDER,
         "timeline": [

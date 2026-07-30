@@ -426,6 +426,17 @@
     ],
     "equation": "y = 172 + (85.21 - 172) * x / 319"
   },
+  "road_upper_ground_guide": {
+    "start": [
+      0.0,
+      92.0
+    ],
+    "end": [
+      319.0,
+      75.58
+    ],
+    "equation": "y = 92 + (75.58 - 92) * x / 319"
+  },
   "layer_order": [
     "01_sky",
     "02_terrain",
@@ -4524,7 +4535,20 @@
       },
       "road_dash_endpoint_pixels_present": true,
       "road_dash_maximum_raster_deviation_pixels": 0.499,
-      "road_dash_follows_guide": true
+      "road_dash_follows_guide": true,
+      "road_upper_ground_guide": {
+        "start": [
+          0.0,
+          92.0
+        ],
+        "end": [
+          319.0,
+          75.58
+        ]
+      },
+      "road_upper_ground_endpoint_pixels_present": true,
+      "road_upper_ground_maximum_raster_deviation_pixels": 0.5,
+      "road_upper_ground_follows_guide": true
     },
     "03_main_building": {
       "frame_count": 64,
@@ -5068,7 +5092,7 @@
     "02_terrain": [
       {
         "path": "art/animations/title_layers/02_terrain/frame_000.png",
-        "sha256": "761c6dd4157b40789ed562718e6443e651b96abbf64f186fe5e6c6cf7bbea81d",
+        "sha256": "3c901c0c059a90dfeaa185d056f526b43864a70a5f75886de0a43b107ef105b0",
         "frame": 0,
         "used_by_frames": [
           0,
@@ -5099,7 +5123,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_024.png",
-        "sha256": "d19ba9c94fbea2bef9399041158cfe81c1ef6d8628ab037da8fe80757e28432a",
+        "sha256": "54a2de37cd969e23bb9f66579e6464f1424098271a9e2e25685e0effdca2b147",
         "frame": 24,
         "used_by_frames": [
           24,
@@ -5116,7 +5140,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_030.png",
-        "sha256": "c47680cf5797674fe81a48e19dee95bcb4c28b2b2c58058d2c58c059abafdce5",
+        "sha256": "5b64ecf4628d045cf730edb42c086462810c91e841b8622d8aa6d3a67774f946",
         "frame": 30,
         "used_by_frames": [
           30,
@@ -5133,7 +5157,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_036.png",
-        "sha256": "acb3200a004f11feeed0e27f7257beb3e9703cd16ad6c524645e63219bf9bf0c",
+        "sha256": "57763d178ccb31a6c4a2cb91a80f2b8a540c303140dcd7886a42c4ec7f52aced",
         "frame": 36,
         "used_by_frames": [
           36,
