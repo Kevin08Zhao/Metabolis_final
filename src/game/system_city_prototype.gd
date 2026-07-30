@@ -2591,6 +2591,16 @@ func debug_advance_economy(seconds: float) -> void:
 	_refresh_interface()
 
 
+## Committed road length per map, so a caller can check a map that is no longer
+## the one on screen. A delivery without a fault advances the view immediately.
+func _outgoing_route_lengths() -> Dictionary:
+	var lengths: Dictionary = {}
+	for index in range(SYSTEMS.size()):
+		var id := _system_id(index)
+		lengths[id] = _route_for(_outgoing_routes, id).size()
+	return lengths
+
+
 ## Move the pointer onto a grid cell and return what the map-object card would
 ## show there. An empty dictionary means the cell carries no inspectable object.
 func debug_inspect_cell(cell: Vector2i) -> Dictionary:
@@ -2631,6 +2641,7 @@ func debug_snapshot() -> Dictionary:
 		"current_build_time_sec": _current_build_time_sec(),
 		"delivery_path": _delivery_path.duplicate(),
 		"route": _route_for(_outgoing_routes, system_id),
+		"route_lengths": _outgoing_route_lengths(),
 		"route_metrics": _route_metrics.get(system_id, {}).duplicate(true),
 		"resources": {
 			"biomass": _resources.biomass,

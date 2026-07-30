@@ -531,14 +531,18 @@ func _test_system_city_scene() -> void:
 		var post_delivery: Dictionary = prototype.debug_snapshot()
 		## The delivery animation used to share its array with the committed
 		## route, so finishing a delivery erased the road the player paid for.
+		## Read it per map: a fault-free delivery advances the view at once.
+		var lengths: Dictionary = post_delivery.get("route_lengths", {})
 		_expect(
-			(post_delivery.get("route", []) as Array).size() == road_cells,
-			"a committed road must survive its delivery animation"
+			int(lengths.get(SystemCityPrototype.SYSTEMS[index]["id"], 0))
+			== road_cells,
+			"system %d road must survive its delivery animation" % index
 		)
-		_expect(
-			not prototype.debug_inspect_cell(road_cell).is_empty(),
-			"a committed road must stay inspectable after delivery"
-		)
+		if int(post_delivery.get("current_system_index", -1)) == index:
+			_expect(
+				not prototype.debug_inspect_cell(road_cell).is_empty(),
+				"a committed road must stay inspectable after delivery"
+			)
 		if int(post_delivery.get("mode", -1)) == SystemCityPrototype.Mode.BOTTLENECK:
 			_expect(
 				bool(post_delivery.get("bottleneck_active", false)),
