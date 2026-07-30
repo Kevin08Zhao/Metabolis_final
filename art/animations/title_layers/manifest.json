@@ -415,6 +415,17 @@
     "05_vehicle_cargo": 37,
     "06_roadside_props": 56
   },
+  "road_center_dash_guide": {
+    "start": [
+      0.0,
+      172.0
+    ],
+    "end": [
+      319.0,
+      85.21
+    ],
+    "equation": "y = 172 + (85.21 - 172) * x / 319"
+  },
   "layer_order": [
     "01_sky",
     "02_terrain",
@@ -3435,7 +3446,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -3497,7 +3508,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -3559,7 +3570,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -3621,7 +3632,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -3683,7 +3694,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -3745,7 +3756,7 @@
         "anchors": "locked"
       },
       "godot_ui": {
-        "phase": "title_and_subtitle_entering",
+        "phase": "title_entering",
         "image_layer": false
       }
     },
@@ -4497,10 +4508,23 @@
       "all_320x180": true,
       "locked_palette": true,
       "binary_alpha": true,
-      "visible_color_count": 9,
+      "visible_color_count": 7,
       "nonempty_frame_count": 64,
       "first_nonempty_frame": 0,
-      "last_nonempty_frame": 63
+      "last_nonempty_frame": 63,
+      "road_dash_guide": {
+        "start": [
+          0.0,
+          172.0
+        ],
+        "end": [
+          319.0,
+          85.21
+        ]
+      },
+      "road_dash_endpoint_pixels_present": true,
+      "road_dash_maximum_raster_deviation_pixels": 0.499,
+      "road_dash_follows_guide": true
     },
     "03_main_building": {
       "frame_count": 64,
@@ -5044,7 +5068,7 @@
     "02_terrain": [
       {
         "path": "art/animations/title_layers/02_terrain/frame_000.png",
-        "sha256": "9f3a3a809f80694514ebcf0571df66f1162205199cefaa8019a84627d7995c58",
+        "sha256": "761c6dd4157b40789ed562718e6443e651b96abbf64f186fe5e6c6cf7bbea81d",
         "frame": 0,
         "used_by_frames": [
           0,
@@ -5075,7 +5099,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_024.png",
-        "sha256": "4a2669ac00b05e7f29a763b054c0230c51cfad83fb63203ee136f5d602ca67b8",
+        "sha256": "d19ba9c94fbea2bef9399041158cfe81c1ef6d8628ab037da8fe80757e28432a",
         "frame": 24,
         "used_by_frames": [
           24,
@@ -5092,7 +5116,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_030.png",
-        "sha256": "5aa72151fc65b43e5085c3feee1a4f5c3b6a5a3efde6210081ddf41611d594c5",
+        "sha256": "c47680cf5797674fe81a48e19dee95bcb4c28b2b2c58058d2c58c059abafdce5",
         "frame": 30,
         "used_by_frames": [
           30,
@@ -5109,7 +5133,7 @@
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_036.png",
-        "sha256": "e8c0548ebf25a424d18b38468f57346e4436fda19d54f630be5b24ac09af6bf7",
+        "sha256": "acb3200a004f11feeed0e27f7257beb3e9703cd16ad6c524645e63219bf9bf0c",
         "frame": 36,
         "used_by_frames": [
           36,

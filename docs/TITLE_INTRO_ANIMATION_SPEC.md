@@ -40,6 +40,7 @@ python tools/build_title_layer_animation.py \
 | Vanishing point | `(1088/3, 220/3) = (362.6667, 73.3333)` |
 | Road upper edge | `(0,130) → (320,80)` |
 | Road lower edge | `(160,200) → (320,100)` |
+| Road center-dash guide | `(0,172) → (319,85.21)` |
 | Embedded text | Forbidden; title and menu are native Godot UI |
 
 Layer order is back-to-front and MUST remain:
@@ -112,6 +113,11 @@ the first frame that introduces new pixels.
 ### 02_terrain
 
 - Road edges and center dashes MUST not move between frames.
+- The continuous center-dash guide MUST pass through source coordinates
+  `(0,172)` and `(319,85.21)`; rasterized dash pixels may differ by at
+  most `0.5 px` vertically.
+- Exactly four distinct terrain PNGs are stored; the 64 logical frames
+  resolve to them through `manifest.json`'s `frame_maps`.
 - Day/night changes are palette swaps, not geometry changes.
 - The off-canvas vanishing point MUST remain shared with all buildings.
 
