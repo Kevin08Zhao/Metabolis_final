@@ -1,12 +1,16 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://ui/title_pulse.gd" id="1_pulse"]
 
+[sub_resource type="SystemFont" id="SystemFont_title"]
+font_names = PackedStringArray("Menlo", "Monaco", "Consolas", "Courier New")
+font_weight = 700
+
 ; Title screen.
 ;
-; Geometry from the layout table of docs/D-29_TITLE_SCENE_INTEGRATION.md, on the
-; 640x360 reference canvas. Font sizing remains engine-native and the D-29 pulse
-; is provided by res://ui/title_pulse.gd.
+; The 640x360 source art scales to the project's 800x450 viewport. The title and
+; menu use the viewport centre so the full-screen presentation stays balanced.
+; The D-29 pulse is provided by res://ui/title_pulse.gd.
 ;
 ; The background is the accepted D-29 asset recorded by docs/assets/D-29_MANIFEST.md,
 ; art/backgrounds/background_title.png. It cannot be an ext_resource: art/ sits
@@ -20,10 +24,10 @@
 ;
 ; The entry set is T-32's, not the two-button set in the D-29 table. T-32's
 ; accepted behaviour offers continue, new game and chapter select, with chapter
-; select gated on a finished stage that can really be entered. MenuAnchor is
-; sized so that two entries land on the two rectangles D-29 specifies and a
-; third appears one pitch above them, clear of the disclaimer band. Both
-; differences are recorded in docs/coord/rework/D-29__from_ACCOUNT_C.open.md.
+; select gated on a finished stage that can really be entered. MenuAnchor keeps
+; every generated entry centred over the lower skyline. The obsolete
+; title-screen disclaimer is intentionally absent; the required educational
+; disclaimer remains on the ending screen.
 ;
 ; SceneRouter puts the entry buttons into MenuAnchor because of its group.
 
@@ -35,54 +39,62 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="TextureRect" parent="." groups=["title_background"]]
-offset_right = 640.0
-offset_bottom = 360.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 expand_mode = 1
-stretch_mode = 1
+stretch_mode = 0
 mouse_filter = 2
 
 [node name="HeartPulse" type="Node2D" parent="."]
-position = Vector2(320, 180)
+position = Vector2(400, 225)
 script = ExtResource("1_pulse")
 
 [node name="TitleBand" type="Label" parent="."]
-theme_override_font_sizes/font_size = 8
-offset_left = 160.0
-offset_top = 80.0
-offset_right = 480.0
-offset_bottom = 120.0
-text = "Metabolis: Birth of the City of Life"
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 12.0
+offset_bottom = 62.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
+theme_override_colors/font_outline_color = Color(0.168627, 0.2, 0.309804, 1)
+theme_override_colors/font_shadow_color = Color(0.498039, 0.258824, 0.360784, 0.75)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = SubResource("SystemFont_title")
+theme_override_font_sizes/font_size = 36
+text = "METABOLIS"
 horizontal_alignment = 1
 vertical_alignment = 1
 mouse_filter = 2
 
 [node name="Subtitle" type="Label" parent="."]
-theme_override_font_sizes/font_size = 8
-offset_left = 160.0
-offset_top = 120.0
-offset_right = 480.0
-offset_bottom = 140.0
-text = "Birth of the City of Life"
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 62.0
+offset_bottom = 82.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
+theme_override_colors/font_outline_color = Color(0.168627, 0.2, 0.309804, 0.9)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = SubResource("SystemFont_title")
+theme_override_font_sizes/font_size = 10
+text = "BIRTH OF THE CITY OF LIFE"
 horizontal_alignment = 1
 vertical_alignment = 1
 mouse_filter = 2
 
 [node name="MenuAnchor" type="VBoxContainer" parent="." groups=["title_menu_anchor"]]
-offset_left = 180.0
-offset_top = 124.0
-offset_right = 460.0
-offset_bottom = 284.0
+layout_mode = 0
+offset_left = 260.0
+offset_top = 190.0
+offset_right = 540.0
+offset_bottom = 350.0
 alignment = 2
 theme_override_constants/separation = 8
-
-[node name="Disclaimer" type="Label" parent="."]
-theme_override_font_sizes/font_size = 8
-clip_text = true
-offset_left = 80.0
-offset_top = 300.0
-offset_right = 560.0
-offset_bottom = 320.0
-text = "A simplified educational model of human development. Not for medical judgement, diagnosis, or treatment."
-horizontal_alignment = 1
-vertical_alignment = 1
-mouse_filter = 2
