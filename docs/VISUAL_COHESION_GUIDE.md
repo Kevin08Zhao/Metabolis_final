@@ -7,12 +7,10 @@ The builder sequence uses a friendly top-down body-city rather than a visible bo
 The map reads in this order:
 
 1. a continuous peach-pink tissue ground;
-2. a legible civic plan of perimeter avenues, neighborhood props, and a central construction parcel;
-3. raised coral organ districts with dark berry cellular walls;
-4. luminous cyan transport roads that select connected straight, corner, branch, and junction art;
-5. compact organ-buildings whose visible silhouettes fit their declared footprints;
-6. cell residents and city vehicles that remain grounded by shadows and street alignment;
-7. dark berry interface panels with coral edging.
+2. raised coral organ districts with dark berry cellular walls;
+3. luminous cyan transport vessels that select connected straight, corner, branch, and junction art;
+4. compact organ-buildings whose visible silhouettes fit their declared footprints;
+5. dark berry interface panels with coral edging.
 
 ## Locked Prototype Palette
 
@@ -32,15 +30,12 @@ The map reads in this order:
 - The logical placement grid remains 16 × 16 pixels.
 - The grid is invisible during observation and operation.
 - A low-opacity grid appears only while a placement or unfinished route tool is active.
-- Each system has one softly paved civic construction parcel. Its full grid and stronger border appear only while the placement tool is active.
+- Valid anatomical regions may appear as temporary tool overlays, but they are not permanent map rectangles.
 - A confirmed building never keeps a footprint outline.
 - A 2 × 2 structure uses a 32 × 32 pixel canvas.
 - A 6 × 6 landmark uses a 96 × 96 pixel canvas.
 - Transparent padding is cropped and integer-scaled before a sprite is accepted.
 - Buildings use a bottom-center anchor and may not be stretched beyond their declared canvas.
-- A player facility receives a matching paved plaza and short service aprons computed from its chosen grid origin.
-- Fixed shops, phone booths, shelters, lamps, citizens, and maintenance traffic stay outside the construction parcel.
-- Every background prop and moving actor uses a ground pad or contact shadow; no object may appear to float over the map.
 - Transport routes use broad arterial-street tiles with cyan curbs and a cream center marking. They select art from neighbor connectivity; separate square stamps may not be placed side by side without edge matching.
 
 ## Screen Composition
@@ -65,10 +60,6 @@ The vessel set uses `N = 1`, `E = 2`, `S = 4`, and `W = 8`. Adding the connected
 | Life Harbor | `21256c8e-2480-44db-8a2e-deb230a44f6e` | `art/organs/cohesive/organ_placenta_harbor_v1.png` | Active |
 | Early heart pumping station | `5e24720c-d644-439e-9897-99645b2291bb` | `art/organs/cohesive/organ_heart_pump_v1.png` | Active |
 | First cell district | `fcf92134-2341-4d35-8e2e-10de6dac4171` | `art/organs/cohesive/organ_cell_district_v2.png` | Active after the third division cycle |
-| Membrane phone booth | `fc67e01d-5fa2-4887-8417-bdd3b22e61cb` | `art/props/system/prop_cell_phone_booth.png` | Active fixed neighborhood infrastructure |
-| Nutrient corner shop | `0984c8f1-552b-47fa-9b6d-7457f00d72a1` | `art/props/system/prop_nutrient_corner_shop.png` | Active fixed neighborhood infrastructure |
-| Body-city transit shelter | `aec6af78-8df6-4a98-a61f-7ea79f86c190` | `art/props/system/prop_body_transit_shelter.png` | Active fixed neighborhood infrastructure |
-| Tissue street lamp | `06fc7535-b8e2-4b0c-b9e7-b8d32cedff78` | `art/props/system/prop_tissue_street_lamp.png` | Active fixed neighborhood infrastructure |
 
 ## Generation Prompt Set
 
@@ -89,7 +80,3 @@ The organ prompts specify compact top-down civic structures, coral roof plates, 
 - Routes read as connected city streets and remain visibly narrower than 6 × 6 landmark buildings.
 - Each body system has a separate warm map page; unlocked pages are selected from the right rail or with number keys.
 - Cross-boundary delivery uses visible vans, freight cars, scooters, and trams instead of abstract moving dots.
-- Every map has a readable street hierarchy, fixed civic props, ambient residents, and ambient municipal traffic.
-- A 6 × 6 facility can be placed at several positions inside its parcel but nowhere outside it.
-- Construction has a visible three-second buffer with progress, scaffold scan, and workers.
-- The completed plaza and access aprons move with the facility and meet its ports without a floating gap.

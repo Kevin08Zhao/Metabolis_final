@@ -249,39 +249,14 @@ func _test_system_city_scene() -> void:
 		not prototype.debug_switch_system(1),
 		"locked body-system map must reject manual switching"
 	)
-	var placements := [
-		Vector2i(22, 7),
-		Vector2i(22, 5),
-		Vector2i(22, 9),
-		Vector2i(22, 6),
-	]
 	for index in range(4):
 		var before_build: Dictionary = prototype.debug_snapshot()
-		var placement: Vector2i = placements[index]
-		var build_zone: Rect2i = before_build.get(
-			"current_build_zone",
-			Rect2i()
-		)
-		_expect(
-			build_zone.size.x >= 13
-			and build_zone.size.y >= 11
-			and int(before_build.get("background_avenue_count", 0)) >= 2
-			and int(before_build.get("ambient_actor_count", 0)) == 3,
-			"system %d must expose a spacious civic parcel, planned avenues, and ambient city life" % index
-		)
-		_expect(
-			not prototype.debug_place_facility(Vector2i(2, 2)),
-			"system %d must reject placement outside its civic construction zone" % index
-		)
+		var placement := Vector2i(2, 2) if index == 0 else Vector2i(20, 8)
 		_expect(
 			prototype.debug_place_facility(placement),
-			"system %d must accept a 6 x 6 facility inside its civic construction zone" % index
+			"system %d must accept a 6 x 6 facility" % index
 		)
 		var constructing: Dictionary = prototype.debug_snapshot()
-		_expect(
-			bool(constructing.get("service_apron_active", false)),
-			"system %d facility placement must create a grounded adaptive service apron" % index
-		)
 		var before_build_resources: Dictionary = before_build.get("resources", {})
 		var constructing_resources: Dictionary = constructing.get("resources", {})
 		var facility_cost: Dictionary = constructing.get("current_facility_cost", {})
@@ -323,12 +298,8 @@ func _test_system_city_scene() -> void:
 				{}
 			)
 			_expect(
-				not prototype.debug_place_facility(Vector2i(2, 2)),
-				"facility relocation must remain inside the civic construction zone"
-			)
-			_expect(
-				prototype.debug_place_facility(Vector2i(19, 8)),
-				"facility must relocate within the civic construction zone"
+				prototype.debug_place_facility(Vector2i(20, 8)),
+				"facility must relocate from outside the former build district"
 			)
 			var moved: Dictionary = prototype.debug_snapshot()
 			var moved_resources: Dictionary = moved.get("resources", {})
