@@ -13,6 +13,11 @@ Everything in section 1 was observed in a full playthrough of `main` at commit
 `src/game/system_city_prototype.gd`, `src/world/route_tool.gd`, and
 `src/world/network_operation_tool.gd`.
 
+The resource economy and the resource HUD have since been split into
+`docs/RESOURCE_ECONOMY_DESIGN.md`, which is the active work item. That document
+supersedes this one on resources, `throughput`, and `pressure`. Everything else
+here remains a proposal.
+
 ---
 
 ## 1. Playtest diagnosis
@@ -117,7 +122,19 @@ grants a flat reward and unlocks map two. Map one's layout has no influence on m
 two's economy. The system switcher bound to keys 1–4 has no use after a map is
 finished.
 
-### 1.10 Summary
+### 1.10 Confirmed review positions
+
+Settled in review after the playthrough. These narrow the proposals in sections 3
+to 5 and are not open questions.
+
+| Position | Effect on this document |
+|---|---|
+| Placement position needs no validity constraint. Placing a facility costs resources; where it goes may stay unrestricted. | **S2 is downgraded.** Tissue types are no longer required for placement. They may still be useful for route cost, which is section 5's concern, but the "guided free placement" framing is dropped. |
+| Road cost depends only on length in tiles. No other term. | **Confirmed as correct.** The per-tile rule stays. The running cost of a long road — oxygen demand and waste — is where length gains an ongoing consequence. See `docs/RESOURCE_ECONOMY_DESIGN.md` section 4.3. |
+| `throughput` and `pressure` have no understood purpose. | **Both are removed**, not repaired. Their replacement is the oxygen supply/demand ratio. See `docs/RESOURCE_ECONOMY_DESIGN.md` section 6. |
+| The fault is boring: one click resolves it, and nothing states that it exists. | **Confirms 1.5 and 1.6.** S5 stands as written and remains unimplemented. |
+
+### 1.11 Summary
 
 The build is a functioning prototype of a *presentation*: four backdrops, a
 placement tool, a routing tool, a repair tool, and a progression gate. It is not
