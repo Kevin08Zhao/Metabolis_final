@@ -1,10 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://ui/title_intro.gd" id="1_intro"]
-
-[sub_resource type="SystemFont" id="SystemFont_title"]
-font_names = PackedStringArray("Menlo", "Monaco", "Consolas", "Courier New")
-font_weight = 700
 
 ; Opening title scene.
 ;
@@ -33,6 +29,7 @@ stretch_mode = 0
 mouse_filter = 2
 
 [node name="AnimationLayers" type="Control" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,72 +40,66 @@ mouse_filter = 2
 
 [node name="Sky" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
 [node name="Terrain" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
 [node name="MainBuilding" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
 [node name="SmallBuildings" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
 [node name="VehicleCargo" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
 [node name="RoadsideProps" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
 expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
@@ -120,14 +111,13 @@ anchor_right = 1.0
 offset_top = 16.0
 offset_bottom = 74.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
+theme_override_colors/font_color = Color(0.909804, 0.862745, 0.811765, 1)
 theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725, 1)
 theme_override_colors/font_shadow_color = Color(0.568627, 0.27451, 0.372549, 0.85)
 theme_override_constants/outline_size = 3
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 3
-theme_override_fonts/font = SubResource("SystemFont_title")
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 50
 text = "METABOLIS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -140,14 +130,13 @@ anchor_right = 1.0
 offset_top = 76.0
 offset_bottom = 100.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
+theme_override_colors/font_color = Color(0.909804, 0.862745, 0.811765, 1)
 theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725, 1)
 theme_override_colors/font_shadow_color = Color(0.568627, 0.27451, 0.372549, 0.75)
 theme_override_constants/outline_size = 2
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = SubResource("SystemFont_title")
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 20
 text = "BIRTH OF THE CITY OF LIFE"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -155,7 +144,7 @@ mouse_filter = 2
 
 [node name="MenuAnchor" type="VBoxContainer" parent="." groups=["title_menu_anchor"]]
 layout_mode = 0
-offset_left = 500.0
+offset_left = 490.0
 offset_top = 255.0
 offset_right = 780.0
 offset_bottom = 430.0

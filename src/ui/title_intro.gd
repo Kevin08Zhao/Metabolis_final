@@ -40,6 +40,20 @@ const LAYER_SPECS := [
 	["RoadsideProps", "06_roadside_props"],
 ]
 
+## The layer PNGs are 320x180 while the canvas is 800x450, a fractional 2.5x.
+## Stretching across that gap makes neighbouring source pixels 2 and 3 screen
+## pixels wide, which reads as uneven noise beside integer-scaled pixel text.
+## The stack is instead drawn at the smallest integer scale that covers the
+## canvas and clipped by the parent, so every source pixel stays square.
+const LAYER_SOURCE_SIZE := Vector2(320.0, 180.0)
+
+## Whole multiples of UiTheme.NATIVE_FONT_SIZE. Anything else samples the glyph
+## atlas at a fractional scale and breaks the pixel grid.
+const MENU_FONT_SIZE := 20
+const PROMPT_FONT_SIZE := 10
+## "Body-System City Builder" needs 286px at MENU_FONT_SIZE including padding.
+const MENU_BUTTON_SIZE := Vector2(290.0, 36.0)
+
 const COLOR_OUTLINE := Color("#140F1D")
 const COLOR_BLUE_DARK := Color("#29314A")
 const COLOR_BLUE := Color("#404586")
@@ -79,6 +93,8 @@ func _ready() -> void:
 	if _load_layer_frames():
 		_fallback_background.hide()
 		_animation_layers.show()
+		_layout_animation_layers()
+		_animation_layers.resized.connect(_layout_animation_layers)
 		_set_animation_frame(0)
 	else:
 		_animation_layers.hide()
@@ -169,6 +185,26 @@ func _load_layer_frames() -> bool:
 			frames.append(texture)
 		_layers.append({"node": layer_node, "frames": frames})
 	return true
+
+
+func _layout_animation_layers() -> void:
+	var canvas := _animation_layers.size
+	if canvas.x <= 0.0 or canvas.y <= 0.0:
+		return
+
+	# Cover rather than fit: an integer scale that leaves gaps would need a
+	# backdrop, and the sky changes color across the eight seconds, so there is
+	# no single color that could fill one.
+	var cover := maxf(canvas.x / LAYER_SOURCE_SIZE.x, canvas.y / LAYER_SOURCE_SIZE.y)
+	var scale := maxi(1, int(ceil(cover)))
+	var scaled := LAYER_SOURCE_SIZE * float(scale)
+	var origin := ((canvas - scaled) * 0.5).floor()
+
+	for layer in _layers:
+		var layer_node: TextureRect = layer["node"]
+		layer_node.set_anchors_preset(Control.PRESET_TOP_LEFT, false)
+		layer_node.position = origin
+		layer_node.size = scaled
 
 
 func _load_frame_maps() -> Dictionary:
@@ -356,21 +392,21 @@ func _refresh_dynamic_menu() -> void:
 		return
 	title_menu.add_theme_constant_override("separation", 7)
 
-	var title_font := _title_band.get_theme_font("font")
+	# The font itself comes from the global UiTheme, so only the sizes and the
+	# title-specific styling are set here.
 	for descendant in title_menu.find_children("*", "", true, false):
 		if descendant is Button:
-			_style_button(descendant as Button, title_font)
+			_style_button(descendant as Button)
 		elif descendant is Label:
-			_style_prompt(descendant as Label, title_font)
+			_style_prompt(descendant as Label)
 
 
-func _style_button(button: Button, font: Font) -> void:
+func _style_button(button: Button) -> void:
 	if not button.has_meta("metabolis_pixel_styled"):
 		button.set_meta("metabolis_pixel_styled", true)
-		button.custom_minimum_size = Vector2(270.0, 36.0)
+		button.custom_minimum_size = MENU_BUTTON_SIZE
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_font_override("font", font)
-		button.add_theme_font_size_override("font_size", 16)
+		button.add_theme_font_size_override("font_size", MENU_FONT_SIZE)
 		button.add_theme_color_override("font_color", COLOR_CREAM)
 		button.add_theme_color_override("font_hover_color", COLOR_MINT)
 		button.add_theme_color_override("font_pressed_color", COLOR_AMBER_LIGHT)
@@ -384,14 +420,13 @@ func _style_button(button: Button, font: Font) -> void:
 	button.disabled = not _menu_interactive
 
 
-func _style_prompt(label: Label, font: Font) -> void:
+func _style_prompt(label: Label) -> void:
 	if label.has_meta("metabolis_pixel_styled"):
 		return
 	label.set_meta("metabolis_pixel_styled", true)
-	label.custom_minimum_size = Vector2(270.0, 0.0)
+	label.custom_minimum_size = Vector2(MENU_BUTTON_SIZE.x, 0.0)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_font_size_override("font_size", PROMPT_FONT_SIZE)
 	label.add_theme_color_override("font_color", COLOR_CREAM)
 	label.add_theme_color_override("font_outline_color", COLOR_OUTLINE)
 	label.add_theme_constant_override("outline_size", 1)
