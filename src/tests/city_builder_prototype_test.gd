@@ -438,14 +438,28 @@ func _test_system_city_scene() -> void:
 			prototype.debug_finish_construction(),
 			"system %d test build must be finishable after construction starts" % index
 		)
-		## Built but not earning yet: the card must say so and still preview
-		## what connecting it would be worth.
+		## Built but not earning yet. The hover stays qualitative from here on:
+		## it names the state and points at the detail window, and carries no
+		## figures of its own.
 		var unconnected: Dictionary = prototype.debug_inspect_cell(building_cell)
+		var unconnected_lines: Array = unconnected.get("lines", [])
 		_expect(
 			String(unconnected.get("status", "")) == "NOT CONNECTED"
 			and bool(unconnected.get("muted", false))
-			and (unconnected.get("lines", []) as Array).size() == 3,
-			"an unconnected facility must preview its output in a muted card"
+			and unconnected_lines.is_empty(),
+			"an unconnected facility must hover without figures"
+		)
+		var unconnected_details: Dictionary = prototype.debug_open_cell_details(
+			building_cell
+		)
+		_expect(
+			String(unconnected_details.get("title", "")).length() > 0
+			and _joined(unconnected_details.get("lines", [])).contains("Biomass"),
+			"the detail window must carry the unconnected facility's figures"
+		)
+		_expect(
+			prototype.debug_close_detail_window(),
+			"the detail window must close on demand"
 		)
 		_expect(
 			not prototype.debug_dispatch(),
@@ -509,19 +523,32 @@ func _test_system_city_scene() -> void:
 			"a committed network must produce biomass every second"
 		)
 		var operating: Dictionary = prototype.debug_inspect_cell(building_cell)
+		var operating_lines: Array = operating.get("lines", [])
 		_expect(
 			String(operating.get("status", "")) in ["OPERATING", "THROTTLED"]
-			and String((operating.get("lines", []) as Array)[0]).contains("/"),
-			"a committed facility must show actual over nominal output"
+			and operating_lines.is_empty(),
+			"an operating facility must hover without figures"
 		)
-		## Roads carry a running cost, so they are inspectable too.
+		var operating_details: Dictionary = prototype.debug_open_cell_details(
+			building_cell
+		)
+		_expect(
+			_joined(operating_details.get("lines", [])).contains("/"),
+			"the detail window must show actual over nominal output"
+		)
+		_expect(prototype.debug_close_detail_window(), "details must close")
+		## Roads carry a running cost, so they are inspectable too. Their card
+		## reports only the running cost; what they cost to lay is not repeated.
 		var road: Array = committed.get("route", [])
 		var road_cell: Vector2i = road[road.size() / 2]
 		var road_card: Dictionary = prototype.debug_inspect_cell(road_cell)
+		var road_text := _joined(road_card.get("lines", []))
 		_expect(
 			String(road_card.get("name", "")).contains("roads")
-			and (road_card.get("lines", []) as Array).size() == 3,
-			"a committed road must report its length and running cost"
+			and road_text.contains("Length")
+			and road_text.contains("Oxygen")
+			and not road_text.contains("BIO"),
+			"a road card must report its running cost and not its build cost"
 		)
 		_expect(
 			prototype.debug_inspect_cell(Vector2i(0, 0)).is_empty(),
@@ -618,7 +645,16 @@ func _test_system_city_scene() -> void:
 	for metric_id in [&"biomass", &"oxygen", &"waste"]:
 		_expect(
 			prototype.debug_hover_metric(metric_id),
-			"hovering %s must open the per-building breakdown" % metric_id
+			"hovering %s must open its summary card" % metric_id
+		)
+		var details: Dictionary = prototype.debug_open_metric_details(metric_id)
+		_expect(
+			_joined(details.get("lines", [])).contains("Nutrient Exchange Depot"),
+			"%s details must break down by building" % metric_id
+		)
+		_expect(
+			prototype.debug_close_detail_window(),
+			"%s details must close" % metric_id
 		)
 	_expect(
 		prototype.debug_switch_system(0),
@@ -729,6 +765,13 @@ func _test_title_entry() -> void:
 	saved_main.queue_free()
 	await get_tree().process_frame
 	SaveManager.set_main_progress(original_progress)
+
+
+func _joined(lines: Variant) -> String:
+	var parts: Array[String] = []
+	for line in (lines as Array):
+		parts.append(String(line))
+	return "\n".join(parts)
 
 
 func _expect(condition: bool, message: String) -> void:

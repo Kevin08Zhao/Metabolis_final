@@ -31,9 +31,7 @@ window/size/viewport_width=800
 window/size/viewport_height=450
 window/size/window_width_override=1600
 window/size/window_height_override=900
-window/dpi/allow_hidpi=true
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
 
 [gui]
