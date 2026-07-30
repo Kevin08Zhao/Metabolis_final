@@ -9,16 +9,23 @@ func _ready() -> void:
 
 func _run() -> void:
 	AudioRouter.set_muted(true)
+	print("[BUILDER TEST] STAGE tools")
 	await _test_tools()
+	print("[BUILDER TEST] STAGE origin")
 	await _test_origin_scene()
+	print("[BUILDER TEST] STAGE prototype")
 	await _test_prototype_scene()
+	print("[BUILDER TEST] STAGE system_city")
 	await _test_system_city_scene()
+	print("[BUILDER TEST] STAGE title")
 	await _test_title_entry()
+	print("[BUILDER TEST] STAGE done")
 	if _failures.is_empty():
 		print("[BUILDER TEST] RESULT PASS")
 		get_tree().quit(0)
 		return
 	for failure in _failures:
+		print("[BUILDER TEST] FAIL %s" % failure)
 		push_error("[BUILDER TEST] %s" % failure)
 	print("[BUILDER TEST] RESULT FAIL count=", _failures.size())
 	get_tree().quit(1)
@@ -78,8 +85,14 @@ func _test_tools() -> void:
 		"bottleneck route cell must be directly selectable"
 	)
 	_expect(
-		operation_tool.repair(6, 8),
-		"selected bottleneck must repair with the exact resource cost"
+		not operation_tool.can_repair(
+			NetworkOperationTool.REPAIR_BIOMASS_COST - 1.0
+		),
+		"a repair must be rejected below its biomass cost"
+	)
+	_expect(
+		operation_tool.repair(NetworkOperationTool.REPAIR_BIOMASS_COST),
+		"selected bottleneck must repair for its exact biomass cost"
 	)
 	_expect(
 		operation_tool.coverage_percent() == 100
@@ -227,8 +240,9 @@ func _test_prototype_scene() -> void:
 		"repair must restore coverage and normal pressure"
 	)
 	_expect(
-		int(repaired_resources.get("cell_material", 0)) == 49
-		and int(repaired_resources.get("development_signal", 0)) == 45
+		int(repaired_resources.get("cell_material", 0))
+		== int(stressed_resources.get("cell_material", 0))
+		- int(NetworkOperationTool.REPAIR_BIOMASS_COST)
 		and int(repaired.get("repair_count", 0)) == 1,
 		"repair must deduct its resources exactly once"
 	)
@@ -288,36 +302,63 @@ func _test_system_city_scene() -> void:
 		and prototype.find_child("WindowChrome", true, false) == null,
 		"completion banner must not use a dimmer, traffic-light chrome, or action button"
 	)
-	for resource_name in [
-		"NutrientEnergy",
-		"CellMaterial",
-		"DevelopmentSignal",
-		"Stability",
-	]:
+	for metric_name in ["Biomass", "Oxygen", "Waste"]:
 		var icon := prototype.find_child(
-			"%sIcon" % resource_name,
+			"%sIcon" % metric_name,
 			true,
 			false
 		) as TextureRect
 		var value_label := prototype.find_child(
-			"%sValue" % resource_name,
+			"%sValue" % metric_name,
 			true,
 			false
 		) as Label
+		var metric := prototype.find_child(
+			"%sMetric" % metric_name,
+			true,
+			false
+		) as Control
 		_expect(
 			icon != null and icon.texture != null,
-			"%s status must use its existing PixelLab icon" % resource_name
+			"%s status must use its existing PixelLab icon" % metric_name
 		)
 		_expect(
-			value_label != null and value_label.text.is_valid_int(),
-			"%s status must show only its numeric value" % resource_name
+			value_label != null and not value_label.text.is_empty(),
+			"%s status must be labelled, not a bare number" % metric_name
 		)
+		## The shipped build set MOUSE_FILTER_IGNORE on every node in this bar,
+		## which made the breakdown and every tooltip unreachable.
+		_expect(
+			metric != null
+			and metric.mouse_filter == Control.MOUSE_FILTER_STOP,
+			"%s metric must be hoverable" % metric_name
+		)
+
+	_expect(
+		prototype.find_child("StabilityFill", true, false) != null
+		and prototype.find_child("StabilityValue", true, false) != null,
+		"stability must render as its own bar rather than a fourth resource"
+	)
+	var breakdown := prototype.find_child(
+		"ResourceBreakdown",
+		true,
+		false
+	) as Control
+	_expect(
+		breakdown != null and not breakdown.visible,
+		"the per-building breakdown must exist and start hidden"
+	)
 
 	_expect(
 		not prototype.debug_switch_system(1),
 		"locked body-system map must reject manual switching"
 	)
 	for index in range(4):
+		## Later maps are meant to be funded by earlier ones rather than by a
+		## completion payout, so bank the production the player would have
+		## watched accumulate instead of waiting for it in real time.
+		if index > 0:
+			prototype.debug_advance_economy(60.0)
 		var before_build: Dictionary = prototype.debug_snapshot()
 		var placement := Vector2i(2, 2) if index == 0 else Vector2i(20, 8)
 		_expect(
@@ -327,7 +368,7 @@ func _test_system_city_scene() -> void:
 		var constructing: Dictionary = prototype.debug_snapshot()
 		var before_build_resources: Dictionary = before_build.get("resources", {})
 		var constructing_resources: Dictionary = constructing.get("resources", {})
-		var facility_cost: Dictionary = constructing.get("current_facility_cost", {})
+		var facility_cost := float(constructing.get("current_facility_cost", 0.0))
 		_expect(
 			int(constructing.get("mode", -1))
 			== SystemCityPrototype.Mode.CONSTRUCTING
@@ -338,15 +379,10 @@ func _test_system_city_scene() -> void:
 			"system %d placement must begin a real three-second build" % index
 		)
 		_expect(
-			int(constructing_resources.get("nutrient_energy", 0))
-			== int(before_build_resources.get("nutrient_energy", 0))
-			- int(facility_cost.get("nutrient_energy", 0))
-			and int(constructing_resources.get("cell_material", 0))
-			== int(before_build_resources.get("cell_material", 0))
-			- int(facility_cost.get("cell_material", 0))
-			and int(constructing_resources.get("development_signal", 0))
-			== int(before_build_resources.get("development_signal", 0))
-			- int(facility_cost.get("development_signal", 0)),
+			is_equal_approx(
+				float(constructing_resources.get("biomass", 0.0)),
+				float(before_build_resources.get("biomass", 0.0)) - facility_cost
+			),
 			"system %d placement must deduct the previewed building cost" % index
 		)
 		if index == 0:
@@ -373,16 +409,8 @@ func _test_system_city_scene() -> void:
 			var moved_resources: Dictionary = moved.get("resources", {})
 			_expect(
 				is_equal_approx(
-					float(moved_resources.get("nutrient_energy", 0.0)),
-					float(before_move_resources.get("nutrient_energy", 0.0))
-				)
-				and is_equal_approx(
-					float(moved_resources.get("cell_material", 0.0)),
-					float(before_move_resources.get("cell_material", 0.0))
-				)
-				and is_equal_approx(
-					float(moved_resources.get("development_signal", 0.0)),
-					float(before_move_resources.get("development_signal", 0.0))
+					float(moved_resources.get("biomass", 0.0)),
+					float(before_move_resources.get("biomass", 0.0))
 				),
 				"relocation must refund the old facility before charging the new one"
 			)
@@ -403,25 +431,28 @@ func _test_system_city_scene() -> void:
 		)
 		var planned: Dictionary = prototype.debug_snapshot()
 		var metrics: Dictionary = planned.get("route_metrics", {})
-		var route_cost: Dictionary = metrics.get("route_cost", {})
+		var road_cells := int(metrics.get("road_cells", 0))
+		_expect(road_cells > 0, "system %d route must occupy road tiles" % index)
 		_expect(
-			int(metrics.get("road_cells", 0)) > 0
-			and int(metrics.get("throughput", 0)) > 0
-			and int(metrics.get("pressure", 0)) > 0,
-			"system %d route must expose cost and performance metrics" % index
-		)
-		_expect(
-			int(route_cost.get("cell_material", 0))
-			== int(metrics.get("road_cells", 0))
-			and int(route_cost.get("development_signal", 0)) == 0,
+			is_equal_approx(
+				float(metrics.get("route_cost", 0.0)),
+				float(road_cells)
+				* SystemCityPrototype.ROAD_BIOMASS_COST_PER_TILE
+			),
 			"road cost must depend only on the number of occupied road tiles"
+		)
+		## Length keeps costing after it is paid for: a longer road draws more
+		## oxygen and makes more waste for as long as it exists.
+		_expect(
+			float(metrics.get("road_oxygen_demand", 0.0)) > 0.0
+			and float(metrics.get("road_waste_output", 0.0)) > 0.0,
+			"system %d road must carry a running cost" % index
 		)
 		if index == 0:
 			_expect(
 				int(metrics.get("excess_segments", 0)) > 0
-				and int(metrics.get("turns", 0)) >= 2
-				and int(metrics.get("throughput", 100)) < 100,
-				"a detoured route must be longer, bend more, and lose throughput"
+				and int(metrics.get("turns", 0)) >= 2,
+				"a detoured route must be longer and bend more"
 			)
 		_expect(
 			prototype.debug_dispatch(),
@@ -430,19 +461,36 @@ func _test_system_city_scene() -> void:
 		var committed: Dictionary = prototype.debug_snapshot()
 		var before_resources: Dictionary = planned.get("resources", {})
 		var after_resources: Dictionary = committed.get("resources", {})
-		var total_cost: Dictionary = metrics.get("total_cost", {})
+		var total_cost := float(metrics.get("total_cost", 0.0))
 		_expect(
-			int(after_resources.get("nutrient_energy", 0))
-			== int(before_resources.get("nutrient_energy", 0))
-			- int(total_cost.get("nutrient_energy", 0))
-			and int(after_resources.get("cell_material", 0))
-			== int(before_resources.get("cell_material", 0))
-			- int(total_cost.get("cell_material", 0))
-			and int(after_resources.get("development_signal", 0))
-			== int(before_resources.get("development_signal", 0))
-			- int(total_cost.get("development_signal", 0)),
+			is_equal_approx(
+				float(after_resources.get("biomass", 0.0)),
+				float(before_resources.get("biomass", 0.0)) - total_cost
+			),
 			"system %d commit must deduct its displayed plan cost exactly once" % index
 		)
+		## Committing is what puts the facility and its road on the books.
+		var committed_sources: Dictionary = committed.get("economy_sources", {})
+		_expect(
+			committed_sources.size() >= (index + 1) * 2,
+			"system %d commit must register its facility and road economy" % index
+		)
+		_expect(
+			float(after_resources.get("biomass_rate", 0.0)) > 0.0,
+			"a committed network must produce biomass every second"
+		)
+		if index == 0:
+			_expect(
+				float(after_resources.get("waste_rate", 0.0)) > 0.0,
+				"the exchange map alone must accumulate waste it cannot clear"
+			)
+		if index == 1:
+			## The teaching moment of the first two maps: the pump is worth its
+			## price because it is what takes the rubbish out.
+			_expect(
+				float(after_resources.get("waste_rate", 1.0)) < 0.0,
+				"adding the heart must reverse the waste trend"
+			)
 		prototype.debug_finish_delivery()
 		var post_delivery: Dictionary = prototype.debug_snapshot()
 		if int(post_delivery.get("mode", -1)) == SystemCityPrototype.Mode.BOTTLENECK:
@@ -498,10 +546,18 @@ func _test_system_city_scene() -> void:
 	)
 	var final_resources: Dictionary = complete.get("resources", {})
 	_expect(
-		int(final_resources.get("cell_material", 0)) > 0
-		and int(final_resources.get("development_signal", 0)) > 0,
+		float(final_resources.get("biomass", -1.0)) >= 0.0,
 		"the four-system loop must remain economically completable"
 	)
+	_expect(
+		float(final_resources.get("biomass_rate", 0.0)) > 0.0,
+		"a fully built body-city must still be producing"
+	)
+	for metric_id in [&"biomass", &"oxygen", &"waste"]:
+		_expect(
+			prototype.debug_hover_metric(metric_id),
+			"hovering %s must open the per-building breakdown" % metric_id
+		)
 	_expect(
 		prototype.debug_switch_system(0),
 		"completed network must still allow switching to an unlocked map"
@@ -614,5 +670,9 @@ func _test_title_entry() -> void:
 
 
 func _expect(condition: bool, message: String) -> void:
-	if not condition:
-		_failures.append(message)
+	if condition:
+		return
+	## Report immediately as well as in the summary, so a stage that stalls
+	## later in the run still tells us what failed before it.
+	print("[BUILDER TEST] FAIL %s" % message)
+	_failures.append(message)

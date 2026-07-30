@@ -617,16 +617,17 @@ func _repair_bottleneck() -> bool:
 	if _operation_tool.selected_cell != _operation_tool.bottleneck_cell:
 		_set_feedback("Click the flashing red route segment before repairing.", true)
 		return false
-	if not _operation_tool.repair(_cell_material, _development_signal):
+	## This older slice keeps its own local resource counters. It pays the
+	## shared repair cost out of cell material so that one constant governs
+	## every repair in the project.
+	if not _operation_tool.repair(float(_cell_material)):
 		_set_feedback(
-			"Repair needs 6 cell material and 8 developmental signal.",
+			"Repair needs %d cell material."
+			% int(NetworkOperationTool.REPAIR_BIOMASS_COST),
 			true
 		)
 		return false
-	_cell_material -= NetworkOperationTool.REPAIR_CELL_MATERIAL_COST
-	_development_signal -= (
-		NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST
-	)
+	_cell_material -= int(NetworkOperationTool.REPAIR_BIOMASS_COST)
 	_coverage = _operation_tool.coverage_percent()
 	_pressure = _operation_tool.pressure_percent()
 	_stability = mini(_stability + 3, 85)
@@ -734,8 +735,7 @@ func _refresh_interface() -> void:
 		or _operation_tool.bottleneck_active
 	)
 	_repair_button.disabled = not _operation_tool.can_repair(
-		_cell_material,
-		_development_signal
+		float(_cell_material)
 	)
 
 

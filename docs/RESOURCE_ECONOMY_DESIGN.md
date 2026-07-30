@@ -97,7 +97,9 @@ displayed as a resource and becomes a bar.
 
 ### 2.2 Oxygen — the supply/demand pair
 
-- Displayed as `O₂ supply/demand`, for example `O₂ 10/6`.
+- Displayed as `OXY supply/demand`, for example `OXY 10/6`. The generated
+  pixel font has no subscript glyph and its capital O reads as a zero, so the
+  label spells out three letters rather than using a chemical symbol.
 - **Not a stock.** There is no oxygen balance to save or carry.
 - Supply comes from exchange facilities. Demand comes from every operating
   facility and every road tile.
@@ -212,7 +214,7 @@ pins at 100. A city at full waste and no oxygen falls at −4.5/s.
 | Constant | Value |
 |---|---|
 | `TICK_SEC` | 1.0 |
-| `BIOMASS_START` | 120 |
+| `BIOMASS_START` | 180 |
 | `WASTE_CAPACITY` | 60 |
 | `WASTE_SAFE` | 0.5 |
 | `STABILITY_START` | 100 |
@@ -235,13 +237,18 @@ pins at 100. A city at full waste and no oxygen falls at −4.5/s.
 Road cost is length times two, and nothing else. This matches the confirmed
 position in 1.5.
 
+`BIOMASS_START` has a hard lower bound: it must fund the first facility, a
+detoured first road, and one fault repair, or the opening map cannot be
+finished. At 60 + 50 + 15 that floor is 125, and 180 leaves a working margin.
+An acceptance run at 120 stalled on exactly this.
+
 ### 4.3 Per-second contribution by source
 
 Both maps produce Biomass, as decided. They differ in what else they contribute:
 the exchange facility is the city's oxygen source, and the heart is the city's
 clearance capacity.
 
-| Source | Biomass | O₂ supply | O₂ demand | Waste out | Clearance |
+| Source | Biomass | Oxygen supply | Oxygen demand | Waste out | Clearance |
 |---|---:|---:|---:|---:|---:|
 | Nutrient Exchange Depot | +3.0 | +10.0 | 2.0 | +0.40 | +0.40 |
 | Central Heart Transit Station | +1.5 | 0 | 3.0 | +0.30 | +1.10 |
@@ -304,7 +311,7 @@ occupies `(416, 5)` at `374 × 30`. The new panel keeps that rectangle and split
 it into two rows.
 
 ```
- NUTRIENT EXCHANGE MAP            ◆ BIO 152 +2.4   ▲ O₂ 10/6   ■ WST 18 +0.2
+ NUTRIENT EXCHANGE MAP           ◆ BIO 152 +2.4   ▲ OXY 10/6   ■ WST 18 +0.2
                                   ████████░░  STABILITY 82
 ```
 
@@ -319,7 +326,7 @@ different nature is readable without explanation.
 | Metric | Format | Example |
 |---|---|---|
 | Biomass | `BIO <stock> <signed rate>` | `BIO 152 +2.4` |
-| Oxygen | `O₂ <supply>/<demand>` | `O₂ 10/6` |
+| Oxygen | `OXY <supply>/<demand>` | `OXY 10/6` |
 | Waste | `WST <stock> <signed rate>` | `WST 18 +0.2` |
 
 The `/s` suffix is dropped in the top bar for width and appears in the hover

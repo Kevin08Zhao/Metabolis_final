@@ -5,8 +5,8 @@ extends RefCounted
 ## A route bottleneck is selected on the route itself and repaired with resources.
 
 const INVALID_CELL := Vector2i(-1, -1)
-const REPAIR_CELL_MATERIAL_COST := 6
-const REPAIR_DEVELOPMENT_SIGNAL_COST := 8
+## Biomass is the only spendable resource; see docs/RESOURCE_ECONOMY_DESIGN.md.
+const REPAIR_BIOMASS_COST := 15.0
 const NORMAL_COVERAGE := 100
 const BOTTLENECK_COVERAGE := 45
 const NORMAL_PRESSURE := 12
@@ -45,17 +45,16 @@ func select_route_cell(cell: Vector2i) -> bool:
 	return true
 
 
-func can_repair(cell_material: int, development_signal: int) -> bool:
+func can_repair(biomass: float) -> bool:
 	return (
 		bottleneck_active
 		and selected_cell == bottleneck_cell
-		and cell_material >= REPAIR_CELL_MATERIAL_COST
-		and development_signal >= REPAIR_DEVELOPMENT_SIGNAL_COST
+		and biomass >= REPAIR_BIOMASS_COST
 	)
 
 
-func repair(cell_material: int, development_signal: int) -> bool:
-	if not can_repair(cell_material, development_signal):
+func repair(biomass: float) -> bool:
+	if not can_repair(biomass):
 		return false
 	bottleneck_active = false
 	selected_cell = INVALID_CELL

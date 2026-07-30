@@ -28,13 +28,15 @@ const MAP_SIZE := Vector2(640, 320)
 const FACILITY_FOOTPRINT := Vector2i(6, 6)
 const FULL_MAP_BUILD_ZONE := Rect2i(Vector2i.ZERO, GRID_SIZE)
 const DEFAULT_BUILD_TIME_SEC := 3.0
-const RESOURCE_START := {
-	&"nutrient_energy": 160,
-	&"cell_material": 150,
-	&"development_signal": 130,
-	&"stability": 100,
+## Biomass charged per road tile. Road cost depends on length and nothing else.
+const ROAD_BIOMASS_COST_PER_TILE := 2.0
+## A committed road tile keeps costing after it is built: it draws oxygen and
+## it generates waste. This is where route length gains an ongoing consequence.
+const ROAD_TILE_ECONOMY := {
+	&"oxygen_demand": 0.03,
+	&"waste_output": 0.01,
 }
-const ROAD_CELL_MATERIAL_COST := 1
+const REPAIR_BIOMASS_COST := 15.0
 const BOTTLENECK_STABILITY_DRAIN_PER_SEC := 1.5
 const STAGING_CELLS := [
 	Vector2i(8, 10),
@@ -56,15 +58,16 @@ const SYSTEMS := [
 		"vehicle_asset": &"vehicle_nutrient_delivery",
 		"cargo": "nutrient cargo",
 		"accent": Color("#F4B860"),
-		"facility_cost": {
-			&"nutrient_energy": 10,
-			&"cell_material": 18,
-			&"development_signal": 6,
-		},
+		"facility_cost_biomass": 60.0,
 		"build_time_sec": 3.0,
-		"completion_reward": {
-			&"nutrient_energy": 24,
-			&"cell_material": 8,
+		## The exchange interface is the city's oxygen source and its largest
+		## biomass producer. It clears only as much waste as it makes.
+		"economy": {
+			&"biomass_output": 3.0,
+			&"oxygen_supply": 10.0,
+			&"oxygen_demand": 2.0,
+			&"waste_output": 0.40,
+			&"waste_clearance": 0.40,
 		},
 		"bottleneck_required": true,
 	},
@@ -78,15 +81,17 @@ const SYSTEMS := [
 		"vehicle_asset": &"vehicle_circulation_freight",
 		"cargo": "circulation freight",
 		"accent": Color("#E85D75"),
-		"facility_cost": {
-			&"nutrient_energy": 15,
-			&"cell_material": 22,
-			&"development_signal": 12,
-		},
+		"facility_cost_biomass": 80.0,
 		"build_time_sec": 3.0,
-		"completion_reward": {
-			&"cell_material": 18,
-			&"stability": 4,
+		## The pump produces less biomass than the exchange but is the city's
+		## clearance capacity. Building it visibly reverses the waste trend,
+		## which is the teaching moment of the first two maps.
+		"economy": {
+			&"biomass_output": 1.5,
+			&"oxygen_supply": 0.0,
+			&"oxygen_demand": 3.0,
+			&"waste_output": 0.30,
+			&"waste_clearance": 1.10,
 		},
 		"bottleneck_required": false,
 	},
@@ -100,15 +105,16 @@ const SYSTEMS := [
 		"vehicle_asset": &"vehicle_neural_courier",
 		"cargo": "signal parcels",
 		"accent": Color("#D9A3E8"),
-		"facility_cost": {
-			&"nutrient_energy": 12,
-			&"cell_material": 18,
-			&"development_signal": 22,
-		},
+		"facility_cost_biomass": 90.0,
 		"build_time_sec": 3.0,
-		"completion_reward": {
-			&"development_signal": 24,
-			&"stability": 4,
+		## Provisional. The nervous system is where the first real oxygen
+		## deficit is meant to appear; see RESOURCE_ECONOMY_DESIGN section 4.5.
+		"economy": {
+			&"biomass_output": 1.0,
+			&"oxygen_supply": 0.0,
+			&"oxygen_demand": 8.0,
+			&"waste_output": 0.50,
+			&"waste_clearance": 0.20,
 		},
 		"bottleneck_required": true,
 	},
@@ -122,15 +128,16 @@ const SYSTEMS := [
 		"vehicle_asset": &"vehicle_oxygen_tram",
 		"cargo": "oxygen canisters",
 		"accent": Color("#9CE8DE"),
-		"facility_cost": {
-			&"nutrient_energy": 20,
-			&"cell_material": 24,
-			&"development_signal": 18,
-		},
+		"facility_cost_biomass": 100.0,
 		"build_time_sec": 3.0,
-		"completion_reward": {
-			&"nutrient_energy": 18,
-			&"stability": 12,
+		## Provisional. The lungs are what pay off the nervous system's oxygen
+		## demand; see RESOURCE_ECONOMY_DESIGN section 4.5.
+		"economy": {
+			&"biomass_output": 1.0,
+			&"oxygen_supply": 14.0,
+			&"oxygen_demand": 3.0,
+			&"waste_output": 0.30,
+			&"waste_clearance": 0.50,
 		},
 		"bottleneck_required": false,
 	},
@@ -150,37 +157,44 @@ const COLOR_NOTIFICATION_MUTED := Color("#817582")
 const COMPLETION_NOTIFICATION_DURATION_SEC := 5.0
 const COMPLETION_NOTIFICATION_POSITION := Vector2(400, 48)
 const COMPLETION_NOTIFICATION_SIZE := Vector2(384, 96)
-const RESOURCE_ORDER: Array[StringName] = [
-	&"nutrient_energy",
-	&"cell_material",
-	&"development_signal",
-	&"stability",
+## The three flows shown in the header, in display order. Stability is not one
+## of them: it is a state bar, built separately by `_build_stability_bar`.
+const METRIC_ORDER: Array[StringName] = [
+	&"biomass",
+	&"oxygen",
+	&"waste",
 ]
-const RESOURCE_ICON_ASSETS := {
-	&"nutrient_energy": {
+## Icon silhouettes are reused by role. ENCODING_SPEC fixes the shapes but not
+## which resource owns which shape, so this needs no new art.
+const METRIC_ICON_ASSETS := {
+	&"biomass": {
 		&"normal": &"ui_resource_nutrient_energy_sufficient",
 		&"warning": &"ui_resource_nutrient_energy_insufficient",
 	},
-	&"cell_material": {
-		&"normal": &"ui_resource_cell_material_sufficient",
-		&"warning": &"ui_resource_cell_material_insufficient",
-	},
-	&"development_signal": {
+	&"oxygen": {
 		&"normal": &"ui_resource_developmental_signal_sufficient",
 		&"warning": &"ui_resource_developmental_signal_insufficient",
 	},
-	&"stability": {
-		&"normal": &"ui_resource_stability_normal",
-		&"warning": &"ui_resource_stability_warning",
-		&"critical": &"ui_resource_stability_critical",
+	&"waste": {
+		&"normal": &"ui_resource_cell_material_sufficient",
+		&"warning": &"ui_resource_cell_material_insufficient",
 	},
 }
-const RESOURCE_DISPLAY_NAMES := {
-	&"nutrient_energy": "Nutrient energy",
-	&"cell_material": "Cell material",
-	&"development_signal": "Development signal",
-	&"stability": "System stability",
+const METRIC_SHORT_NAMES := {
+	&"biomass": "BIO",
+	## The generated pixel font has no subscript glyph, and its capital O is
+	## hard to tell from a zero, so the oxygen metric spells out three letters.
+	&"oxygen": "OXY",
+	&"waste": "WST",
 }
+const METRIC_DISPLAY_NAMES := {
+	&"biomass": "BIOMASS",
+	&"oxygen": "OXYGEN",
+	&"waste": "WASTE",
+}
+const STABILITY_BAR_SIZE := Vector2(150.0, 6.0)
+const HOVER_PANEL_POSITION := Vector2(416.0, 42.0)
+const HOVER_PANEL_WIDTH := 374.0
 
 var _mode := Mode.READY
 var _current_system_index := 0
@@ -199,7 +213,7 @@ var _ambient_phase := 0.0
 var _route_dragging := false
 var _pointer_position := Vector2.ZERO
 var _pending_delivery_system_index := -1
-var _resources: Dictionary = RESOURCE_START.duplicate(true)
+var _resources := ResourcePool.new()
 var _build_tools: Dictionary = {}
 var _route_tools: Dictionary = {}
 var _operation_tools: Dictionary = {}
@@ -216,6 +230,12 @@ var _link_status: Label = null
 var _resource_value_labels: Dictionary = {}
 var _resource_icon_nodes: Dictionary = {}
 var _resource_icon_textures: Dictionary = {}
+var _metric_containers: Dictionary = {}
+var _stability_bar_fill: ColorRect = null
+var _stability_bar_label: Label = null
+var _hover_panel: PanelContainer = null
+var _hover_panel_column: VBoxContainer = null
+var _hovered_metric: StringName = &""
 var _latest_feedback := ""
 var _latest_feedback_is_error := false
 var _build_button: Button = null
@@ -239,6 +259,7 @@ var _completion_remaining_sec := 0.0
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	set_process(true)
+	_resources.reset_economy()
 	_load_textures()
 	_build_interface()
 	_initialize_gameplay_tools()
@@ -254,6 +275,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_ambient_phase = fmod(_ambient_phase + delta * 2.4, 10000.0)
+	## The economy runs whenever a map is open, so every value the header shows
+	## is a value that moves without the player pressing anything. Rates are
+	## per second and integrated continuously.
+	_resources.apply_tick(delta)
+	_refresh_resource_status()
 	if _completion_popup_visible():
 		_completion_remaining_sec -= delta
 		if _completion_remaining_sec <= 0.0:
@@ -269,13 +295,9 @@ func _process(delta: float) -> void:
 		if _delivery_progress >= float(_delivery_path.size()):
 			_finish_delivery_leg()
 	elif _mode == Mode.BOTTLENECK:
-		var metrics: Dictionary = _route_metrics.get(_system_id(), {})
-		var designed_pressure := float(metrics.get("pressure", 0.0))
-		var pressure_multiplier := 1.0 + designed_pressure / 100.0
-		_resources[&"stability"] = maxf(
+		_resources.stability = maxf(
 			25.0,
-			float(_resources.get(&"stability", 0.0))
-			- BOTTLENECK_STABILITY_DRAIN_PER_SEC * pressure_multiplier * delta
+			_resources.stability - BOTTLENECK_STABILITY_DRAIN_PER_SEC * delta
 		)
 		_refresh_interface()
 	queue_redraw()
@@ -720,68 +742,167 @@ func _build_interface() -> void:
 func _build_resource_status(top_bar: Control) -> void:
 	var status_panel := PanelContainer.new()
 	status_panel.name = "ResourceStatus"
-	status_panel.position = Vector2(416, 5)
-	status_panel.size = Vector2(374, 30)
-	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_panel.position = Vector2(416, 3)
+	status_panel.size = Vector2(374, 34)
+	## The panel and its containers must pass hover through so the metric rows
+	## below can receive it. Setting IGNORE here is what made every tooltip in
+	## this bar unreachable before.
+	status_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	status_panel.add_theme_stylebox_override(
 		"panel",
 		_status_panel_style()
 	)
 	top_bar.add_child(status_panel)
 
+	var column := VBoxContainer.new()
+	column.name = "ResourceStatusColumn"
+	column.add_theme_constant_override("separation", 1)
+	column.mouse_filter = Control.MOUSE_FILTER_PASS
+	status_panel.add_child(column)
+
 	var row := HBoxContainer.new()
 	row.name = "ResourceStatusRow"
 	row.alignment = BoxContainer.ALIGNMENT_END
-	row.add_theme_constant_override("separation", 6)
-	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	status_panel.add_child(row)
+	row.add_theme_constant_override("separation", 4)
+	row.mouse_filter = Control.MOUSE_FILTER_PASS
+	column.add_child(row)
 
-	_link_status = Label.new()
-	_link_status.name = "LinkStatus"
-	_link_status.custom_minimum_size = Vector2(62, 20)
-	_link_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_link_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_link_status.add_theme_font_size_override("font_size", 10)
-	_link_status.tooltip_text = "Operating links"
-	row.add_child(_link_status)
+	for metric_id in METRIC_ORDER:
+		_build_resource_metric(row, metric_id)
 
-	for resource_id in RESOURCE_ORDER:
-		_build_resource_metric(row, resource_id)
+	_build_stability_bar(column)
+	_build_hover_panel()
 
 
 func _build_resource_metric(
 	row: HBoxContainer,
-	resource_id: StringName
+	metric_id: StringName
 ) -> void:
 	var metric := HBoxContainer.new()
-	metric.name = "%sMetric" % String(resource_id).to_pascal_case()
-	metric.custom_minimum_size = Vector2(54, 20)
+	metric.name = "%sMetric" % String(metric_id).to_pascal_case()
+	metric.custom_minimum_size = Vector2(118, 18)
 	metric.add_theme_constant_override("separation", 2)
-	metric.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	metric.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
+	## The metric row is the hover target for the breakdown panel. It carries no
+	## tooltip: the panel is the tooltip, and a second floating box on top of it
+	## just covers the stability bar.
+	metric.mouse_filter = Control.MOUSE_FILTER_STOP
+	metric.mouse_entered.connect(_on_metric_hovered.bind(metric_id))
+	metric.mouse_exited.connect(_on_metric_unhovered.bind(metric_id))
 	row.add_child(metric)
+	_metric_containers[metric_id] = metric
 
 	var icon := TextureRect.new()
-	icon.name = "%sIcon" % String(resource_id).to_pascal_case()
-	icon.custom_minimum_size = Vector2(18, 18)
+	icon.name = "%sIcon" % String(metric_id).to_pascal_case()
+	icon.custom_minimum_size = Vector2(14, 14)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
 	metric.add_child(icon)
-	_resource_icon_nodes[resource_id] = icon
+	_resource_icon_nodes[metric_id] = icon
 
 	var value_label := Label.new()
-	value_label.name = "%sValue" % String(resource_id).to_pascal_case()
-	value_label.custom_minimum_size = Vector2(32, 20)
+	value_label.name = "%sValue" % String(metric_id).to_pascal_case()
+	value_label.custom_minimum_size = Vector2(100, 18)
 	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	value_label.add_theme_font_size_override("font_size", 10)
 	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	value_label.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
 	metric.add_child(value_label)
-	_resource_value_labels[resource_id] = value_label
+	_resource_value_labels[metric_id] = value_label
+
+
+## Stability is a state, not a stock, so it is drawn as a bar apart from the
+## three flows rather than as a fourth number in the row.
+func _build_stability_bar(column: VBoxContainer) -> void:
+	var row := HBoxContainer.new()
+	row.name = "StabilityRow"
+	row.alignment = BoxContainer.ALIGNMENT_END
+	row.add_theme_constant_override("separation", 6)
+	row.mouse_filter = Control.MOUSE_FILTER_PASS
+	column.add_child(row)
+
+	_link_status = Label.new()
+	_link_status.name = "LinkStatus"
+	_link_status.custom_minimum_size = Vector2(96, 12)
+	_link_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_link_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_link_status.add_theme_font_size_override("font_size", 9)
+	_link_status.add_theme_color_override("font_color", COLOR_MUTED)
+	_link_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(_link_status)
+
+	var track := ColorRect.new()
+	track.name = "StabilityTrack"
+	track.custom_minimum_size = STABILITY_BAR_SIZE
+	track.color = Color(1.0, 1.0, 1.0, 0.14)
+	track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(track)
+
+	_stability_bar_fill = ColorRect.new()
+	_stability_bar_fill.name = "StabilityFill"
+	_stability_bar_fill.position = Vector2.ZERO
+	_stability_bar_fill.size = STABILITY_BAR_SIZE
+	_stability_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	track.add_child(_stability_bar_fill)
+
+	## Tick marks at the two production-tier boundaries, so the steps in
+	## `ResourcePool._stability_factor_for` are visible rather than implied.
+	for threshold in [
+		ResourcePool.STABILITY_STRAINED,
+		ResourcePool.STABILITY_HEALTHY,
+	]:
+		var mark := ColorRect.new()
+		mark.name = "StabilityTick%d" % int(threshold)
+		mark.color = Color(0.08, 0.04, 0.11, 0.85)
+		mark.size = Vector2(1.0, STABILITY_BAR_SIZE.y)
+		mark.position = Vector2(
+			STABILITY_BAR_SIZE.x * float(threshold) / 100.0,
+			0.0
+		)
+		mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		track.add_child(mark)
+
+	_stability_bar_label = Label.new()
+	_stability_bar_label.name = "StabilityValue"
+	_stability_bar_label.custom_minimum_size = Vector2(84, 12)
+	_stability_bar_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_stability_bar_label.add_theme_font_size_override("font_size", 9)
+	_stability_bar_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(_stability_bar_label)
+
+
+func _build_hover_panel() -> void:
+	_hover_panel = PanelContainer.new()
+	_hover_panel.name = "ResourceBreakdown"
+	_hover_panel.position = HOVER_PANEL_POSITION
+	_hover_panel.custom_minimum_size = Vector2(HOVER_PANEL_WIDTH, 0.0)
+	_hover_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hover_panel.z_index = 40
+	_hover_panel.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color(0.08, 0.04, 0.11, 0.97))
+	)
+	_hover_panel.visible = false
+	add_child(_hover_panel)
+
+	_hover_panel_column = VBoxContainer.new()
+	_hover_panel_column.name = "ResourceBreakdownColumn"
+	_hover_panel_column.add_theme_constant_override("separation", 1)
+	_hover_panel_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hover_panel.add_child(_hover_panel_column)
+
+
+func _on_metric_hovered(metric_id: StringName) -> void:
+	_hovered_metric = metric_id
+	_refresh_hover_panel()
+
+
+func _on_metric_unhovered(metric_id: StringName) -> void:
+	if _hovered_metric != metric_id:
+		return
+	_hovered_metric = &""
+	_refresh_hover_panel()
 
 
 func _build_completion_popup() -> void:
@@ -1028,9 +1149,7 @@ func _select_facility() -> void:
 		_facility_origins.erase(system_id)
 		_current_route_tool().clear()
 		_route_metrics.erase(system_id)
-		_award_resources(
-			SYSTEMS[_current_system_index].get("facility_cost", {})
-		)
+		_resources.refund(_facility_cost())
 	_mode = Mode.PLACING
 	_set_feedback(
 		"Place the 6 × 6 facility anywhere it fits. Cost and build time follow the cursor.",
@@ -1053,18 +1172,15 @@ func _place_facility_at(origin: Vector2i) -> bool:
 		)
 		queue_redraw()
 		return false
-	var facility_cost: Dictionary = SYSTEMS[_current_system_index].get(
-		"facility_cost",
-		{}
-	)
-	if not _can_afford(facility_cost):
+	var facility_cost := _facility_cost()
+	if not _resources.can_afford(facility_cost):
 		_set_feedback(
-			"Insufficient resources. Need %s." % _resource_cost_text(facility_cost),
+			"Insufficient biomass. Need %s." % _biomass_cost_text(facility_cost),
 			true
 		)
 		_update_context_cards()
 		return false
-	_spend_resources(facility_cost)
+	_resources.spend(facility_cost)
 	var system_id := _system_id()
 	_facility_origins[system_id] = origin
 	var route_tool := _current_route_tool()
@@ -1082,7 +1198,7 @@ func _place_facility_at(origin: Vector2i) -> bool:
 	_set_feedback(
 		"Construction started. %s spent; completion in %.1f seconds."
 		% [
-			_resource_cost_text(facility_cost),
+			_biomass_cost_text(facility_cost),
 			_current_build_time_sec(),
 		],
 		false
@@ -1129,18 +1245,24 @@ func _dispatch_to_next_system() -> bool:
 		_set_feedback("The road must be continuous and end at the boundary gate.", true)
 		return false
 	var metrics := _route_plan_metrics()
-	var total_cost: Dictionary = metrics.get("total_cost", {})
-	if not _can_afford(total_cost):
+	var total_cost := float(metrics.get("total_cost", 0.0))
+	if not _resources.can_afford(total_cost):
 		_set_feedback(
-			"Insufficient resources. Need %s." % _resource_cost_text(total_cost),
+			"Insufficient biomass. Need %s." % _biomass_cost_text(total_cost),
 			true
 		)
 		return false
-	_spend_resources(total_cost)
+	_resources.spend(total_cost)
 	var route := route_tool.path()
 	_outgoing_routes[system_id] = route
 	_route_metrics[system_id] = metrics
 	_committed_systems[system_id] = true
+	## The facility and its road start producing only once the network is
+	## committed, which is when the player has paid for both.
+	_register_system_economy(
+		_current_system_index,
+		int(metrics.get("road_cells", 0))
+	)
 	_current_operation_tool().configure(route)
 	_delivery_path = route
 	_delivery_progress = 0.0
@@ -1148,11 +1270,10 @@ func _dispatch_to_next_system() -> bool:
 	_pending_delivery_system_index = _current_system_index
 	_mode = Mode.DELIVERY_OUT
 	_set_feedback(
-		"Network committed for %s. Throughput %d%%, pressure %d%%."
+		"Network committed for %s. %s is now producing."
 		% [
-			_resource_cost_text(total_cost),
-			int(metrics.get("throughput", 0)),
-			int(metrics.get("pressure", 0)),
+			_biomass_cost_text(total_cost),
+			SYSTEMS[_current_system_index]["facility"],
 		],
 		false
 	)
@@ -1202,8 +1323,9 @@ func _continue_after_outgoing_delivery() -> void:
 		completed_index = _delivery_system_index
 	var completed_id := _system_id(completed_index)
 	_completed_dispatches[completed_id] = true
-	var completion_reward := _scaled_completion_reward(completed_index)
-	_award_resources(completion_reward)
+	## No lump-sum completion reward. The incentive to finish a map is that its
+	## facility permanently raises production, which a payout would obscure.
+	var production_note := _production_note(completed_index)
 	_pending_delivery_system_index = -1
 	var next_index := completed_index + 1
 	if next_index >= SYSTEMS.size():
@@ -1211,8 +1333,7 @@ func _continue_after_outgoing_delivery() -> void:
 		_current_system_index = completed_index
 		_delivery_path.clear()
 		_set_feedback(
-			"Final output delivered (%s). The body-city network is complete."
-			% _resource_cost_text(completion_reward),
+			"Final link online. The body-city network is complete.",
 			false
 		)
 		print("%s Full body network complete." % LOG_PREFIX)
@@ -1220,10 +1341,10 @@ func _continue_after_outgoing_delivery() -> void:
 		_show_completion_popup(
 			"BODY NETWORK COMPLETE",
 			(
-				"%s is online.\nAll four body systems now exchange resources. Reward: %s."
+				"%s is online.\nAll four body systems now exchange resources.\n%s"
 				% [
 					SYSTEMS[completed_index]["name"],
-					_resource_reward_text(completion_reward),
+					production_note,
 				]
 			),
 			true
@@ -1239,11 +1360,7 @@ func _continue_after_outgoing_delivery() -> void:
 	_delivery_system_index = next_index
 	_mode = Mode.DELIVERY_IN
 	_set_feedback(
-		"Output delivered (%s). %s is now unlocked."
-		% [
-			_resource_cost_text(completion_reward),
-			SYSTEMS[next_index]["name"],
-		],
+		"Output delivered. %s is now unlocked." % SYSTEMS[next_index]["name"],
 		false
 	)
 	print("%s Unlocked %s." % [LOG_PREFIX, SYSTEMS[next_index]["name"]])
@@ -1251,15 +1368,33 @@ func _continue_after_outgoing_delivery() -> void:
 	_show_completion_popup(
 		"%s LINK COMPLETE" % SYSTEMS[completed_index]["short"],
 		(
-			"Delivery succeeded. Reward: %s.\n%s is now ready to develop."
-			% [
-				_resource_reward_text(completion_reward),
-				SYSTEMS[next_index]["name"],
-			]
+			"%s\n%s is now ready to develop."
+			% [production_note, SYSTEMS[next_index]["name"]]
 		),
 		false
 	)
 	queue_redraw()
+
+
+## One line naming what the finished facility now contributes every second.
+func _production_note(index: int) -> String:
+	var economy: Dictionary = SYSTEMS[index].get("economy", {})
+	var parts: Array[String] = []
+	var biomass_output := float(economy.get(&"biomass_output", 0.0))
+	if biomass_output > 0.0:
+		parts.append("+%.1f biomass/s" % biomass_output)
+	var oxygen_supply := float(economy.get(&"oxygen_supply", 0.0))
+	if oxygen_supply > 0.0:
+		parts.append("+%.0f oxygen supply" % oxygen_supply)
+	var net_waste := (
+		float(economy.get(&"waste_clearance", 0.0))
+		- float(economy.get(&"waste_output", 0.0))
+	)
+	if net_waste > 0.0:
+		parts.append("-%.2f waste/s" % net_waste)
+	if parts.is_empty():
+		return "This facility is now operating."
+	return "Now producing %s." % ", ".join(parts)
 
 
 func _on_primary_action() -> void:
@@ -1279,11 +1414,8 @@ func _select_bottleneck_at(cell: Vector2i) -> bool:
 		queue_redraw()
 		return false
 	_set_feedback(
-		"Fault isolated. Repair costs CM %d and DS %d."
-		% [
-			NetworkOperationTool.REPAIR_CELL_MATERIAL_COST,
-			NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST,
-		],
+		"Fault isolated. Repair costs %s."
+		% _biomass_cost_text(NetworkOperationTool.REPAIR_BIOMASS_COST),
 		false
 	)
 	_refresh_interface()
@@ -1295,30 +1427,18 @@ func _repair_selected_bottleneck() -> bool:
 	if _mode != Mode.BOTTLENECK:
 		return false
 	var operation_tool := _current_operation_tool()
-	var cell_material := int(_resources.get(&"cell_material", 0))
-	var development_signal := int(_resources.get(&"development_signal", 0))
-	if not operation_tool.can_repair(cell_material, development_signal):
+	if not operation_tool.can_repair(_resources.biomass):
 		_set_feedback(
-			"Select the flashing segment and keep CM %d / DS %d available."
-			% [
-				NetworkOperationTool.REPAIR_CELL_MATERIAL_COST,
-				NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST,
-			],
+			"Select the flashing segment and keep %s available."
+			% _biomass_cost_text(REPAIR_BIOMASS_COST),
 			true
 		)
 		return false
-	var repair_cost := {
-		&"cell_material": NetworkOperationTool.REPAIR_CELL_MATERIAL_COST,
-		&"development_signal": NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST,
-	}
-	_spend_resources(repair_cost)
-	if not operation_tool.repair(cell_material, development_signal):
-		_award_resources(repair_cost)
+	_resources.spend(REPAIR_BIOMASS_COST)
+	if not operation_tool.repair(_resources.biomass + REPAIR_BIOMASS_COST):
+		_resources.refund(REPAIR_BIOMASS_COST)
 		return false
-	_resources[&"stability"] = minf(
-		100.0,
-		float(_resources.get(&"stability", 0.0)) + 5.0
-	)
+	_resources.stability = minf(100.0, _resources.stability + 5.0)
 	_set_feedback("Segment repaired. Flow and system stability are restored.", false)
 	_continue_after_outgoing_delivery()
 	return true
@@ -1367,7 +1487,7 @@ func _reset_network() -> void:
 	_construction_system_index = -1
 	_route_dragging = false
 	_pending_delivery_system_index = -1
-	_resources = RESOURCE_START.duplicate(true)
+	_resources.reset_economy()
 	_route_metrics.clear()
 	_committed_systems.clear()
 	_initialize_gameplay_tools()
@@ -1475,17 +1595,14 @@ func _update_context_cards() -> void:
 	_build_preview_card.visible = _mode == Mode.PLACING
 	_route_cost_bubble.visible = _mode in [Mode.ROUTING, Mode.PLAN_READY]
 	if _build_preview_card.visible:
-		var facility_cost: Dictionary = SYSTEMS[_current_system_index].get(
-			"facility_cost",
-			{}
-		)
+		var facility_cost := _facility_cost()
 		_build_preview_name.text = String(
 			SYSTEMS[_current_system_index]["facility"]
 		)
-		_build_preview_cost.text = "Cost   %s" % _resource_cost_text(facility_cost)
+		_build_preview_cost.text = "Cost   %s" % _biomass_cost_text(facility_cost)
 		_build_preview_cost.add_theme_color_override(
 			"font_color",
-			COLOR_TEXT if _can_afford(facility_cost) else COLOR_INVALID
+			COLOR_TEXT if _resources.can_afford(facility_cost) else COLOR_INVALID
 		)
 		_build_preview_time.text = "Build time   %.1f s" % _current_build_time_sec()
 		_position_follow_card(
@@ -1494,16 +1611,14 @@ func _update_context_cards() -> void:
 		)
 	if _route_cost_bubble.visible:
 		var road_cells := _current_road_cell_count()
-		var road_cost := road_cells * ROAD_CELL_MATERIAL_COST
-		_route_cost_label.text = "Road  %d tiles   ·   CM %d" % [
+		var road_cost := float(road_cells) * ROAD_BIOMASS_COST_PER_TILE
+		_route_cost_label.text = "Road  %d tiles   ·   %s" % [
 			road_cells,
-			road_cost,
+			_biomass_cost_text(road_cost),
 		]
 		_route_cost_label.add_theme_color_override(
 			"font_color",
-			COLOR_TEXT
-			if float(_resources.get(&"cell_material", 0.0)) >= float(road_cost)
-			else COLOR_INVALID
+			COLOR_TEXT if _resources.can_afford(road_cost) else COLOR_INVALID
 		)
 		_position_follow_card(_route_cost_bubble, Vector2(16.0, 16.0))
 
@@ -1545,14 +1660,13 @@ func _update_route_plan_feedback() -> void:
 		return
 	var metrics := _route_plan_metrics()
 	_route_metrics[_system_id()] = metrics
-	var status := "Road: %d tiles | Cost %s | Flow %d%% | Pressure %d%%"
 	_set_feedback(
-		status
+		"Road: %d tiles | Cost %s | Running oxygen %.2f, waste %.2f/s"
 		% [
 			int(metrics.get("road_cells", 0)),
-			_resource_cost_text(metrics.get("total_cost", {})),
-			int(metrics.get("throughput", 0)),
-			int(metrics.get("pressure", 0)),
+			_biomass_cost_text(float(metrics.get("total_cost", 0.0))),
+			float(metrics.get("road_oxygen_demand", 0.0)),
+			float(metrics.get("road_waste_output", 0.0)),
 		],
 		false
 	)
@@ -1561,6 +1675,8 @@ func _update_route_plan_feedback() -> void:
 	queue_redraw()
 
 
+## Road length is the only term. It buys biomass once, then keeps costing
+## oxygen and generating waste for as long as the road exists.
 func _route_plan_metrics() -> Dictionary:
 	var route_tool := _current_route_tool()
 	var segments := route_tool.segment_count()
@@ -1570,32 +1686,19 @@ func _route_plan_metrics() -> Dictionary:
 		absi(route_tool.target_port.x - route_tool.source_port.x)
 		+ absi(route_tool.target_port.y - route_tool.source_port.y)
 	)
-	var excess := maxi(segments - minimum_segments, 0)
-	var support_distance := _facility_support_distance()
-	var throughput := clampi(100 - excess * 4 - turns * 6, 35, 100)
-	var pressure := clampi(
-		18 + turns * 10 + excess * 3 + maxi(support_distance - 4, 0) * 2,
-		0,
-		100
-	)
-	var route_cost := {
-		&"cell_material": road_cells * ROAD_CELL_MATERIAL_COST,
-	}
+	var route_cost := float(road_cells) * ROAD_BIOMASS_COST_PER_TILE
+	var road_spec := _road_economy_spec(road_cells)
 	return {
 		"segments": segments,
 		"road_cells": road_cells,
 		"turns": turns,
 		"minimum_segments": minimum_segments,
-		"excess_segments": excess,
-		"support_distance": support_distance,
-		"throughput": throughput,
-		"pressure": pressure,
+		"excess_segments": maxi(segments - minimum_segments, 0),
 		"route_cost": route_cost,
-		"facility_cost": SYSTEMS[_current_system_index].get(
-			"facility_cost",
-			{}
-		).duplicate(true),
-		"total_cost": route_cost.duplicate(true),
+		"road_oxygen_demand": float(road_spec[&"oxygen_demand"]),
+		"road_waste_output": float(road_spec[&"waste_output"]),
+		"facility_cost": _facility_cost(),
+		"total_cost": route_cost,
 	}
 
 
@@ -1604,19 +1707,6 @@ func _current_road_cell_count() -> int:
 	if route_tool == null:
 		return 0
 	return route_tool.path().size()
-
-
-func _facility_support_distance() -> int:
-	var origin: Vector2i = _facility_origins.get(
-		_system_id(),
-		Vector2i(-100, -100)
-	)
-	var facility_center := origin + FACILITY_FOOTPRINT / 2
-	var zone_center := GRID_SIZE / 2
-	return (
-		absi(facility_center.x - zone_center.x)
-		+ absi(facility_center.y - zone_center.y)
-	)
 
 
 func _current_build_time_sec() -> float:
@@ -1635,71 +1725,48 @@ func _construction_progress() -> float:
 	return clampf(_construction_elapsed / duration, 0.0, 1.0)
 
 
-func _can_afford(cost: Dictionary) -> bool:
-	for key in cost:
-		if float(_resources.get(key, 0.0)) < float(cost[key]):
-			return false
-	return true
+func _facility_cost(index: int = -1) -> float:
+	var system_index := _current_system_index if index < 0 else index
+	return float(SYSTEMS[system_index].get("facility_cost_biomass", 0.0))
 
 
-func _spend_resources(cost: Dictionary) -> void:
-	for key in cost:
-		_resources[key] = float(_resources.get(key, 0.0)) - float(cost[key])
+func _biomass_cost_text(amount: float) -> String:
+	return "BIO %d" % roundi(amount)
 
 
-func _award_resources(reward: Dictionary) -> void:
-	for key in reward:
-		_resources[key] = float(_resources.get(key, 0.0)) + float(reward[key])
-	if _resources.has(&"stability"):
-		_resources[&"stability"] = minf(
-			100.0,
-			float(_resources[&"stability"])
-		)
-
-
-func _scaled_completion_reward(index: int) -> Dictionary:
-	var system_id := _system_id(index)
-	var metrics: Dictionary = _route_metrics.get(system_id, {})
-	var throughput := int(metrics.get("throughput", 100))
-	var base_reward: Dictionary = SYSTEMS[index].get("completion_reward", {})
-	var scaled: Dictionary = {}
-	for key in base_reward:
-		scaled[key] = maxi(
-			1,
-			roundi(float(base_reward[key]) * float(throughput) / 100.0)
-		)
-	return scaled
-
-
-func _resource_cost_text(cost: Dictionary) -> String:
-	var parts: Array[String] = []
-	var labels := {
-		&"nutrient_energy": "NE",
-		&"cell_material": "CM",
-		&"development_signal": "DS",
-		&"stability": "ST",
+## Aggregate economy specification of one map's committed road, scaled by tile
+## count. Registering roads as one source keeps the hover breakdown to a single
+## line per map instead of a line per tile.
+func _road_economy_spec(road_cells: int) -> Dictionary:
+	return {
+		&"label": "Roads, %d tiles" % road_cells,
+		&"oxygen_demand": (
+			float(ROAD_TILE_ECONOMY[&"oxygen_demand"]) * float(road_cells)
+		),
+		&"waste_output": (
+			float(ROAD_TILE_ECONOMY[&"waste_output"]) * float(road_cells)
+		),
 	}
-	for key in [
-		&"nutrient_energy",
-		&"cell_material",
-		&"development_signal",
-		&"stability",
-	]:
-		var amount := int(cost.get(key, 0))
-		if amount > 0:
-			parts.append("%s %d" % [labels[key], amount])
-	return ", ".join(parts)
 
 
-func _resource_reward_text(reward: Dictionary) -> String:
-	var parts: Array[String] = []
-	for key in RESOURCE_ORDER:
-		var amount := int(reward.get(key, 0))
-		if amount > 0:
-			parts.append("%s +%d" % [RESOURCE_DISPLAY_NAMES[key], amount])
-	if parts.is_empty():
-		return "network stability"
-	return ", ".join(parts)
+func _register_system_economy(index: int, road_cells: int) -> void:
+	var system_id := _system_id(index)
+	var spec: Dictionary = SYSTEMS[index].get("economy", {}).duplicate(true)
+	spec[&"label"] = String(SYSTEMS[index]["facility"])
+	_resources.register_source(system_id, spec)
+	_resources.register_source(
+		_road_source_id(index),
+		_road_economy_spec(road_cells)
+	)
+
+
+func _unregister_system_economy(index: int) -> void:
+	_resources.unregister_source(_system_id(index))
+	_resources.unregister_source(_road_source_id(index))
+
+
+func _road_source_id(index: int) -> StringName:
+	return StringName("%s_roads" % _system_id(index))
 
 
 func _mode_for_system(index: int) -> Mode:
@@ -1723,64 +1790,266 @@ func _refresh_resource_status() -> void:
 		_completed_dispatches.size(),
 		SYSTEMS.size(),
 	]
-	for resource_id in RESOURCE_ORDER:
-		var value_label: Label = _resource_value_labels.get(resource_id)
-		var icon: TextureRect = _resource_icon_nodes.get(resource_id)
+	for metric_id in METRIC_ORDER:
+		var value_label: Label = _resource_value_labels.get(metric_id)
+		var icon: TextureRect = _resource_icon_nodes.get(metric_id)
 		if value_label == null or icon == null:
 			continue
-		var value := int(_resources.get(resource_id, 0))
-		value_label.text = str(value)
-		var state := _resource_icon_state(resource_id, value)
-		var asset_name: StringName = RESOURCE_ICON_ASSETS[resource_id][state]
+		value_label.text = _metric_text(metric_id)
+		value_label.add_theme_color_override(
+			"font_color",
+			_metric_color(metric_id)
+		)
+		var state := _metric_icon_state(metric_id)
+		var asset_name: StringName = METRIC_ICON_ASSETS[metric_id][state]
 		if not _resource_icon_textures.has(asset_name):
 			_resource_icon_textures[asset_name] = AssetLoader.get_static_texture(
 				asset_name
 			)
 		icon.texture = _resource_icon_textures[asset_name]
-		var state_hint := ""
-		if state == &"warning":
-			state_hint = " - low"
-		elif state == &"critical":
-			state_hint = " - critical"
-		var tooltip := "%s: %d%s" % [
-			RESOURCE_DISPLAY_NAMES[resource_id],
-			value,
-			state_hint,
-		]
-		icon.tooltip_text = tooltip
-		value_label.tooltip_text = tooltip
+	_refresh_stability_bar()
+	_refresh_hover_panel()
 
 
-func _resource_icon_state(resource_id: StringName, value: int) -> StringName:
-	if resource_id == &"stability":
-		if value < 35:
-			return &"critical"
-		if value < 70:
-			return &"warning"
-		return &"normal"
-	var required := _resource_requirement_for_current_action(resource_id)
-	if required > 0 and value < required:
-		return &"warning"
+func _metric_text(metric_id: StringName) -> String:
+	match metric_id:
+		&"biomass":
+			return "%s %d %s" % [
+				METRIC_SHORT_NAMES[metric_id],
+				floori(_resources.biomass),
+				_signed_rate_text(_resources.biomass_rate),
+			]
+		&"oxygen":
+			return "%s %d/%d" % [
+				METRIC_SHORT_NAMES[metric_id],
+				roundi(_resources.oxygen_supply),
+				roundi(_resources.oxygen_demand),
+			]
+		&"waste":
+			return "%s %d %s" % [
+				METRIC_SHORT_NAMES[metric_id],
+				floori(_resources.waste),
+				_signed_rate_text(_resources.waste_rate),
+			]
+	return ""
+
+
+func _signed_rate_text(rate: float) -> String:
+	if is_zero_approx(rate):
+		return "0.0"
+	return "%+.1f" % rate
+
+
+## Positive is good for biomass, bad for waste; oxygen is judged on whether
+## demand outruns supply.
+func _metric_color(metric_id: StringName) -> Color:
+	match metric_id:
+		&"biomass":
+			return COLOR_VALID if _resources.biomass_rate > 0.0 else COLOR_INVALID
+		&"oxygen":
+			return COLOR_INVALID if _resources.is_oxygen_short() else COLOR_TEXT
+		&"waste":
+			if _resources.waste >= ResourcePool.WASTE_CAPACITY:
+				return COLOR_INVALID
+			return COLOR_VALID if _resources.waste_rate < 0.0 else COLOR_PORT
+	return COLOR_TEXT
+
+
+func _metric_icon_state(metric_id: StringName) -> StringName:
+	match metric_id:
+		&"biomass":
+			return &"normal" if _resources.biomass_rate > 0.0 else &"warning"
+		&"oxygen":
+			return &"warning" if _resources.is_oxygen_short() else &"normal"
+		&"waste":
+			return (
+				&"warning"
+				if _resources.waste_ratio() >= ResourcePool.WASTE_SAFE
+				else &"normal"
+			)
 	return &"normal"
 
 
-func _resource_requirement_for_current_action(resource_id: StringName) -> int:
-	if _mode in [Mode.READY, Mode.PLACING]:
-		var facility_cost: Dictionary = SYSTEMS[_current_system_index].get(
-			"facility_cost",
-			{}
+func _refresh_stability_bar() -> void:
+	if _stability_bar_fill == null or _stability_bar_label == null:
+		return
+	var ratio := clampf(_resources.stability / 100.0, 0.0, 1.0)
+	_stability_bar_fill.size = Vector2(
+		STABILITY_BAR_SIZE.x * ratio,
+		STABILITY_BAR_SIZE.y
+	)
+	var color := COLOR_VALID
+	if _resources.stability < ResourcePool.STABILITY_STRAINED:
+		color = COLOR_INVALID
+	elif _resources.stability < ResourcePool.STABILITY_HEALTHY:
+		color = COLOR_PORT
+	_stability_bar_fill.color = color
+	_stability_bar_label.text = "STABILITY %d" % roundi(_resources.stability)
+	_stability_bar_label.add_theme_color_override("font_color", color)
+
+
+## Every line of the breakdown names something the player built, so there is no
+## contribution shown that they cannot act on.
+func _refresh_hover_panel() -> void:
+	if _hover_panel == null or _hover_panel_column == null:
+		return
+	if _hovered_metric == &"":
+		_hover_panel.visible = false
+		return
+	var lines := _breakdown_lines(_hovered_metric)
+	## Reuse the existing labels rather than freeing them. `queue_free` defers
+	## to the end of the frame, so rebuilding every frame would leave the old
+	## rows visible alongside the new ones.
+	var existing := _hover_panel_column.get_child_count()
+	for index in range(lines.size()):
+		var line: Dictionary = lines[index]
+		var label: Label
+		if index < existing:
+			label = _hover_panel_column.get_child(index) as Label
+		else:
+			label = _breakdown_label("", false)
+			_hover_panel_column.add_child(label)
+		label.visible = true
+		label.text = String(line.get("text", ""))
+		label.add_theme_color_override(
+			"font_color",
+			COLOR_MUTED if bool(line.get("muted", false)) else COLOR_TEXT
 		)
-		return int(facility_cost.get(resource_id, 0))
-	if _mode in [Mode.ROUTING, Mode.PLAN_READY]:
-		var metrics := _route_plan_metrics()
-		var total_cost: Dictionary = metrics.get("total_cost", {})
-		return int(total_cost.get(resource_id, 0))
-	if _mode == Mode.BOTTLENECK:
-		if resource_id == &"cell_material":
-			return NetworkOperationTool.REPAIR_CELL_MATERIAL_COST
-		if resource_id == &"development_signal":
-			return NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST
-	return 0
+	for index in range(lines.size(), existing):
+		(_hover_panel_column.get_child(index) as Label).visible = false
+	_hover_panel.visible = not lines.is_empty()
+
+
+func _breakdown_label(text: String, muted: bool) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override(
+		"font_color",
+		COLOR_MUTED if muted else COLOR_TEXT
+	)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
+
+
+func _breakdown_lines(metric_id: StringName) -> Array[Dictionary]:
+	var lines: Array[Dictionary] = []
+	var sources := _resources.sources()
+	match metric_id:
+		&"biomass":
+			lines.append({
+				"text": "BIOMASS%s%d" % [
+					_breakdown_gap(),
+					floori(_resources.biomass),
+				],
+			})
+			for source_id in sources:
+				var entry: Dictionary = sources[source_id]
+				var output := float(entry[&"biomass_output"])
+				if is_zero_approx(output):
+					continue
+				lines.append(_breakdown_row(String(entry[&"label"]), "%+.1f/s" % output))
+			lines.append(_breakdown_row(
+				"Oxygen efficiency",
+				"x%.2f" % _resources.oxygen_ratio,
+				true
+			))
+			lines.append(_breakdown_row(
+				"Stability efficiency",
+				"x%.2f" % _resources.stability_factor,
+				true
+			))
+			lines.append(_breakdown_row(
+				"Net",
+				"%s/s" % _signed_rate_text(_resources.biomass_rate)
+			))
+		&"oxygen":
+			lines.append({
+				"text": "OXYGEN%s%d / %d" % [
+					_breakdown_gap(),
+					roundi(_resources.oxygen_supply),
+					roundi(_resources.oxygen_demand),
+				],
+			})
+			for source_id in sources:
+				var entry: Dictionary = sources[source_id]
+				var supply := float(entry[&"oxygen_supply"])
+				if not is_zero_approx(supply):
+					lines.append(_breakdown_row(
+						"%s  supply" % entry[&"label"],
+						"+%.1f" % supply
+					))
+			for source_id in sources:
+				var entry: Dictionary = sources[source_id]
+				var demand := float(entry[&"oxygen_demand"])
+				if not is_zero_approx(demand):
+					lines.append(_breakdown_row(
+						"%s  demand" % entry[&"label"],
+						"%.1f" % demand,
+						true
+					))
+			lines.append(_breakdown_row(
+				"Ratio",
+				"%.2f" % _resources.oxygen_ratio
+			))
+		&"waste":
+			lines.append({
+				"text": "WASTE%s%d" % [
+					_breakdown_gap(),
+					floori(_resources.waste),
+				],
+			})
+			for source_id in sources:
+				var entry: Dictionary = sources[source_id]
+				var output := float(entry[&"waste_output"])
+				if not is_zero_approx(output):
+					lines.append(_breakdown_row(
+						String(entry[&"label"]),
+						"+%.2f" % output
+					))
+			for source_id in sources:
+				var entry: Dictionary = sources[source_id]
+				var clearance := float(entry[&"waste_clearance"])
+				if not is_zero_approx(clearance):
+					lines.append(_breakdown_row(
+						"%s  clearance" % entry[&"label"],
+						"-%.2f" % clearance,
+						true
+					))
+			lines.append(_breakdown_row(
+				"Net",
+				"%s/s" % _signed_rate_text(_resources.waste_rate)
+			))
+			lines.append(_breakdown_row(
+				"Capacity",
+				"%d/%d" % [
+					floori(_resources.waste),
+					int(ResourcePool.WASTE_CAPACITY),
+				],
+				true
+			))
+	if lines.size() <= 1:
+		lines.append(_breakdown_row(
+			"Nothing built yet",
+			"commit a network",
+			true
+		))
+	return lines
+
+
+func _breakdown_row(
+	label: String,
+	value: String,
+	muted: bool = false
+) -> Dictionary:
+	var padded := label
+	while padded.length() < 30:
+		padded += " "
+	return {"text": "  %s%s" % [padded, value], "muted": muted}
+
+
+func _breakdown_gap() -> String:
+	return "                       "
 
 
 func _refresh_interface() -> void:
@@ -1864,25 +2133,23 @@ func _objective_text() -> String:
 			_system_id(),
 			_route_plan_metrics()
 		)
-		return "Plan ready: throughput %d%%, pressure %d%%. Commit or redraw." % [
-			int(metrics.get("throughput", 0)),
-			int(metrics.get("pressure", 0)),
+		return "Plan ready: %d road tiles for %s. Commit or redraw." % [
+			int(metrics.get("road_cells", 0)),
+			_biomass_cost_text(float(metrics.get("total_cost", 0.0))),
 		]
 	if _mode == Mode.DELIVERY_OUT:
 		return "Delivery in transit: vehicle exits this map at the city boundary."
 	if _mode == Mode.DELIVERY_IN:
 		return "Delivery continuity: vehicle has entered the newly unlocked map."
 	if _mode == Mode.BOTTLENECK:
-		var operation_tool := _current_operation_tool()
-		return "Emergency: coverage %d%%, pressure %d%%. Locate and repair the fault." % [
-			operation_tool.coverage_percent(),
-			operation_tool.pressure_percent(),
-		]
+		return "Emergency: click the flashing road segment, then repair it for %s." % (
+			_biomass_cost_text(REPAIR_BIOMASS_COST)
+		)
 	if _completed_dispatches.get(_system_id(), false):
-		var metrics: Dictionary = _route_metrics.get(_system_id(), {})
-		return "Operating link: throughput %d%%, designed pressure %d%%." % [
-			int(metrics.get("throughput", 100)),
-			int(metrics.get("pressure", 0)),
+		var economy: Dictionary = SYSTEMS[_current_system_index].get("economy", {})
+		return "Operating link: +%.1f biomass/s from %s." % [
+			float(economy.get(&"biomass_output", 0.0)),
+			SYSTEMS[_current_system_index]["facility"],
 		]
 	if not _facility_origins.has(_system_id()):
 		return "Develop this system: place its 6 × 6 civic facility."
@@ -2038,6 +2305,20 @@ func debug_switch_system(index: int) -> bool:
 	return _switch_system(index)
 
 
+## Fast-forward the economy by the given number of seconds using the real tick,
+## so acceptance runs do not have to wait in real time for biomass to build up.
+func debug_advance_economy(seconds: float) -> void:
+	_resources.apply_tick(seconds)
+	_refresh_interface()
+
+
+func debug_hover_metric(metric_id: StringName) -> bool:
+	if not _metric_containers.has(metric_id):
+		return false
+	_on_metric_hovered(metric_id)
+	return _hover_panel != null and _hover_panel.visible
+
+
 func debug_dismiss_completion_popup() -> bool:
 	if not _completion_popup_visible():
 		return false
@@ -2055,15 +2336,23 @@ func debug_snapshot() -> Dictionary:
 		"facility_count": _facility_origins.size(),
 		"completed_dispatch_count": _completed_dispatches.size(),
 		"construction_progress": _construction_progress(),
-		"current_facility_cost": SYSTEMS[_current_system_index].get(
-			"facility_cost",
-			{}
-		).duplicate(true),
+		"current_facility_cost": _facility_cost(),
 		"current_build_time_sec": _current_build_time_sec(),
 		"delivery_path": _delivery_path.duplicate(),
 		"route": _route_for(_outgoing_routes, system_id),
 		"route_metrics": _route_metrics.get(system_id, {}).duplicate(true),
-		"resources": _resources.duplicate(true),
+		"resources": {
+			"biomass": _resources.biomass,
+			"waste": _resources.waste,
+			"stability": _resources.stability,
+			"oxygen_supply": _resources.oxygen_supply,
+			"oxygen_demand": _resources.oxygen_demand,
+			"oxygen_ratio": _resources.oxygen_ratio,
+			"biomass_rate": _resources.biomass_rate,
+			"waste_rate": _resources.waste_rate,
+			"stability_rate": _resources.stability_rate,
+		},
+		"economy_sources": _resources.sources(),
 		"bottleneck_active": operation_tool.bottleneck_active,
 		"bottleneck_selected": (
 			operation_tool.selected_cell == operation_tool.bottleneck_cell
