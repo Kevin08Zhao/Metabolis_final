@@ -314,15 +314,27 @@ func _test_system_city_scene() -> void:
 		)
 
 	_expect(
+		prototype.debug_snapshot().get(
+			"facility_footprint",
+			Vector2i.ZERO
+		) == Vector2i(7, 7),
+		"player-placeable system facilities must use a 7 x 7 footprint"
+	)
+	_expect(
 		not prototype.debug_switch_system(1),
 		"locked body-system map must reject manual switching"
 	)
 	for index in range(4):
 		var before_build: Dictionary = prototype.debug_snapshot()
+		if index == 0:
+			_expect(
+				not prototype.debug_place_facility(Vector2i(34, 0)),
+				"a facility placement that fits 6 x 6 but not 7 x 7 must be rejected"
+			)
 		var placement := Vector2i(2, 2) if index == 0 else Vector2i(20, 8)
 		_expect(
 			prototype.debug_place_facility(placement),
-			"system %d must accept a 6 x 6 facility" % index
+			"system %d must accept a 7 x 7 facility" % index
 		)
 		var constructing: Dictionary = prototype.debug_snapshot()
 		var before_build_resources: Dictionary = before_build.get("resources", {})
@@ -396,7 +408,7 @@ func _test_system_city_scene() -> void:
 		)
 		var waypoints: Array[Vector2i] = []
 		if index == 0:
-			waypoints = [Vector2i(26, 5)]
+			waypoints = [Vector2i(27, 5)]
 		_expect(
 			prototype.debug_build_route(waypoints),
 			"system %d must accept a player-authored boundary route" % index

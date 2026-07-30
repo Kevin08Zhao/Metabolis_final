@@ -11,7 +11,7 @@ The body-city is divided into four connected pages. Each page is one body system
 | 3 | Nervous System | Neural Dispatch Center | Signal courier scooter |
 | 4 | Respiratory System | Air Exchange Terminal | Oxygen delivery tram |
 
-The Nutrient Exchange map is available at the start. A player places its 6 × 6 facility and dispatches cargo to unlock the Circulatory System. Repeating the same development action unlocks the Nervous and Respiratory systems in order.
+The Nutrient Exchange map is available at the start. A player places its 7 × 7 facility and dispatches cargo to unlock the Circulatory System. Repeating the same development action unlocks the Nervous and Respiratory systems in order.
 
 ## Cross-Boundary Transport
 
@@ -31,7 +31,7 @@ Completed connections keep an ambient delivery vehicle moving on their road, so 
 - The playable map remains 640 × 320 pixels inside the 800 × 450 interface.
 - Map controls stay in the separate 160 pixel right rail.
 - Objective and feedback text stay below the map.
-- System facilities occupy 6 × 6 tiles, or 96 × 96 logical pixels.
+- System facilities occupy 7 × 7 tiles, or 112 × 112 logical pixels.
 - Delivery vehicles render at 64 × 42 logical pixels.
 - Roads use transparent surroundings, preventing square tile backgrounds from covering the system-map art.
 - All system maps use warm peach, coral, raspberry, cream, gold, and cyan accents.

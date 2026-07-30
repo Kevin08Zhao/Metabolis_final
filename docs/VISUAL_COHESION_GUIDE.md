@@ -33,9 +33,9 @@ The map reads in this order:
 - Valid anatomical regions may appear as temporary tool overlays, but they are not permanent map rectangles.
 - A confirmed building never keeps a footprint outline.
 - A 2 × 2 structure uses a 32 × 32 pixel canvas.
-- A 6 × 6 landmark uses a 96 × 96 pixel canvas.
-- Transparent padding is cropped and integer-scaled before a sprite is accepted.
-- Buildings use a bottom-center anchor and may not be stretched beyond their declared canvas.
+- A 7 × 7 landmark uses a 112 × 112 pixel canvas.
+- Transparent padding is cropped before a sprite is accepted.
+- Buildings use nearest-neighbor scaling and a bottom-center anchor. Integer scaling is preferred; system facilities may use a fractional scale to fill their declared footprint when the silhouette stays crisp and fully contained.
 - Transport routes use broad arterial-street tiles with cyan curbs and a cream center marking. They select art from neighbor connectivity; separate square stamps may not be placed side by side without edge matching.
 
 ## Screen Composition
@@ -77,6 +77,6 @@ The organ prompts specify compact top-down civic structures, coral roof plates, 
 - The Life Harbor, cell district, and heart pumping station share one palette and top-down camera.
 - At 2× display scale, every landmark is readable without exceeding its grid footprint.
 - The right action rail and lower information region remain fully outside the 640 × 320 map.
-- Routes read as connected city streets and remain visibly narrower than 6 × 6 landmark buildings.
+- Routes read as connected city streets and remain visibly narrower than 7 × 7 landmark buildings.
 - Each body system has a separate warm map page; unlocked pages are selected from the right rail or with number keys.
 - Cross-boundary delivery uses visible vans, freight cars, scooters, and trams instead of abstract moving dots.
