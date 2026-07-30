@@ -26,7 +26,6 @@ const GRID_SIZE := Vector2i(40, 20)
 const MAP_ORIGIN := Vector2(0, 40)
 const MAP_SIZE := Vector2(640, 320)
 const FACILITY_FOOTPRINT := Vector2i(6, 6)
-const FULL_MAP_BUILD_ZONE := Rect2i(Vector2i.ZERO, GRID_SIZE)
 const DEFAULT_BUILD_TIME_SEC := 3.0
 const RESOURCE_START := {
 	&"nutrient_energy": 160,
@@ -136,6 +135,107 @@ const SYSTEMS := [
 	},
 ]
 
+const CITY_LAYOUTS := [
+	{
+		"build_zone": Rect2i(15, 5, 13, 11),
+		"avenues": [
+			[Vector2i(0, 10), Vector2i(11, 10), Vector2i(11, 3), Vector2i(38, 3)],
+			[Vector2i(4, 17), Vector2i(35, 17), Vector2i(35, 10), Vector2i(39, 10)],
+		],
+		"props": [
+			{"asset": &"prop_nutrient_corner_shop", "cell": Vector2i(2, 1), "size": Vector2(80, 80)},
+			{"asset": &"prop_cell_phone_booth", "cell": Vector2i(34, 5), "size": Vector2(48, 64)},
+			{"asset": &"prop_body_transit_shelter", "cell": Vector2i(30, 16), "size": Vector2(64, 48)},
+			{"asset": &"prop_tissue_street_lamp", "cell": Vector2i(12, 16), "size": Vector2(32, 48)},
+		],
+		"citizen_lane": [Vector2i(5, 17), Vector2i(30, 17)],
+		"vehicle_loop": [
+			Vector2i(4, 17),
+			Vector2i(35, 17),
+			Vector2i(35, 3),
+			Vector2i(11, 3),
+			Vector2i(11, 10),
+			Vector2i(4, 10),
+			Vector2i(4, 17),
+		],
+	},
+	{
+		"build_zone": Rect2i(14, 5, 14, 11),
+		"avenues": [
+			[Vector2i(0, 7), Vector2i(9, 7), Vector2i(9, 2), Vector2i(34, 2), Vector2i(34, 7), Vector2i(39, 7)],
+			[Vector2i(3, 17), Vector2i(36, 17), Vector2i(36, 12), Vector2i(39, 12)],
+			[Vector2i(6, 2), Vector2i(6, 17)],
+		],
+		"props": [
+			{"asset": &"prop_body_transit_shelter", "cell": Vector2i(2, 13), "size": Vector2(64, 48)},
+			{"asset": &"prop_cell_phone_booth", "cell": Vector2i(34, 8), "size": Vector2(48, 64)},
+			{"asset": &"prop_nutrient_corner_shop", "cell": Vector2i(28, 1), "size": Vector2(80, 80)},
+			{"asset": &"prop_tissue_street_lamp", "cell": Vector2i(10, 3), "size": Vector2(32, 48)},
+		],
+		"citizen_lane": [Vector2i(8, 17), Vector2i(32, 17)],
+		"vehicle_loop": [
+			Vector2i(6, 17),
+			Vector2i(36, 17),
+			Vector2i(36, 2),
+			Vector2i(6, 2),
+			Vector2i(6, 17),
+		],
+	},
+	{
+		"build_zone": Rect2i(15, 5, 13, 11),
+		"avenues": [
+			[Vector2i(0, 12), Vector2i(9, 12), Vector2i(9, 3), Vector2i(38, 3)],
+			[Vector2i(4, 18), Vector2i(35, 18), Vector2i(35, 9), Vector2i(39, 9)],
+			[Vector2i(31, 3), Vector2i(31, 18)],
+		],
+		"props": [
+			{"asset": &"prop_cell_phone_booth", "cell": Vector2i(4, 4), "size": Vector2(48, 64)},
+			{"asset": &"prop_body_transit_shelter", "cell": Vector2i(2, 15), "size": Vector2(64, 48)},
+			{"asset": &"prop_nutrient_corner_shop", "cell": Vector2i(31, 11), "size": Vector2(80, 80)},
+			{"asset": &"prop_tissue_street_lamp", "cell": Vector2i(28, 2), "size": Vector2(32, 48)},
+		],
+		"citizen_lane": [Vector2i(6, 18), Vector2i(28, 18)],
+		"vehicle_loop": [
+			Vector2i(4, 18),
+			Vector2i(35, 18),
+			Vector2i(35, 3),
+			Vector2i(9, 3),
+			Vector2i(9, 12),
+			Vector2i(4, 12),
+			Vector2i(4, 18),
+		],
+	},
+	{
+		"build_zone": Rect2i(14, 5, 14, 11),
+		"avenues": [
+			[Vector2i(0, 9), Vector2i(10, 9), Vector2i(10, 2), Vector2i(36, 2), Vector2i(36, 9), Vector2i(39, 9)],
+			[Vector2i(3, 17), Vector2i(37, 17), Vector2i(37, 9)],
+			[Vector2i(5, 2), Vector2i(5, 17)],
+		],
+		"props": [
+			{"asset": &"prop_nutrient_corner_shop", "cell": Vector2i(1, 10), "size": Vector2(80, 80)},
+			{"asset": &"prop_cell_phone_booth", "cell": Vector2i(34, 10), "size": Vector2(48, 64)},
+			{"asset": &"prop_body_transit_shelter", "cell": Vector2i(27, 1), "size": Vector2(64, 48)},
+			{"asset": &"prop_tissue_street_lamp", "cell": Vector2i(11, 2), "size": Vector2(32, 48)},
+		],
+		"citizen_lane": [Vector2i(7, 17), Vector2i(31, 17)],
+		"vehicle_loop": [
+			Vector2i(5, 17),
+			Vector2i(37, 17),
+			Vector2i(37, 2),
+			Vector2i(5, 2),
+			Vector2i(5, 17),
+		],
+	},
+]
+
+const PROP_ASSETS := [
+	&"prop_cell_phone_booth",
+	&"prop_nutrient_corner_shop",
+	&"prop_body_transit_shelter",
+	&"prop_tissue_street_lamp",
+]
+
 const COLOR_PANEL := Color(0.10, 0.05, 0.13, 0.96)
 const COLOR_PANEL_EDGE := Color("#C84F7C")
 const COLOR_TEXT := Color("#FFF1E2")
@@ -174,6 +274,7 @@ var _committed_systems: Dictionary = {}
 var _map_textures: Dictionary = {}
 var _building_textures: Dictionary = {}
 var _vehicle_textures: Dictionary = {}
+var _prop_textures: Dictionary = {}
 var _road_textures: Array[Texture2D] = []
 
 var _system_title: Label = null
@@ -312,8 +413,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _draw() -> void:
 	_draw_map_background()
+	_draw_city_plan()
 	_draw_routes()
+	_draw_facility_foundation()
 	_draw_boundary_portals()
+	_draw_ambient_city_life()
 	_draw_facility()
 	_draw_ports()
 	_draw_delivery()
@@ -324,8 +428,9 @@ func _draw() -> void:
 func _draw_map_background() -> void:
 	var texture: Texture2D = _map_textures.get(_system_id(), null)
 	var rect := Rect2(MAP_ORIGIN, MAP_SIZE)
+	draw_rect(rect, CohesiveMapVisuals.GROUND)
 	if texture != null:
-		draw_texture_rect(texture, rect, false)
+		draw_texture_rect(texture, rect, false, Color(1.0, 1.0, 1.0, 0.62))
 	else:
 		CohesiveMapVisuals.draw_ground(
 			self,
@@ -335,8 +440,226 @@ func _draw_map_background() -> void:
 			false
 		)
 	var accent: Color = SYSTEMS[_current_system_index]["accent"]
-	draw_rect(rect, Color(accent, 0.06))
+	draw_rect(rect, Color("#FFE1D2", 0.12))
+	draw_rect(rect, Color(accent, 0.08))
 	draw_rect(rect, Color(accent, 0.40), false, 2.0)
+
+
+func _draw_city_plan() -> void:
+	_draw_development_zone()
+	for path in _city_avenues():
+		_draw_city_avenue(path)
+	_draw_city_props()
+
+
+func _draw_development_zone() -> void:
+	var zone := _current_build_zone()
+	var rect := Rect2(
+		_grid_to_pixel(zone.position),
+		Vector2(zone.size * TILE_SIZE_PX)
+	)
+	var accent: Color = SYSTEMS[_current_system_index]["accent"]
+	draw_rect(rect, Color("#FFD6C3", 0.76))
+	draw_rect(rect.grow(-4.0), Color("#F8B8A9", 0.34))
+	draw_rect(rect, Color(accent, 0.78), false, 2.0)
+	for corner in [
+		rect.position + Vector2(6, 6),
+		Vector2(rect.end.x - 6, rect.position.y + 6),
+		Vector2(rect.position.x + 6, rect.end.y - 6),
+		rect.end - Vector2(6, 6),
+	]:
+		draw_circle(corner, 3.0, COLOR_PORTAL_LIGHT)
+	if _mode == Mode.PLACING:
+		var pulse := 0.48 + sin(_ambient_phase * 4.0) * 0.12
+		draw_rect(rect.grow(-2.0), Color(accent, pulse), false, 2.0)
+		for column in range(zone.position.x, zone.end.x + 1):
+			var x := MAP_ORIGIN.x + column * TILE_SIZE_PX
+			draw_line(
+				Vector2(x, rect.position.y),
+				Vector2(x, rect.end.y),
+				Color(accent, 0.18),
+				1.0
+			)
+		for row in range(zone.position.y, zone.end.y + 1):
+			var y := MAP_ORIGIN.y + row * TILE_SIZE_PX
+			draw_line(
+				Vector2(rect.position.x, y),
+				Vector2(rect.end.x, y),
+				Color(accent, 0.18),
+				1.0
+			)
+
+
+func _draw_city_avenue(path: Array[Vector2i]) -> void:
+	if path.is_empty():
+		return
+	for index in range(path.size() - 1):
+		var from := _cell_center(path[index])
+		var to := _cell_center(path[index + 1])
+		draw_line(from, to, Color("#4E2948", 0.76), 20.0)
+		draw_line(from, to, Color("#D77F86", 0.92), 15.0)
+	for cell in path:
+		draw_circle(_cell_center(cell), 7.5, Color("#D77F86"))
+	CohesiveMapVisuals.draw_path(
+		self,
+		path,
+		MAP_ORIGIN,
+		TILE_SIZE_PX,
+		_road_textures
+	)
+
+
+func _draw_city_props() -> void:
+	var props: Array = CITY_LAYOUTS[_current_system_index]["props"]
+	for prop_value in props:
+		var prop: Dictionary = prop_value
+		var logical_name: StringName = prop["asset"]
+		var size: Vector2 = prop["size"]
+		var position := _grid_to_pixel(prop["cell"])
+		var rect := Rect2(position, size)
+		var ground_rect := Rect2(
+			Vector2(rect.position.x - 4.0, rect.end.y - 14.0),
+			Vector2(rect.size.x + 8.0, 14.0)
+		)
+		draw_rect(ground_rect, Color("#FFD9C9", 0.90))
+		draw_rect(ground_rect, Color("#752754", 0.45), false, 1.0)
+		draw_circle(
+			Vector2(rect.get_center().x, rect.end.y - 4.0),
+			minf(20.0, rect.size.x * 0.30),
+			Color(0.12, 0.05, 0.14, 0.25)
+		)
+		var texture: Texture2D = _prop_textures.get(logical_name, null)
+		if texture != null:
+			draw_texture_rect(texture, rect, false)
+
+
+func _draw_facility_foundation() -> void:
+	if not _facility_origins.has(_system_id()):
+		return
+	var origin: Vector2i = _facility_origins[_system_id()]
+	var building_rect := Rect2(
+		_grid_to_pixel(origin),
+		Vector2(FACILITY_FOOTPRINT * TILE_SIZE_PX)
+	)
+	var plaza := building_rect.grow(7.0)
+	draw_rect(plaza, Color("#FFE0C8", 0.94))
+	draw_rect(plaza.grow(-3.0), Color("#F3AA9D", 0.55))
+	draw_rect(plaza, Color("#752754", 0.72), false, 2.0)
+	var left_port := _cell_center(Vector2i(origin.x - 1, origin.y + 3))
+	var right_port := _cell_center(
+		Vector2i(origin.x + FACILITY_FOOTPRINT.x, origin.y + 3)
+	)
+	var middle_y := building_rect.position.y + 3.5 * TILE_SIZE_PX
+	draw_line(
+		Vector2(left_port.x, middle_y),
+		Vector2(building_rect.position.x + 4.0, middle_y),
+		Color("#D77F86"),
+		12.0
+	)
+	draw_line(
+		Vector2(building_rect.end.x - 4.0, middle_y),
+		Vector2(right_port.x, middle_y),
+		Color("#D77F86"),
+		12.0
+	)
+	draw_line(
+		Vector2(building_rect.end.x - 4.0, middle_y),
+		Vector2(right_port.x, middle_y),
+		COLOR_PORTAL_LIGHT,
+		2.0
+	)
+
+
+func _draw_ambient_city_life() -> void:
+	var lane_points: Array = CITY_LAYOUTS[_current_system_index]["citizen_lane"]
+	var lane := _route_through(lane_points)
+	if not lane.is_empty():
+		_draw_walking_character(
+			lane,
+			_ambient_phase * 0.48,
+			0.0,
+			Color("#FFB2A6"),
+			Color("#64DDD8")
+		)
+		_draw_walking_character(
+			lane,
+			_ambient_phase * 0.42,
+			float(lane.size()) * 0.55,
+			Color("#FFF1E2"),
+			Color("#D9A3E8")
+		)
+	var vehicle_points: Array = CITY_LAYOUTS[_current_system_index]["vehicle_loop"]
+	var vehicle_path := _route_through(vehicle_points)
+	var traffic_texture: Texture2D = _vehicle_textures.get(_system_id(), null)
+	if vehicle_path.is_empty() or traffic_texture == null:
+		return
+	var progress := fmod(_ambient_phase * 0.72, float(vehicle_path.size()))
+	var position := _path_position(vehicle_path, progress)
+	draw_ellipse_shadow(Rect2(position + Vector2(-16, 6), Vector2(32, 8)))
+	var bob := sin(_ambient_phase * 5.0) * 1.0
+	draw_texture_rect(
+		traffic_texture,
+		Rect2(position + Vector2(-26, -16 + bob), Vector2(52, 32)),
+		false
+	)
+
+
+func _draw_walking_character(
+	path: Array[Vector2i],
+	progress: float,
+	offset: float,
+	body_color: Color,
+	hat_color: Color
+) -> void:
+	if path.size() < 2:
+		return
+	var span := float(path.size() - 1)
+	var cycle := fmod(progress + offset, span * 2.0)
+	var resolved := cycle if cycle <= span else span * 2.0 - cycle
+	var position := _path_position(path, resolved)
+	var step_bob := absf(sin((progress + offset) * 5.5)) * 2.0
+	draw_circle(position + Vector2(0, 8), 8.0, Color(0.12, 0.05, 0.14, 0.24))
+	_draw_cell_citizen(position + Vector2(0, -8 - step_bob), body_color, hat_color)
+
+
+func _draw_cell_citizen(
+	center: Vector2,
+	body_color: Color,
+	hat_color: Color,
+	is_worker: bool = false
+) -> void:
+	draw_circle(center, 9.0, CohesiveMapVisuals.OUTLINE)
+	draw_circle(center, 7.0, body_color)
+	draw_rect(Rect2(center + Vector2(-5, -10), Vector2(10, 4)), hat_color)
+	draw_rect(Rect2(center + Vector2(-7, -7), Vector2(14, 3)), hat_color)
+	draw_rect(
+		Rect2(center + Vector2(-4, -2), Vector2(2, 2)),
+		CohesiveMapVisuals.OUTLINE
+	)
+	draw_rect(
+		Rect2(center + Vector2(2, -2), Vector2(2, 2)),
+		CohesiveMapVisuals.OUTLINE
+	)
+	draw_line(
+		center + Vector2(-5, 6),
+		center + Vector2(-7, 12),
+		CohesiveMapVisuals.OUTLINE,
+		2.0
+	)
+	draw_line(
+		center + Vector2(5, 6),
+		center + Vector2(7, 12),
+		CohesiveMapVisuals.OUTLINE,
+		2.0
+	)
+	if is_worker:
+		draw_line(
+			center + Vector2(8, 1),
+			center + Vector2(13, -5),
+			COLOR_PORTAL_LIGHT,
+			2.0
+		)
+		draw_circle(center + Vector2(14, -6), 2.0, COLOR_PORTAL_LIGHT)
 
 
 func _draw_routes() -> void:
@@ -478,6 +801,19 @@ func _draw_construction_animation(rect: Rect2) -> void:
 	draw_rect(
 		Rect2(progress_rect.position, Vector2(progress_rect.size.x * progress, 5.0)),
 		COLOR_VALID
+	)
+	var worker_bob := absf(sin(_ambient_phase * 6.0)) * 2.0
+	_draw_cell_citizen(
+		rect.position + Vector2(-2, rect.size.y - 13 - worker_bob),
+		Color("#FFB2A6"),
+		Color("#F4B860"),
+		true
+	)
+	_draw_cell_citizen(
+		rect.position + Vector2(rect.size.x + 2, 12 + worker_bob),
+		Color("#FFF1E2"),
+		Color("#F4B860"),
+		true
 	)
 
 
@@ -774,7 +1110,7 @@ func _select_facility() -> void:
 		)
 	_mode = Mode.PLACING
 	_set_feedback(
-		"Place the 6 × 6 facility anywhere it fits. Cost and build time follow the cursor.",
+		"Place the 6 × 6 facility inside the highlighted civic construction zone.",
 		false
 	)
 	_refresh_interface()
@@ -789,7 +1125,7 @@ func _place_facility_at(origin: Vector2i) -> bool:
 	build_tool.set_preview(origin)
 	if not build_tool.place_preview():
 		_set_feedback(
-			"The complete 6 × 6 facility must fit on the map and avoid occupied cells.",
+			"The complete 6 × 6 facility must stay inside the highlighted construction zone.",
 			true
 		)
 		queue_redraw()
@@ -1119,7 +1455,7 @@ func _initialize_gameplay_tools() -> void:
 		build_tool.configure(
 			GRID_SIZE,
 			FACILITY_FOOTPRINT,
-			FULL_MAP_BUILD_ZONE,
+			_build_zone_for(index),
 			blocked_cells
 		)
 		_build_tools[system_id] = build_tool
@@ -1455,7 +1791,7 @@ func _objective_text() -> String:
 	if _mode == Mode.COMPLETE:
 		return "Body network complete: all system maps exchange resources."
 	if _mode == Mode.PLACING:
-		return "Place %s anywhere it fits on the map." % SYSTEMS[_current_system_index]["facility"]
+		return "Place %s inside the highlighted civic construction zone." % SYSTEMS[_current_system_index]["facility"]
 	if _mode == Mode.CONSTRUCTING:
 		return "Constructing %s: %d%% complete." % [
 			SYSTEMS[_current_system_index]["facility"],
@@ -1516,6 +1852,8 @@ func _load_textures() -> void:
 		_vehicle_textures[system_id] = AssetLoader.get_static_texture(
 			system["vehicle_asset"]
 		)
+	for logical_name in PROP_ASSETS:
+		_prop_textures[logical_name] = AssetLoader.get_static_texture(logical_name)
 
 
 func _is_valid_origin(origin: Vector2i) -> bool:
@@ -1525,6 +1863,34 @@ func _is_valid_origin(origin: Vector2i) -> bool:
 func _entry_route_for(index: int) -> Array[Vector2i]:
 	var start := Vector2i(0, EXIT_ROWS[index])
 	return _orthogonal_route(start, STAGING_CELLS[index])
+
+
+func _current_build_zone() -> Rect2i:
+	return _build_zone_for(_current_system_index)
+
+
+func _build_zone_for(index: int) -> Rect2i:
+	return CITY_LAYOUTS[index]["build_zone"]
+
+
+func _city_avenues() -> Array[Array]:
+	var result: Array[Array] = []
+	var avenue_points: Array = CITY_LAYOUTS[_current_system_index]["avenues"]
+	for points in avenue_points:
+		result.append(_route_through(points))
+	return result
+
+
+func _route_through(points: Array) -> Array[Vector2i]:
+	var route: Array[Vector2i] = []
+	if points.is_empty():
+		return route
+	for index in range(points.size() - 1):
+		var segment := _orthogonal_route(points[index], points[index + 1])
+		if not route.is_empty() and not segment.is_empty():
+			segment.remove_at(0)
+		route.append_array(segment)
+	return route
 
 
 func _orthogonal_route(start: Vector2i, target: Vector2i) -> Array[Vector2i]:
@@ -1662,6 +2028,10 @@ func debug_snapshot() -> Dictionary:
 			{}
 		).duplicate(true),
 		"current_build_time_sec": _current_build_time_sec(),
+		"current_build_zone": _current_build_zone(),
+		"background_avenue_count": _city_avenues().size(),
+		"ambient_actor_count": 3,
+		"service_apron_active": _facility_origins.has(system_id),
 		"delivery_path": _delivery_path.duplicate(),
 		"route": _route_for(_outgoing_routes, system_id),
 		"route_metrics": _route_metrics.get(system_id, {}).duplicate(true),
