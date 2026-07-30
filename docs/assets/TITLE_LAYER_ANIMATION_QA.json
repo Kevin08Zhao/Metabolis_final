@@ -1,0 +1,81 @@
+{
+  "status": "PASS",
+  "total_png_frames": 384,
+  "expected_png_frames": 384,
+  "output": "art/animations/title_layers",
+  "manifest": "art/animations/title_layers/manifest.json",
+  "manifest_sha256": "269a09602aa1e989ef73a5aeb67ae5f56d9e999dd3802db0c1081d9c018026ec",
+  "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
+  "specification_sha256": "722d08f999aa08dbe4abc6e7c1f73f00a876a1f38e10d4f2ce3c58b7f4ee0d99",
+  "checks": {
+    "01_sky": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 10,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "all_frames_opaque": true
+    },
+    "02_terrain": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 9,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63
+    },
+    "03_main_building": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 13,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "minimum_road_clearance_pixels": 9.438,
+      "never_intersects_road": true
+    },
+    "04_small_buildings": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 13,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "minimum_road_clearance_pixels": 2.625,
+      "never_intersects_road": true
+    },
+    "05_vehicle_cargo": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 17,
+      "nonempty_frame_count": 43,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 42
+    },
+    "06_roadside_props": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 16,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63
+    }
+  },
+  "preview": {
+    "gif": "art/previews/title_layers_animation/metabolis_title_layer_animation.gif",
+    "contact_sheet": "art/previews/title_layers_animation/metabolis_title_layer_animation_contact.png"
+  }
+}

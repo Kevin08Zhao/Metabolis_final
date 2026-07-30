@@ -1,0 +1,5696 @@
+{
+  "canvas": {
+    "width": 320,
+    "height": 180
+  },
+  "fps": 8,
+  "duration_seconds": 8,
+  "frame_count_per_layer": 64,
+  "file_pattern": "frame_%03d.png",
+  "layer_order": [
+    "01_sky",
+    "02_terrain",
+    "03_main_building",
+    "04_small_buildings",
+    "05_vehicle_cargo",
+    "06_roadside_props"
+  ],
+  "timeline": [
+    {
+      "frames": [
+        0,
+        13
+      ],
+      "event": "truck enters from lower-left and approaches main building"
+    },
+    {
+      "frames": [
+        12,
+        16
+      ],
+      "event": "cargo appears at fixed unload anchor (160,99)"
+    },
+    {
+      "frames": [
+        16,
+        36
+      ],
+      "event": "afternoon transitions through dusk to night"
+    },
+    {
+      "frames": [
+        18,
+        40
+      ],
+      "event": "main building completes bottom-to-top"
+    },
+    {
+      "frames": [
+        22,
+        46
+      ],
+      "event": "three small buildings complete sequentially"
+    },
+    {
+      "frames": [
+        23,
+        38
+      ],
+      "event": "truck departs toward the off-canvas vanishing point"
+    },
+    {
+      "frames": [
+        29,
+        43
+      ],
+      "event": "delivered cargo is consumed"
+    },
+    {
+      "frames": [
+        44,
+        55
+      ],
+      "event": "four main-building windows perform chamber pulse sequence"
+    },
+    {
+      "frames": [
+        56,
+        63
+      ],
+      "event": "dawn begins and roadside lamps turn down"
+    }
+  ],
+  "truck_scale_formula": "scale = 0.65 + 0.35 * clamp(distance_to_vanishing_point / stop_distance, 0.15, 1.8)",
+  "source_keyframes": "art/previews/title_layers_static",
+  "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
+  "frame_contract": [
+    {
+      "frame": 0,
+      "time_seconds": 0.0,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            278,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          -15.0,
+          171.0
+        ],
+        "truck_scale": 1.2627,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 0.0,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 1,
+      "time_seconds": 0.125,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            278,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          -12.537,
+          170.721
+        ],
+        "truck_scale": 1.2589,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 0.3927,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 2,
+      "time_seconds": 0.25,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            279,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          -5.64,
+          169.842
+        ],
+        "truck_scale": 1.248,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 0.7854,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 3,
+      "time_seconds": 0.375,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            280,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          4.993,
+          168.216
+        ],
+        "truck_scale": 1.2312,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 1.1781,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 4,
+      "time_seconds": 0.5,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            282,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          18.675,
+          165.655
+        ],
+        "truck_scale": 1.2094,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 1.5708,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 5,
+      "time_seconds": 0.625,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            284,
+            44
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          34.704,
+          162.018
+        ],
+        "truck_scale": 1.1836,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 1.9635,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 6,
+      "time_seconds": 0.75,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            287,
+            45
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          52.334,
+          157.266
+        ],
+        "truck_scale": 1.155,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 2.3562,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 7,
+      "time_seconds": 0.875,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              28,
+              24
+            ],
+            [
+              168,
+              42
+            ]
+          ],
+          "sun": [
+            290,
+            45
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          70.759,
+          151.508
+        ],
+        "truck_scale": 1.1247,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 2.7489,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 8,
+      "time_seconds": 1.0,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              168,
+              41
+            ]
+          ],
+          "sun": [
+            292,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          89.105,
+          145.017
+        ],
+        "truck_scale": 1.0942,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 3.1416,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 9,
+      "time_seconds": 1.125,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              168,
+              41
+            ]
+          ],
+          "sun": [
+            296,
+            47
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          106.431,
+          138.231
+        ],
+        "truck_scale": 1.0652,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 3.5343,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 10,
+      "time_seconds": 1.25,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            299,
+            49
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          121.734,
+          131.734
+        ],
+        "truck_scale": 1.0394,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 3.927,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 11,
+      "time_seconds": 1.375,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            302,
+            50
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          133.969,
+          126.215
+        ],
+        "truck_scale": 1.0187,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 4.3197,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 12,
+      "time_seconds": 1.5,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            306,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          142.074,
+          122.405
+        ],
+        "truck_scale": 1.005,
+        "cargo_phase": "appearing",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 4.7124,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 13,
+      "time_seconds": 1.625,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            309,
+            54
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "arriving",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "appearing",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.1562
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 5.1051,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 14,
+      "time_seconds": 1.75,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            312,
+            57
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "appearing",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.5
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 5.4978,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 15,
+      "time_seconds": 1.875,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              29,
+              24
+            ],
+            [
+              169,
+              41
+            ]
+          ],
+          "sun": [
+            316,
+            59
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "appearing",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.8438
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 5.8905,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 16,
+      "time_seconds": 2.0,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              24
+            ],
+            [
+              169,
+              42
+            ]
+          ],
+          "sun": [
+            318,
+            62
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0,
+        "grass_sway_phase_radians": 6.2832,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 17,
+      "time_seconds": 2.125,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              24
+            ],
+            [
+              169,
+              42
+            ]
+          ],
+          "sun": [
+            321,
+            64
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0073,
+        "grass_sway_phase_radians": 6.6759,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 18,
+      "time_seconds": 2.25,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              24
+            ],
+            [
+              169,
+              42
+            ]
+          ],
+          "sun": [
+            324,
+            66
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.028,
+        "grass_sway_phase_radians": 7.0686,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 19,
+      "time_seconds": 2.375,
+      "01_sky": {
+        "palette_state": "afternoon_amber",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              24
+            ],
+            [
+              169,
+              42
+            ]
+          ],
+          "sun": [
+            326,
+            69
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.006,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.0607,
+        "grass_sway_phase_radians": 7.4613,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 20,
+      "time_seconds": 2.5,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "sun": [
+            328,
+            70
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0233,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.104,
+        "grass_sway_phase_radians": 7.854,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 21,
+      "time_seconds": 2.625,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "sun": [
+            329,
+            72
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0507,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.1562,
+        "grass_sway_phase_radians": 8.2467,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 22,
+      "time_seconds": 2.75,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "sun": [
+            330,
+            73
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.0872,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "unloading",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.216,
+        "grass_sway_phase_radians": 8.6394,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 23,
+      "time_seconds": 2.875,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              30,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "sun": [
+            330,
+            73
+          ],
+          "moon": [
+            -8,
+            70
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "day",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.1315,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0197,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          145.0,
+          121.0
+        ],
+        "truck_scale": 1.0,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.2817,
+        "grass_sway_phase_radians": 9.0321,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 24,
+      "time_seconds": 3.0,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            -7,
+            70
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.1826,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.0741,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          147.22,
+          120.666
+        ],
+        "truck_scale": 0.9965,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.352,
+        "grass_sway_phase_radians": 9.4248,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 25,
+      "time_seconds": 3.125,
+      "01_sky": {
+        "palette_state": "dusk_tissue",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            -5,
+            69
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.2393,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.1562,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          153.5,
+          119.701
+        ],
+        "truck_scale": 0.9865,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.4253,
+        "grass_sway_phase_radians": 9.8175,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 26,
+      "time_seconds": 3.25,
+      "01_sky": {
+        "palette_state": "dusk_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            -1,
+            68
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.3005,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.2593,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          163.302,
+          118.134
+        ],
+        "truck_scale": 0.971,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.5,
+        "grass_sway_phase_radians": 10.2102,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 27,
+      "time_seconds": 3.375,
+      "01_sky": {
+        "palette_state": "dusk_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              25
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            4,
+            67
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.3651,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.3762,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          176.105,
+          115.978
+        ],
+        "truck_scale": 0.9506,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.5748,
+        "grass_sway_phase_radians": 10.6029,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 28,
+      "time_seconds": 3.5,
+      "01_sky": {
+        "palette_state": "dusk_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              24
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            9,
+            65
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.432,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.5,
+          0.0,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          191.388,
+          113.251
+        ],
+        "truck_scale": 0.9262,
+        "cargo_phase": "delivered",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.648,
+        "grass_sway_phase_radians": 10.9956,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 29,
+      "time_seconds": 3.625,
+      "01_sky": {
+        "palette_state": "dusk_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              24
+            ],
+            [
+              170,
+              42
+            ]
+          ],
+          "moon": [
+            15,
+            64
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.5,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.6238,
+          0.0197,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          208.602,
+          109.989
+        ],
+        "truck_scale": 0.8988,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 1.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.7183,
+        "grass_sway_phase_radians": 11.3883,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 30,
+      "time_seconds": 3.75,
+      "01_sky": {
+        "palette_state": "night_blue",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            22,
+            62
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.568,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.7407,
+          0.0741,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          227.162,
+          106.26
+        ],
+        "truck_scale": 0.869,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.9854
+      },
+      "06_roadside_props": {
+        "night_factor": 0.784,
+        "grass_sway_phase_radians": 11.781,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 31,
+      "time_seconds": 3.875,
+      "01_sky": {
+        "palette_state": "night_blue",
+        "objects": {
+          "clouds": [
+            [
+              31,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            28,
+            60
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.6349,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.8438,
+          0.1562,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          246.433,
+          102.166
+        ],
+        "truck_scale": 0.8381,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.9446
+      },
+      "06_roadside_props": {
+        "night_factor": 0.8438,
+        "grass_sway_phase_radians": 12.1737,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 32,
+      "time_seconds": 4.0,
+      "01_sky": {
+        "palette_state": "night_blue",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            35,
+            58
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.6995,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.9259,
+          0.2593,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          265.73,
+          97.853
+        ],
+        "truck_scale": 0.8071,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.8819
+      },
+      "06_roadside_props": {
+        "night_factor": 0.896,
+        "grass_sway_phase_radians": 12.5664,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 33,
+      "time_seconds": 4.125,
+      "01_sky": {
+        "palette_state": "night_blue",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            41,
+            57
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.7607,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          0.9803,
+          0.3762,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          284.314,
+          93.51
+        ],
+        "truck_scale": 0.7771,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.8017
+      },
+      "06_roadside_props": {
+        "night_factor": 0.9392,
+        "grass_sway_phase_radians": 12.9591,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 34,
+      "time_seconds": 4.25,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            46,
+            55
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.8174,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.5,
+          0.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          301.398,
+          89.361
+        ],
+        "truck_scale": 0.7495,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.7085
+      },
+      "06_roadside_props": {
+        "night_factor": 0.972,
+        "grass_sway_phase_radians": 13.3518,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 35,
+      "time_seconds": 4.375,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            51,
+            54
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.8685,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.6238,
+          0.0197
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          316.158,
+          85.662
+        ],
+        "truck_scale": 0.7256,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.6064
+      },
+      "06_roadside_props": {
+        "night_factor": 0.9928,
+        "grass_sway_phase_radians": 13.7445,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 36,
+      "time_seconds": 4.5,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            55,
+            53
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.9128,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.7407,
+          0.0741
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          327.743,
+          82.686
+        ],
+        "truck_scale": 0.7068,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.5
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 14.1372,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 37,
+      "time_seconds": 4.625,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            57,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.9493,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.8438,
+          0.1562
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          335.302,
+          80.711
+        ],
+        "truck_scale": 0.7025,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.3936
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 14.5299,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 38,
+      "time_seconds": 4.75,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            58,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.9767,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.9259,
+          0.2593
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "departing",
+        "truck_center": [
+          338.0,
+          80.0
+        ],
+        "truck_scale": 0.7025,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.2915
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 14.9226,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 39,
+      "time_seconds": 4.875,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              32,
+              24
+            ],
+            [
+              171,
+              42
+            ]
+          ],
+          "moon": [
+            58,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 0.994,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          0.9803,
+          0.3762
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.1983
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 15.3153,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 40,
+      "time_seconds": 5.0,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            59,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.5
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.1181
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 15.708,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 41,
+      "time_seconds": 5.125,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            60,
+            52
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.6238
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0554
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 16.1007,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "hidden",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 42,
+      "time_seconds": 5.25,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            61,
+            51
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.7407
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0146
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 16.4934,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 43,
+      "time_seconds": 5.375,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            63,
+            51
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.8438
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "consumed",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 16.8861,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 44,
+      "time_seconds": 5.5,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            65,
+            50
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          0
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.9259
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 17.2788,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 45,
+      "time_seconds": 5.625,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            67,
+            50
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          0
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          0.9803
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 17.6715,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 46,
+      "time_seconds": 5.75,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            69,
+            49
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          1
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 18.0642,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 47,
+      "time_seconds": 5.875,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              33,
+              24
+            ],
+            [
+              172,
+              41
+            ]
+          ],
+          "moon": [
+            71,
+            49
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          1
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 18.4569,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 48,
+      "time_seconds": 6.0,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              24
+            ],
+            [
+              172,
+              42
+            ]
+          ],
+          "moon": [
+            73,
+            48
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          2
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 18.8496,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 49,
+      "time_seconds": 6.125,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              24
+            ],
+            [
+              172,
+              42
+            ]
+          ],
+          "moon": [
+            75,
+            48
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          2
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 19.2423,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 50,
+      "time_seconds": 6.25,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              24
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            77,
+            47
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          3
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 19.635,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 51,
+      "time_seconds": 6.375,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              24
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            79,
+            47
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          3
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 20.0277,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "title_and_subtitle_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 52,
+      "time_seconds": 6.5,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            80,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 20.4204,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 53,
+      "time_seconds": 6.625,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            81,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 20.8131,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 54,
+      "time_seconds": 6.75,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            82,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 21.2058,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 55,
+      "time_seconds": 6.875,
+      "01_sky": {
+        "palette_state": "night_blue_dark",
+        "objects": {
+          "clouds": [
+            [
+              34,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            82,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "night",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 21.5984,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 56,
+      "time_seconds": 7.0,
+      "01_sky": {
+        "palette_state": "dawn_blue",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            82,
+            46
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 1.0,
+        "grass_sway_phase_radians": 21.9911,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 57,
+      "time_seconds": 7.125,
+      "01_sky": {
+        "palette_state": "dawn_blue",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            84,
+            47
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.964,
+        "grass_sway_phase_radians": 22.3838,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 58,
+      "time_seconds": 7.25,
+      "01_sky": {
+        "palette_state": "dawn_blue",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            88,
+            50
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.8711,
+        "grass_sway_phase_radians": 22.7765,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 59,
+      "time_seconds": 7.375,
+      "01_sky": {
+        "palette_state": "dawn_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              25
+            ],
+            [
+              173,
+              42
+            ]
+          ],
+          "moon": [
+            93,
+            53
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "late_dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.7442,
+        "grass_sway_phase_radians": 23.1692,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "menu_entering",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 60,
+      "time_seconds": 7.5,
+      "01_sky": {
+        "palette_state": "dawn_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              24
+            ],
+            [
+              174,
+              42
+            ]
+          ],
+          "moon": [
+            99,
+            57
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.6058,
+        "grass_sway_phase_radians": 23.5619,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "interactive",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 61,
+      "time_seconds": 7.625,
+      "01_sky": {
+        "palette_state": "dawn_blue_light",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              24
+            ],
+            [
+              174,
+              42
+            ]
+          ],
+          "moon": [
+            104,
+            60
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.4789,
+        "grass_sway_phase_radians": 23.9546,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "interactive",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 62,
+      "time_seconds": 7.75,
+      "01_sky": {
+        "palette_state": "dawn_tissue",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              24
+            ],
+            [
+              174,
+              42
+            ]
+          ],
+          "moon": [
+            108,
+            63
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.386,
+        "grass_sway_phase_radians": 24.3473,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "interactive",
+        "image_layer": false
+      }
+    },
+    {
+      "frame": 63,
+      "time_seconds": 7.875,
+      "01_sky": {
+        "palette_state": "dawn_tissue",
+        "objects": {
+          "clouds": [
+            [
+              35,
+              24
+            ],
+            [
+              174,
+              42
+            ]
+          ],
+          "moon": [
+            110,
+            64
+          ]
+        }
+      },
+      "02_terrain": {
+        "palette_state": "dusk",
+        "road_geometry": "locked"
+      },
+      "03_main_building": {
+        "build_progress": 1.0,
+        "active_windows": [],
+        "footprint": "locked"
+      },
+      "04_small_buildings": {
+        "build_progress": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "footprints": "locked"
+      },
+      "05_vehicle_cargo": {
+        "truck_phase": "absent",
+        "truck_center": null,
+        "truck_scale": null,
+        "cargo_phase": "absent",
+        "cargo_anchor": [
+          160,
+          99
+        ],
+        "cargo_visibility": 0.0
+      },
+      "06_roadside_props": {
+        "night_factor": 0.35,
+        "grass_sway_phase_radians": 24.74,
+        "anchors": "locked"
+      },
+      "godot_ui": {
+        "phase": "interactive",
+        "image_layer": false
+      }
+    }
+  ],
+  "checks": {
+    "01_sky": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 10,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "all_frames_opaque": true
+    },
+    "02_terrain": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 9,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63
+    },
+    "03_main_building": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 13,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "minimum_road_clearance_pixels": 9.438,
+      "never_intersects_road": true
+    },
+    "04_small_buildings": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 13,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63,
+      "minimum_road_clearance_pixels": 2.625,
+      "never_intersects_road": true
+    },
+    "05_vehicle_cargo": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 17,
+      "nonempty_frame_count": 43,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 42
+    },
+    "06_roadside_props": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 16,
+      "nonempty_frame_count": 64,
+      "first_nonempty_frame": 0,
+      "last_nonempty_frame": 63
+    }
+  },
+  "files": {
+    "01_sky": [
+      {
+        "path": "art/animations/title_layers/01_sky/frame_000.png",
+        "sha256": "8b7fae4c3b38c9c1932ead5c1776c9c89ac13f8cef5f09722360822cac795226"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_001.png",
+        "sha256": "8b7fae4c3b38c9c1932ead5c1776c9c89ac13f8cef5f09722360822cac795226"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_002.png",
+        "sha256": "c879077c81f065f561e1c584ad84e8b6f3ba889c74696515d6e204cda480cf80"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_003.png",
+        "sha256": "f3e83fed637e43f6a41060e3cb5a717ab991f385fc0175ad1634581de6182eff"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_004.png",
+        "sha256": "25d6bc7ab7aad8718f87ade128751f2286169b7afaef8a5c69b9cf7104dc6fdf"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_005.png",
+        "sha256": "08ed7170f1cbc381c6089a9ef7f482a566e3a21aa1bd98cc3b67c7f06ddc31b1"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_006.png",
+        "sha256": "a40855d386b38207fe2d56087cf84f412ff5ee14258767518ea1a29cd7a2fa8e"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_007.png",
+        "sha256": "7671e0f7342c33710582d2c45d814a3e2812a2f3678a11d5e4a9d14f699364f3"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_008.png",
+        "sha256": "f4bf0c8d8dd8a03b832e9eecd805641788f855d59e3ed99e161948fe3ea4a777"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_009.png",
+        "sha256": "29bcd5f23e4423ef96bc62d5f383e793421af34f22f172fd51cef7fa8222b310"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_010.png",
+        "sha256": "d2fc1cde66b10ae42f461f98a1cf54bf26d3f15dd4b7d0b6c17a77c64cb85b77"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_011.png",
+        "sha256": "ea6ba0b44f455bd65e48dc299ceac80cf86333b61b4c14542f8f4020642dd954"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_012.png",
+        "sha256": "c487ec9729a4fec627fd05cea7bfb45d3011dc110dae9dd727039cc7cc3b098b"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_013.png",
+        "sha256": "b2ca9b30f13aa1916811f36e69cdf269b2c29e252cb9e6209aa7d141696c2341"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_014.png",
+        "sha256": "d16c81f438deb2ee0b26023c15c24f911483854aae572e4c8a9ce159a930b95e"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_015.png",
+        "sha256": "e8471574cf8bf19a0e096d2a2a5902a00a87620c62f63e6fa07621f6f3c03201"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_016.png",
+        "sha256": "c724371cf913924f5b8a7d9a44743161c0c540848ec58913bc1a3d35027cb5e3"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_017.png",
+        "sha256": "4d662ea2fd3473df8fd0e555c9a116433522932e4a07a7dbb8602b2e80dae77d"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_018.png",
+        "sha256": "cfdf873ebcdae6a26147c8523f6dc7d2ad7e482fe980f0d509b8cb9acd18cf24"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_019.png",
+        "sha256": "ba60d0e5316067f8f8f33faab02470b23cd487610c51c5485bba7da43f38e2b0"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_020.png",
+        "sha256": "38a635daaa40f5878c947288f17623f63dae996f92b05af8df228dbfca5a4eea"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_021.png",
+        "sha256": "25fcccf45e76fdb0a2c9c01c9ac703349bb3a3dd9f586d01bd668a84a52ddad3"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_022.png",
+        "sha256": "c6db8374605abb7850fafb0a65326ef270afff26958fd46b5d34a70b79b7c36e"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_023.png",
+        "sha256": "f29ab2a7d89e95ba3a9856fe4071901fd5299666c0108399f725c5a6d9e6d93b"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_024.png",
+        "sha256": "c8082984e6c8b1865463382793173fd59dd80642844c77d67421d770a9673334"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_025.png",
+        "sha256": "a4ea49163466a239e6fed90afecb33536b6e8a437c4a7fb40386de939f34b3d2"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_026.png",
+        "sha256": "8566b3e4335d7fca730f25f949ffd6778edbf3713fbb14648cb0d6995fdc185c"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_027.png",
+        "sha256": "408ac0796a0909b4109f790c31dc754b5eacd065fac14611c5ad80d66e15ee12"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_028.png",
+        "sha256": "09efd3ccdd254e6968ee845837c1b66648843bd848c6beb2bfa8109e03183d18"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_029.png",
+        "sha256": "d7447eddfdd2159be65f696d533f6cec4bc0e26c16cecc4c1c902ed117f526c2"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_030.png",
+        "sha256": "0ab50ad149638c189643ea09ca48ed9af801f955acf8e695944122053aa04f29"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_031.png",
+        "sha256": "8c39819362a027f8e92c9332235f2a0c1748d8053132c66ee72a21ef89168bc5"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_032.png",
+        "sha256": "608bdd22256981c9ce337541082c0af1f1a4c1ea44f36c7d62d4268421c08264"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_033.png",
+        "sha256": "16aa275e769cb8a6930d8fb392fc0d40557f5eeb356230a2cf0c627fbd0721ef"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_034.png",
+        "sha256": "35d8099a48e74cee021f40ecc6950cae8e123f32fba816bccecf3dded7e977f7"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_035.png",
+        "sha256": "46298d4ae3cbb426c01c6733fed219ef27b0ea168e4ecefec7e0170a3958c97f"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_036.png",
+        "sha256": "3d876b1139526b12228d7f2ae03f262da49848c19b52ac60fe92755ea9ffd5d9"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_037.png",
+        "sha256": "8c691aa82b91af2303932bbf1a95cf5308be5e0174bcf4fb9791e3e16f1f3a40"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_038.png",
+        "sha256": "b1e1ac7cd3be0d798cd67e20848693c97d592773d9fcea7191ed20fc59deeeae"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_039.png",
+        "sha256": "b1e1ac7cd3be0d798cd67e20848693c97d592773d9fcea7191ed20fc59deeeae"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_040.png",
+        "sha256": "1010d051b51bb7ba49db265dbfa0f2a5fde001d2d72c3301c3c56aa45b464add"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_041.png",
+        "sha256": "16935f59190db68446860a5b93caaa123b3bea6404b6147bbe2d1ab5afc0c4d3"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_042.png",
+        "sha256": "832e6e486fd88c1d7d23d26b1db9ecdc270a676e04379990193e18b7b7c3b2c9"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_043.png",
+        "sha256": "b04c54ce64d0935b3c2782b3086bf5c238980e409783a62d56bba8fabaf74943"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_044.png",
+        "sha256": "ec0c4867f1d33919ae06cf152f046b1e56955c9d3b24d967067947993b54d46c"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_045.png",
+        "sha256": "0300a9fa4f706fc47be998a9fc46f8b35f43e99fbb9c29186e797d94934304ad"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_046.png",
+        "sha256": "97590346b6fa4cc5a6bc6d244ac7f3baefd5d8c0db348e19db4137212ee0929a"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_047.png",
+        "sha256": "abde8a123e1d97acf78a12b353ad5b95e3c75f4427064c431ee329217fed7d4e"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_048.png",
+        "sha256": "9afd6132f1029ea1d4e7d1215d741b218daf03cb3b6334b36ef2ccfddd8d25bb"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_049.png",
+        "sha256": "d1bb4ba33a2a87fe019c7ebbaea0a39c675689fa57df3c4d28c203c9d4796ad0"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_050.png",
+        "sha256": "850330d8a318f33163b8e785d3e437650e1d8f9fd584a4ff18813b328f61ee9a"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_051.png",
+        "sha256": "3b41ab72afb8b29ab1cbe90726078e3098095b9a9e5efa3b9aec4b81582ddc09"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_052.png",
+        "sha256": "01c983609c25a80dd9352d264385063efcfab1ffdc817784882fc19dbe4f4a1c"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_053.png",
+        "sha256": "a6bd58bb0ed827fb592cca06a92ba2db4bd7b90762c59e98ab144df98adbda22"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_054.png",
+        "sha256": "8da1a9e218cca3f3043219534691be34610d44b3808fefd272efe73b38dfa00a"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_055.png",
+        "sha256": "8da1a9e218cca3f3043219534691be34610d44b3808fefd272efe73b38dfa00a"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_056.png",
+        "sha256": "939826dd6616f577080cfd46dd3baf21e856899ba3537a0bb0e1cd424d9bffde"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_057.png",
+        "sha256": "e82139c4e6e7e545e18353899efd54b8f16b20f19b68c6c860e020c8b3a1bf98"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_058.png",
+        "sha256": "50f4404c2d830fd7118a697793934562d93dcef1a04eca88ddaedf949f1e5ed6"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_059.png",
+        "sha256": "3a1a8c2024a733a1b4a7aef53fa3decb3bcbea88d23bc03a0d78cffbbe0fb9bd"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_060.png",
+        "sha256": "cf59d594426731267c79ce0b502daecfc26314f84f1bbc1711d33d4940c55b48"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_061.png",
+        "sha256": "047cd7ac683f976d5a736e06969740dd95f2fbab31f4fdfa2c10f8e809e6c2a6"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_062.png",
+        "sha256": "d85079fd392601eb557b492b55db6c67c194e973ba05b0359cb7c6a5bdb9eeb2"
+      },
+      {
+        "path": "art/animations/title_layers/01_sky/frame_063.png",
+        "sha256": "d02762944880be3a8a8f8a9c9ebaf67097376de4fcdb51bdc5f51e729c8e5023"
+      }
+    ],
+    "02_terrain": [
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_000.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_001.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_002.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_003.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_004.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_005.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_006.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_007.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_008.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_009.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_010.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_011.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_012.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_013.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_014.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_015.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_016.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_017.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_018.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_019.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_020.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_021.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_022.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_023.png",
+        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_024.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_025.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_026.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_027.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_028.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_029.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_030.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_031.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_032.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_033.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_034.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_035.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_036.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_037.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_038.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_039.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_040.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_041.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_042.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_043.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_044.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_045.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_046.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_047.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_048.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_049.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_050.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_051.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_052.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_053.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_054.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_055.png",
+        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_056.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_057.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_058.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_059.png",
+        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_060.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_061.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_062.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      },
+      {
+        "path": "art/animations/title_layers/02_terrain/frame_063.png",
+        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+      }
+    ],
+    "03_main_building": [
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_000.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_001.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_002.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_003.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_004.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_005.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_006.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_007.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_008.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_009.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_010.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_011.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_012.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_013.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_014.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_015.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_016.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_017.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_018.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_019.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_020.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_021.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_022.png",
+        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_023.png",
+        "sha256": "6f2513a20c0c257f5ede1923868ee9074bdb6d18cf52b283aef4dc6a072872e6"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_024.png",
+        "sha256": "6f4e6a8ec15d72016ce584bfe478ecc0efee02d962f4c206ce934328171ef8c2"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_025.png",
+        "sha256": "2d3c1c4250c6774aecf18bb72ecc21576b9577d0d559be975bb14d6466fc4fd9"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_026.png",
+        "sha256": "12bb133e2c4de77131b8f9b38eb59bfabe468a95c61201c27d16e86b5cb5eb3a"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_027.png",
+        "sha256": "53159979db914473decb4774dde086dae3cafbc0e18c439af44c92833b554110"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_028.png",
+        "sha256": "a50e1a815bcd34b65abf4485c5ef768d77a92c2234df1fe8abf40e1150105263"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_029.png",
+        "sha256": "533b87be38786eb9d973103dded496e7a10133af0c149b4e4fd74a951f0dea91"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_030.png",
+        "sha256": "0c0abec6778c3bd31f16569bb6e4546a612ccd1726fd34c72d5658a45c88966f"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_031.png",
+        "sha256": "8088d7962619a672c3fb519b74eea54abf2a2cd2b0e23ac0b6532adbbc6a392f"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_032.png",
+        "sha256": "c4342df36ebc72fa3262f5187e0928724ccf048313bed2c834fbf8ad9f47a8d4"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_033.png",
+        "sha256": "21a216b4286f41c53335a0596cb0020412212e5f720837a7523cd35f80f1e9d9"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_034.png",
+        "sha256": "2e291fcc7541bb2258ac0076a0ff38c38a4f7d475beabeb03a9949dfbe0468f1"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_035.png",
+        "sha256": "e4d526747a4a86fd1ea98b4e3ff3b2801adb82b181f01778f3d57b752aa25756"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_036.png",
+        "sha256": "6572e7cc9662a040d4ce0398eb7be79b7004cd9293ff168c58c966ae8559521e"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_037.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_038.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_039.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_040.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_041.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_042.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_043.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_044.png",
+        "sha256": "058acf63008cd1b587af583c7ab2523f9feff2d7648aba3b2c6e5cfbe916d130"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_045.png",
+        "sha256": "058acf63008cd1b587af583c7ab2523f9feff2d7648aba3b2c6e5cfbe916d130"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_046.png",
+        "sha256": "53e234ac7c2321355de1b63bc87541d95e123e7d1fc5775ad43edf95cca1c49b"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_047.png",
+        "sha256": "53e234ac7c2321355de1b63bc87541d95e123e7d1fc5775ad43edf95cca1c49b"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_048.png",
+        "sha256": "148d71a627de425d7fe1d4e9118f4112f364c8b8e00caccbdaefc12cab7eeda5"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_049.png",
+        "sha256": "148d71a627de425d7fe1d4e9118f4112f364c8b8e00caccbdaefc12cab7eeda5"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_050.png",
+        "sha256": "a6128524776c1ea7178c7233d06cf67dc46f0b5b9e32d892b7af2ed472bfb30d"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_051.png",
+        "sha256": "a6128524776c1ea7178c7233d06cf67dc46f0b5b9e32d892b7af2ed472bfb30d"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_052.png",
+        "sha256": "8c9b044f1e350585c4dea5632eb6e7b605695310c6eef4cd0f00e797f5e2a77b"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_053.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_054.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_055.png",
+        "sha256": "8c9b044f1e350585c4dea5632eb6e7b605695310c6eef4cd0f00e797f5e2a77b"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_056.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_057.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_058.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_059.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_060.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_061.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_062.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      },
+      {
+        "path": "art/animations/title_layers/03_main_building/frame_063.png",
+        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+      }
+    ],
+    "04_small_buildings": [
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_000.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_001.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_002.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_003.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_004.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_005.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_006.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_007.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_008.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_009.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_010.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_011.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_012.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_013.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_014.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_015.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_016.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_017.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_018.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_019.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_020.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_021.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_022.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_023.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_024.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_025.png",
+        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_026.png",
+        "sha256": "be98b528eb74c162c34a755170f7b6550f019098a1a8d8e0c3a06f6db0b7e4d8"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_027.png",
+        "sha256": "6447021788e6bf408640f47c6dee615e940351996cd65cda5ae5a4bc8e72edca"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_028.png",
+        "sha256": "b0727ed6dff08a8e52767be8e356cf9a46f949f49acba0faeccf3b4855d3438c"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_029.png",
+        "sha256": "fca1769f2aa8656fb89dbdaf44636d03d41131418490e90f6c8428a53ca7e54b"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_030.png",
+        "sha256": "d98b4eb1e70db8da1e93d1517a70b2027b53e1f095051fe343c7c0481834db74"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_031.png",
+        "sha256": "78d1686b4fa481ee62c327f2ef51aa0e61ebf50f8ec9a4aec47a9bce268b69c4"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_032.png",
+        "sha256": "78d1686b4fa481ee62c327f2ef51aa0e61ebf50f8ec9a4aec47a9bce268b69c4"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_033.png",
+        "sha256": "e93bf371d2ae746411bbd4e1d5b6e4c7be96e25c2777d492bfeba6f02634e637"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_034.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_035.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_036.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_037.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_038.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_039.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_040.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_041.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_042.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_043.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_044.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_045.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_046.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_047.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_048.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_049.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_050.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_051.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_052.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_053.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_054.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_055.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_056.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_057.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_058.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_059.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_060.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_061.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_062.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      },
+      {
+        "path": "art/animations/title_layers/04_small_buildings/frame_063.png",
+        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+      }
+    ],
+    "05_vehicle_cargo": [
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_000.png",
+        "sha256": "23863d635af6dd7f7fe0c20d33e65cf13f42da768f14ed3d3fced7e96719466e"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_001.png",
+        "sha256": "c1c2882086aa5d37078502efad2efee7fa6284ddb82a922745ff944d834630dc"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_002.png",
+        "sha256": "f4540e8ae6d00d39abf9ef5fd8d291051dc3c47acad9149eaf707f1fe00bfd9d"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_003.png",
+        "sha256": "8fb40dcd0d9e57f4a0ec4a226f8aa04c89295a35a8c6e126dbc80580e2cef083"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_004.png",
+        "sha256": "9d1349fbd76f2499f787dc50ee5a4caaf80f882a9918df31e25eca4a3fdec6a5"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_005.png",
+        "sha256": "826fac07a5c38c8dedfc51ea3ffc46c244a238188e8e29c77076fd0bab453a86"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_006.png",
+        "sha256": "2b575a77e4413bf1ee5e24561b2aef65f1341d16243f8d314056ce38ea335b0d"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_007.png",
+        "sha256": "ea7191b1cd617baa4d3d15bb4a9f2f7cc2b09afc6966585c84822936eb4b1ae5"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_008.png",
+        "sha256": "a2f5202a6662aae97a3a4b7081560dcac40a7b4453a5b544f35e481cd1b2eb25"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_009.png",
+        "sha256": "d904973f06b988717df2bae9fdd6132ed9d4249074a0df9a1b3cd2108c91bd1c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_010.png",
+        "sha256": "4259cc15cda5dc5eb2207b5beb8e5a730ac6595930bed106d092d27060140cdf"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_011.png",
+        "sha256": "dfd012b0339e95ecfd5870f0d6872bd577fde408f5dde02917b4727dec1522b9"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_012.png",
+        "sha256": "3ad4d4eeef240430357ce935c9946569a92f13fbf5266a5f8ccf9b69f03b1a75"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_013.png",
+        "sha256": "2097be383daa31a5334d749e1d85788d716b4017a9376b9359e5bed1dc92e866"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_014.png",
+        "sha256": "81ba92a70940881535fdb3215d18f35f469d5d6628486e896bdf1fe2db0dba86"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_015.png",
+        "sha256": "eb96d9e8af991d3adb9f99f038eba5ee666483f84a3484d20c99e7cf5bd15da3"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_016.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_017.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_018.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_019.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_020.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_021.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_022.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_023.png",
+        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_024.png",
+        "sha256": "1dbda64f339430fe6981db69904d78f50377b65b1c00986d9503f8d0e4e891e3"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_025.png",
+        "sha256": "55c67d38bdc4c545c1a0716c405348ca2611cf1dd2330e36f9f2fb906dcde833"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_026.png",
+        "sha256": "c881d93207ab8028a46f8e16591a7004b5bc072dbc3619c75d6198d3f8adba8a"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_027.png",
+        "sha256": "8f709f952ae5095fd2ec216c2996fdca715b51929001f7dbfa30a5548c4a5c30"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_028.png",
+        "sha256": "fa8e21e1a23293140d33abc63fd08eae588a2e64c11360ab06ee6333f3f6fd2c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_029.png",
+        "sha256": "2a9f6aae98b1d0785facdfa37d6a3b39aecef1e51012f42d8fef425d0147ea3e"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_030.png",
+        "sha256": "4aa8502546a740bf48112c74ecee4318026588e1b9056a8782743bb40cc1ed0f"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_031.png",
+        "sha256": "47164f74e3059108b55284b50a0da8ed4c4e11f457d92e4e9e6d88a6bde0a9de"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_032.png",
+        "sha256": "af2260170b5996bc72229ae22623ce55a926ba1687a07e467f3c16de3c30cce6"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_033.png",
+        "sha256": "0abdcab6fd98814ed946a8db52767e6a66c4592b21ba5999520e9cd6846209b1"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_034.png",
+        "sha256": "b5585f80f7ac131bccd4f4b567e25099ea6e552a19bc63b26098151678f72368"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_035.png",
+        "sha256": "52fc4ccbbd10ca5a99ef5eab04968dd9da5c179bacccfdd2b17ce5f44e4b51c8"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_036.png",
+        "sha256": "8af68ea320ebd05826b8758db0f47de0635cbc93796e419ccfd54d4e393ae797"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_037.png",
+        "sha256": "d5b784a7365b3c026b6a2b3a47e988bce03ce678d6c14fbc0ca77547dc626c10"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_038.png",
+        "sha256": "d8ccf0dc96ab24a1ce5e43fbb21e738d11c25affef52cc99e52fc0115529fa99"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_039.png",
+        "sha256": "e2a0a608ec0535eaa507e94b70f5b6a6d33922bd0ab154becbb8fe87e6212ab3"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_040.png",
+        "sha256": "1aca1c1529397045364f44a4d7335d3ebcfdb37d6d72df6bdc7aeae789d11bc8"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_041.png",
+        "sha256": "70802358ced140e385d8c068c41a5e30e2e892c97f0f395330cbad6565e8d2f9"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_042.png",
+        "sha256": "d297a9f670635b61a4968df7edef74bd0a7b2b58d494bc27b858aca488dbce11"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_043.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_044.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_045.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_046.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_047.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_048.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_049.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_050.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_051.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_052.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_053.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_054.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_055.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_056.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_057.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_058.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_059.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_060.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_061.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_062.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_cargo/frame_063.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+      }
+    ],
+    "06_roadside_props": [
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_000.png",
+        "sha256": "c0673157775828e44aeae3ceb7c112a74cdd6dce5899cdc053e079b771b4a806"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_001.png",
+        "sha256": "c79151ffab9f3a84a8452a26c646a39075183b8e8098cd6c4dfa1b6b30321462"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_002.png",
+        "sha256": "e683fd03fc505fb681eb7de15065b9df080fd491b23ab3063d82fdee6fd4b0cd"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_003.png",
+        "sha256": "5de68138d113853daba86076d5bf37b1bdfd96a0fe5577520c92e18f465d826d"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_004.png",
+        "sha256": "560619448723c41301b44149c9c37c37c819e67b83cb6c8c3b96839688ab044a"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_005.png",
+        "sha256": "d49f88858d2528d2ef5eab2dedd90c6a023fe8ed56e37743864212566f0a81e3"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_006.png",
+        "sha256": "4ef29c2a1109d054074b5a5fddd7a6cc4bb842a6ae312e9b71716be6456e297d"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_007.png",
+        "sha256": "b931b1687f785ca20d6eadccab8415967dd418891997bca85d8342706910b869"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_008.png",
+        "sha256": "09d806d543906bfb21cd3f618bbd5d5060ad51804bcead5faee2fa13946abf49"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_009.png",
+        "sha256": "d5fa911187ebfaef4fe587eecb4890f431cdd9793a4f702ca41b3969c61b0221"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_010.png",
+        "sha256": "46b9caf00d8ae33a070944537e4b5fdc8b175bf2b7ae21a5821f946f1caa22ac"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_011.png",
+        "sha256": "7626a98ef00f6ff792e6128c99d2e5df662bc64df3c72d96d3b6c2735071989a"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_012.png",
+        "sha256": "f94093173496a467ae6e323d326c1ca85ab1c26be3e74a33b671d91ec3cea367"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_013.png",
+        "sha256": "8354a911fb80cd53c79152c4be5b30ef1d237dbeb2a115d339af26cf77ef88ef"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_014.png",
+        "sha256": "dabf9287cfa3431586d1bd8c7791118f2fcc083860652d2ebb0e431ebb7aabfa"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_015.png",
+        "sha256": "5bb86ca929a8cc64021a1b9f1cc64cdf25ebf830e37f7fa1b63b03ac570b4c53"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_016.png",
+        "sha256": "c0673157775828e44aeae3ceb7c112a74cdd6dce5899cdc053e079b771b4a806"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_017.png",
+        "sha256": "c79151ffab9f3a84a8452a26c646a39075183b8e8098cd6c4dfa1b6b30321462"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_018.png",
+        "sha256": "fc75d5b541d1e3a66bdd7ea230779ed98c19a4674dec1ad766bf1d625073ec36"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_019.png",
+        "sha256": "f69428ccc54fb448492fc6a5b672baa1a9935b03025b5eae4b199f6408d78e77"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_020.png",
+        "sha256": "4f594c5ec6adc2620a3f019d7b3f6a6544964f045d62229603a33afdb8d39ed0"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_021.png",
+        "sha256": "2779edf80548b1ebe183716e8b3f1dbeac6b09c65b06acb25fea198005f57f1e"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_022.png",
+        "sha256": "811ac67d44ee0e48e83ee91f97556a28292952d0f280090ef37387aa649e1406"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_023.png",
+        "sha256": "4d3a9f3315e0851844c92beae77e4f9812026bec37b8d3f40e935413c2042cf1"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_024.png",
+        "sha256": "95bdcd16bf2d3ffabe62e5a52dadfb6ea1d1899db940146b6bce93642f4abb61"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_025.png",
+        "sha256": "649e7202e676d5e4061dec50e7cc9e1ce3fa2a20a9bd3a54fa5c73e9389d76c9"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_026.png",
+        "sha256": "ed0dec4877f865d25336e7da3604a9be6bfb7e3ab5d7bd1bb65a70cd6d3b782a"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_027.png",
+        "sha256": "121f82c13447545ad45aaf55fec5d90a4018873e186efbf0c2a80465456ecf03"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_028.png",
+        "sha256": "b2276696d2a7f530c2d7b4c60ace27a15286abefb79c762e89c2bff5f63896df"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_029.png",
+        "sha256": "c0be4f36d92eee767a629cc867bbfc577aed5f20a070f76251cfe9f1a591b486"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_030.png",
+        "sha256": "3449a01e5b4599152d0a27c050ef5914fbc9b063d4d5a85588e2adbdba59df53"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_031.png",
+        "sha256": "b2af681f632377496d9932736e5b5df0a14e680f44515f1da89ce489ae6e9f1e"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_032.png",
+        "sha256": "e4a2dc10c6807e52de64718f2d1baca87e15db317ab06880cfe295cf7351fb6b"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_033.png",
+        "sha256": "3dd131a896ae8027cdbf7ae3635f6b023820a1e4d386c8f23df16fae4a2d9110"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_034.png",
+        "sha256": "8e093a62f60ed9fa2baea60f1876ff38457a4fcfd8ca529bfbf6f2769870dbb7"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_035.png",
+        "sha256": "1833cb1e0432c100737fb2e4e5ecb2f5517ce17f47b25105d56038b993af0ba6"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_036.png",
+        "sha256": "c5f724c6081e22ca6f3e31e78b71e05d3487e812f598e4ef706dba5b2517ecd1"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_037.png",
+        "sha256": "e0c02f33a2d85b9fd8bc34d5a2a3a563531e4bba0c896f0b0c20b50b6c44175c"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_038.png",
+        "sha256": "6e5e7c9771a3dec1428eed800604433f4a6b09b91c585e1765b2cf6dfc886fb8"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_039.png",
+        "sha256": "0fb6aacf02cb84cbe1d8e32a0e7b93ac01e12fa3c746be6018b7c7400777ed1b"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_040.png",
+        "sha256": "b0cb6b0f83e7435e08a4eb3f0f8854805b26f5baafe1c1608cd0643364dec12a"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_041.png",
+        "sha256": "0c384981aaa459585d9ffbf3da83515a695eedd3e3d5729c3af0d608be748ba6"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_042.png",
+        "sha256": "576935041f01a4985fac1d655335b4e05e293de85a3b9eacf07bb563dde5f251"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_043.png",
+        "sha256": "d21c4a7469e2b9e10eab20770d29f0b64af5af20a9be0b480fca7689c9de775b"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_044.png",
+        "sha256": "b06ccfbbbdcef4eab2a2169c65109b75cbfd14de5d1c9a677cfb85c7f33838f2"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_045.png",
+        "sha256": "70edc8c65347945c13006d9455978432bfe551df108d4b0f90b1243e270ee06e"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_046.png",
+        "sha256": "a2f4da8576825fed8b3a98712cf7d2ea5be50e4f9398a450e054b008773255fa"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_047.png",
+        "sha256": "5656b967af99f0a76e767535f86274353cc71d2310970d64d626c7091d071425"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_048.png",
+        "sha256": "bd077267dcac1f37c184faaa9af1127643d9717d96fd20f7b712acf06357f730"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_049.png",
+        "sha256": "f208fbd3e5ddd2bc53a1624950f71dc6920663003f039824efb3deef113f9a00"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_050.png",
+        "sha256": "a04c675f539dca9cd59d854dd3f70c163374bbfe5c7e84c7c41bfe166774f75d"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_051.png",
+        "sha256": "1833cb1e0432c100737fb2e4e5ecb2f5517ce17f47b25105d56038b993af0ba6"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_052.png",
+        "sha256": "c5f724c6081e22ca6f3e31e78b71e05d3487e812f598e4ef706dba5b2517ecd1"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_053.png",
+        "sha256": "e0c02f33a2d85b9fd8bc34d5a2a3a563531e4bba0c896f0b0c20b50b6c44175c"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_054.png",
+        "sha256": "6e5e7c9771a3dec1428eed800604433f4a6b09b91c585e1765b2cf6dfc886fb8"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_055.png",
+        "sha256": "0fb6aacf02cb84cbe1d8e32a0e7b93ac01e12fa3c746be6018b7c7400777ed1b"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_056.png",
+        "sha256": "b0cb6b0f83e7435e08a4eb3f0f8854805b26f5baafe1c1608cd0643364dec12a"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_057.png",
+        "sha256": "ffdba6ae4926fb7b8c38e022955dc6414e586ddb307932ba78e633c5e6973636"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_058.png",
+        "sha256": "f03d94ab540bba2e11d9f1e0731dcadf04560bb3f9748d23ee3c335427c7db12"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_059.png",
+        "sha256": "28eb560339760468ba27f597ac40fd4ffc7d3dac1b55a6273cdb0f9fbe9a5a9c"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_060.png",
+        "sha256": "8b9751103b79a029d16ef6e59bfe448e343d359fa679f0821ad4c371c2176a0d"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_061.png",
+        "sha256": "317cf82994ae81c66243f29204c8f71f7e4804076fad5bde3e9762a4a4eb4d76"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_062.png",
+        "sha256": "a85e78f544ba400e3c5d1a3ced28c5be7be555adc8012d73df8145eb19f32a6e"
+      },
+      {
+        "path": "art/animations/title_layers/06_roadside_props/frame_063.png",
+        "sha256": "2ae4987d96dc85cc5d8bf44371558b918bee8c89649b14e151e5202e3dea8133"
+      }
+    ]
+  },
+  "preview": {
+    "gif": "art/previews/title_layers_animation/metabolis_title_layer_animation.gif",
+    "contact_sheet": "art/previews/title_layers_animation/metabolis_title_layer_animation_contact.png"
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "canvas": [
+    320,
+    180
+  ],
+  "vanishing_point": [
+    362.6666666666667,
+    73.33333333333333
+  ],
+  "road_upper_edge": [
+    [
+      0,
+      130
+    ],
+    [
+      320,
+      80
+    ]
+  ],
+  "main_projection_quad": [
+    [
+      40.0,
+      45.0
+    ],
+    [
+      150.0,
+      54.65909090909091
+    ],
+    [
+      150.0,
+      98.81818181818181
+    ],
+    [
+      40.0,
+      112.0
+    ]
+  ],
+  "small_projection_quad": [
+    [
+      180.0,
+      69.0
+    ],
+    [
+      260.0,
+      70.8978102189781
+    ],
+    [
+      260.0,
+      87.1970802919708
+    ],
+    [
+      180.0,
+      98.0
+    ]
+  ],
+  "layers": {
+    "building_main_complete.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        40,
+        54,
+        149,
+        108
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 12,
+      "road_clearance": {
+        "minimum_gap_pixels": 10.75,
+        "minimum_gap_x": 104,
+        "visible_columns": 109
+      }
+    },
+    "building_main_construction.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        40,
+        53,
+        151,
+        109
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 7,
+      "road_clearance": {
+        "minimum_gap_pixels": 9.438,
+        "minimum_gap_x": 138,
+        "visible_columns": 111
+      }
+    },
+    "building_small_complete.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        180,
+        71,
+        260,
+        96
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 13,
+      "road_clearance": {
+        "minimum_gap_pixels": 2.625,
+        "minimum_gap_x": 252,
+        "visible_columns": 76
+      }
+    },
+    "building_small_construction.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        180,
+        71,
+        261,
+        96
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 9,
+      "road_clearance": {
+        "minimum_gap_pixels": 2.625,
+        "minimum_gap_x": 252,
+        "visible_columns": 77
+      }
+    },
+    "prop_roadside_day.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        20,
+        79,
+        320,
+        176
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 11
+    },
+    "prop_roadside_night.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        16,
+        79,
+        320,
+        176
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 13
+    },
+    "sky_title_afternoon.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        320,
+        180
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 6,
+      "horizon_band_removed": true,
+      "horizon_dither_removed": true,
+      "shared_cloud_silhouettes": true
+    },
+    "sky_title_night.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        320,
+        180
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 4,
+      "horizon_band_removed": true,
+      "horizon_dither_removed": true,
+      "shared_cloud_silhouettes": true
+    },
+    "terrain_road_afternoon.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        0,
+        80,
+        320,
+        180
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 7
+    },
+    "terrain_road_night.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        0,
+        82,
+        320,
+        180
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 9
+    },
+    "vehicle_truck_arrival.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        124,
+        92,
+        174,
+        134
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 17
+    },
+    "vehicle_truck_departure.png": {
+      "size": [
+        320,
+        180
+      ],
+      "alpha_bbox": [
+        153,
+        89,
+        269,
+        113
+      ],
+      "binary_alpha": true,
+      "locked_palette": true,
+      "visible_color_count": 15
+    }
+  },
+  "sky_revision": {
+    "horizon_y": 73.33333333333333,
+    "hard_horizontal_bands_removed": true,
+    "horizon_dither_removed": true,
+    "sun_position": [
+      278,
+      44
+    ],
+    "moon_position": [
+      58,
+      52
+    ],
+    "cloud_anchors": [
+      [
+        28,
+        24
+      ],
+      [
+        168,
+        42
+      ]
+    ],
+    "non_sky_layer_hashes_unchanged": true
+  }
+}

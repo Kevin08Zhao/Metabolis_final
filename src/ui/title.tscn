@@ -1,35 +1,17 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://ui/title_pulse.gd" id="1_pulse"]
+[ext_resource type="Script" path="res://ui/title_intro.gd" id="1_intro"]
 
 [sub_resource type="SystemFont" id="SystemFont_title"]
 font_names = PackedStringArray("Menlo", "Monaco", "Consolas", "Courier New")
 font_weight = 700
 
-; Title screen.
+; Opening title scene.
 ;
-; The 640x360 source art scales to the project's 800x450 viewport. The title and
-; menu use the viewport centre so the full-screen presentation stays balanced.
-; The D-29 pulse is provided by res://ui/title_pulse.gd.
-;
-; The background is the accepted D-29 asset recorded by docs/assets/D-29_MANIFEST.md,
-; art/backgrounds/background_title.png. It cannot be an ext_resource: art/ sits
-; outside the Godot project root, so no scene can reach it through the import
-; pipeline. SceneRouter fills the slot at runtime through AssetLoader, which T-36
-; built to read res://../art for exactly this reason, and it finds this node by
-; its title_background group.
-;
-; The production file is 640x360 and palette-quantized. AssetLoader supplies it
-; by logical name when the route enters the title.
-;
-; The entry set is T-32's, not the two-button set in the D-29 table. T-32's
-; accepted behaviour offers continue, new game and chapter select, with chapter
-; select gated on a finished stage that can really be entered. MenuAnchor keeps
-; every generated entry centred over the lower skyline. The obsolete
-; title-screen disclaimer is intentionally absent; the required educational
-; disclaimer remains on the ending screen.
-;
-; SceneRouter puts the entry buttons into MenuAnchor because of its group.
+; Six independent 320x180 layers play once for eight seconds at 8 FPS. The
+; existing background slot remains as a fallback if any sequence is unavailable.
+; SceneRouter still owns and dynamically creates the save-aware menu entries;
+; title_intro.gd only presents and reveals them.
 
 [node name="Title" type="Control"]
 anchors_preset = 15
@@ -37,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_intro")
 
 [node name="Background" type="TextureRect" parent="." groups=["title_background"]]
 layout_mode = 1
@@ -49,25 +32,102 @@ expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
-[node name="HeartPulse" type="Node2D" parent="."]
-position = Vector2(400, 225)
-script = ExtResource("1_pulse")
+[node name="AnimationLayers" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Sky" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="Terrain" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="MainBuilding" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="SmallBuildings" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="VehicleCargo" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="RoadsideProps" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
 
 [node name="TitleBand" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 12.0
-offset_bottom = 62.0
+offset_top = 16.0
+offset_bottom = 74.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
-theme_override_colors/font_outline_color = Color(0.168627, 0.2, 0.309804, 1)
-theme_override_colors/font_shadow_color = Color(0.498039, 0.258824, 0.360784, 0.75)
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
+theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725, 1)
+theme_override_colors/font_shadow_color = Color(0.568627, 0.27451, 0.372549, 0.85)
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
 theme_override_fonts/font = SubResource("SystemFont_title")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 44
 text = "METABOLIS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -77,14 +137,17 @@ mouse_filter = 2
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 62.0
-offset_bottom = 82.0
+offset_top = 76.0
+offset_bottom = 100.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.956863, 0.862745, 1)
-theme_override_colors/font_outline_color = Color(0.168627, 0.2, 0.309804, 0.9)
-theme_override_constants/outline_size = 1
+theme_override_colors/font_outline_color = Color(0.0784314, 0.0588235, 0.113725, 1)
+theme_override_colors/font_shadow_color = Color(0.568627, 0.27451, 0.372549, 0.75)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = SubResource("SystemFont_title")
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 13
 text = "BIRTH OF THE CITY OF LIFE"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -92,9 +155,9 @@ mouse_filter = 2
 
 [node name="MenuAnchor" type="VBoxContainer" parent="." groups=["title_menu_anchor"]]
 layout_mode = 0
-offset_left = 260.0
-offset_top = 190.0
-offset_right = 540.0
-offset_bottom = 350.0
+offset_left = 500.0
+offset_top = 255.0
+offset_right = 780.0
+offset_bottom = 430.0
 alignment = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 7
