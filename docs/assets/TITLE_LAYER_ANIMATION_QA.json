@@ -1,12 +1,22 @@
 {
   "status": "PASS",
-  "total_png_frames": 384,
-  "expected_png_frames": 384,
+  "total_png_frames": 188,
+  "expected_png_frames": 188,
+  "logical_frame_count": 384,
+  "unique_frame_counts": {
+    "01_sky": 61,
+    "02_terrain": 4,
+    "03_main_building": 21,
+    "04_small_buildings": 9,
+    "05_vehicle_cargo": 37,
+    "06_roadside_props": 56
+  },
+  "duplicate_frames_removed": 196,
   "output": "art/animations/title_layers",
   "manifest": "art/animations/title_layers/manifest.json",
-  "manifest_sha256": "269a09602aa1e989ef73a5aeb67ae5f56d9e999dd3802db0c1081d9c018026ec",
+  "manifest_sha256": "118615f7a028d0bd4e248563158b9b2374ce4d789304dcac4ee41ff7c109c0bb",
   "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
-  "specification_sha256": "722d08f999aa08dbe4abc6e7c1f73f00a876a1f38e10d4f2ce3c58b7f4ee0d99",
+  "specification_sha256": "71ffddb03aad613cade7b7f3afa0632e1b0ebcd71e09253e3bc995ee92d62017",
   "checks": {
     "01_sky": {
       "frame_count": 64,

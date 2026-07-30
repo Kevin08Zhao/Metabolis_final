@@ -7,6 +7,414 @@
   "duration_seconds": 8,
   "frame_count_per_layer": 64,
   "file_pattern": "frame_%03d.png",
+  "deduplicated": true,
+  "frame_map_contract": "frame_maps[layer][i] is the frame number whose PNG must be shown at logical frame i. Identical frames share one file, so a layer directory is sparse and frame_maps[layer][i] <= i always holds.",
+  "frame_maps": {
+    "01_sky": [
+      0,
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      38,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      54,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "02_terrain": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      24,
+      24,
+      24,
+      24,
+      24,
+      24,
+      30,
+      30,
+      30,
+      30,
+      30,
+      30,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      36,
+      30,
+      30,
+      30,
+      30,
+      24,
+      24,
+      24,
+      24
+    ],
+    "03_main_building": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      44,
+      44,
+      46,
+      46,
+      48,
+      48,
+      50,
+      50,
+      52,
+      37,
+      37,
+      52,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37
+    ],
+    "04_small_buildings": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      31,
+      33,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34,
+      34
+    ],
+    "05_vehicle_cargo": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43,
+      43
+    ],
+    "06_roadside_props": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      0,
+      1,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ]
+  },
+  "unique_frame_counts": {
+    "01_sky": 61,
+    "02_terrain": 4,
+    "03_main_building": 21,
+    "04_small_buildings": 9,
+    "05_vehicle_cargo": 37,
+    "06_roadside_props": 56
+  },
   "layer_order": [
     "01_sky",
     "02_terrain",
@@ -4143,1549 +4551,1713 @@
     "01_sky": [
       {
         "path": "art/animations/title_layers/01_sky/frame_000.png",
-        "sha256": "8b7fae4c3b38c9c1932ead5c1776c9c89ac13f8cef5f09722360822cac795226"
-      },
-      {
-        "path": "art/animations/title_layers/01_sky/frame_001.png",
-        "sha256": "8b7fae4c3b38c9c1932ead5c1776c9c89ac13f8cef5f09722360822cac795226"
+        "sha256": "64fd5edafe1748fd4137766a51c23c75527c702be5c5d3257fb4bdc3fcdd32ff",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          1
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_002.png",
-        "sha256": "c879077c81f065f561e1c584ad84e8b6f3ba889c74696515d6e204cda480cf80"
+        "sha256": "447bf06ee7231ecf79a5c33d9beeaa0f8b97a01d34244c6bfd02735ab7ece719",
+        "frame": 2,
+        "used_by_frames": [
+          2
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_003.png",
-        "sha256": "f3e83fed637e43f6a41060e3cb5a717ab991f385fc0175ad1634581de6182eff"
+        "sha256": "fea9e13154434f2a6255bae08ac997fabbe1c28b2783c106bc707de07b1742fc",
+        "frame": 3,
+        "used_by_frames": [
+          3
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_004.png",
-        "sha256": "25d6bc7ab7aad8718f87ade128751f2286169b7afaef8a5c69b9cf7104dc6fdf"
+        "sha256": "f5b9a857f96e1c7c93195e59c8c9d996d0f575455c9621a313c0a89b02cf0331",
+        "frame": 4,
+        "used_by_frames": [
+          4
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_005.png",
-        "sha256": "08ed7170f1cbc381c6089a9ef7f482a566e3a21aa1bd98cc3b67c7f06ddc31b1"
+        "sha256": "deb23b57b3faaa3eb1a7ba50872df930845e4efedc1d173b21c231242424f908",
+        "frame": 5,
+        "used_by_frames": [
+          5
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_006.png",
-        "sha256": "a40855d386b38207fe2d56087cf84f412ff5ee14258767518ea1a29cd7a2fa8e"
+        "sha256": "22695ce470e9bcb93c1daca713f1420fef6ce02b092801de45f9e98a3e68a4b4",
+        "frame": 6,
+        "used_by_frames": [
+          6
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_007.png",
-        "sha256": "7671e0f7342c33710582d2c45d814a3e2812a2f3678a11d5e4a9d14f699364f3"
+        "sha256": "759a43688940500a4e248344ce14036b2118283aa306eec44aa130210620c6e6",
+        "frame": 7,
+        "used_by_frames": [
+          7
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_008.png",
-        "sha256": "f4bf0c8d8dd8a03b832e9eecd805641788f855d59e3ed99e161948fe3ea4a777"
+        "sha256": "da76c4c52b168239aa9152252dcbcc19e181183b0c30e2a1de8f97ec09a8adc2",
+        "frame": 8,
+        "used_by_frames": [
+          8
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_009.png",
-        "sha256": "29bcd5f23e4423ef96bc62d5f383e793421af34f22f172fd51cef7fa8222b310"
+        "sha256": "ec919642b5a1e541079175afba42d2378c03e33c1c49388192c124135f67e5ed",
+        "frame": 9,
+        "used_by_frames": [
+          9
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_010.png",
-        "sha256": "d2fc1cde66b10ae42f461f98a1cf54bf26d3f15dd4b7d0b6c17a77c64cb85b77"
+        "sha256": "3521d733e4ac42a0498ca0e3d1946b9806417520805e1e3fd2b1ead2daaa407d",
+        "frame": 10,
+        "used_by_frames": [
+          10
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_011.png",
-        "sha256": "ea6ba0b44f455bd65e48dc299ceac80cf86333b61b4c14542f8f4020642dd954"
+        "sha256": "7749805b21d088a8c5db7b972fa28a7bb0aeabb569f12a9bc01cef1011776de0",
+        "frame": 11,
+        "used_by_frames": [
+          11
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_012.png",
-        "sha256": "c487ec9729a4fec627fd05cea7bfb45d3011dc110dae9dd727039cc7cc3b098b"
+        "sha256": "aefe738c531bec8717e1327385377909ffeb3da72ca2097b7e5fe2edf14324f0",
+        "frame": 12,
+        "used_by_frames": [
+          12
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_013.png",
-        "sha256": "b2ca9b30f13aa1916811f36e69cdf269b2c29e252cb9e6209aa7d141696c2341"
+        "sha256": "41067a09599a25f8721a17cddb600ebca1ed42e361d9b622c3471deb2a8cdf8e",
+        "frame": 13,
+        "used_by_frames": [
+          13
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_014.png",
-        "sha256": "d16c81f438deb2ee0b26023c15c24f911483854aae572e4c8a9ce159a930b95e"
+        "sha256": "984b0936677c2cd5df4971d119f319d3cbec01ed9ab85e0c773f3f76ac925647",
+        "frame": 14,
+        "used_by_frames": [
+          14
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_015.png",
-        "sha256": "e8471574cf8bf19a0e096d2a2a5902a00a87620c62f63e6fa07621f6f3c03201"
+        "sha256": "aebbc6c8b7a75263497466c232ca2204f8cb401423f4ff21b2904268c96dac69",
+        "frame": 15,
+        "used_by_frames": [
+          15
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_016.png",
-        "sha256": "c724371cf913924f5b8a7d9a44743161c0c540848ec58913bc1a3d35027cb5e3"
+        "sha256": "fd4ff7891e4e9ea9ca3c557b4ef70c26067abce09d0f736e7310fd0910159edf",
+        "frame": 16,
+        "used_by_frames": [
+          16
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_017.png",
-        "sha256": "4d662ea2fd3473df8fd0e555c9a116433522932e4a07a7dbb8602b2e80dae77d"
+        "sha256": "281ea4a986855e13943a7b36b9d6b808b4322e88896e16f85bfa5fd717bd9a5a",
+        "frame": 17,
+        "used_by_frames": [
+          17
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_018.png",
-        "sha256": "cfdf873ebcdae6a26147c8523f6dc7d2ad7e482fe980f0d509b8cb9acd18cf24"
+        "sha256": "a3158e8837356067ac2c01c1a6861dcd1ed9cfba927bfe55dc1dbd6444b56410",
+        "frame": 18,
+        "used_by_frames": [
+          18
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_019.png",
-        "sha256": "ba60d0e5316067f8f8f33faab02470b23cd487610c51c5485bba7da43f38e2b0"
+        "sha256": "a8a9ae9a1b547d976165aa05927e2e509614c65bdcc5718268155fb5ffa565cf",
+        "frame": 19,
+        "used_by_frames": [
+          19
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_020.png",
-        "sha256": "38a635daaa40f5878c947288f17623f63dae996f92b05af8df228dbfca5a4eea"
+        "sha256": "5e8c6117145360ff69155777c341b84024e231fe5e2872e31f44f4ac493e1766",
+        "frame": 20,
+        "used_by_frames": [
+          20
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_021.png",
-        "sha256": "25fcccf45e76fdb0a2c9c01c9ac703349bb3a3dd9f586d01bd668a84a52ddad3"
+        "sha256": "1227538393e6d1a21f18cc63395630e6d63847052b09d0b544c9d36efe9eeb9b",
+        "frame": 21,
+        "used_by_frames": [
+          21
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_022.png",
-        "sha256": "c6db8374605abb7850fafb0a65326ef270afff26958fd46b5d34a70b79b7c36e"
+        "sha256": "eaba29fbada6241d936bf3e62ac8f75c543992170938b8d94c2d68f893c3fd79",
+        "frame": 22,
+        "used_by_frames": [
+          22
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_023.png",
-        "sha256": "f29ab2a7d89e95ba3a9856fe4071901fd5299666c0108399f725c5a6d9e6d93b"
+        "sha256": "c553c16ee06415412a9fc4215b168d1c5e331135e16dc4e58ad4f32f3c3e4abe",
+        "frame": 23,
+        "used_by_frames": [
+          23
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_024.png",
-        "sha256": "c8082984e6c8b1865463382793173fd59dd80642844c77d67421d770a9673334"
+        "sha256": "54cd5d71393251dc5ef4670d4a2f4a7d86eb2228f9e9ff016093429262ddcb5b",
+        "frame": 24,
+        "used_by_frames": [
+          24
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_025.png",
-        "sha256": "a4ea49163466a239e6fed90afecb33536b6e8a437c4a7fb40386de939f34b3d2"
+        "sha256": "3b5a9886dd674c8a70d6b3e114bc38765a1abbfacaa36219083f7c3e5264eaaf",
+        "frame": 25,
+        "used_by_frames": [
+          25
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_026.png",
-        "sha256": "8566b3e4335d7fca730f25f949ffd6778edbf3713fbb14648cb0d6995fdc185c"
+        "sha256": "981cb1c210e72f55e8cd45855d5db692db9677cab726cafb4e7e58a255deae96",
+        "frame": 26,
+        "used_by_frames": [
+          26
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_027.png",
-        "sha256": "408ac0796a0909b4109f790c31dc754b5eacd065fac14611c5ad80d66e15ee12"
+        "sha256": "81de22b7b236f406e1b3fadfe7a78c8ce3c7f94eaea1763b4406d4f7d57cd380",
+        "frame": 27,
+        "used_by_frames": [
+          27
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_028.png",
-        "sha256": "09efd3ccdd254e6968ee845837c1b66648843bd848c6beb2bfa8109e03183d18"
+        "sha256": "575fd7f42db83f3f1f917885f699e87cf97cc6dd829b7ea14889af0888de08ed",
+        "frame": 28,
+        "used_by_frames": [
+          28
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_029.png",
-        "sha256": "d7447eddfdd2159be65f696d533f6cec4bc0e26c16cecc4c1c902ed117f526c2"
+        "sha256": "021cb92526b78537b03b08ccb71cd281b5c5f5cb79f0d3415738937acba754ac",
+        "frame": 29,
+        "used_by_frames": [
+          29
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_030.png",
-        "sha256": "0ab50ad149638c189643ea09ca48ed9af801f955acf8e695944122053aa04f29"
+        "sha256": "364c586c6d3b5a7c4394f192d15c0f33a802250d821ec8f919a3f1ba3718aefb",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_031.png",
-        "sha256": "8c39819362a027f8e92c9332235f2a0c1748d8053132c66ee72a21ef89168bc5"
+        "sha256": "429eef31ee4d6dc11d0d0bfcb02b7534e2345d3cb8666ff99907dc65dd0bc4aa",
+        "frame": 31,
+        "used_by_frames": [
+          31
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_032.png",
-        "sha256": "608bdd22256981c9ce337541082c0af1f1a4c1ea44f36c7d62d4268421c08264"
+        "sha256": "d16508cf0065a45efb520f46a7fc3f94be1b440d3f03bba126e3d4aad8272136",
+        "frame": 32,
+        "used_by_frames": [
+          32
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_033.png",
-        "sha256": "16aa275e769cb8a6930d8fb392fc0d40557f5eeb356230a2cf0c627fbd0721ef"
+        "sha256": "03daf757bc3681b507bcccbf4c6d4326ee0302d519edf409cbf532ae92dba261",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_034.png",
-        "sha256": "35d8099a48e74cee021f40ecc6950cae8e123f32fba816bccecf3dded7e977f7"
+        "sha256": "7fad79ba94718280c5508823c85cdbab1d0fff87e12390eb061c172520daeaae",
+        "frame": 34,
+        "used_by_frames": [
+          34
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_035.png",
-        "sha256": "46298d4ae3cbb426c01c6733fed219ef27b0ea168e4ecefec7e0170a3958c97f"
+        "sha256": "b562a1a3d78100f27b4cfbbb8e8f1d8da5497d26cedc8ee724414d81b5e6da4e",
+        "frame": 35,
+        "used_by_frames": [
+          35
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_036.png",
-        "sha256": "3d876b1139526b12228d7f2ae03f262da49848c19b52ac60fe92755ea9ffd5d9"
+        "sha256": "48f90ba94627dac450258107d9a1a3a212df695c47b8cd2014dab90cc0f18806",
+        "frame": 36,
+        "used_by_frames": [
+          36
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_037.png",
-        "sha256": "8c691aa82b91af2303932bbf1a95cf5308be5e0174bcf4fb9791e3e16f1f3a40"
+        "sha256": "7fab80db12eca4ae31c6ba3ea1658ab35b2aa17828fca7e1137be318608ff481",
+        "frame": 37,
+        "used_by_frames": [
+          37
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_038.png",
-        "sha256": "b1e1ac7cd3be0d798cd67e20848693c97d592773d9fcea7191ed20fc59deeeae"
-      },
-      {
-        "path": "art/animations/title_layers/01_sky/frame_039.png",
-        "sha256": "b1e1ac7cd3be0d798cd67e20848693c97d592773d9fcea7191ed20fc59deeeae"
+        "sha256": "05530d369c183308a4cc14c0000991558a006ece7b29779be34dab8d916dec05",
+        "frame": 38,
+        "used_by_frames": [
+          38,
+          39
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_040.png",
-        "sha256": "1010d051b51bb7ba49db265dbfa0f2a5fde001d2d72c3301c3c56aa45b464add"
+        "sha256": "10eef6ddf5d7cfde69b1f7967ffedfae5153321354926201e21d8753ec59869b",
+        "frame": 40,
+        "used_by_frames": [
+          40
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_041.png",
-        "sha256": "16935f59190db68446860a5b93caaa123b3bea6404b6147bbe2d1ab5afc0c4d3"
+        "sha256": "831fb5248106a409c636d174671f0a57db9e2cfe4dbe0040bd37c162647e0fe4",
+        "frame": 41,
+        "used_by_frames": [
+          41
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_042.png",
-        "sha256": "832e6e486fd88c1d7d23d26b1db9ecdc270a676e04379990193e18b7b7c3b2c9"
+        "sha256": "3bdc6cbb15eb5f11f6533b1c97a08003a0113e2872c3f9bff44ae709cdebde42",
+        "frame": 42,
+        "used_by_frames": [
+          42
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_043.png",
-        "sha256": "b04c54ce64d0935b3c2782b3086bf5c238980e409783a62d56bba8fabaf74943"
+        "sha256": "edf29473cc91630d7434b0a6b7aee9e7f94d4a509f25e63b13b8c29a90e1b4ae",
+        "frame": 43,
+        "used_by_frames": [
+          43
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_044.png",
-        "sha256": "ec0c4867f1d33919ae06cf152f046b1e56955c9d3b24d967067947993b54d46c"
+        "sha256": "311e002aea82e527257390e8742901a3efa2aee7f5021f16f1dff8a500f83acc",
+        "frame": 44,
+        "used_by_frames": [
+          44
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_045.png",
-        "sha256": "0300a9fa4f706fc47be998a9fc46f8b35f43e99fbb9c29186e797d94934304ad"
+        "sha256": "68a66119a15ab1711a5cdfeb4a31bfb585935517acb40b6fe4b8bf3e77d861cf",
+        "frame": 45,
+        "used_by_frames": [
+          45
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_046.png",
-        "sha256": "97590346b6fa4cc5a6bc6d244ac7f3baefd5d8c0db348e19db4137212ee0929a"
+        "sha256": "49a8cc01d32ad7fb6d1a0576057a663e6b9345911b4b75fb17eab1611d10ee03",
+        "frame": 46,
+        "used_by_frames": [
+          46
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_047.png",
-        "sha256": "abde8a123e1d97acf78a12b353ad5b95e3c75f4427064c431ee329217fed7d4e"
+        "sha256": "2686cde79ff2474c57847d3cd037168e15c9ae76d5b5a78f8894c1365632af1f",
+        "frame": 47,
+        "used_by_frames": [
+          47
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_048.png",
-        "sha256": "9afd6132f1029ea1d4e7d1215d741b218daf03cb3b6334b36ef2ccfddd8d25bb"
+        "sha256": "c315e5391f523e97a93a94aa40061063dd19c6fc7789c6ca50b39228eb73bc29",
+        "frame": 48,
+        "used_by_frames": [
+          48
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_049.png",
-        "sha256": "d1bb4ba33a2a87fe019c7ebbaea0a39c675689fa57df3c4d28c203c9d4796ad0"
+        "sha256": "4b9b8ae8bd814ed47e297db1296bae0058c4083adf6c607929909ba216ad89b3",
+        "frame": 49,
+        "used_by_frames": [
+          49
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_050.png",
-        "sha256": "850330d8a318f33163b8e785d3e437650e1d8f9fd584a4ff18813b328f61ee9a"
+        "sha256": "5ab6cf12250c9ddcaae45df0b6b929ac2f6b31061960658ee56f436fe5dcf826",
+        "frame": 50,
+        "used_by_frames": [
+          50
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_051.png",
-        "sha256": "3b41ab72afb8b29ab1cbe90726078e3098095b9a9e5efa3b9aec4b81582ddc09"
+        "sha256": "b622df57decef84efb0bde1a9ba8a31f3892fd08be12f549e90079f06a90ffca",
+        "frame": 51,
+        "used_by_frames": [
+          51
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_052.png",
-        "sha256": "01c983609c25a80dd9352d264385063efcfab1ffdc817784882fc19dbe4f4a1c"
+        "sha256": "5f85ba60dcc60d8e2ac9518d4d879d26649e0034b15047d5af0adbea61a62840",
+        "frame": 52,
+        "used_by_frames": [
+          52
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_053.png",
-        "sha256": "a6bd58bb0ed827fb592cca06a92ba2db4bd7b90762c59e98ab144df98adbda22"
+        "sha256": "3b12a4973251bc3f38bd6a99454595737ff1ed51cf81fc1cb251926b7702d2de",
+        "frame": 53,
+        "used_by_frames": [
+          53
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_054.png",
-        "sha256": "8da1a9e218cca3f3043219534691be34610d44b3808fefd272efe73b38dfa00a"
-      },
-      {
-        "path": "art/animations/title_layers/01_sky/frame_055.png",
-        "sha256": "8da1a9e218cca3f3043219534691be34610d44b3808fefd272efe73b38dfa00a"
+        "sha256": "b47e9b05567932ea2de34a583224bbf56a8cff5baf6b917d3670b710074784f8",
+        "frame": 54,
+        "used_by_frames": [
+          54,
+          55
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_056.png",
-        "sha256": "939826dd6616f577080cfd46dd3baf21e856899ba3537a0bb0e1cd424d9bffde"
+        "sha256": "6de110cfa5d4564100ae7462578269d410c1f53f5d4e46efb39b54495a8043b4",
+        "frame": 56,
+        "used_by_frames": [
+          56
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_057.png",
-        "sha256": "e82139c4e6e7e545e18353899efd54b8f16b20f19b68c6c860e020c8b3a1bf98"
+        "sha256": "e84cd73e05f9f30473205bd2804dbf6bab610d1e9cff495f4ab0561c44da9b64",
+        "frame": 57,
+        "used_by_frames": [
+          57
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_058.png",
-        "sha256": "50f4404c2d830fd7118a697793934562d93dcef1a04eca88ddaedf949f1e5ed6"
+        "sha256": "0fcc9dee9c780707f69fc8390378331707fcb78caf6a98224ab9b9d10a45fcbd",
+        "frame": 58,
+        "used_by_frames": [
+          58
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_059.png",
-        "sha256": "3a1a8c2024a733a1b4a7aef53fa3decb3bcbea88d23bc03a0d78cffbbe0fb9bd"
+        "sha256": "716ad643be4dcfb3c44f121e3e1d1a7552bafd18ed45f99a0d877aeb5e5a41fa",
+        "frame": 59,
+        "used_by_frames": [
+          59
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_060.png",
-        "sha256": "cf59d594426731267c79ce0b502daecfc26314f84f1bbc1711d33d4940c55b48"
+        "sha256": "2af19a3506ecd769d9a05323de81d1fb9a0d4f5bc122e6b17704bd219b27ec72",
+        "frame": 60,
+        "used_by_frames": [
+          60
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_061.png",
-        "sha256": "047cd7ac683f976d5a736e06969740dd95f2fbab31f4fdfa2c10f8e809e6c2a6"
+        "sha256": "3d16eed4426819f5ebcc8b69bfad33557ccc9260689c5fe695f0220921b1f06f",
+        "frame": 61,
+        "used_by_frames": [
+          61
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_062.png",
-        "sha256": "d85079fd392601eb557b492b55db6c67c194e973ba05b0359cb7c6a5bdb9eeb2"
+        "sha256": "fffdc177b6c83f89af2c83d35cbeab886009e7c1fa8c73ed49e0c2fc2bf1d9cc",
+        "frame": 62,
+        "used_by_frames": [
+          62
+        ]
       },
       {
         "path": "art/animations/title_layers/01_sky/frame_063.png",
-        "sha256": "d02762944880be3a8a8f8a9c9ebaf67097376de4fcdb51bdc5f51e729c8e5023"
+        "sha256": "91c3430eec74c74d4a32cad1e8d3d0f85e673424edb57d43a376ada1b94c7ff7",
+        "frame": 63,
+        "used_by_frames": [
+          63
+        ]
       }
     ],
     "02_terrain": [
       {
         "path": "art/animations/title_layers/02_terrain/frame_000.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_001.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_002.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_003.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_004.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_005.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_006.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_007.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_008.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_009.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_010.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_011.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_012.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_013.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_014.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_015.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_016.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_017.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_018.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_019.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_020.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_021.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_022.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_023.png",
-        "sha256": "7ef12911a263fcdb1b81e955db3f4817015f0397d428ece2200e9d860d3a2d5c"
+        "sha256": "9f3a3a809f80694514ebcf0571df66f1162205199cefaa8019a84627d7995c58",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ]
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_024.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_025.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_026.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_027.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_028.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_029.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+        "sha256": "4a2669ac00b05e7f29a763b054c0230c51cfad83fb63203ee136f5d602ca67b8",
+        "frame": 24,
+        "used_by_frames": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          60,
+          61,
+          62,
+          63
+        ]
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_030.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_031.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_032.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_033.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_034.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_035.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
+        "sha256": "5aa72151fc65b43e5085c3feee1a4f5c3b6a5a3efde6210081ddf41611d594c5",
+        "frame": 30,
+        "used_by_frames": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          56,
+          57,
+          58,
+          59
+        ]
       },
       {
         "path": "art/animations/title_layers/02_terrain/frame_036.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_037.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_038.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_039.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_040.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_041.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_042.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_043.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_044.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_045.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_046.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_047.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_048.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_049.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_050.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_051.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_052.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_053.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_054.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_055.png",
-        "sha256": "7facecac3b932e680f990c063f3a33b992d878ec826a268e3b97173701d9cd39"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_056.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_057.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_058.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_059.png",
-        "sha256": "ee582b0955adc092b9928d498b2caa932fc0f201f653c1eeaa4d847ece9b659c"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_060.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_061.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_062.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
-      },
-      {
-        "path": "art/animations/title_layers/02_terrain/frame_063.png",
-        "sha256": "187cedde260ce387c1bc73735b8f55276554328fa1bc9354ff2f77bf4fa16350"
+        "sha256": "e8c0548ebf25a424d18b38468f57346e4436fda19d54f630be5b24ac09af6bf7",
+        "frame": 36,
+        "used_by_frames": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55
+        ]
       }
     ],
     "03_main_building": [
       {
         "path": "art/animations/title_layers/03_main_building/frame_000.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_001.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_002.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_003.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_004.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_005.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_006.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_007.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_008.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_009.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_010.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_011.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_012.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_013.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_014.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_015.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_016.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_017.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_018.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_019.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_020.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_021.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_022.png",
-        "sha256": "b5661c7cc7e5c352eea426b05fe2d53d5651d4ae66976f2662b9d9398834312a"
+        "sha256": "3f3945c6cce5dd3eb316ee8814eec94e2f07ca249e6bebba3c7e01b07e571bb7",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_023.png",
-        "sha256": "6f2513a20c0c257f5ede1923868ee9074bdb6d18cf52b283aef4dc6a072872e6"
+        "sha256": "b821abe5105f4a44bec09ffafcb6828f1a5b00058e8c5ca2f937a070d8335557",
+        "frame": 23,
+        "used_by_frames": [
+          23
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_024.png",
-        "sha256": "6f4e6a8ec15d72016ce584bfe478ecc0efee02d962f4c206ce934328171ef8c2"
+        "sha256": "5bd220e626b282af318cbce4b0b64b71e4ec1715000dbd1fb7893c6f8adeaaa4",
+        "frame": 24,
+        "used_by_frames": [
+          24
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_025.png",
-        "sha256": "2d3c1c4250c6774aecf18bb72ecc21576b9577d0d559be975bb14d6466fc4fd9"
+        "sha256": "f7f2999b02afd55107921b0ecaa044a3d828e80b8b4df47ab1b8072cb7242e7c",
+        "frame": 25,
+        "used_by_frames": [
+          25
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_026.png",
-        "sha256": "12bb133e2c4de77131b8f9b38eb59bfabe468a95c61201c27d16e86b5cb5eb3a"
+        "sha256": "c48a35b988a16dd61520f52c8d9faf5ecb970ce8d9483edfcebdfe2f098df857",
+        "frame": 26,
+        "used_by_frames": [
+          26
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_027.png",
-        "sha256": "53159979db914473decb4774dde086dae3cafbc0e18c439af44c92833b554110"
+        "sha256": "a18c26360fd688ebb8b12e072590b91a9a1b97675139cef3e30f967d5395189c",
+        "frame": 27,
+        "used_by_frames": [
+          27
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_028.png",
-        "sha256": "a50e1a815bcd34b65abf4485c5ef768d77a92c2234df1fe8abf40e1150105263"
+        "sha256": "3debae9c2eec0ba875dd9570add3b5ee86e881f8673b0508c6822ff42f80d35c",
+        "frame": 28,
+        "used_by_frames": [
+          28
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_029.png",
-        "sha256": "533b87be38786eb9d973103dded496e7a10133af0c149b4e4fd74a951f0dea91"
+        "sha256": "5d2cf669cf56cff631d4e852d815064a241c1eb13bd635456f7df6393d4c2fb3",
+        "frame": 29,
+        "used_by_frames": [
+          29
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_030.png",
-        "sha256": "0c0abec6778c3bd31f16569bb6e4546a612ccd1726fd34c72d5658a45c88966f"
+        "sha256": "ab02025f3a013cbaae9d36cf600b49d915c319558144abe7bc4c38df4b5f25ee",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_031.png",
-        "sha256": "8088d7962619a672c3fb519b74eea54abf2a2cd2b0e23ac0b6532adbbc6a392f"
+        "sha256": "5852145c2a8e3ad794d6bb799049fd2282732ced6ba6c4f110728ef36f508803",
+        "frame": 31,
+        "used_by_frames": [
+          31
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_032.png",
-        "sha256": "c4342df36ebc72fa3262f5187e0928724ccf048313bed2c834fbf8ad9f47a8d4"
+        "sha256": "b82ce91532d0efe01532dbb01381bb8039f6a22751a84efa32e8eb7220900450",
+        "frame": 32,
+        "used_by_frames": [
+          32
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_033.png",
-        "sha256": "21a216b4286f41c53335a0596cb0020412212e5f720837a7523cd35f80f1e9d9"
+        "sha256": "83819057dcb179ee00b29db77c4ef77aafb2bf1e63bf0103cc1a4deffd00d9c3",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_034.png",
-        "sha256": "2e291fcc7541bb2258ac0076a0ff38c38a4f7d475beabeb03a9949dfbe0468f1"
+        "sha256": "9cba5ddfc14a276f265c1f46eb7a087e29abff8c8086764e152eadc750825289",
+        "frame": 34,
+        "used_by_frames": [
+          34
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_035.png",
-        "sha256": "e4d526747a4a86fd1ea98b4e3ff3b2801adb82b181f01778f3d57b752aa25756"
+        "sha256": "1de2c8085e5038d6e34407537862fb7ede2734ef68248c066dd707cf8ce1eace",
+        "frame": 35,
+        "used_by_frames": [
+          35
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_036.png",
-        "sha256": "6572e7cc9662a040d4ce0398eb7be79b7004cd9293ff168c58c966ae8559521e"
+        "sha256": "89fbf35caafe0c52dbe779a276a456c87cd58d06a1d3178731978a358b6122b5",
+        "frame": 36,
+        "used_by_frames": [
+          36
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_037.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_038.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_039.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_040.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_041.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_042.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_043.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+        "sha256": "b78b3cfc744739bdf3d98d20cc7c1c102fae0d02e2666ccd194fd7146aa90395",
+        "frame": 37,
+        "used_by_frames": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          53,
+          54,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_044.png",
-        "sha256": "058acf63008cd1b587af583c7ab2523f9feff2d7648aba3b2c6e5cfbe916d130"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_045.png",
-        "sha256": "058acf63008cd1b587af583c7ab2523f9feff2d7648aba3b2c6e5cfbe916d130"
+        "sha256": "185069fd2bb1ba59b6957f45312c621d9cd30d841d83cf6f536ed13ce89d6420",
+        "frame": 44,
+        "used_by_frames": [
+          44,
+          45
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_046.png",
-        "sha256": "53e234ac7c2321355de1b63bc87541d95e123e7d1fc5775ad43edf95cca1c49b"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_047.png",
-        "sha256": "53e234ac7c2321355de1b63bc87541d95e123e7d1fc5775ad43edf95cca1c49b"
+        "sha256": "e930aa9dd5355d0303382bca74a6c74bb95977b13077f5e782eed719e2ce601e",
+        "frame": 46,
+        "used_by_frames": [
+          46,
+          47
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_048.png",
-        "sha256": "148d71a627de425d7fe1d4e9118f4112f364c8b8e00caccbdaefc12cab7eeda5"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_049.png",
-        "sha256": "148d71a627de425d7fe1d4e9118f4112f364c8b8e00caccbdaefc12cab7eeda5"
+        "sha256": "55a1b720b02c033cb6a26025c8bdc19ae5e9a5f8fe77e440fd7f0e9ea7eeae9b",
+        "frame": 48,
+        "used_by_frames": [
+          48,
+          49
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_050.png",
-        "sha256": "a6128524776c1ea7178c7233d06cf67dc46f0b5b9e32d892b7af2ed472bfb30d"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_051.png",
-        "sha256": "a6128524776c1ea7178c7233d06cf67dc46f0b5b9e32d892b7af2ed472bfb30d"
+        "sha256": "0e8c58cc37a31451b19c15a01aaa4d16f2fb246a69e64bf35abce1348a0a9393",
+        "frame": 50,
+        "used_by_frames": [
+          50,
+          51
+        ]
       },
       {
         "path": "art/animations/title_layers/03_main_building/frame_052.png",
-        "sha256": "8c9b044f1e350585c4dea5632eb6e7b605695310c6eef4cd0f00e797f5e2a77b"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_053.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_054.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_055.png",
-        "sha256": "8c9b044f1e350585c4dea5632eb6e7b605695310c6eef4cd0f00e797f5e2a77b"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_056.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_057.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_058.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_059.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_060.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_061.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_062.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
-      },
-      {
-        "path": "art/animations/title_layers/03_main_building/frame_063.png",
-        "sha256": "dd5fd9d66db6d929694c91b9781ea0edbb40014abed2d9c0295e3c23cbc5fa50"
+        "sha256": "96502c2e538b2bb70f0f0b82ea04a2df82f393f24092c04d25f87ab0e59d587d",
+        "frame": 52,
+        "used_by_frames": [
+          52,
+          55
+        ]
       }
     ],
     "04_small_buildings": [
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_000.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_001.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_002.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_003.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_004.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_005.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_006.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_007.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_008.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_009.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_010.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_011.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_012.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_013.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_014.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_015.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_016.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_017.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_018.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_019.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_020.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_021.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_022.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_023.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_024.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_025.png",
-        "sha256": "9942434765774a639ce737e93f2464b19b8c38e6b8bce3c39bbc6e146c49083e"
+        "sha256": "bc5a9cfaa75283cb72843a9a859ebcc732e8f5b513d41555607a35ac19ee212c",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_026.png",
-        "sha256": "be98b528eb74c162c34a755170f7b6550f019098a1a8d8e0c3a06f6db0b7e4d8"
+        "sha256": "3706e55e7d84ada7b96e2c578dfa56789539f43ba542b4dad6556150d99c44ce",
+        "frame": 26,
+        "used_by_frames": [
+          26
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_027.png",
-        "sha256": "6447021788e6bf408640f47c6dee615e940351996cd65cda5ae5a4bc8e72edca"
+        "sha256": "4f21cf86b52f2ed0f9456968b84908038e873108080d1fb1be1d6f36aaad305a",
+        "frame": 27,
+        "used_by_frames": [
+          27
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_028.png",
-        "sha256": "b0727ed6dff08a8e52767be8e356cf9a46f949f49acba0faeccf3b4855d3438c"
+        "sha256": "19e674b2b5a5eab2e5bb023bd19d7a12df3607aede4a48118a5c890b6139f5c8",
+        "frame": 28,
+        "used_by_frames": [
+          28
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_029.png",
-        "sha256": "fca1769f2aa8656fb89dbdaf44636d03d41131418490e90f6c8428a53ca7e54b"
+        "sha256": "96e81b691783155623e39304ae417d7de184c6b823436d0ab37d88ea15e8643c",
+        "frame": 29,
+        "used_by_frames": [
+          29
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_030.png",
-        "sha256": "d98b4eb1e70db8da1e93d1517a70b2027b53e1f095051fe343c7c0481834db74"
+        "sha256": "4e7080cf513da689fbf1ff144415e6d3c6eb04d1dc60e5d2004c459756a73c4e",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_031.png",
-        "sha256": "78d1686b4fa481ee62c327f2ef51aa0e61ebf50f8ec9a4aec47a9bce268b69c4"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_032.png",
-        "sha256": "78d1686b4fa481ee62c327f2ef51aa0e61ebf50f8ec9a4aec47a9bce268b69c4"
+        "sha256": "e0f815fbc6bf2922331a860e8ac41c71a7e2771b7ffd96f77f712aaf2391cd4c",
+        "frame": 31,
+        "used_by_frames": [
+          31,
+          32
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_033.png",
-        "sha256": "e93bf371d2ae746411bbd4e1d5b6e4c7be96e25c2777d492bfeba6f02634e637"
+        "sha256": "37daded1fe1e4805cbb77d091043b390957ec443b0118e66ea4ac4afa86efc71",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
       },
       {
         "path": "art/animations/title_layers/04_small_buildings/frame_034.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_035.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_036.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_037.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_038.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_039.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_040.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_041.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_042.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_043.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_044.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_045.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_046.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_047.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_048.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_049.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_050.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_051.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_052.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_053.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_054.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_055.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_056.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_057.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_058.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_059.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_060.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_061.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_062.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
-      },
-      {
-        "path": "art/animations/title_layers/04_small_buildings/frame_063.png",
-        "sha256": "21293761dfc3b9306ddb335e55a94e727530d5acf51b934db3bb5af00d78072a"
+        "sha256": "7c963c0e7885d4be55ef3006093fea32cdddb02c948994c825880234d96f6975",
+        "frame": 34,
+        "used_by_frames": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ]
       }
     ],
     "05_vehicle_cargo": [
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_000.png",
-        "sha256": "23863d635af6dd7f7fe0c20d33e65cf13f42da768f14ed3d3fced7e96719466e"
+        "sha256": "2f4177e052ae38b536ea8907c81a00422391d50632e39411cad5304bba837273",
+        "frame": 0,
+        "used_by_frames": [
+          0
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_001.png",
-        "sha256": "c1c2882086aa5d37078502efad2efee7fa6284ddb82a922745ff944d834630dc"
+        "sha256": "06c87248a1f323382dbe4683dee7f579de5fc4a0da9e4aab2f3096b2a963ae34",
+        "frame": 1,
+        "used_by_frames": [
+          1
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_002.png",
-        "sha256": "f4540e8ae6d00d39abf9ef5fd8d291051dc3c47acad9149eaf707f1fe00bfd9d"
+        "sha256": "e4c1a8429da07ada10d10a4d33322ff29e0f3ceb970e3c74c928860c59469cc8",
+        "frame": 2,
+        "used_by_frames": [
+          2
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_003.png",
-        "sha256": "8fb40dcd0d9e57f4a0ec4a226f8aa04c89295a35a8c6e126dbc80580e2cef083"
+        "sha256": "c6b7709f585affd110c2f8e399e3d90e9317c79203fd3824029b2515fb65aff7",
+        "frame": 3,
+        "used_by_frames": [
+          3
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_004.png",
-        "sha256": "9d1349fbd76f2499f787dc50ee5a4caaf80f882a9918df31e25eca4a3fdec6a5"
+        "sha256": "14a33d39969185cb70a620541333d01914797c09fc34946eb1639b1a41ae2b55",
+        "frame": 4,
+        "used_by_frames": [
+          4
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_005.png",
-        "sha256": "826fac07a5c38c8dedfc51ea3ffc46c244a238188e8e29c77076fd0bab453a86"
+        "sha256": "94efc9109a0d300e482db7d2da3c95922e02fce4e2cd55ce4bf8cfe5a1da57eb",
+        "frame": 5,
+        "used_by_frames": [
+          5
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_006.png",
-        "sha256": "2b575a77e4413bf1ee5e24561b2aef65f1341d16243f8d314056ce38ea335b0d"
+        "sha256": "0da2545d8cd4880560ebc4d152821f67ec93753590d3a8788a365373921409ac",
+        "frame": 6,
+        "used_by_frames": [
+          6
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_007.png",
-        "sha256": "ea7191b1cd617baa4d3d15bb4a9f2f7cc2b09afc6966585c84822936eb4b1ae5"
+        "sha256": "5278db256dd8b7b2b9b9d78900ff455422a800f82360124c6d136c4824b74281",
+        "frame": 7,
+        "used_by_frames": [
+          7
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_008.png",
-        "sha256": "a2f5202a6662aae97a3a4b7081560dcac40a7b4453a5b544f35e481cd1b2eb25"
+        "sha256": "3e7372da81a0706f69323867caf9eb6f67379f5f42d99d5d9584e6d6254f7537",
+        "frame": 8,
+        "used_by_frames": [
+          8
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_009.png",
-        "sha256": "d904973f06b988717df2bae9fdd6132ed9d4249074a0df9a1b3cd2108c91bd1c"
+        "sha256": "15083680261eb6c3093072f98ba2030c2fab8b5ad988381510aa27fc648c4865",
+        "frame": 9,
+        "used_by_frames": [
+          9
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_010.png",
-        "sha256": "4259cc15cda5dc5eb2207b5beb8e5a730ac6595930bed106d092d27060140cdf"
+        "sha256": "d1ff67fa869282c1b3aab9df9bda794471969bae2ad1563f9360fb43001937c0",
+        "frame": 10,
+        "used_by_frames": [
+          10
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_011.png",
-        "sha256": "dfd012b0339e95ecfd5870f0d6872bd577fde408f5dde02917b4727dec1522b9"
+        "sha256": "628eaa11701432095fdba5d7e2c022ffad8b4e525c81234106148fb1dd2298a6",
+        "frame": 11,
+        "used_by_frames": [
+          11
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_012.png",
-        "sha256": "3ad4d4eeef240430357ce935c9946569a92f13fbf5266a5f8ccf9b69f03b1a75"
+        "sha256": "e6bf71c847a53321a912f6e160d4bff479071844720ab181b8bff43d612201de",
+        "frame": 12,
+        "used_by_frames": [
+          12
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_013.png",
-        "sha256": "2097be383daa31a5334d749e1d85788d716b4017a9376b9359e5bed1dc92e866"
+        "sha256": "8c81700c470a22f2f6498da01fd443ce1f04999f2f3d07fa8002379adaf25f6c",
+        "frame": 13,
+        "used_by_frames": [
+          13
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_014.png",
-        "sha256": "81ba92a70940881535fdb3215d18f35f469d5d6628486e896bdf1fe2db0dba86"
+        "sha256": "3d46660da54994d06fe3c6b01f5dbb62eabb6ca2d58c2382ec6d302e2a471fd0",
+        "frame": 14,
+        "used_by_frames": [
+          14
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_015.png",
-        "sha256": "eb96d9e8af991d3adb9f99f038eba5ee666483f84a3484d20c99e7cf5bd15da3"
+        "sha256": "d6fc7d7e51c8b46e702765f47cc04ca829b4c1fa0757e1ebb858b4b72628cccc",
+        "frame": 15,
+        "used_by_frames": [
+          15
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_016.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_017.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_018.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_019.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_020.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_021.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_022.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_023.png",
-        "sha256": "7c1a6917653e0c0e4de8a966bc01b0da36870bd6325db20b7555cebf9770cef7"
+        "sha256": "ddd8eb26d20f8cc61e45898e4f1987c7ab7237127c2f0498370fb4c970038a0a",
+        "frame": 16,
+        "used_by_frames": [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_024.png",
-        "sha256": "1dbda64f339430fe6981db69904d78f50377b65b1c00986d9503f8d0e4e891e3"
+        "sha256": "a96756232b66f1b47fa387bebfbf31de3b288d88146fb70ade40922a02b3cfc4",
+        "frame": 24,
+        "used_by_frames": [
+          24
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_025.png",
-        "sha256": "55c67d38bdc4c545c1a0716c405348ca2611cf1dd2330e36f9f2fb906dcde833"
+        "sha256": "113a73e10b43e615aabf206335c840937ae10fd95d79fdb3964b11fbdb943aac",
+        "frame": 25,
+        "used_by_frames": [
+          25
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_026.png",
-        "sha256": "c881d93207ab8028a46f8e16591a7004b5bc072dbc3619c75d6198d3f8adba8a"
+        "sha256": "427dd8d4a09b7e7f0aae30950afbda4572e94734e6e01ce09ac05f79ec3cdb23",
+        "frame": 26,
+        "used_by_frames": [
+          26
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_027.png",
-        "sha256": "8f709f952ae5095fd2ec216c2996fdca715b51929001f7dbfa30a5548c4a5c30"
+        "sha256": "bf68771e23f3e2651656b6032cfce5a00cb79f56499fed6c8d78e8234e36f1e6",
+        "frame": 27,
+        "used_by_frames": [
+          27
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_028.png",
-        "sha256": "fa8e21e1a23293140d33abc63fd08eae588a2e64c11360ab06ee6333f3f6fd2c"
+        "sha256": "c1693bd3d1b28dfd96a718b4f7630978210f0dda28bbae9efc9544d16eb7616b",
+        "frame": 28,
+        "used_by_frames": [
+          28
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_029.png",
-        "sha256": "2a9f6aae98b1d0785facdfa37d6a3b39aecef1e51012f42d8fef425d0147ea3e"
+        "sha256": "4e42b6dd625ac2dc9f30222d1a0b46358d57670ea03b55bd512ac9fe35857a4c",
+        "frame": 29,
+        "used_by_frames": [
+          29
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_030.png",
-        "sha256": "4aa8502546a740bf48112c74ecee4318026588e1b9056a8782743bb40cc1ed0f"
+        "sha256": "ecb2e6f38caaacb579843f2e6834238666e2f005257ec7d2090e03af4c285710",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_031.png",
-        "sha256": "47164f74e3059108b55284b50a0da8ed4c4e11f457d92e4e9e6d88a6bde0a9de"
+        "sha256": "5bbe4d812c9a2956afd2ec3ef2279fa0356f58fc98429f068b455728cbb0633c",
+        "frame": 31,
+        "used_by_frames": [
+          31
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_032.png",
-        "sha256": "af2260170b5996bc72229ae22623ce55a926ba1687a07e467f3c16de3c30cce6"
+        "sha256": "173b89bf9a3ae84add3571eda56b94834f561a0a6eedd8165465fa35688c959e",
+        "frame": 32,
+        "used_by_frames": [
+          32
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_033.png",
-        "sha256": "0abdcab6fd98814ed946a8db52767e6a66c4592b21ba5999520e9cd6846209b1"
+        "sha256": "e736f52186a046f000d0780bd95f23ceca5313b4a702e5c904a22adaa0fcddea",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_034.png",
-        "sha256": "b5585f80f7ac131bccd4f4b567e25099ea6e552a19bc63b26098151678f72368"
+        "sha256": "a57f25a0410488e28c1f7478d0a43e91704fcff0a63669932b61f7bd4c0f77ce",
+        "frame": 34,
+        "used_by_frames": [
+          34
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_035.png",
-        "sha256": "52fc4ccbbd10ca5a99ef5eab04968dd9da5c179bacccfdd2b17ce5f44e4b51c8"
+        "sha256": "b803fb7a5031b4f9614e39f955a4f053f8e51c898538199eb17c8a3d586aa035",
+        "frame": 35,
+        "used_by_frames": [
+          35
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_036.png",
-        "sha256": "8af68ea320ebd05826b8758db0f47de0635cbc93796e419ccfd54d4e393ae797"
+        "sha256": "e1a5a040e8aa1faed3688f06dbcb7097ba19a5c4629999da32d8329bd1444481",
+        "frame": 36,
+        "used_by_frames": [
+          36
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_037.png",
-        "sha256": "d5b784a7365b3c026b6a2b3a47e988bce03ce678d6c14fbc0ca77547dc626c10"
+        "sha256": "8c797e84fa054b218996d48975b63afb9a894b999398274f416d40fc93e4f3cc",
+        "frame": 37,
+        "used_by_frames": [
+          37
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_038.png",
-        "sha256": "d8ccf0dc96ab24a1ce5e43fbb21e738d11c25affef52cc99e52fc0115529fa99"
+        "sha256": "2175843225838719ba9e9a9f1b95a2adae38b8bbc5a2a867ac38606bc0afb908",
+        "frame": 38,
+        "used_by_frames": [
+          38
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_039.png",
-        "sha256": "e2a0a608ec0535eaa507e94b70f5b6a6d33922bd0ab154becbb8fe87e6212ab3"
+        "sha256": "47513d35a5454737b724a2820ff465752b61f83cc0c47c825c439b38e6aa23d1",
+        "frame": 39,
+        "used_by_frames": [
+          39
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_040.png",
-        "sha256": "1aca1c1529397045364f44a4d7335d3ebcfdb37d6d72df6bdc7aeae789d11bc8"
+        "sha256": "ea0fb3a5fa04c9dba3bea4099e351b42f7870261eee6ef38e142b8a5acf1717a",
+        "frame": 40,
+        "used_by_frames": [
+          40
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_041.png",
-        "sha256": "70802358ced140e385d8c068c41a5e30e2e892c97f0f395330cbad6565e8d2f9"
+        "sha256": "8a0c5fa8822dcd6954e933caa4c4aabe748d89ddc22c978b8e41746d7e1804b4",
+        "frame": 41,
+        "used_by_frames": [
+          41
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_042.png",
-        "sha256": "d297a9f670635b61a4968df7edef74bd0a7b2b58d494bc27b858aca488dbce11"
+        "sha256": "d297a9f670635b61a4968df7edef74bd0a7b2b58d494bc27b858aca488dbce11",
+        "frame": 42,
+        "used_by_frames": [
+          42
+        ]
       },
       {
         "path": "art/animations/title_layers/05_vehicle_cargo/frame_043.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_044.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_045.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_046.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_047.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_048.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_049.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_050.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_051.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_052.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_053.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_054.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_055.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_056.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_057.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_058.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_059.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_060.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_061.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_062.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_063.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c"
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c",
+        "frame": 43,
+        "used_by_frames": [
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ]
       }
     ],
     "06_roadside_props": [
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_000.png",
-        "sha256": "c0673157775828e44aeae3ceb7c112a74cdd6dce5899cdc053e079b771b4a806"
+        "sha256": "be24159aecfa16421fdea6f9be484454a9a2da2c7180f633670b5a9dcde06abc",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          16
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_001.png",
-        "sha256": "c79151ffab9f3a84a8452a26c646a39075183b8e8098cd6c4dfa1b6b30321462"
+        "sha256": "786076a39268d5bf2af29b3d91bd7c82952bce77eaf238986e3c2ccfb43a2232",
+        "frame": 1,
+        "used_by_frames": [
+          1,
+          17
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_002.png",
-        "sha256": "e683fd03fc505fb681eb7de15065b9df080fd491b23ab3063d82fdee6fd4b0cd"
+        "sha256": "656c461cc0673076ed32650abff27c52881e571a406cb0dafb1c304326ad9bd3",
+        "frame": 2,
+        "used_by_frames": [
+          2
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_003.png",
-        "sha256": "5de68138d113853daba86076d5bf37b1bdfd96a0fe5577520c92e18f465d826d"
+        "sha256": "fc60547fd28b9cb9f183eaa5b043afb03776b6afcfa866b0d0eb6400d66a2d01",
+        "frame": 3,
+        "used_by_frames": [
+          3
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_004.png",
-        "sha256": "560619448723c41301b44149c9c37c37c819e67b83cb6c8c3b96839688ab044a"
+        "sha256": "16e6d8d208c563a26ab71c1122fdfb4d099eb552a1ad828fbd5289128f25df8e",
+        "frame": 4,
+        "used_by_frames": [
+          4
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_005.png",
-        "sha256": "d49f88858d2528d2ef5eab2dedd90c6a023fe8ed56e37743864212566f0a81e3"
+        "sha256": "aedc3d53f9310946541a22e28c573dbaa316f0d350673bc02d7dce403f91f0a2",
+        "frame": 5,
+        "used_by_frames": [
+          5
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_006.png",
-        "sha256": "4ef29c2a1109d054074b5a5fddd7a6cc4bb842a6ae312e9b71716be6456e297d"
+        "sha256": "0a97ab1c7fd5900031399ed703277c48957b7398d1e5f2f6fdd2e2187765ac0a",
+        "frame": 6,
+        "used_by_frames": [
+          6
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_007.png",
-        "sha256": "b931b1687f785ca20d6eadccab8415967dd418891997bca85d8342706910b869"
+        "sha256": "06444cf4ef0e93a3f8453b7b2cf071e5d3b8b7fb9e76d1f51ebff7d42b12ca04",
+        "frame": 7,
+        "used_by_frames": [
+          7
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_008.png",
-        "sha256": "09d806d543906bfb21cd3f618bbd5d5060ad51804bcead5faee2fa13946abf49"
+        "sha256": "dbb5a5c769c25e0f3ab269cfe5bb36c3b15bdd507164f34addbb90c6c6a2ff62",
+        "frame": 8,
+        "used_by_frames": [
+          8
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_009.png",
-        "sha256": "d5fa911187ebfaef4fe587eecb4890f431cdd9793a4f702ca41b3969c61b0221"
+        "sha256": "c14d7250b3651be41a6c492ca9a78e926431b71dc1466c99ae4b807d3ccd5028",
+        "frame": 9,
+        "used_by_frames": [
+          9
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_010.png",
-        "sha256": "46b9caf00d8ae33a070944537e4b5fdc8b175bf2b7ae21a5821f946f1caa22ac"
+        "sha256": "d9fc8a2340ca8bf081bad46f0989e5b689d1b138936edacac5fa3819f23b8e37",
+        "frame": 10,
+        "used_by_frames": [
+          10
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_011.png",
-        "sha256": "7626a98ef00f6ff792e6128c99d2e5df662bc64df3c72d96d3b6c2735071989a"
+        "sha256": "bb283a4c59908afeb57b29c5235700a3b680b7bf63469b732f8f3e605410c9c5",
+        "frame": 11,
+        "used_by_frames": [
+          11
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_012.png",
-        "sha256": "f94093173496a467ae6e323d326c1ca85ab1c26be3e74a33b671d91ec3cea367"
+        "sha256": "1f7641e780d3f2cece08c6229814f8074722446ac4da03310b4c688eac9a9780",
+        "frame": 12,
+        "used_by_frames": [
+          12
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_013.png",
-        "sha256": "8354a911fb80cd53c79152c4be5b30ef1d237dbeb2a115d339af26cf77ef88ef"
+        "sha256": "80ff34c650f05b19c73b76a7bd1314592f8430922c896b93d9dc66611fdbfc54",
+        "frame": 13,
+        "used_by_frames": [
+          13
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_014.png",
-        "sha256": "dabf9287cfa3431586d1bd8c7791118f2fcc083860652d2ebb0e431ebb7aabfa"
+        "sha256": "d2c8d7f9aa22094a000d1403c7a47c2a53c242b9a5296c0c6abe2dc9fa7d9b4b",
+        "frame": 14,
+        "used_by_frames": [
+          14
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_015.png",
-        "sha256": "5bb86ca929a8cc64021a1b9f1cc64cdf25ebf830e37f7fa1b63b03ac570b4c53"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_016.png",
-        "sha256": "c0673157775828e44aeae3ceb7c112a74cdd6dce5899cdc053e079b771b4a806"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_017.png",
-        "sha256": "c79151ffab9f3a84a8452a26c646a39075183b8e8098cd6c4dfa1b6b30321462"
+        "sha256": "9ec4ce4f92863757a2c2b1c39b5b6ed4c5f7671fc3928184e5015387f7154dc5",
+        "frame": 15,
+        "used_by_frames": [
+          15
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_018.png",
-        "sha256": "fc75d5b541d1e3a66bdd7ea230779ed98c19a4674dec1ad766bf1d625073ec36"
+        "sha256": "276999d3b2ea591c76da8909169800389f6040bbd82455a500f49dc8c628ca6b",
+        "frame": 18,
+        "used_by_frames": [
+          18
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_019.png",
-        "sha256": "f69428ccc54fb448492fc6a5b672baa1a9935b03025b5eae4b199f6408d78e77"
+        "sha256": "15fc99bbbb155ab590f44dc3c2ff33ab31f0d6c0224d8109488795ccd2fb427c",
+        "frame": 19,
+        "used_by_frames": [
+          19
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_020.png",
-        "sha256": "4f594c5ec6adc2620a3f019d7b3f6a6544964f045d62229603a33afdb8d39ed0"
+        "sha256": "9a07566a13241de30383f6843d72b687b7926584b36b2aef1c0e2cd6f6ce7dd2",
+        "frame": 20,
+        "used_by_frames": [
+          20
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_021.png",
-        "sha256": "2779edf80548b1ebe183716e8b3f1dbeac6b09c65b06acb25fea198005f57f1e"
+        "sha256": "88914fc9285d7144da6c034f5052e55b7544b3f84980dd4357cee24a7d63e572",
+        "frame": 21,
+        "used_by_frames": [
+          21
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_022.png",
-        "sha256": "811ac67d44ee0e48e83ee91f97556a28292952d0f280090ef37387aa649e1406"
+        "sha256": "df019f992cbb6e46309170aa6f633e20d3bcd7c3399249c15dfaf8daeee965ef",
+        "frame": 22,
+        "used_by_frames": [
+          22
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_023.png",
-        "sha256": "4d3a9f3315e0851844c92beae77e4f9812026bec37b8d3f40e935413c2042cf1"
+        "sha256": "108fdd73a0e96f276697181ef0819d2fb7f07098be53689333dcc203688a0da6",
+        "frame": 23,
+        "used_by_frames": [
+          23
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_024.png",
-        "sha256": "95bdcd16bf2d3ffabe62e5a52dadfb6ea1d1899db940146b6bce93642f4abb61"
+        "sha256": "ecf333f449d734f3773db6f37420b94141da8dea4a2e3a3fa329ff87420de93d",
+        "frame": 24,
+        "used_by_frames": [
+          24
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_025.png",
-        "sha256": "649e7202e676d5e4061dec50e7cc9e1ce3fa2a20a9bd3a54fa5c73e9389d76c9"
+        "sha256": "baece68601605996da49a7e1e95161097292e7c507749125475b51d515c270a8",
+        "frame": 25,
+        "used_by_frames": [
+          25
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_026.png",
-        "sha256": "ed0dec4877f865d25336e7da3604a9be6bfb7e3ab5d7bd1bb65a70cd6d3b782a"
+        "sha256": "d6b66c284e63e0ef686c734bfa6fbafe34449d8ccfb94ce05ca9154de572614f",
+        "frame": 26,
+        "used_by_frames": [
+          26
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_027.png",
-        "sha256": "121f82c13447545ad45aaf55fec5d90a4018873e186efbf0c2a80465456ecf03"
+        "sha256": "31e00605f036f2c45e25c99232f550cb8d150d4dcf9452f5a35e46a4d1b35db9",
+        "frame": 27,
+        "used_by_frames": [
+          27
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_028.png",
-        "sha256": "b2276696d2a7f530c2d7b4c60ace27a15286abefb79c762e89c2bff5f63896df"
+        "sha256": "42613ddc07736e733e7236f051afab5864ed1ef95f62d1388d835b1b913e4e01",
+        "frame": 28,
+        "used_by_frames": [
+          28
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_029.png",
-        "sha256": "c0be4f36d92eee767a629cc867bbfc577aed5f20a070f76251cfe9f1a591b486"
+        "sha256": "43974ae1a985a1da4c28a35a23960b7d0f40f0e8292937dcc8a76c3a1dca5432",
+        "frame": 29,
+        "used_by_frames": [
+          29
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_030.png",
-        "sha256": "3449a01e5b4599152d0a27c050ef5914fbc9b063d4d5a85588e2adbdba59df53"
+        "sha256": "ebc0a5a0e6a6f6597944400b4b1e56e597b9c62aac50c26fff2d7d72042e23ba",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_031.png",
-        "sha256": "b2af681f632377496d9932736e5b5df0a14e680f44515f1da89ce489ae6e9f1e"
+        "sha256": "6035a2b184e4f5495ed9ba47015d18a999234d62ba2deced3ed62104533f372f",
+        "frame": 31,
+        "used_by_frames": [
+          31
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_032.png",
-        "sha256": "e4a2dc10c6807e52de64718f2d1baca87e15db317ab06880cfe295cf7351fb6b"
+        "sha256": "ef19ee5145b5b203afaa827520897c60d70b03e308bd52180aa3c47ac5e683b7",
+        "frame": 32,
+        "used_by_frames": [
+          32
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_033.png",
-        "sha256": "3dd131a896ae8027cdbf7ae3635f6b023820a1e4d386c8f23df16fae4a2d9110"
+        "sha256": "65b1fbd35e0cf23d41ca330b1d7b514b3db490c6bec5d8c2faf420379fec7cfa",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_034.png",
-        "sha256": "8e093a62f60ed9fa2baea60f1876ff38457a4fcfd8ca529bfbf6f2769870dbb7"
+        "sha256": "7f31f45a7e018edb6f5652b4e966743feaa8ee9cc1ff578441a10c48705f5158",
+        "frame": 34,
+        "used_by_frames": [
+          34
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_035.png",
-        "sha256": "1833cb1e0432c100737fb2e4e5ecb2f5517ce17f47b25105d56038b993af0ba6"
+        "sha256": "3fc70a96d12434650a3b59b140cc592e9743f22f33b6acd4535568581ec1e090",
+        "frame": 35,
+        "used_by_frames": [
+          35,
+          51
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_036.png",
-        "sha256": "c5f724c6081e22ca6f3e31e78b71e05d3487e812f598e4ef706dba5b2517ecd1"
+        "sha256": "38cb5f5cd964ee880f2895fdf4403196a05daa6641dda3fc55b9a93649703966",
+        "frame": 36,
+        "used_by_frames": [
+          36,
+          52
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_037.png",
-        "sha256": "e0c02f33a2d85b9fd8bc34d5a2a3a563531e4bba0c896f0b0c20b50b6c44175c"
+        "sha256": "b556bfd29d6836d22313aed8df638370e54084603244a8dda1093e70f27a1eb3",
+        "frame": 37,
+        "used_by_frames": [
+          37,
+          53
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_038.png",
-        "sha256": "6e5e7c9771a3dec1428eed800604433f4a6b09b91c585e1765b2cf6dfc886fb8"
+        "sha256": "8a633eaeb1a4e56f837279db78b554f4fa6bd7e407814a5f745019cac7346187",
+        "frame": 38,
+        "used_by_frames": [
+          38,
+          54
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_039.png",
-        "sha256": "0fb6aacf02cb84cbe1d8e32a0e7b93ac01e12fa3c746be6018b7c7400777ed1b"
+        "sha256": "346f153efeb69e508c1b27cc2985a8090b7b456d2b38f8523f444c21f3a67a5b",
+        "frame": 39,
+        "used_by_frames": [
+          39,
+          55
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_040.png",
-        "sha256": "b0cb6b0f83e7435e08a4eb3f0f8854805b26f5baafe1c1608cd0643364dec12a"
+        "sha256": "96ebe2cdcac3dd0a774e59a970ee4745ee462d3322e6d1ca48065bcecb6755df",
+        "frame": 40,
+        "used_by_frames": [
+          40,
+          56
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_041.png",
-        "sha256": "0c384981aaa459585d9ffbf3da83515a695eedd3e3d5729c3af0d608be748ba6"
+        "sha256": "d01fa931a4e17d687d6fe54cf353aec295545d8a5947818f21f5ef8f76a79858",
+        "frame": 41,
+        "used_by_frames": [
+          41
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_042.png",
-        "sha256": "576935041f01a4985fac1d655335b4e05e293de85a3b9eacf07bb563dde5f251"
+        "sha256": "3ee5abcc1b3a03a3d5dd2e53d9152c9e72d09cd28356ed7a800ff5273b0aff73",
+        "frame": 42,
+        "used_by_frames": [
+          42
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_043.png",
-        "sha256": "d21c4a7469e2b9e10eab20770d29f0b64af5af20a9be0b480fca7689c9de775b"
+        "sha256": "64df71b61ca8af27cd06b6deeb81d386759765f20e5fe0b70ae03ee6290c9064",
+        "frame": 43,
+        "used_by_frames": [
+          43
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_044.png",
-        "sha256": "b06ccfbbbdcef4eab2a2169c65109b75cbfd14de5d1c9a677cfb85c7f33838f2"
+        "sha256": "9b96182e7108aa93e84dc65a9fae1a6e8b66667a0562b182cd2c8a90ee424f43",
+        "frame": 44,
+        "used_by_frames": [
+          44
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_045.png",
-        "sha256": "70edc8c65347945c13006d9455978432bfe551df108d4b0f90b1243e270ee06e"
+        "sha256": "3979cfc27070b05e285111cf9d33b98355859797fc7c1cfdfb2d46c0ec8ec719",
+        "frame": 45,
+        "used_by_frames": [
+          45
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_046.png",
-        "sha256": "a2f4da8576825fed8b3a98712cf7d2ea5be50e4f9398a450e054b008773255fa"
+        "sha256": "2b57bece194c5de86271b904055d8a4e5244f780caeab345e2887d5c50cc6dc1",
+        "frame": 46,
+        "used_by_frames": [
+          46
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_047.png",
-        "sha256": "5656b967af99f0a76e767535f86274353cc71d2310970d64d626c7091d071425"
+        "sha256": "1ac364a2103e52467fbbf5d0cc550b726f568d2788423b7f72b63286ffa7d0de",
+        "frame": 47,
+        "used_by_frames": [
+          47
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_048.png",
-        "sha256": "bd077267dcac1f37c184faaa9af1127643d9717d96fd20f7b712acf06357f730"
+        "sha256": "f98310eba0f352002fbee472c3321cc12c1e83bade866e623cc706918f2787c3",
+        "frame": 48,
+        "used_by_frames": [
+          48
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_049.png",
-        "sha256": "f208fbd3e5ddd2bc53a1624950f71dc6920663003f039824efb3deef113f9a00"
+        "sha256": "919298bfdeba7f618445f8aaf481b32b00f9026060afc8a85624334f3d459916",
+        "frame": 49,
+        "used_by_frames": [
+          49
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_050.png",
-        "sha256": "a04c675f539dca9cd59d854dd3f70c163374bbfe5c7e84c7c41bfe166774f75d"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_051.png",
-        "sha256": "1833cb1e0432c100737fb2e4e5ecb2f5517ce17f47b25105d56038b993af0ba6"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_052.png",
-        "sha256": "c5f724c6081e22ca6f3e31e78b71e05d3487e812f598e4ef706dba5b2517ecd1"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_053.png",
-        "sha256": "e0c02f33a2d85b9fd8bc34d5a2a3a563531e4bba0c896f0b0c20b50b6c44175c"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_054.png",
-        "sha256": "6e5e7c9771a3dec1428eed800604433f4a6b09b91c585e1765b2cf6dfc886fb8"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_055.png",
-        "sha256": "0fb6aacf02cb84cbe1d8e32a0e7b93ac01e12fa3c746be6018b7c7400777ed1b"
-      },
-      {
-        "path": "art/animations/title_layers/06_roadside_props/frame_056.png",
-        "sha256": "b0cb6b0f83e7435e08a4eb3f0f8854805b26f5baafe1c1608cd0643364dec12a"
+        "sha256": "570f5d0e2bb8d853373165e19fc16c5b535f3d88f872504baf65d7c6b207b152",
+        "frame": 50,
+        "used_by_frames": [
+          50
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_057.png",
-        "sha256": "ffdba6ae4926fb7b8c38e022955dc6414e586ddb307932ba78e633c5e6973636"
+        "sha256": "ccd61696d3e61b24fe3ef29f67fe3c50a329eee490c3231813c3596e4e397477",
+        "frame": 57,
+        "used_by_frames": [
+          57
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_058.png",
-        "sha256": "f03d94ab540bba2e11d9f1e0731dcadf04560bb3f9748d23ee3c335427c7db12"
+        "sha256": "31fe75579cece096667e2d8dea6a292e185d8cae0bdd98dc3c6132d12e588e8b",
+        "frame": 58,
+        "used_by_frames": [
+          58
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_059.png",
-        "sha256": "28eb560339760468ba27f597ac40fd4ffc7d3dac1b55a6273cdb0f9fbe9a5a9c"
+        "sha256": "f31c6fb79cdc58b596737cc4dd356b381d8e8fec63fa3c8aa44cf74a492fcf07",
+        "frame": 59,
+        "used_by_frames": [
+          59
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_060.png",
-        "sha256": "8b9751103b79a029d16ef6e59bfe448e343d359fa679f0821ad4c371c2176a0d"
+        "sha256": "30edfb0e5d506a391b6380f921a063fc666bc6b56d4ce60f51251fd97b670de8",
+        "frame": 60,
+        "used_by_frames": [
+          60
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_061.png",
-        "sha256": "317cf82994ae81c66243f29204c8f71f7e4804076fad5bde3e9762a4a4eb4d76"
+        "sha256": "190008e31d2beefcc35e09157436fb575658768397d830ff54bc692c50e30173",
+        "frame": 61,
+        "used_by_frames": [
+          61
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_062.png",
-        "sha256": "a85e78f544ba400e3c5d1a3ced28c5be7be555adc8012d73df8145eb19f32a6e"
+        "sha256": "4912af469a87401fc98e4bea001b41af11d6a683440302ec5bdea4d53474d86a",
+        "frame": 62,
+        "used_by_frames": [
+          62
+        ]
       },
       {
         "path": "art/animations/title_layers/06_roadside_props/frame_063.png",
-        "sha256": "2ae4987d96dc85cc5d8bf44371558b918bee8c89649b14e151e5202e3dea8133"
+        "sha256": "8c3b52444584a2ffb7032d9e0b88ee505b18567501c3ea545b1c14b768847c7b",
+        "frame": 63,
+        "used_by_frames": [
+          63
+        ]
       }
     ]
   },

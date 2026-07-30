@@ -649,20 +649,56 @@ def portable_path(path: Path, repo_root: Path) -> str:
         return resolved.as_posix()
 
 
+def pixel_digest(frame: Image.Image) -> str:
+    """Content address a frame by its exact decoded pixels.
+
+    Two frames that hash the same are byte-identical after decoding, so the
+    playback side can point at one shared PNG instead of storing a copy.
+    """
+    header = f"{frame.mode}:{frame.width}x{frame.height}:".encode("utf-8")
+    return hashlib.sha256(header + frame.tobytes()).hexdigest()
+
+
 def save_frames(
     root: Path,
     layer: str,
     frames: list[Image.Image],
     repo_root: Path,
-) -> list[dict[str, str]]:
+) -> tuple[list[dict[str, object]], list[int]]:
+    """Write only the distinct frames of one layer.
+
+    Returns the on-disk records plus a 64-entry frame map. `frame_map[i]` is
+    the frame number whose PNG must be shown at logical frame `i`; a frame is
+    its own representative whenever it introduces new pixels. The map is
+    therefore always non-decreasing-safe: `frame_map[i] <= i`.
+    """
     directory = root / layer
     directory.mkdir(parents=True, exist_ok=True)
-    records: list[dict[str, str]] = []
+    records: list[dict[str, object]] = []
+    representative_by_digest: dict[str, int] = {}
+    record_by_representative: dict[int, dict[str, object]] = {}
+    frame_map: list[int] = []
     for index, frame in enumerate(frames):
-        path = directory / f"frame_{index:03d}.png"
-        frame.save(path, optimize=True)
-        records.append({"path": portable_path(path, repo_root), "sha256": sha256(path)})
-    return records
+        digest = pixel_digest(frame)
+        representative = representative_by_digest.get(digest)
+        if representative is None:
+            representative = index
+            representative_by_digest[digest] = index
+            path = directory / f"frame_{index:03d}.png"
+            frame.save(path, optimize=True)
+            record: dict[str, object] = {
+                "path": portable_path(path, repo_root),
+                "sha256": sha256(path),
+                "frame": index,
+                "used_by_frames": [],
+            }
+            records.append(record)
+            record_by_representative[index] = record
+        frame_map.append(representative)
+        used_by = record_by_representative[representative]["used_by_frames"]
+        assert isinstance(used_by, list)
+        used_by.append(index)
+    return records, frame_map
 
 
 def composite_frames(layers: dict[str, list[Image.Image]]) -> list[Image.Image]:
@@ -869,7 +905,20 @@ def percent(value: float) -> str:
     return f"{round(value * 100):d}%"
 
 
-def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
+def write_spec(
+    repo_root: Path,
+    contracts: list[dict[str, object]],
+    unique_frame_counts: dict[str, int],
+) -> Path:
+    total_unique = sum(unique_frame_counts.values())
+    dedup_rows = [
+        "| `{layer}` | `{unique}` | `{saved}` |".format(
+            layer=layer,
+            unique=unique_frame_counts[layer],
+            saved=FRAME_COUNT - unique_frame_counts[layer],
+        )
+        for layer in LAYER_ORDER
+    ]
     rows: list[str] = []
     for contract in contracts:
         frame = int(contract["frame"])
@@ -919,7 +968,7 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "## Source of truth",
         "",
         "- Human-readable contract: this file.",
-        "- Machine-readable per-frame contract and SHA-256 hashes:",
+        "- Machine-readable per-frame contract, frame maps, and SHA-256 hashes:",
         "  `art/animations/title_layers/manifest.json`.",
         "- Deterministic generator: `tools/build_title_layer_animation.py`.",
         "- PixelLab-approved keyframes: `art/previews/title_layers_static/`.",
@@ -941,8 +990,10 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "| Canvas | `320 × 180` pixels |",
         "| Duration | `8.000 s` |",
         "| Frame rate | `8 FPS` |",
-        "| Frames per layer | `64`, numbered `000–063` |",
-        "| File pattern | `frame_%03d.png` |",
+        "| Frames per layer | `64` logical frames, numbered `000–063` |",
+        "| File pattern | `frame_%03d.png`, sparse — duplicates are not written |",
+        f"| PNG files on disk | `{total_unique}` total across the six layers |",
+        "| Frame resolution | `frame_maps` in the manifest, see below |",
         "| Color | Only the 22 colors in `art/palette.gpl` |",
         "| Alpha | Binary only: `0` or `255` |",
         "| Sampling | Nearest-neighbor; integer source coordinates |",
@@ -959,6 +1010,34 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "4. `04_small_buildings` — exactly three perspective buildings.",
         "5. `05_vehicle_cargo` — transient truck and delivered cargo.",
         "6. `06_roadside_props` — lamps and grass anchored to road edges.",
+        "",
+        "## Frame deduplication",
+        "",
+        "Every layer still has `64` logical frames, but identical frames share a",
+        "single PNG. A layer directory is therefore sparse: a file exists only for",
+        "the first frame that introduces new pixels.",
+        "",
+        "`manifest.json` carries the resolution table:",
+        "",
+        "```json",
+        '"frame_maps": { "02_terrain": [0, 0, 0, ..., 24, 24, ...] }',
+        "```",
+        "",
+        "- `frame_maps[layer][i]` is the frame number whose PNG renders logical",
+        "  frame `i`.",
+        "- `frame_maps[layer][i] <= i` MUST always hold; a map that points forward",
+        "  is a build error.",
+        "- Consumers MUST resolve through `frame_maps` and MUST NOT assume that",
+        "  `frame_%03d.png` exists for every `i`.",
+        "- Consumers SHOULD upload each distinct PNG to the GPU once and reuse the",
+        "  texture handle for every logical frame that maps to it.",
+        "- `src/ui/title_intro.gd` falls back to the identity map when the manifest",
+        "  is missing or malformed, so a fully populated directory still plays.",
+        "",
+        "| Layer | Distinct PNGs | Duplicates removed |",
+        "|---|---:|---:|",
+        *dedup_rows,
+        f"| **total** | **{total_unique}** | **{len(LAYER_ORDER) * FRAME_COUNT - total_unique}** |",
         "",
         "## Locked geometry",
         "",
@@ -1043,7 +1122,8 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "## Required validation after edits",
         "",
         "1. Run the rebuild command.",
-        "2. Confirm QA status is `PASS` and total PNG count is `384`.",
+        f"2. Confirm QA status is `PASS` and total PNG count is `{total_unique}`,",
+        f"   with `logical_frame_count` still `{len(LAYER_ORDER) * FRAME_COUNT}`.",
         "3. Confirm all images are RGBA `320×180`, palette-locked, binary-alpha.",
         "4. Confirm both building layers report `never_intersects_road: true`.",
         "5. Run:",
@@ -1096,10 +1176,21 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
         if not all(required):
             raise RuntimeError(f"Validation failed for {layer}: {result}")
 
-    files = {
+    saved = {
         layer: save_frames(output, layer, frames, repo_root)
         for layer, frames in layers.items()
     }
+    files = {layer: records for layer, (records, _) in saved.items()}
+    frame_maps = {layer: frame_map for layer, (_, frame_map) in saved.items()}
+    unique_frame_counts = {layer: len(records) for layer, records in files.items()}
+    for layer, frame_map in frame_maps.items():
+        if len(frame_map) != FRAME_COUNT:
+            raise RuntimeError(f"Frame map for {layer} is not {FRAME_COUNT} entries.")
+        if any(source > index for index, source in enumerate(frame_map)):
+            raise RuntimeError(f"Frame map for {layer} points forward in time.")
+        available = {record["frame"] for record in files[layer]}
+        if not set(frame_map).issubset(available):
+            raise RuntimeError(f"Frame map for {layer} references a missing PNG.")
     composites = composite_frames(layers)
     preview_root.mkdir(parents=True, exist_ok=True)
     preview_files = save_preview(composites, preview_root)
@@ -1115,6 +1206,14 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
         "duration_seconds": DURATION_SECONDS,
         "frame_count_per_layer": FRAME_COUNT,
         "file_pattern": "frame_%03d.png",
+        "deduplicated": True,
+        "frame_map_contract": (
+            "frame_maps[layer][i] is the frame number whose PNG must be shown at "
+            "logical frame i. Identical frames share one file, so a layer "
+            "directory is sparse and frame_maps[layer][i] <= i always holds."
+        ),
+        "frame_maps": frame_maps,
+        "unique_frame_counts": unique_frame_counts,
         "layer_order": LAYER_ORDER,
         "timeline": [
             {"frames": [0, 13], "event": "truck enters from lower-left and approaches main building"},
@@ -1137,12 +1236,17 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
     }
     manifest_path = output / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    spec_path = write_spec(repo_root, frame_contract)
+    spec_path = write_spec(repo_root, frame_contract, unique_frame_counts)
 
+    total_png_frames = sum(len(records) for records in files.values())
+    logical_frames = len(LAYER_ORDER) * FRAME_COUNT
     report = {
         "status": "PASS",
-        "total_png_frames": sum(len(records) for records in files.values()),
-        "expected_png_frames": len(LAYER_ORDER) * FRAME_COUNT,
+        "total_png_frames": total_png_frames,
+        "expected_png_frames": sum(unique_frame_counts.values()),
+        "logical_frame_count": logical_frames,
+        "unique_frame_counts": unique_frame_counts,
+        "duplicate_frames_removed": logical_frames - total_png_frames,
         "output": OUTPUT_ROOT.as_posix(),
         "manifest": manifest_path.relative_to(repo_root).as_posix(),
         "manifest_sha256": sha256(manifest_path),

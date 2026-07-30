@@ -8,7 +8,7 @@ requirements; changing a `LOCKED` value requires updating this document,
 ## Source of truth
 
 - Human-readable contract: this file.
-- Machine-readable per-frame contract and SHA-256 hashes:
+- Machine-readable per-frame contract, frame maps, and SHA-256 hashes:
   `art/animations/title_layers/manifest.json`.
 - Deterministic generator: `tools/build_title_layer_animation.py`.
 - PixelLab-approved keyframes: `art/previews/title_layers_static/`.
@@ -30,8 +30,10 @@ python tools/build_title_layer_animation.py \
 | Canvas | `320 × 180` pixels |
 | Duration | `8.000 s` |
 | Frame rate | `8 FPS` |
-| Frames per layer | `64`, numbered `000–063` |
-| File pattern | `frame_%03d.png` |
+| Frames per layer | `64` logical frames, numbered `000–063` |
+| File pattern | `frame_%03d.png`, sparse — duplicates are not written |
+| PNG files on disk | `188` total across the six layers |
+| Frame resolution | `frame_maps` in the manifest, see below |
 | Color | Only the 22 colors in `art/palette.gpl` |
 | Alpha | Binary only: `0` or `255` |
 | Sampling | Nearest-neighbor; integer source coordinates |
@@ -48,6 +50,39 @@ Layer order is back-to-front and MUST remain:
 4. `04_small_buildings` — exactly three perspective buildings.
 5. `05_vehicle_cargo` — transient truck and delivered cargo.
 6. `06_roadside_props` — lamps and grass anchored to road edges.
+
+## Frame deduplication
+
+Every layer still has `64` logical frames, but identical frames share a
+single PNG. A layer directory is therefore sparse: a file exists only for
+the first frame that introduces new pixels.
+
+`manifest.json` carries the resolution table:
+
+```json
+"frame_maps": { "02_terrain": [0, 0, 0, ..., 24, 24, ...] }
+```
+
+- `frame_maps[layer][i]` is the frame number whose PNG renders logical
+  frame `i`.
+- `frame_maps[layer][i] <= i` MUST always hold; a map that points forward
+  is a build error.
+- Consumers MUST resolve through `frame_maps` and MUST NOT assume that
+  `frame_%03d.png` exists for every `i`.
+- Consumers SHOULD upload each distinct PNG to the GPU once and reuse the
+  texture handle for every logical frame that maps to it.
+- `src/ui/title_intro.gd` falls back to the identity map when the manifest
+  is missing or malformed, so a fully populated directory still plays.
+
+| Layer | Distinct PNGs | Duplicates removed |
+|---|---:|---:|
+| `01_sky` | `61` | `3` |
+| `02_terrain` | `4` | `60` |
+| `03_main_building` | `21` | `43` |
+| `04_small_buildings` | `9` | `55` |
+| `05_vehicle_cargo` | `37` | `27` |
+| `06_roadside_props` | `56` | `8` |
+| **total** | **188** | **196** |
 
 ## Locked geometry
 
@@ -195,7 +230,8 @@ file paths, and SHA-256 values are stored in the machine-readable manifest.
 ## Required validation after edits
 
 1. Run the rebuild command.
-2. Confirm QA status is `PASS` and total PNG count is `384`.
+2. Confirm QA status is `PASS` and total PNG count is `188`,
+   with `logical_frame_count` still `384`.
 3. Confirm all images are RGBA `320×180`, palette-locked, binary-alpha.
 4. Confirm both building layers report `never_intersects_road: true`.
 5. Run:
