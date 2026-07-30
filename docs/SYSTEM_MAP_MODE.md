@@ -49,7 +49,7 @@ Completed connections keep an ambient delivery vehicle moving on their road, so 
 | Circulation freight car | `195b0408-b118-43ca-85a1-11b34a4f6e3f` | `art/vehicles/system/vehicle_circulation_freight.png` |
 | Signal courier scooter | `f167297d-e7e2-49aa-b64d-1fe3748cf386` | `art/vehicles/system/vehicle_neural_courier.png` |
 | Oxygen delivery tram | `6268e0f1-ebb4-401b-8f74-e476036cdd60` | `art/vehicles/system/vehicle_oxygen_tram.png` |
-| Nutrient Exchange Depot | `5244d349-c27c-4a9e-9ad1-e9b374d3f0c0` | `art/buildings/system/building_nutrient_depot.png` |
-| Central Heart Transit Station | `8e41f3d6-90f7-43fe-8ff8-249cf4e739fa` | `art/buildings/system/building_circulation_station.png` |
-| Neural Dispatch Center | `520da400-097e-4be7-adf2-7245c40c2158` | `art/buildings/system/building_neural_dispatch.png` |
-| Air Exchange Terminal | `43d22ccb-134a-4d3a-bbda-2a91bb9b72b9` | `art/buildings/system/building_respiratory_terminal.png` |
+| Nutrient Exchange Depot | `7c5ce766-bfa9-4399-a3b2-923c20960ec7` candidate `02` | `art/buildings/system/building_nutrient_depot.png` |
+| Central Heart Transit Station | `727d6b81-cbea-4328-a52e-6e1693fdbb01` candidate `08` | `art/buildings/system/building_circulation_station.png` |
+| Neural Dispatch Center | `e9cd3f81-cad5-48b9-bd92-2ab1fe772692` candidate `08` | `art/buildings/system/building_neural_dispatch.png` |
+| Air Exchange Terminal | `c9627adc-2e8d-408c-95b1-1d9113b150d8` candidate `03` | `art/buildings/system/building_respiratory_terminal.png` |

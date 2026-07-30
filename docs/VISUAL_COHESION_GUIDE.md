@@ -14,16 +14,18 @@ The map reads in this order:
 
 ## Locked Prototype Palette
 
-| Role | Color |
+The canonical 22-color palette is stored in `art/palette.gpl`. System-map art
+uses the same semantic groups documented in `docs/ART_BIBLE.md`:
+
+| Semantic group | Dark / main / light |
 |---|---|
-| Tissue ground | `#F7A39E` |
-| Tissue highlight | `#FFC2B6` |
-| Organ-district top | `#F27FA3` |
-| Organ-district midtone | `#BD4178` |
-| Organ-district wall | `#752754` |
-| Global outline and panel base | `#28152F` |
-| Transport vessel | `#64DDD8` |
-| Vessel highlight | `#C7FFF4` |
+| Arterial coral | `#340106` / `#BA3A3F` / `#C25453` |
+| Oxygen blue | `#48A5CF` / `#7AD1FD` / `#CDD9E1` |
+| Blue violet | `#29314A` / `#404586` / `#53548C` |
+| Tissue pink | `#91465F` / `#BE6E87` / `#C98197` |
+| Warm amber | `#B26C09` / `#E2953A` / `#DDAD7E` |
+| Mint green | `#73CD9B` / `#B1FFD1` / `#F4FFF8` |
+| Neutrals | `#140F1D` / `#514854` / `#817582` / `#E8DCCF` |
 
 ## Scale and Placement Rules
 
@@ -34,8 +36,9 @@ The map reads in this order:
 - A confirmed building never keeps a footprint outline.
 - A 2 × 2 structure uses a 32 × 32 pixel canvas.
 - A 7 × 7 landmark uses a 112 × 112 pixel canvas.
-- Transparent padding is cropped before a sprite is accepted.
-- Buildings use nearest-neighbor scaling and a bottom-center anchor. Integer scaling is preferred; system facilities may use a fractional scale to fill their declared footprint when the silhouette stays crisp and fully contained.
+- Excess transparent padding is cropped before a sprite is accepted; system facilities retain a four-pixel safety margin inside the standard source canvas.
+- Buildings use nearest-neighbor scaling and a bottom-center anchor.
+- System facilities use 56 × 56 source canvases and render into their 112 × 112 logical footprints at an exact 2× scale.
 - Transport routes use broad arterial-street tiles with cyan curbs and a cream center marking. They select art from neighbor connectivity; separate square stamps may not be placed side by side without edge matching.
 
 ## Screen Composition
