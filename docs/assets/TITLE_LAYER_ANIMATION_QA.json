@@ -14,9 +14,9 @@
   "duplicate_frames_removed": 196,
   "output": "art/animations/title_layers",
   "manifest": "art/animations/title_layers/manifest.json",
-  "manifest_sha256": "a0f8722bcb07d4a309654850013647c0e46e98af1e46f222bf9613bd890a64ae",
+  "manifest_sha256": "ad2437f327d466d4d442941aea638b930fdea9458e919a6906aeadc470953041",
   "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
-  "specification_sha256": "9d840c59ce78b7f88f70af4289a482ae8c324444876743c5f1ca119d3ca21f5b",
+  "specification_sha256": "76cbaddde3cbc114ef721bd6bc7001121ed82cc535264abdfdbf05fc26fc57fd",
   "checks": {
     "01_sky": {
       "frame_count": 64,
@@ -50,7 +50,20 @@
       },
       "road_dash_endpoint_pixels_present": true,
       "road_dash_maximum_raster_deviation_pixels": 0.499,
-      "road_dash_follows_guide": true
+      "road_dash_follows_guide": true,
+      "road_upper_ground_guide": {
+        "start": [
+          0.0,
+          92.0
+        ],
+        "end": [
+          319.0,
+          75.58
+        ]
+      },
+      "road_upper_ground_endpoint_pixels_present": true,
+      "road_upper_ground_maximum_raster_deviation_pixels": 0.5,
+      "road_upper_ground_follows_guide": true
     },
     "03_main_building": {
       "frame_count": 64,
