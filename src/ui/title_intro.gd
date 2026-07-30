@@ -2,7 +2,7 @@ extends Control
 
 ## Eight-second layered title intro.
 ##
-## The six visual layers stay as independent 320x180 frame sequences under
+## The seven visual layers stay as independent 320x180 frame sequences under
 ## art/animations/title_layers. They are loaded through the same res://../art
 ## boundary used by AssetLoader, then advanced together at exactly 8 FPS.
 ## Native Godot labels and buttons remain separate so routing, focus, save-state
@@ -34,7 +34,8 @@ const LAYER_SPECS := [
 	["Terrain", "02_terrain"],
 	["MainBuilding", "03_main_building"],
 	["SmallBuildings", "04_small_buildings"],
-	["VehicleCargo", "05_vehicle_cargo"],
+	["VehicleUnloadedCargo", "05_vehicle_unloaded_cargo"],
+	["VehicleTruck", "05_vehicle_truck"],
 	["RoadsideProps", "06_roadside_props"],
 ]
 

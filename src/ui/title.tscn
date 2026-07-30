@@ -87,7 +87,18 @@ expand_mode = 1
 stretch_mode = 0
 mouse_filter = 2
 
-[node name="VehicleCargo" type="TextureRect" parent="AnimationLayers"]
+[node name="VehicleUnloadedCargo" type="TextureRect" parent="AnimationLayers"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -80.0
+offset_top = -45.0
+offset_right = 880.0
+offset_bottom = 495.0
+expand_mode = 1
+stretch_mode = 0
+mouse_filter = 2
+
+[node name="VehicleTruck" type="TextureRect" parent="AnimationLayers"]
 texture_filter = 1
 layout_mode = 0
 offset_left = -80.0
