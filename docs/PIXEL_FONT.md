@@ -44,14 +44,20 @@ requested size that is not a multiple of the native `10` gets snapped to the
 nearest whole scale factor, so the text still renders but not at the size the
 layout asked for. `UiTheme.snap_font_size()` rounds a size down onto the grid.
 
-Sizes in use on the title screen:
+Every panel in the game was laid out against Godot's 16px default font. The
+pixel font is 6px per character at `1x` and 12px at `2x`, so `2x` runs past
+those panel edges while `1x` fits with room to spare. The theme default is
+therefore `10`, and a larger size has to be asked for explicitly and checked
+against its container.
 
 | Element | `font_size` | Scale |
 |---|---:|---:|
 | `TitleBand` | `50` | `5x` |
 | `Subtitle` | `20` | `2x` |
-| Menu buttons | `20` | `2x` |
-| Confirm prompt | `10` | `1x` |
+| Title menu buttons | `20` | `2x` |
+| `system_city` map title | `20` | `2x` |
+| Gameplay action title, gameplay status | `20` | `2x` |
+| Everything else | `10` | `1x` |
 
 Advance widths at native size, for layout math:
 
@@ -71,9 +77,10 @@ padding is `286`, which is why `MENU_BUTTON_SIZE` in `src/ui/title_intro.gd` is
 `art/` lives outside the Godot project root, so no `ext_resource` can reach the
 font from a `.tres`. Two further Godot behaviors rule out the simpler wirings:
 
-- A `Theme` assigned to the scene tree root does not reach the UI. Godot
+- A `Theme` assigned to the scene tree root does not reach a route's UI. Godot
   resolves a Control's theme by walking up Control and Window parents only, and
-  `main.tscn`'s root is a `Node2D`, which severs that chain.
+  every route sits under `SceneRouter` and the `SceneHost` it creates, both
+  plain `Node`s, which severs that chain.
 - `ThemeDB.fallback_font` is already baked into the default theme by the time an
   autoload runs, so assigning it changes nothing.
 
@@ -86,13 +93,30 @@ every Control keeps the engine font, so the game stays playable.
 The trade-off is that the Godot editor previews Controls with the default engine
 font. The pixel font only appears once the project is running.
 
+## Checking that text still fits
+
+`src/tests/check_ui_text_fits.gd` walks the live scene tree on each route and
+fails when a string is wider than the box holding it, or when a Control spills
+past the 800px canvas. It also rejects any `font_size` that is not a multiple of
+`10`. Wrapped and `clip_text` labels are skipped, since they degrade readably
+rather than spilling.
+
+```bash
+godot --headless --path src --script res://tests/check_ui_text_fits.gd
+```
+
+Routes gated on save state, such as chapter select, quietly refuse to open; the
+check reports which scene was actually resident so the coverage is not
+overstated.
+
 ## Required validation after edits
 
 1. Run the rebuild command and confirm QA status is `PASS` with
    `covers_printable_ascii: true`.
 2. Run `/opt/homebrew/bin/godot --headless --path src --editor --quit` and
    confirm there are no script or resource errors.
-3. Run the project and confirm the log contains
+3. Run the text-fitting check above and confirm `[UI FIT] PASS`.
+4. Run the project and confirm the log contains
    `[UI THEME] pixel theme applied at native size 10`.
-4. Confirm on screen that the title, subtitle, and menu render in the pixel
+5. Confirm on screen that the title, subtitle, and menu render in the pixel
    font, and that no menu label overflows its button.

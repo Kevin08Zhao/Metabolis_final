@@ -445,7 +445,7 @@ func _build_resource_cell(row: HBoxContainer, resource_id: StringName) -> void:
 	label.name = "%sValue" % prefix
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 8)
+	label.add_theme_font_size_override("font_size", 10)
 	label.clip_text = true
 	label.text = "[pending]"
 	content.add_child(label)

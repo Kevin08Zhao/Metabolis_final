@@ -944,14 +944,14 @@ func _build_interface() -> void:
 	_system_title = Label.new()
 	_system_title.position = Vector2(10, 7)
 	_system_title.size = Vector2(410, 26)
-	_system_title.add_theme_font_size_override("font_size", 15)
+	_system_title.add_theme_font_size_override("font_size", 20)
 	top_bar.add_child(_system_title)
 
 	_network_status = Label.new()
 	_network_status.position = Vector2(420, 8)
 	_network_status.size = Vector2(368, 24)
 	_network_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_network_status.add_theme_font_size_override("font_size", 11)
+	_network_status.add_theme_font_size_override("font_size", 10)
 	top_bar.add_child(_network_status)
 
 	var side_panel := PanelContainer.new()
@@ -967,7 +967,7 @@ func _build_interface() -> void:
 
 	var maps_title := Label.new()
 	maps_title.text = "BODY SYSTEM MAPS"
-	maps_title.add_theme_font_size_override("font_size", 11)
+	maps_title.add_theme_font_size_override("font_size", 10)
 	column.add_child(maps_title)
 
 	for index in range(SYSTEMS.size()):
@@ -1005,7 +1005,7 @@ func _build_interface() -> void:
 	info_column.add_theme_constant_override("separation", 5)
 	info_panel.add_child(info_column)
 	_objective_label = Label.new()
-	_objective_label.add_theme_font_size_override("font_size", 11)
+	_objective_label.add_theme_font_size_override("font_size", 10)
 	info_column.add_child(_objective_label)
 	_feedback_label = Label.new()
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1030,7 +1030,7 @@ func _build_context_cards() -> void:
 	build_column.add_theme_constant_override("separation", 3)
 	_build_preview_card.add_child(build_column)
 	_build_preview_name = Label.new()
-	_build_preview_name.add_theme_font_size_override("font_size", 12)
+	_build_preview_name.add_theme_font_size_override("font_size", 10)
 	_build_preview_name.add_theme_color_override("font_color", COLOR_PORT)
 	build_column.add_child(_build_preview_name)
 	_build_preview_cost = Label.new()
