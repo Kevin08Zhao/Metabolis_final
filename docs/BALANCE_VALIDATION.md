@@ -14,7 +14,7 @@ The path dictionary below uses closed placeholders only:
 - `{minigame_id}` = `minigame_cell_division`, `minigame_material_transport`, `minigame_signal_transfer`
 - `{decision_id}.{option_id}` expands to the fourteen pairs declared in Table D2 and stored under `build_options`
 
-The JSON has exactly the twelve required top-level keys. The Balance access layer resolves older logical specification paths without duplicating data:
+The JSON has exactly the thirteen required top-level keys. The Balance access layer resolves older logical specification paths without duplicating data:
 
 - `balance.operation.*` resolves to `operations.*`.
 - `balance.transport.*` and `balance.signal.*` resolve to `network.transport.*` and `network.signal.*`.
@@ -26,7 +26,7 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 - `balance.operation.cost[selected_operation_id]` and `balance.operation.outcome[selected_operation_id]` resolve under `operations.options`.
 - `balance.transport.intervention.capacity` resolves to `network.transport.intervention.capacity_increment`.
 - Legacy `balance.stage.carryover.*` resolves to `carryover.*`; Table F1’s `balance.carryover.*` is canonical.
-- T-09 logical paths `balance.save.*`, `balance.progress.*`, and `balance.knowledge.*` resolve to `chapters.save.*`, `chapters.progress.*`, and `assist.knowledge.*` so the required twelve-key top level is preserved.
+- T-09 logical paths `balance.save.*`, `balance.progress.*`, and `balance.knowledge.*` resolve to `chapters.save.*`, `chapters.progress.*`, and `assist.knowledge.*`.
 - T-12 reads the canonical paths `build_options.grid.columns`, `build_options.grid.rows`, and `build_options.grid.tile_size_px` directly through `Balance.get_value`; no alias or script constant is permitted for these values.
 
 ## Complete Key-Path Dictionary
@@ -223,6 +223,13 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `challenges.signal_coverage_intro.{delivery_multiplier\|coverage_target}` | Signal-introduction intensity | ratio |
 | `challenges.signal_coverage_intro.max_recovery_ticks` | Required maximum recovery time | ticks |
 | `challenges.by_stage.stage_birth` | Locked empty Stage Four challenge list | identifier list |
+| `notifications.dwell_sec.{broadcast\|attribution\|pressure\|alert}` | D-17a dwell duration for each notification tier. Entry and exit animation lengths remain locked by tables G1a–G1d | seconds |
+| `notifications.max_stack.broadcast` | Maximum number of simultaneous broadcast cards; locked to the three-card G1a stack proof | cards |
+| `notifications.max_stack.alert` | Maximum simultaneous alert cards; additional alerts wait in the queue | cards |
+| `notifications.max_stack.shared` | Shared visible capacity used first-in-first-out by attribution and pressure cards | cards |
+| `notifications.merge_window_ms` | Coalescing window used only by EVENT_API rows marked `repeatable within one tick` | milliseconds |
+| `notifications.alert_bpm.{stable\|warning\|critical}` | Alert-border heartbeat cadence by stability display band | beats per minute |
+| `notifications.assist.dwell_multiplier` | Assist-mode multiplier applied to dwell duration without changing tier, order, or copy | coefficient |
 | `assist.hint_levels` | D7 hint levels available to assistance UI | identifier list |
 | `assist.default_hint_level` | Default D7 hint level | identifier |
 | `assist.mode.failures_before_assist` | Consecutive failures inside one stage after which T-33a offers assist mode. Held equal to `minigames.failure.failures_before_ease` so the assist offer and the table M5 eased tier arrive together rather than at two different moments | failures |
@@ -230,7 +237,6 @@ The JSON has exactly the twelve required top-level keys. The Balance access laye
 | `assist.mode.time_limit_scale` | Factor T-33a publishes for the assist-mode time-limit extension. At least one, since assist mode only ever lengthens a run. It scales the effective limit of a running attempt; the configured `minigames.<id>.duration_limit_sec` is unchanged, exactly as the table M5 eased tier changes windows and targets without rewriting the configured value | unitless factor |
 | `assist.mode.show_full_route` | Whether assist mode publishes the complete operation route for a minigame prototype. Boolean | flag |
 | `assist.knowledge.{initial_unlocked_entry_ids\|read_tracking_policy\|selection_policy}` | T-09 knowledge initialization and tracking policies | identifier list or identifier |
-| `assist.knowledge.immediate_prompt_display_sec` | How long the T-30 immediate knowledge prompt stays up before dismissing itself. The prompt has no close control, so this is the only way it leaves. Its container geometry is fixed by table G1 and is deliberately not configurable; only the dwell time is | seconds |
 | `assist.audio.max_concurrent_one_shots` | Maximum number of reusable one-shot players created by T-37. The value is a positive integer; six permits short overlaps while keeping the soundscape restrained | players |
 | `assist.audio.high_frequency_min_interval_sec` | Minimum interval between playbacks of the same event whose EVENT_API frequency is `repeatable within one tick`. The value is positive and no greater than one settlement tick | seconds |
 | `assist.ui.resource_change_highlight_sec` | Duration of the T-29 resource-cell change highlight. The value is positive and shorter than one settlement tick so adjacent updates remain distinguishable | seconds |

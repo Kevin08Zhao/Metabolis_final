@@ -1,16 +1,14 @@
 class_name InfoContainers
 extends Control
 
-## The two information containers.
+## The paused organ-archive information container.
 ##
-## They sit at opposite ends of the same axis. The immediate knowledge prompt
-## rides alongside an operation's causal feedback: it appears while the player is
-## still acting, blocks nothing, takes no click to close, and leaves on its own.
-## The organ archive is the other extreme: opening it stops the world, and the
-## player has to close it before the world starts again.
+## D-17a and T-30b moved every immediate prompt into NotificationQueue. This
+## class now owns only the archive: opening it stops the world, and the player
+## has to close it before the world starts again.
 ##
-## Both are size-locked. Art fixed the dimensions in docs/UI_LAYOUT.md tables G1
-## and G2, and every pixel figure in this file is transcribed from those tables.
+## It is size-locked. Art fixed the dimensions in docs/UI_LAYOUT.md table G2,
+## and every pixel figure in this file is transcribed from that table.
 ## They are deliberately NOT configurable and deliberately NOT in Balance: a
 ## container that can be resized at runtime cannot be guaranteed to hold the text
 ## the tables say it holds.
@@ -22,24 +20,9 @@ extends Control
 ##
 ## Every string is a bracketed placeholder. T-31 owns the real copy.
 ##
-## Requires the `EventBus` and `Balance` autoloads.
+## Requires the `EventBus` autoload.
 
 const LOG_PREFIX := "[UI]"
-
-# ---------------------------------------------------------------------------
-# Table G1 - immediate knowledge prompt capacity
-# docs/UI_LAYOUT.md section 7. Transcribed, not chosen.
-# ---------------------------------------------------------------------------
-
-const G1_WIDTH_PX := 224
-const G1_HEIGHT_PX := 32
-const G1_BORDER_PX := 1
-const G1_PADDING_H_PX := 7
-const G1_PADDING_V_PX := 5
-const G1_FONT_PX := 8
-const G1_LINE_HEIGHT_PX := 10
-const G1_MAX_LINES := 2
-const G1_MAX_CHARS_PER_LINE := 26
 
 # ---------------------------------------------------------------------------
 # Table G2 - organ archive capacity
@@ -74,12 +57,7 @@ const G2_FIELD_IDS: Array[StringName] = [
 	&"g2_7",
 ]
 
-## Read from Balance. The prompt dismisses itself after this long; there is no
-## close control, by design.
-const PROMPT_DURATION_BALANCE_PATH := "assist.knowledge.immediate_prompt_display_sec"
-
 ## Placeholder copy. All of it belongs to T-31.
-const PROMPT_PLACEHOLDER := "[hint:%s]"
 const ARCHIVE_HEADER_PLACEHOLDER := "[archive:%s]"
 const FIELD_LABEL_PLACEHOLDER := "[field:%s]"
 const FIELD_EMPTY_PLACEHOLDER := "[empty]"
@@ -89,15 +67,8 @@ const FIELD_EMPTY_PLACEHOLDER := "[empty]"
 ## the code-side guarantee that something is always on screen while paused.
 const PAUSE_INDICATOR_PLACEHOLDER := "[paused] Operation time and resource settlement are stopped."
 
-signal immediate_prompt_shown(prompt_id: StringName)
-signal immediate_prompt_dismissed(prompt_id: StringName)
 signal archive_opened(entry_id: StringName)
 signal archive_closed(entry_id: StringName)
-
-var _prompt_root: PanelContainer = null
-var _prompt_lines: Array[Label] = []
-var _prompt_id: StringName = &""
-var _prompt_remaining_sec := 0.0
 
 var _archive_root: PanelContainer = null
 var _archive_header: Label = null
@@ -119,87 +90,8 @@ var _withheld_seconds := 0.0
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# The prompt has to keep counting down even while the archive holds the tree
-	# paused, or a prompt raised just before the archive opened would stay on
-	# screen forever with no way to dismiss it.
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build()
-
-
-func _process(delta: float) -> void:
-	if _prompt_id == &"":
-		return
-	_prompt_remaining_sec -= delta
-	if _prompt_remaining_sec <= 0.0:
-		_dismiss_prompt()
-
-
-# ---------------------------------------------------------------------------
-# The immediate knowledge prompt
-#
-# Non-blocking is not a claim, it is three properties: the container ignores the
-# mouse, it carries no close control, and it has a finite lifetime that runs
-# without any player action.
-# ---------------------------------------------------------------------------
-
-## Raise the prompt. `lines` is the placeholder content, at most two lines of at
-## most twenty-six characters; anything past that is cut and reported.
-func show_immediate_prompt(prompt_id: StringName, lines: PackedStringArray) -> bool:
-	if prompt_id == &"":
-		return false
-
-	var fitted := _fit(
-		lines,
-		G1_MAX_LINES,
-		G1_MAX_CHARS_PER_LINE,
-		"immediate prompt '%s'" % prompt_id
-	)
-
-	_prompt_id = prompt_id
-	_prompt_remaining_sec = prompt_duration_sec()
-	for index in G1_MAX_LINES:
-		var label := _prompt_lines[index]
-		label.text = fitted[index] if index < fitted.size() else ""
-	_prompt_root.visible = true
-	immediate_prompt_shown.emit(prompt_id)
-	return true
-
-
-## The display duration, from Balance. Nothing about the prompt's geometry is
-## configurable; how long it lingers is a balance question, not a layout one.
-func prompt_duration_sec() -> float:
-	return float(Balance.get_value(PROMPT_DURATION_BALANCE_PATH, 0.0))
-
-
-func prompt_visible() -> bool:
-	return _prompt_root != null and _prompt_root.visible
-
-
-func current_prompt_id() -> StringName:
-	return _prompt_id
-
-
-func prompt_remaining_sec() -> float:
-	return maxf(_prompt_remaining_sec, 0.0)
-
-
-## What the prompt currently reads, line by line, after truncation.
-func prompt_text_lines() -> PackedStringArray:
-	var out := PackedStringArray()
-	for label in _prompt_lines:
-		out.append(label.text)
-	return out
-
-
-func _dismiss_prompt() -> void:
-	var dismissed := _prompt_id
-	_prompt_id = &""
-	_prompt_remaining_sec = 0.0
-	for label in _prompt_lines:
-		label.text = ""
-	_prompt_root.visible = false
-	if dismissed != &"":
-		immediate_prompt_dismissed.emit(dismissed)
+	_build_archive()
 
 
 # ---------------------------------------------------------------------------
@@ -383,44 +275,9 @@ func _as_lines(value: Variant) -> PackedStringArray:
 # ---------------------------------------------------------------------------
 # Construction
 #
-# Sizes come from tables G1 and G2 and are applied as minimum sizes on the
-# containers themselves. This is the one place in the UI layer that writes pixel
-# figures, and it does so because the tables say it must.
+# The size comes from table G2 and is applied as a minimum size on the archive.
+# This is the one place in the UI layer that writes those pixel figures.
 # ---------------------------------------------------------------------------
-
-func _build() -> void:
-	_build_prompt()
-	_build_archive()
-
-
-func _build_prompt() -> void:
-	_prompt_root = PanelContainer.new()
-	_prompt_root.name = "ImmediateKnowledgePrompt"
-	_prompt_root.custom_minimum_size = Vector2(G1_WIDTH_PX, G1_HEIGHT_PX)
-	_prompt_root.size = Vector2(G1_WIDTH_PX, G1_HEIGHT_PX)
-	# Non-blocking: the prompt cannot receive a click, so it cannot swallow one
-	# meant for the operation the player is in the middle of.
-	_prompt_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_prompt_root.visible = false
-	add_child(_prompt_root)
-
-	var column := VBoxContainer.new()
-	column.name = "PromptLines"
-	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_prompt_root.add_child(column)
-
-	for index in G1_MAX_LINES:
-		var label := Label.new()
-		label.name = "PromptLine%d" % (index + 1)
-		label.text = ""
-		label.custom_minimum_size = Vector2(
-			G1_WIDTH_PX - 2 * G1_BORDER_PX - 2 * G1_PADDING_H_PX,
-			G1_LINE_HEIGHT_PX
-		)
-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		column.add_child(label)
-		_prompt_lines.append(label)
-
 
 func _build_archive() -> void:
 	_archive_root = PanelContainer.new()

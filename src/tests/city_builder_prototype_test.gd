@@ -244,6 +244,74 @@ func _test_system_city_scene() -> void:
 	var prototype := packed.instantiate()
 	get_tree().root.add_child(prototype)
 	await get_tree().process_frame
+	var resource_status := prototype.find_child("ResourceStatus", true, false)
+	var completion_overlay := prototype.find_child(
+		"TaskCompletionOverlay",
+		true,
+		false
+	) as Control
+	var completion_notification := prototype.find_child(
+		"TaskCompletionNotification",
+		true,
+		false
+	) as PanelContainer
+	_expect(
+		resource_status != null,
+		"system-city header must expose an icon-based resource status"
+	)
+	_expect(
+		completion_overlay != null and not completion_overlay.visible,
+		"task completion notification must start hidden"
+	)
+	_expect(
+		completion_notification != null
+		and completion_notification.position == Vector2(400, 48)
+		and completion_notification.size == Vector2(384, 96)
+		and completion_overlay.mouse_filter == Control.MOUSE_FILTER_IGNORE
+		and completion_notification.mouse_filter == Control.MOUSE_FILTER_STOP,
+		"completion UI must be a top-right non-modal macOS-style banner"
+	)
+	var notification_frame := prototype.find_child(
+		"NotificationFrameArt",
+		true,
+		false
+	) as TextureRect
+	_expect(
+		notification_frame != null
+		and notification_frame.texture != null
+		and notification_frame.texture.get_size() == Vector2(384, 96),
+		"completion banner must use its compact PixelLab frame at native size"
+	)
+	_expect(
+		prototype.find_child("Dimmer", true, false) == null
+		and prototype.find_child("TaskCompletionAction", true, false) == null
+		and prototype.find_child("WindowChrome", true, false) == null,
+		"completion banner must not use a dimmer, traffic-light chrome, or action button"
+	)
+	for resource_name in [
+		"NutrientEnergy",
+		"CellMaterial",
+		"DevelopmentSignal",
+		"Stability",
+	]:
+		var icon := prototype.find_child(
+			"%sIcon" % resource_name,
+			true,
+			false
+		) as TextureRect
+		var value_label := prototype.find_child(
+			"%sValue" % resource_name,
+			true,
+			false
+		) as Label
+		_expect(
+			icon != null and icon.texture != null,
+			"%s status must use its existing PixelLab icon" % resource_name
+		)
+		_expect(
+			value_label != null and value_label.text.is_valid_int(),
+			"%s status must show only its numeric value" % resource_name
+		)
 
 	_expect(
 		not prototype.debug_switch_system(1),
@@ -390,6 +458,27 @@ func _test_system_city_scene() -> void:
 				prototype.debug_repair_bottleneck(),
 				"system %d bottleneck must consume resources and restore flow" % index
 			)
+		var completion_notice: Dictionary = prototype.debug_snapshot()
+		_expect(
+			bool(completion_notice.get("completion_popup_visible", false)),
+			"system %d completion must open the macOS-style notification banner" % index
+		)
+		if index == 3:
+			prototype.call("_process", 8.0)
+			_expect(
+				not bool(
+					prototype.debug_snapshot().get(
+						"completion_popup_visible",
+						true
+					)
+				),
+				"final completion banner must dismiss itself"
+			)
+		else:
+			_expect(
+				prototype.debug_dismiss_completion_popup(),
+				"system %d completion banner must be clickable/dismissible" % index
+			)
 		if index < 3:
 			var unlocked: Dictionary = prototype.debug_snapshot()
 			_expect(
@@ -426,16 +515,30 @@ func _test_title_entry() -> void:
 	_expect(packed != null, "main scene must load")
 	if packed == null:
 		return
+	var original_progress: Dictionary = (
+		SaveManager.build_payload().get("main_progress", {}).duplicate(true)
+	)
+	SaveManager.set_main_progress({})
+
 	var main := packed.instantiate()
 	get_tree().root.add_child(main)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var button := main.find_child(
+	var retired_button := main.find_child(
 		"Entry_builder_prototype",
 		true,
 		false
 	) as Button
-	_expect(button != null, "title must expose Interactive Builder Prototype")
+	_expect(
+		retired_button == null,
+		"title must not expose a separate Body-System tab"
+	)
+	var button := main.find_child(
+		"Entry_new_game",
+		true,
+		false
+	) as Button
+	_expect(button != null, "title must expose New Game as the system-city entry")
 	if button != null:
 		button.pressed.emit()
 		await get_tree().process_frame
@@ -445,14 +548,69 @@ func _test_title_entry() -> void:
 		if router != null:
 			_expect(
 				router.current_route() == SceneRouter.ROUTE_SYSTEM_CITY,
-				"interactive entry must begin with the body-system city"
+				"New Game without a save must begin with the body-system city"
 			)
 		_expect(
 			main.find_child("SystemCityPrototype", true, false) != null,
-			"interactive entry must load the system-map scene"
+			"New Game without a save must load the system-map scene"
 		)
 	main.queue_free()
 	await get_tree().process_frame
+
+	SaveManager.set_main_progress({"current_stage_id": "stage_origin"})
+	var saved_main := packed.instantiate()
+	get_tree().root.add_child(saved_main)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_expect(
+		saved_main.find_child("Entry_builder_prototype", true, false) == null,
+		"saved title must not restore the separate Body-System tab"
+	)
+	var saved_new_game := saved_main.find_child(
+		"Entry_new_game",
+		true,
+		false
+	) as Button
+	_expect(
+		saved_new_game != null,
+		"saved title must retain the New Game entry"
+	)
+	if saved_new_game != null:
+		saved_new_game.pressed.emit()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var saved_router := saved_main.get_node_or_null(
+			"SceneRouter"
+		) as SceneRouter
+		_expect(
+			saved_router != null
+			and saved_router.current_route() == SceneRouter.ROUTE_TITLE
+			and saved_router.awaiting_new_game_confirmation(),
+			"New Game with a save must wait for overwrite confirmation"
+		)
+		var confirm := saved_main.find_child(
+			"Entry_confirm_yes",
+			true,
+			false
+		) as Button
+		_expect(confirm != null, "saved progress must expose New Game confirmation")
+		if confirm != null:
+			confirm.pressed.emit()
+			await get_tree().process_frame
+			await get_tree().process_frame
+		_expect(
+			saved_router != null
+			and saved_router.current_route() == SceneRouter.ROUTE_SYSTEM_CITY
+			and saved_main.find_child(
+				"SystemCityPrototype",
+				true,
+				false
+			) != null,
+			"confirmed New Game must load the body-system city"
+		)
+	saved_main.queue_free()
+	await get_tree().process_frame
+	SaveManager.set_main_progress(original_progress)
 
 
 func _expect(condition: bool, message: String) -> void:

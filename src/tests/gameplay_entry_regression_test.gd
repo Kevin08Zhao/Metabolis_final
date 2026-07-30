@@ -29,7 +29,12 @@ func _run() -> void:
 		await _finish()
 		return
 
-	_test_new_game_button_is_deferred(main, router)
+	_test_new_game_routes_to_system_city(main, router)
+	await get_tree().process_frame
+	_expect(
+		bool(router.call("_enter_route", SceneRouter.ROUTE_GAME)),
+		"legacy save route must remain testable after New Game is repointed"
+	)
 	await get_tree().process_frame
 	await _test_space_advances_gameplay(main)
 	await _test_first_stage_interactions(main)
@@ -151,7 +156,8 @@ func _test_integration_contract(game: Node) -> void:
 		and runtime.info_containers != null
 		and runtime.chapter_summary != null
 		and runtime.tutorial != null
-		and runtime.hint_system != null,
+		and runtime.hint_system != null
+		and runtime.notification_queue != null,
 		"Network intervention and all major auxiliary UI systems must be wired"
 	)
 
@@ -186,7 +192,11 @@ func _test_full_lifecycle(main: Node, router: Node) -> void:
 	)
 
 
-func _test_new_game_button_is_deferred(main: Node, router: Node) -> void:
+func _test_new_game_routes_to_system_city(main: Node, router: Node) -> void:
+	_expect(
+		main.find_child("Entry_builder_prototype", true, false) == null,
+		"title must not expose a separate Body-System tab"
+	)
 	var new_game_button := main.find_child("Entry_new_game", true, false) as Button
 	_expect(new_game_button != null, "title must expose the New Game button")
 	if new_game_button == null:
@@ -199,8 +209,12 @@ func _test_new_game_button_is_deferred(main: Node, router: Node) -> void:
 	)
 	await get_tree().process_frame
 	_expect(
-		router.current_route() == SceneRouter.ROUTE_GAME,
-		"New Game must enter the game route on the deferred callback"
+		router.current_route() == SceneRouter.ROUTE_SYSTEM_CITY,
+		"New Game must enter the body-system route on the deferred callback"
+	)
+	_expect(
+		main.find_child("SystemCityPrototype", true, false) != null,
+		"New Game must instantiate the body-system city"
 	)
 
 

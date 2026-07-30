@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "source_job_id": "47a1f75a-54f8-4f56-b605-198f10802f4c",
+  "source_seed": 73194,
+  "output": "art/ui/ui_system_completion_notification.png",
+  "dimensions": [384, 96],
+  "sha256": "6cdc320c8bee36f33f4d6d308e62b13496adf4c574c6ed3125a530544866b7be",
+  "alpha_values": [0, 255],
+  "opaque_colors": [
+    "#140F1D",
+    "#817582",
+    "#514854",
+    "#48A5CF",
+    "#7AD1FD",
+    "#91465F",
+    "#BE6E87",
+    "#E8DCCF",
+    "#73CD9B",
+    "#B1FFD1"
+  ],
+  "locked_palette_only": true,
+  "resampled": false,
+  "runtime_text_baked_in": false
+}

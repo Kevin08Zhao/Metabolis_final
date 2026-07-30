@@ -25,9 +25,8 @@ extends Node
 
 const LOG_PREFIX := "[ROUTE]"
 
-## The original title, game, and ending routes remain unchanged. The local
-## builder sequence is a parallel entry used to migrate the four-stage flow one
-## playable map-first slice at a time.
+## The legacy game route remains available for continue/chapter-select saves.
+## New Game now starts directly in the playable body-system city.
 const ROUTE_TITLE := &"title"
 const ROUTE_GAME := &"game"
 const ROUTE_ENDING := &"ending"
@@ -39,7 +38,6 @@ const ROUTE_SYSTEM_CITY := &"system_city"
 const ENTRY_CONTINUE := &"continue"
 const ENTRY_NEW_GAME := &"new_game"
 const ENTRY_CHAPTER_SELECT := &"chapter_select"
-const ENTRY_BUILDER_PROTOTYPE := &"builder_prototype"
 
 ## Placeholder text. The display name is the full one; the internal identifier
 ## stays Metabolis, per the naming rules in docs/CONTEXT.md.
@@ -47,7 +45,6 @@ const ENTRY_LABELS := {
 	ENTRY_CONTINUE: "Continue",
 	ENTRY_NEW_GAME: "New Game",
 	ENTRY_CHAPTER_SELECT: "Chapter Select",
-	ENTRY_BUILDER_PROTOTYPE: "Body-System City Builder",
 }
 const CONFIRM_LABEL := "New Game will overwrite your progress. Confirm?"
 const CONFIRM_YES := "Yes, start a new game"
@@ -207,7 +204,7 @@ func request_new_game() -> bool:
 		return false
 	if not has_save():
 		# Nothing to overwrite, so nothing to confirm.
-		return _enter_route(ROUTE_GAME)
+		return _enter_route(ROUTE_SYSTEM_CITY)
 	_awaiting_new_game_confirmation = true
 	print("%s new game requested; waiting for confirmation." % LOG_PREFIX)
 	_build_title_menu()
@@ -220,7 +217,7 @@ func confirm_new_game() -> bool:
 		return false
 	_awaiting_new_game_confirmation = false
 	print("%s new game confirmed." % LOG_PREFIX)
-	return _enter_route(ROUTE_GAME)
+	return _enter_route(ROUTE_SYSTEM_CITY)
 
 
 func cancel_new_game() -> void:
@@ -281,7 +278,6 @@ func title_entries() -> Array[StringName]:
 	if has_save():
 		entries.append(ENTRY_CONTINUE)
 	entries.append(ENTRY_NEW_GAME)
-	entries.append(ENTRY_BUILDER_PROTOTYPE)
 	if chapter_select_available():
 		entries.append(ENTRY_CHAPTER_SELECT)
 	return entries
@@ -473,8 +469,6 @@ func _handler_for(entry: StringName) -> Callable:
 			return request_new_game
 		ENTRY_CHAPTER_SELECT:
 			return open_chapter_select
-		ENTRY_BUILDER_PROTOTYPE:
-			return open_system_city
 		_:
 			return func() -> void: pass
 

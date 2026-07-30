@@ -146,6 +146,41 @@ const COLOR_PORT := Color("#FFD166")
 const COLOR_PORTAL := Color("#62DDD8")
 const COLOR_PORTAL_LIGHT := Color("#C8FFF4")
 const COLOR_SHADOW := Color(0.12, 0.05, 0.14, 0.38)
+const COLOR_NOTIFICATION_MUTED := Color("#817582")
+const COMPLETION_NOTIFICATION_DURATION_SEC := 5.0
+const COMPLETION_NOTIFICATION_POSITION := Vector2(400, 48)
+const COMPLETION_NOTIFICATION_SIZE := Vector2(384, 96)
+const RESOURCE_ORDER: Array[StringName] = [
+	&"nutrient_energy",
+	&"cell_material",
+	&"development_signal",
+	&"stability",
+]
+const RESOURCE_ICON_ASSETS := {
+	&"nutrient_energy": {
+		&"normal": &"ui_resource_nutrient_energy_sufficient",
+		&"warning": &"ui_resource_nutrient_energy_insufficient",
+	},
+	&"cell_material": {
+		&"normal": &"ui_resource_cell_material_sufficient",
+		&"warning": &"ui_resource_cell_material_insufficient",
+	},
+	&"development_signal": {
+		&"normal": &"ui_resource_developmental_signal_sufficient",
+		&"warning": &"ui_resource_developmental_signal_insufficient",
+	},
+	&"stability": {
+		&"normal": &"ui_resource_stability_normal",
+		&"warning": &"ui_resource_stability_warning",
+		&"critical": &"ui_resource_stability_critical",
+	},
+}
+const RESOURCE_DISPLAY_NAMES := {
+	&"nutrient_energy": "Nutrient energy",
+	&"cell_material": "Cell material",
+	&"development_signal": "Development signal",
+	&"stability": "System stability",
+}
 
 var _mode := Mode.READY
 var _current_system_index := 0
@@ -177,9 +212,12 @@ var _vehicle_textures: Dictionary = {}
 var _road_textures: Array[Texture2D] = []
 
 var _system_title: Label = null
-var _network_status: Label = null
-var _objective_label: Label = null
-var _feedback_label: Label = null
+var _link_status: Label = null
+var _resource_value_labels: Dictionary = {}
+var _resource_icon_nodes: Dictionary = {}
+var _resource_icon_textures: Dictionary = {}
+var _latest_feedback := ""
+var _latest_feedback_is_error := false
 var _build_button: Button = null
 var _dispatch_button: Button = null
 var _route_button: Button = null
@@ -190,6 +228,12 @@ var _build_preview_cost: Label = null
 var _build_preview_time: Label = null
 var _route_cost_bubble: PanelContainer = null
 var _route_cost_label: Label = null
+var _completion_overlay: Control = null
+var _completion_window: PanelContainer = null
+var _completion_title: Label = null
+var _completion_message: Label = null
+var _completion_time: Label = null
+var _completion_remaining_sec := 0.0
 
 
 func _ready() -> void:
@@ -210,6 +254,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_ambient_phase = fmod(_ambient_phase + delta * 2.4, 10000.0)
+	if _completion_popup_visible():
+		_completion_remaining_sec -= delta
+		if _completion_remaining_sec <= 0.0:
+			_dismiss_completion_popup()
 	if _mode == Mode.CONSTRUCTING:
 		_construction_elapsed += delta
 		if _construction_elapsed >= _current_build_time_sec():
@@ -298,6 +346,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if not event is InputEventKey:
 		return
 	if not event.pressed or event.echo:
+		return
+	if _completion_popup_visible() and event.keycode == KEY_ESCAPE:
+		_dismiss_completion_popup()
+		get_viewport().set_input_as_handled()
 		return
 	match event.keycode:
 		KEY_1:
@@ -611,12 +663,15 @@ func _build_interface() -> void:
 	_system_title.add_theme_font_size_override("font_size", 20)
 	top_bar.add_child(_system_title)
 
-	_network_status = Label.new()
-	_network_status.position = Vector2(420, 8)
-	_network_status.size = Vector2(368, 24)
-	_network_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_network_status.add_theme_font_size_override("font_size", 10)
-	top_bar.add_child(_network_status)
+	_build_resource_status(top_bar)
+
+	var quiet_footer := Panel.new()
+	quiet_footer.name = "QuietFooter"
+	quiet_footer.position = Vector2(0, 360)
+	quiet_footer.size = Vector2(640, 90)
+	quiet_footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	quiet_footer.add_theme_stylebox_override("panel", _quiet_footer_style())
+	add_child(quiet_footer)
 
 	var side_panel := PanelContainer.new()
 	side_panel.position = Vector2(640, 40)
@@ -658,25 +713,202 @@ func _build_interface() -> void:
 	var title_button := _add_button(column, "ReturnToTitle", "Return to Title")
 	title_button.pressed.connect(_return_to_title)
 
-	var info_panel := PanelContainer.new()
-	info_panel.position = Vector2(8, 368)
-	info_panel.size = Vector2(624, 74)
-	info_panel.add_theme_stylebox_override("panel", _panel_style(Color("#35202F")))
-	info_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(info_panel)
-
-	var info_column := VBoxContainer.new()
-	info_column.add_theme_constant_override("separation", 5)
-	info_panel.add_child(info_column)
-	_objective_label = Label.new()
-	_objective_label.add_theme_font_size_override("font_size", 10)
-	info_column.add_child(_objective_label)
-	_feedback_label = Label.new()
-	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_feedback_label.add_theme_font_size_override("font_size", 10)
-	_feedback_label.custom_minimum_size = Vector2(600, 34)
-	info_column.add_child(_feedback_label)
 	_build_context_cards()
+	_build_completion_popup()
+
+
+func _build_resource_status(top_bar: Control) -> void:
+	var status_panel := PanelContainer.new()
+	status_panel.name = "ResourceStatus"
+	status_panel.position = Vector2(416, 5)
+	status_panel.size = Vector2(374, 30)
+	status_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_panel.add_theme_stylebox_override(
+		"panel",
+		_status_panel_style()
+	)
+	top_bar.add_child(status_panel)
+
+	var row := HBoxContainer.new()
+	row.name = "ResourceStatusRow"
+	row.alignment = BoxContainer.ALIGNMENT_END
+	row.add_theme_constant_override("separation", 6)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	status_panel.add_child(row)
+
+	_link_status = Label.new()
+	_link_status.name = "LinkStatus"
+	_link_status.custom_minimum_size = Vector2(62, 20)
+	_link_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_link_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_link_status.add_theme_font_size_override("font_size", 10)
+	_link_status.tooltip_text = "Operating links"
+	row.add_child(_link_status)
+
+	for resource_id in RESOURCE_ORDER:
+		_build_resource_metric(row, resource_id)
+
+
+func _build_resource_metric(
+	row: HBoxContainer,
+	resource_id: StringName
+) -> void:
+	var metric := HBoxContainer.new()
+	metric.name = "%sMetric" % String(resource_id).to_pascal_case()
+	metric.custom_minimum_size = Vector2(54, 20)
+	metric.add_theme_constant_override("separation", 2)
+	metric.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	metric.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
+	row.add_child(metric)
+
+	var icon := TextureRect.new()
+	icon.name = "%sIcon" % String(resource_id).to_pascal_case()
+	icon.custom_minimum_size = Vector2(18, 18)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
+	metric.add_child(icon)
+	_resource_icon_nodes[resource_id] = icon
+
+	var value_label := Label.new()
+	value_label.name = "%sValue" % String(resource_id).to_pascal_case()
+	value_label.custom_minimum_size = Vector2(32, 20)
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	value_label.add_theme_font_size_override("font_size", 10)
+	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	value_label.tooltip_text = String(RESOURCE_DISPLAY_NAMES[resource_id])
+	metric.add_child(value_label)
+	_resource_value_labels[resource_id] = value_label
+
+
+func _build_completion_popup() -> void:
+	_completion_overlay = Control.new()
+	_completion_overlay.name = "TaskCompletionOverlay"
+	_completion_overlay.position = Vector2.ZERO
+	_completion_overlay.size = Vector2(800, 450)
+	_completion_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_completion_overlay.z_index = 100
+	add_child(_completion_overlay)
+
+	_completion_window = PanelContainer.new()
+	_completion_window.name = "TaskCompletionNotification"
+	_completion_window.position = COMPLETION_NOTIFICATION_POSITION
+	_completion_window.custom_minimum_size = COMPLETION_NOTIFICATION_SIZE
+	_completion_window.size = COMPLETION_NOTIFICATION_SIZE
+	_completion_window.mouse_filter = Control.MOUSE_FILTER_STOP
+	_completion_window.tooltip_text = "Click to dismiss"
+	_completion_window.add_theme_stylebox_override(
+		"panel",
+		_completion_window_style()
+	)
+	_completion_window.gui_input.connect(_on_completion_notification_input)
+	_completion_overlay.add_child(_completion_window)
+
+	var frame_art := TextureRect.new()
+	frame_art.name = "NotificationFrameArt"
+	frame_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame_art.stretch_mode = TextureRect.STRETCH_SCALE
+	frame_art.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	frame_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame_art.texture = AssetLoader.get_static_texture(
+		&"ui_system_completion_notification"
+	)
+	_completion_window.add_child(frame_art)
+
+	var content_margin := MarginContainer.new()
+	content_margin.name = "NotificationContentMargin"
+	content_margin.add_theme_constant_override("margin_left", 26)
+	content_margin.add_theme_constant_override("margin_top", 18)
+	content_margin.add_theme_constant_override("margin_right", 25)
+	content_margin.add_theme_constant_override("margin_bottom", 16)
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_completion_window.add_child(content_margin)
+
+	var notification_row := HBoxContainer.new()
+	notification_row.name = "NotificationRow"
+	notification_row.add_theme_constant_override("separation", 10)
+	notification_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.add_child(notification_row)
+
+	var icon_frame := MarginContainer.new()
+	icon_frame.name = "AppIconFrame"
+	icon_frame.custom_minimum_size = Vector2(58, 58)
+	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon_frame.add_theme_constant_override("margin_left", 11)
+	icon_frame.add_theme_constant_override("margin_top", 11)
+	icon_frame.add_theme_constant_override("margin_right", 11)
+	icon_frame.add_theme_constant_override("margin_bottom", 11)
+	notification_row.add_child(icon_frame)
+
+	var app_icon := TextureRect.new()
+	app_icon.name = "AppIcon"
+	app_icon.custom_minimum_size = Vector2(34, 34)
+	app_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	app_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	app_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	app_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	app_icon.texture = AssetLoader.get_static_texture(
+		&"ui_resource_stability_normal"
+	)
+	icon_frame.add_child(app_icon)
+
+	var content_column := VBoxContainer.new()
+	content_column.name = "NotificationContent"
+	content_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_column.add_theme_constant_override("separation", 2)
+	content_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	notification_row.add_child(content_column)
+
+	var heading_row := HBoxContainer.new()
+	heading_row.name = "NotificationHeading"
+	heading_row.add_theme_constant_override("separation", 8)
+	heading_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_column.add_child(heading_row)
+
+	_completion_title = Label.new()
+	_completion_title.name = "TaskCompletionTitle"
+	_completion_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_completion_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_completion_title.add_theme_font_size_override("font_size", 13)
+	_completion_title.add_theme_color_override("font_color", Color("#F4FFF8"))
+	heading_row.add_child(_completion_title)
+
+	_completion_time = Label.new()
+	_completion_time.name = "TaskCompletionTime"
+	_completion_time.text = "now"
+	_completion_time.add_theme_font_size_override("font_size", 10)
+	_completion_time.add_theme_color_override(
+		"font_color",
+		COLOR_NOTIFICATION_MUTED
+	)
+	heading_row.add_child(_completion_time)
+
+	_completion_message = Label.new()
+	_completion_message.name = "TaskCompletionMessage"
+	_completion_message.custom_minimum_size = Vector2(245, 40)
+	_completion_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_completion_message.max_lines_visible = 2
+	_completion_message.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_completion_message.add_theme_font_size_override("font_size", 11)
+	_completion_message.add_theme_color_override(
+		"font_color",
+		Color("#E8DCCF")
+	)
+	content_column.add_child(_completion_message)
+	_completion_overlay.visible = false
+
+
+func _on_completion_notification_input(event: InputEvent) -> void:
+	if (
+		event is InputEventMouseButton
+		and event.button_index == MOUSE_BUTTON_LEFT
+		and event.pressed
+	):
+		_dismiss_completion_popup()
+		get_viewport().set_input_as_handled()
 
 
 func _build_context_cards() -> void:
@@ -745,6 +977,33 @@ func _panel_style(color: Color) -> StyleBoxFlat:
 	style.content_margin_right = 7.0
 	style.content_margin_top = 7.0
 	style.content_margin_bottom = 7.0
+	return style
+
+
+func _status_panel_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.04, 0.02, 0.07, 0.48)
+	style.border_color = Color(0.79, 0.31, 0.49, 0.48)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(8)
+	style.content_margin_left = 8.0
+	style.content_margin_right = 8.0
+	style.content_margin_top = 4.0
+	style.content_margin_bottom = 4.0
+	return style
+
+
+func _quiet_footer_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("#160C1D")
+	style.border_color = Color(0.79, 0.31, 0.49, 0.56)
+	style.border_width_top = 1
+	return style
+
+
+func _completion_window_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
 	return style
 
 
@@ -958,6 +1217,17 @@ func _continue_after_outgoing_delivery() -> void:
 		)
 		print("%s Full body network complete." % LOG_PREFIX)
 		_refresh_interface()
+		_show_completion_popup(
+			"BODY NETWORK COMPLETE",
+			(
+				"%s is online.\nAll four body systems now exchange resources. Reward: %s."
+				% [
+					SYSTEMS[completed_index]["name"],
+					_resource_reward_text(completion_reward),
+				]
+			),
+			true
+		)
 		queue_redraw()
 		return
 	_unlocked_count = maxi(_unlocked_count, next_index + 1)
@@ -978,6 +1248,17 @@ func _continue_after_outgoing_delivery() -> void:
 	)
 	print("%s Unlocked %s." % [LOG_PREFIX, SYSTEMS[next_index]["name"]])
 	_refresh_interface()
+	_show_completion_popup(
+		"%s LINK COMPLETE" % SYSTEMS[completed_index]["short"],
+		(
+			"Delivery succeeded. Reward: %s.\n%s is now ready to develop."
+			% [
+				_resource_reward_text(completion_reward),
+				SYSTEMS[next_index]["name"],
+			]
+		),
+		false
+	)
 	queue_redraw()
 
 
@@ -1068,6 +1349,9 @@ func _switch_system(index: int) -> bool:
 
 
 func _reset_network() -> void:
+	if _completion_overlay != null:
+		_completion_overlay.visible = false
+	_completion_remaining_sec = 0.0
 	_mode = Mode.READY
 	_current_system_index = 0
 	_unlocked_count = 1
@@ -1104,6 +1388,48 @@ func _return_to_title() -> void:
 			node.call_deferred("go_to_title")
 			return
 		node = node.get_parent()
+
+
+func _show_completion_popup(
+	title: String,
+	message: String,
+	is_final: bool
+) -> void:
+	if (
+		_completion_overlay == null
+		or _completion_title == null
+		or _completion_message == null
+		or _completion_time == null
+	):
+		return
+	_completion_title.text = title.capitalize()
+	_completion_message.text = message
+	_completion_time.text = "now"
+	_completion_remaining_sec = (
+		COMPLETION_NOTIFICATION_DURATION_SEC + 2.0
+		if is_final
+		else COMPLETION_NOTIFICATION_DURATION_SEC
+	)
+	_completion_overlay.visible = true
+	_completion_overlay.move_to_front()
+
+
+func _dismiss_completion_popup() -> void:
+	if not _completion_popup_visible():
+		return
+	_completion_overlay.visible = false
+	_completion_remaining_sec = 0.0
+	if _mode == Mode.DELIVERY_IN:
+		_set_feedback(
+			"Follow the delivery into %s."
+			% SYSTEMS[_current_system_index]["name"],
+			false
+		)
+	_refresh_interface()
+
+
+func _completion_popup_visible() -> bool:
+	return _completion_overlay != null and _completion_overlay.visible
 
 
 func _initialize_gameplay_tools() -> void:
@@ -1365,6 +1691,17 @@ func _resource_cost_text(cost: Dictionary) -> String:
 	return ", ".join(parts)
 
 
+func _resource_reward_text(reward: Dictionary) -> String:
+	var parts: Array[String] = []
+	for key in RESOURCE_ORDER:
+		var amount := int(reward.get(key, 0))
+		if amount > 0:
+			parts.append("%s +%d" % [RESOURCE_DISPLAY_NAMES[key], amount])
+	if parts.is_empty():
+		return "network stability"
+	return ", ".join(parts)
+
+
 func _mode_for_system(index: int) -> Mode:
 	if _completed_dispatches.size() == SYSTEMS.size():
 		return Mode.COMPLETE
@@ -1379,19 +1716,78 @@ func _mode_for_system(index: int) -> Mode:
 	return Mode.ROUTING
 
 
+func _refresh_resource_status() -> void:
+	if _link_status == null:
+		return
+	_link_status.text = "Links %d/%d" % [
+		_completed_dispatches.size(),
+		SYSTEMS.size(),
+	]
+	for resource_id in RESOURCE_ORDER:
+		var value_label: Label = _resource_value_labels.get(resource_id)
+		var icon: TextureRect = _resource_icon_nodes.get(resource_id)
+		if value_label == null or icon == null:
+			continue
+		var value := int(_resources.get(resource_id, 0))
+		value_label.text = str(value)
+		var state := _resource_icon_state(resource_id, value)
+		var asset_name: StringName = RESOURCE_ICON_ASSETS[resource_id][state]
+		if not _resource_icon_textures.has(asset_name):
+			_resource_icon_textures[asset_name] = AssetLoader.get_static_texture(
+				asset_name
+			)
+		icon.texture = _resource_icon_textures[asset_name]
+		var state_hint := ""
+		if state == &"warning":
+			state_hint = " - low"
+		elif state == &"critical":
+			state_hint = " - critical"
+		var tooltip := "%s: %d%s" % [
+			RESOURCE_DISPLAY_NAMES[resource_id],
+			value,
+			state_hint,
+		]
+		icon.tooltip_text = tooltip
+		value_label.tooltip_text = tooltip
+
+
+func _resource_icon_state(resource_id: StringName, value: int) -> StringName:
+	if resource_id == &"stability":
+		if value < 35:
+			return &"critical"
+		if value < 70:
+			return &"warning"
+		return &"normal"
+	var required := _resource_requirement_for_current_action(resource_id)
+	if required > 0 and value < required:
+		return &"warning"
+	return &"normal"
+
+
+func _resource_requirement_for_current_action(resource_id: StringName) -> int:
+	if _mode in [Mode.READY, Mode.PLACING]:
+		var facility_cost: Dictionary = SYSTEMS[_current_system_index].get(
+			"facility_cost",
+			{}
+		)
+		return int(facility_cost.get(resource_id, 0))
+	if _mode in [Mode.ROUTING, Mode.PLAN_READY]:
+		var metrics := _route_plan_metrics()
+		var total_cost: Dictionary = metrics.get("total_cost", {})
+		return int(total_cost.get(resource_id, 0))
+	if _mode == Mode.BOTTLENECK:
+		if resource_id == &"cell_material":
+			return NetworkOperationTool.REPAIR_CELL_MATERIAL_COST
+		if resource_id == &"development_signal":
+			return NetworkOperationTool.REPAIR_DEVELOPMENT_SIGNAL_COST
+	return 0
+
+
 func _refresh_interface() -> void:
 	if _system_title == null:
 		return
 	_system_title.text = "%s MAP" % SYSTEMS[_current_system_index]["name"].to_upper()
-	_network_status.text = "Links %d/%d  NE %d  CM %d  DS %d  ST %d" % [
-		_completed_dispatches.size(),
-		SYSTEMS.size(),
-		int(_resources.get(&"nutrient_energy", 0)),
-		int(_resources.get(&"cell_material", 0)),
-		int(_resources.get(&"development_signal", 0)),
-		int(_resources.get(&"stability", 0)),
-	]
-	_objective_label.text = _objective_text()
+	_refresh_resource_status()
 	for index in range(_system_buttons.size()):
 		var unlocked := index < _unlocked_count
 		_system_buttons[index].disabled = (
@@ -1494,13 +1890,8 @@ func _objective_text() -> String:
 
 
 func _set_feedback(message: String, is_error: bool) -> void:
-	if _feedback_label == null:
-		return
-	_feedback_label.text = message
-	_feedback_label.add_theme_color_override(
-		"font_color",
-		COLOR_INVALID if is_error else COLOR_TEXT
-	)
+	_latest_feedback = message
+	_latest_feedback_is_error = is_error
 
 
 func _load_textures() -> void:
@@ -1647,6 +2038,13 @@ func debug_switch_system(index: int) -> bool:
 	return _switch_system(index)
 
 
+func debug_dismiss_completion_popup() -> bool:
+	if not _completion_popup_visible():
+		return false
+	_dismiss_completion_popup()
+	return true
+
+
 func debug_snapshot() -> Dictionary:
 	var system_id := _system_id()
 	var operation_tool := _current_operation_tool()
@@ -1671,4 +2069,7 @@ func debug_snapshot() -> Dictionary:
 			operation_tool.selected_cell == operation_tool.bottleneck_cell
 		),
 		"repair_count": operation_tool.repair_count,
+		"completion_popup_visible": _completion_popup_visible(),
+		"latest_feedback": _latest_feedback,
+		"latest_feedback_is_error": _latest_feedback_is_error,
 	}

@@ -1853,6 +1853,28 @@
       "stage_birth": []
     }
   },
+  "notifications": {
+    "dwell_sec": {
+      "broadcast": 1.5,
+      "attribution": 3.0,
+      "pressure": 2.5,
+      "alert": 4.0
+    },
+    "max_stack": {
+      "broadcast": 3,
+      "alert": 1,
+      "shared": 2
+    },
+    "merge_window_ms": 16,
+    "alert_bpm": {
+      "stable": 60,
+      "warning": 84,
+      "critical": 108
+    },
+    "assist": {
+      "dwell_multiplier": 1.5
+    }
+  },
   "assist": {
     "hint_levels": [
       "hint_observe",
@@ -1869,8 +1891,7 @@
     "knowledge": {
       "initial_unlocked_entry_ids": [],
       "read_tracking_policy": "explicit_id_set",
-      "selection_policy": "empty_until_player_selection",
-      "immediate_prompt_display_sec": 4.0
+      "selection_policy": "empty_until_player_selection"
     },
     "audio": {
       "max_concurrent_one_shots": 6,

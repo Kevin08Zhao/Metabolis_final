@@ -55,6 +55,7 @@ field; the authoritative P-F00 batch total is 91 generation units.
 | 2026-07-29 | D-22 ending keyframe 1 | `create_image_pixflux` | `30542acc-cd3e-490a-8481-ef5441a71bec` | 22401 | 1 | Accepted |
 | 2026-07-29 | D-22 ending keyframe 2 | `create_image_pixflux` | `9242e92c-0e8e-4eca-957e-4224907a3097` | 22402 | 1 | Accepted |
 | 2026-07-29 | D-22 ending keyframe 3 | `create_image_pixflux` | `ffc51dab-5355-40e6-9c62-f6e4b89c8cb8` | 22403 | 1 | Accepted |
+| 2026-07-30 | System completion notification frame | `create_ui_asset` | `47a1f75a-54f8-4f56-b605-198f10802f4c` | 73194 | 25 | Accepted and landed locally |
 
 P-F00 usage reconciliation: 65 used before the accelerated batch, 91 used by
 the batch, and 156 used afterward. D-20 then used one additional generation.
@@ -82,6 +83,7 @@ the exact output paths and hashes.
 | D-23 birth fallbacks | Deterministic copies of the accepted D-22 endpoints | `tools/build_d23_fallbacks.py`, `docs/assets/D-23_MANIFEST.md` |
 | D-29 screenshots | Godot 4.7.1 runtime captures; no generated screenshot content | `tools/capture_d29_screenshots.gd`, `art/screenshots/` |
 | D-29 | Quantized and validated title background derived from the attributed source | `fetch_plans/D-29_fetch_plan.json`, `docs/assets/D-29_MANIFEST.md` |
+| System completion notification | Lossless center-band removal and locked-palette mapping of the attributed PixelLab UI source | `tools/build_system_completion_notification.py`, `docs/assets/SYSTEM_COMPLETION_NOTIFICATION_MANIFEST.md` |
 
 ## License Rules
 

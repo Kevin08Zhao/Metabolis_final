@@ -117,24 +117,105 @@ Create one native-resolution chapter-recap entry button for “Metabolis: Birth 
 
 ## 7. D-17 information-container capacity
 
-All three containers use the Godot engine’s built-in font at `8 px`. Capacity calculations reserve an `8 px` advance for each full-width Chinese character and a fixed `10 px` line height. T-31 must treat the character counts below as hard maxima. Runtime code may truncate and warn, but may not shrink the font, add scrolling, paginate, collapse a section, or expand a container.
+The D-17 immediate prompt is split by D-17a into four urgency tiers: broadcast, attribution, pressure, and alert. All four are non-modal, pointer-transparent, and self-dismissing. They extend downward from the lower edge of the reserved top UI at `y = 40`; they are not a seventh persistent UI region. Only an alert in assist mode may wait for a manual dismissal. The organ archive remains a paused modal at `Rect2(40,28,560,304)`, and the chapter summary remains a paused modal at `Rect2(48,28,544,304)`.
 
-The immediate knowledge prompt is non-modal at `Rect2(400,312,224,32)`. It ignores pointer input, has no close control, appears with the operational result that triggered it, and removes itself after the Balance-defined duration. The organ archive is a paused modal at `Rect2(40,28,560,304)`. The chapter summary is a paused modal at `Rect2(48,28,544,304)`. Opening either modal pauses operation time and resource settlement; both show a two-bar pause symbol in the header throughout the pause.
+G1a-G1d notifications use the project pixel font at its native `10 px` size. Capacity calculations reserve a `10 px` advance for each full-width Chinese character and a fixed `10 px` line height. T-31 and T-34 must treat every notification character count below as a hard maximum. Runtime code truncates and prints a `[UI]` warning; it may not shrink the font, add scrolling, paginate, fold content, or expand a container.
 
-### Table G1 — Immediate knowledge prompt capacity
-
-| Container size | Border | Inner padding | Font pixel size | Line height | Maximum lines | Hard maximum Chinese characters per line |
-|---:|---:|---:|---:|---:|---:|---:|
-| `224 × 32 px` | `1 px` | `7 px` horizontal / `5 px` vertical | `8 px` | `10 px` | **2** | **26** |
+The requested D-17a height baselines `20/32/32/40 px` conflict with the requirement that both dimensions be whole multiples of the locked `16 px` tile edge. The smallest compliant upward adjustment is:
 
 ```text
-text_width = 224 - 2 × 1 border - 2 × 7 padding = 208 px
-characters_per_line = floor(208 ÷ 8) = 26
-text_height = 32 - 2 × 1 border - 2 × 5 padding = 20 px
-maximum_lines = floor(20 ÷ 10) = 2
+broadcast_height = ceil(20 ÷ 16) × 16 = 32 px = 2T
+attribution_height = 32 px = 2T
+pressure_height = 32 px = 2T
+alert_height = ceil(40 ÷ 16) × 16 = 48 px = 3T
 ```
 
-The two-line maximum includes all punctuation. A prompt longer than `26 × 2` Chinese character cells must be rewritten; a close label, title row, third line, or overflow indicator may not consume capacity.
+Widths already satisfy the rule: `112 = 7T`, `128 = 8T`, and `144 = 9T`.
+
+The right edge is locked to `x = 640`, so each anchor derives as `anchor_x = 640 - width`. The first card starts at `anchor_y = reserved_ui_height = 40`. A `4 px` vertical gap separates cards. Three broadcasts therefore occupy:
+
+```text
+broadcast_1 = Rect2(528, 40, 112, 32)
+broadcast_2_y = 40 + (32 + 4) = 76
+broadcast_3_y = 40 + 2 × (32 + 4) = 112
+stack_bottom = 112 + 32 = 144 px < 360 px
+```
+
+The three-card stack stays `216 px` above the screen bottom.
+
+### Table G1a — Broadcast prompt capacity
+
+| Container size | Top-right anchor | Vertical gap | Border | Inner padding | Icon / rail allocation | Font | Line height | Maximum lines | Hard maximum Chinese characters per line | Entry / exit |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `112 × 32 px` (`7T × 2T`) | `(528,40)` | `4 px` | `1 px` | `4 px` horizontal / `5 px` vertical | `1 px` rail + `8 px` icon + `2 px` gap | `10 px` | `10 px` | **1** | **9** | `160 ms / 180 ms` |
+
+```text
+text_width = 112 - 2 × 1 border - 2 × 4 padding - 1 rail - 8 icon - 2 gap = 91 px
+characters_per_line = floor(91 ÷ 10) = 9
+```
+
+Broadcast is a square-corner confirmation card. Its entry divides one `16 px` cell into two `8 px` halves, then unfolds horizontally like cell division. It holds without pulse. On exit it contracts to one cell and flies to the mapped resource icon or map marker; it never fades in place.
+
+### Table G1b — Attribution prompt capacity
+
+| Container size | Top-right anchor | Vertical gap | Border | Inner padding | Icon / rail allocation | Font | Line height | Maximum lines | Hard maximum Chinese characters per line | Entry / exit |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `128 × 32 px` (`8T × 2T`) | `(512,40)` | `4 px` | `1 px` | `4 px` horizontal / `5 px` vertical | `2 px` rail + `8 px` icon + `2 px` gap | `10 px` | `10 px` | **2** | **10** | `260 ms / 240 ms` |
+
+```text
+text_width = 128 - 2 × 1 border - 2 × 4 padding - 2 rail - 8 icon - 2 gap = 106 px
+characters_per_line = floor(106 ÷ 10) = 10
+text_height = 32 - 2 × 1 border - 2 × 5 padding = 20 px = 2 lines
+```
+
+Attribution has rounded soft corners. A single bright pixel travels once around the outline like a neural impulse before the two text lines settle. On exit the bright pixel leads the card as it contracts and flies to its mapped target.
+During dwell the outline, rail, star, and two settled lines remain still; attribution has no pulse because it explains a cause without demanding immediate action.
+
+### Table G1c — Pressure prompt capacity
+
+| Container size | Top-right anchor | Vertical gap | Border | Inner padding | Icon / rail allocation | Font | Line height | Maximum lines | Hard maximum Chinese characters per line | Entry / exit |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `128 × 32 px` (`8T × 2T`) | `(512,40)` | `4 px` | `2 px` | `4 px` horizontal / `4 px` vertical | `3 px` rail + `16 px` D-16 icon + `2 px` gap | `10 px` | `10 px` | **2** | **9** | `220 ms / 220 ms` |
+
+```text
+text_width = 128 - 2 × 2 border - 2 × 4 padding - 3 rail - 16 icon - 2 gap = 95 px
+characters_per_line = floor(95 ÷ 10) = 9
+text_height = 32 - 2 × 2 border - 2 × 4 padding = 20 px = 2 lines
+```
+
+Pressure uses a left-top cut corner. Edge particles seep inward one integer pixel per frame, communicating accumulating load without relying on colour. The icon is one of the three existing D-16 bottleneck markers. Exit reverses the seep, contracts, and flies to the affected organ or resource icon.
+During dwell the seep stops at the inner edge while the cut corner, 2-pixel border, 3-pixel rail, and D-16 marker remain fixed, preserving pressure without imitating the alert heartbeat.
+
+### Table G1d — Alert prompt capacity
+
+| Container size | Top-right anchor | Vertical gap | Border | Inner padding | Icon / rail allocation | Font | Line height | Maximum lines | Hard maximum Chinese characters per line | Entry / exit |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `144 × 48 px` (`9T × 3T`) | `(496,40)` | `4 px` | `3 px` | `4 px` horizontal / `11 px` vertical | `4 px` rail + `16 px` D-16 icon + `2 px` gap | `10 px` | `10 px` | **2** | **10** | `240 ms / 280 ms` |
+
+```text
+text_width = 144 - 2 × 3 border - 2 × 4 padding - 4 rail - 16 icon - 2 gap = 108 px
+characters_per_line = floor(108 ÷ 10) = 10
+text_height = 48 - 2 × 3 border - 2 × 11 padding = 20 px = 2 lines
+```
+
+Alert combines a left-top cut corner with the thickest border and widest rail. Its D-16 bottleneck marker matches the map marker. During dwell the border performs a one-pixel inward/outward heartbeat at the Balance BPM for the current stability band. A one-pixel arterial-coral leader runs from the card edge toward the mapped organ for the alert dwell; when direct travel would cross an organ silhouette, it takes an orthogonal route around that silhouette’s bounding rectangle with a one-pixel clearance. It may touch the marker but never crosses the organ body. Exit contracts on the heartbeat and flies to that marker. Only assist-mode alerts may expose a close control and wait for it.
+
+### D-17a non-colour encoding matrix
+
+| Tier | Outline shape | Border thickness | Left rail width | Tier icon | Container size | Primary grayscale identifier |
+|---|---|---:|---:|---|---:|---|
+| Broadcast | Square corners | `1 px` | `1 px` | Dividing-cell glyph | `112 × 32` | Smallest width plus square silhouette |
+| Attribution | Rounded soft edge | `1 px` | `2 px` | Knowledge-star impulse glyph | `128 × 32` | Rounded silhouette |
+| Pressure | Left-top cut corner | `2 px` | `3 px` | Existing D-16 bottleneck marker | `128 × 32` | Cut corner plus 2-pixel border |
+| Alert | Left-top cut corner | `3 px` | `4 px` | Existing D-16 bottleneck marker | `144 × 48` | Unique 3T height plus 3-pixel border |
+
+Every tier simultaneously uses at least two non-colour dimensions. In grayscale, pressure and alert are the easiest pair to confuse because both reuse a D-16 marker and a cut corner. Increasing alert height from `2T` to `3T` is the lowest-cost separation: it changes one permitted dimension, preserves the shared map-marker grammar, and needs no new icon.
+
+Within G1c/G1d the D-16 marker identifies the notification tier and bottleneck family; it never replaces a resource's locked silhouette. Resource identity remains visible in the unchanged resource bar, and a resource notification exits to that existing silhouette. Stability therefore keeps its shield, waste keeps its original resource outline, and shortages keep the hollow investable-resource status encoding at their targets.
+
+Forbidden in all four tiers: gradients, rounded-corner shadows, semi-transparent blur, colours outside the locked palette, scrollbars, pagination, folding, close buttons (except assist-mode alert), and exclamation-mark graphics. No fifth tier, history panel, notification centre, unread count, or seventh persistent UI region is permitted.
+
+The Godot acceptance test measured the project bitmap font at its native `10 px` size with full-width Chinese test glyphs, not an estimated advance. G1a measured `90 px` for 9 glyphs and `100 px` for 10 against `91 px` available; G1b measured `100/110 px` for 10/11 against `106 px`; G1c measured `90/100 px` for 9/10 against `95 px`; G1d measured `100/110 px` for 10/11 against `108 px`. These four maxima are therefore hard measured limits.
 
 ### Table G2 — Organ archive capacity
 
@@ -172,11 +253,93 @@ available_item_height = 304 - 2 × 2 border - 2 × 8 padding - 20 header - 4 gap
 
 The six fixed items are: current developmental stage; structures formed in the chapter; newly established system connection; three core knowledge points; before/after change in the body-city; and newly unlocked encyclopedia content. Each item includes its runtime label in its four-line allocation. Stage Two must compress placental and germ-layer content into these same six slots; it may not add a seventh item.
 
+### Table G4 — Event-to-notification mapping
+
+This table contains every `docs/EVENT_API.md` event that enters the shared top-right notification layer. Events omitted here already own a dedicated surface (resource bar, decision panel, archive, timeline, birth presentation, or ending) and must not be duplicated as notifications. All copy keys resolve to placeholders until T-31/T-34 supplies final copy.
+
+| Event name | Notification tier | Copy key | Balance dwell path | Exit target |
+|---|---|---|---|---|
+| `organ_built` | broadcast | `notification.organ_built` | `notifications.dwell_sec.broadcast` | `map_organ` |
+| `operation_result_settled` | attribution | `notification.operation_result` | `notifications.dwell_sec.attribution` | `none` |
+| `transport_pressure_appeared` | first attribution; same-stage repeat broadcast | `notification.transport_pressure` | `notifications.dwell_sec.attribution`; repeat uses `.broadcast` | `map_organ` |
+| `waste_buildup_appeared` | first attribution; same-stage repeat broadcast | `notification.waste_processing` | `notifications.dwell_sec.attribution`; repeat uses `.broadcast` | `map_organ` |
+| `signal_gap_appeared` | first attribution; same-stage repeat broadcast | `notification.signal_coordination` | `notifications.dwell_sec.attribution`; repeat uses `.broadcast` | `map_organ` |
+| `transport_pressure_cleared` | broadcast | `notification.transport_recovered` | `notifications.dwell_sec.broadcast` | `map_organ` |
+| `waste_buildup_cleared` | broadcast | `notification.waste_recovered` | `notifications.dwell_sec.broadcast` | `map_organ` |
+| `signal_gap_cleared` | broadcast | `notification.signal_recovered` | `notifications.dwell_sec.broadcast` | `map_organ` |
+| `stability_band_changed` | first downward transition attribution; same-stage downward repeat broadcast; critical transition alert; recovery broadcast | `notification.stability_response` | tier-matched path under `notifications.dwell_sec` | `resource_stability` |
+| `waste_overflowed` | alert | `notification.waste_overflow` | `notifications.dwell_sec.alert` | `resource_waste` |
+| `resource_shortage_raised` | pressure | `notification.resource_shortage` | `notifications.dwell_sec.pressure` | `resource_argument_0` |
+| `resource_shortage_cleared` | broadcast | `notification.resource_recovered` | `notifications.dwell_sec.broadcast` | `resource_argument_0` |
+| `minigame_exited` | broadcast | `notification.minigame_resolved` | `notifications.dwell_sec.broadcast` | `none` |
+| `minigame_rated` | broadcast | `notification.minigame_rated` | `notifications.dwell_sec.broadcast` | `none` |
+| `system_observation_ended` | attribution | `notification.system_observed` | `notifications.dwell_sec.attribution` | `map_organ` |
+| `knowledge_entry_unlocked` | broadcast; `hint_neural_tube_compensation` override is attribution | `notification.knowledge_unlocked`; neural-tube override uses `notification.neural_tube_compensation` | `notifications.dwell_sec.broadcast`; neural-tube override uses `.attribution` | `resource_knowledge_badges`; neural-tube override uses argument-1 `map_organ` |
+| `delayed_feedback_shown` | attribution | `notification.delayed_feedback` | `notifications.dwell_sec.attribution` | `none` |
+| `action_rejected` | pressure | `notification.action_rejected` | `notifications.dwell_sec.pressure` | `none` |
+| `birth_sequence_started` | first attribution; same-stage retry broadcast | `notification.birth_transition` | `notifications.dwell_sec.attribution`; retry uses `.broadcast` | `none` |
+| `birth_rolled_back` | alert | `notification.birth_retry` | `notifications.dwell_sec.alert` | `none` |
+
+The merge groups are taken only from EVENT_API rows marked `repeatable within one tick`:
+
+- `investable_resource_shortage`: all same-tick `resource_shortage_raised` signals, regardless of which of the three investable resources fired.
+- One same-name group each for `organ_built`, the six bottleneck appeared/cleared events, `resource_shortage_cleared`, `knowledge_entry_unlocked`, and `action_rejected`. The `hint_neural_tube_compensation` override is excluded from the knowledge-unlock merge group because table E11 requires that hint never to merge.
+- No other G4 row merges. In particular, events marked `at most once per tick`, `once per stage`, or `once per run` never enter a merge group.
+
+Tutorial notifications are the three E11 bottleneck appearances, the neural-tube knowledge-unlock override, downward `stability_band_changed` transitions, `delayed_feedback_shown`, and `birth_sequence_started`. An on-screen alert moves them to the FIFO wait queue. `stage_loaded` clears only the first/repeat counters; it does not generate a notification.
+
+For `stability_band_changed`, only a worsening transition (`current_band > previous_band`) participates in the E11 first/repeat counter. A recovery (`current_band < previous_band`) is a non-tutorial broadcast and does not consume the first later downward attribution.
+
+The neural-tube override deliberately consumes the existing `knowledge_entry_unlocked` event instead of re-deriving gameplay conditions from `signal_gap_appeared`. `BottleneckDetector` emits that entry only for `stage_circulation` when transport coverage limits signal in the same settlement. The override supersedes the still-pending generic `signal_gap_appeared` card, so the E11 compensation case produces one explanation rather than both the compensation and outside-compensation copy. It also remains outside the knowledge-unlock merge group.
+
+`NotificationQueue` does not implement the once-per-save guard and never reads or writes a save. `BottleneckDetector` owns the runtime guard and exposes it in `snapshot_state`; persisting and restoring that upstream snapshot remains a T-18/T-27 integration responsibility. The presentation layer stays stateless as required.
+
+T-30b exposes assist-mode presentation hooks, but does not connect them directly to `HintSystem`: the accepted EventBus API has no assist-mode signal, and this layer may subscribe only to EventBus. T-33a must route its assist state through an accepted EventBus mount point before the production queue can consume it.
+
+### G4 dwell-time budget for the 1068-second route
+
+The estimate uses the accepted no-rollback walkthrough, counts cards after required same-tick merging, and charges each card its full dwell even when cards overlap on screen. This is deliberately more conservative than wall-clock visibility.
+
+| G4 event or group | Presented cards | Dwell each | Budget |
+|---|---:|---:|---:|
+| `organ_built` merged by stage tick | 4 | 1.5 s | 6.0 s |
+| `operation_result_settled` | 4 | 3.0 s | 12.0 s |
+| Three E11 bottleneck-appearance rows | 12 | 3.0 s | 36.0 s |
+| Three bottleneck-cleared rows | 12 | 1.5 s | 18.0 s |
+| `stability_band_changed` (charged at alert dwell) | 4 | 4.0 s | 16.0 s |
+| `waste_overflowed` | 2 | 4.0 s | 8.0 s |
+| `resource_shortage_raised` merged by stage tick | 4 | 2.5 s | 10.0 s |
+| `resource_shortage_cleared` merged by stage tick | 4 | 1.5 s | 6.0 s |
+| `minigame_exited` | 3 | 1.5 s | 4.5 s |
+| `minigame_rated` | 3 | 1.5 s | 4.5 s |
+| `system_observation_ended` | 4 | 3.0 s | 12.0 s |
+| Generic `knowledge_entry_unlocked` merged by stage tick | 4 | 1.5 s | 6.0 s |
+| Never-merge neural-tube knowledge override | 1 | 3.0 s | 3.0 s |
+| First-impact `delayed_feedback_shown` rows | 3 | 3.0 s | 9.0 s |
+| Same-tick `action_rejected` validation group | 1 | 2.5 s | 2.5 s |
+| `birth_sequence_started` | 1 | 3.0 s | 3.0 s |
+| `birth_rolled_back` on accepted route | 0 | 4.0 s | 0.0 s |
+| **Total** | **69** | — | **156.5 s** |
+
+`156.5 s <= 160 s`, leaving `3.5 s` of the fixed observation-and-immediate-prompt budget. Assist mode may lengthen dwell for accessibility, but it does not alter the authored 160-second route budget, event count, tier, order, or copy.
+
 ## 8. D-17 English PixelLab descriptions
 
-### Immediate knowledge prompt
+### G1a broadcast prompt
 
-Create one native-resolution immediate-knowledge prompt frame for “Metabolis: Birth of the City of Life,” exactly 224 × 32 pixels for placement at reference-canvas Rect2(400,312,224,32), with a solid opaque #514854 backing, one 1-pixel #140F1D exterior border, 7-pixel horizontal and 5-pixel vertical inner padding, and a subtle 1-pixel oxygen-blue causal-feedback rail kept inside the left padding. Reserve exactly two 10-pixel text lines for the Godot built-in font at 8-pixel size, with no title row and no close control; the prompt must be visually lightweight, must pass pointer input through to the game, must appear concurrently with the operational consequence it explains, and must self-dismiss after its runtime duration. Use exactly and only the locked palette #340106, #BA3A3F, #C25453, #48A5CF, #7AD1FD, #CDD9E1, #29314A, #404586, #53548C, #91465F, #BE6E87, #C98197, #B26C09, #E2953A, #DDAD7E, #73CD9B, #B1FFD1, #F4FFF8, #140F1D, #514854, #817582, #E8DCCF. Apply the project-wide outline rule with #140F1D as the only exterior outline and #514854 as the opaque backing; keep all corners and edges on integer pixels. Forbidden elements: click-to-close behavior, close button, modal dimmer, input blocking, third text line, title row, scrollbar, pagination, folding, collapsible content, gradients, rounded-corner shadows, semi-transparent blur, frosted glass, feathering, anti-aliasing, glow, colors outside the locked palette, baked text, anatomy, blood, or decorative badges.
+Create one native-resolution broadcast prompt frame for “Metabolis: Birth of the City of Life,” exactly 112 × 32 pixels (`7T × 2T`) at reference anchor `(528,40)`, with square corners, an opaque `#514854` surface, a 1-pixel `#140F1D` exterior border, a 1-pixel oxygen-blue left rail, a reserved 8-pixel dividing-cell tier-icon slot, and integer-pixel geometry. Reserve one 10-pixel line for the project pixel font at its native 10-pixel size and leave all copy to runtime. The frame must read as the smallest, quietest top-bar extension and must support a cell-division entry and a contracting target-seeking exit. Use only the locked 22-colour palette. Forbidden: baked text, close button, modal dimmer, input capture, gradients, shadows, blur, glow, anti-aliasing, partial transparency, pagination, scrolling, folding, an exclamation-mark graphic, or any fifth tier.
+
+### G1b attribution prompt
+
+Create one native-resolution attribution prompt frame for “Metabolis: Birth of the City of Life,” exactly 128 × 32 pixels (`8T × 2T`) at reference anchor `(512,40)`, with a rounded soft-edge silhouette drawn on integer pixels, an opaque `#514854` surface, a 1-pixel `#140F1D` exterior border, a 2-pixel oxygen-blue left rail, and a reserved 8-pixel knowledge-star impulse icon slot. Reserve two 10-pixel lines for the project pixel font at its native 10-pixel size. The perimeter must provide a continuous one-pixel route for a single bright pixel to travel once like a neural impulse before the text settles. Use only the locked palette and leave all prose to runtime. Apply the same forbidden list as G1a; do not add a title row or close control.
+
+### G1c pressure prompt
+
+Create one native-resolution pressure prompt frame for “Metabolis: Birth of the City of Life,” exactly 128 × 32 pixels (`8T × 2T`) at reference anchor `(512,40)`, with a clearly cut top-left corner, an opaque `#514854` surface, a 2-pixel `#140F1D` exterior border, a 3-pixel semantic left rail, and one reserved unscaled 16 × 16 slot that directly reuses the matching D-16 transport-pressure, waste-accumulation, or signal-coverage marker. Reserve two 10-pixel lines for the project pixel font at its native 10-pixel size. The edge must support integer-pixel particles seeping inward during entry and reversing before a target-seeking exit. Use oxygen blue for teaching, cold blue-violet for waste, and only existing locked semantics. Apply the G1a forbidden list; never invent a fourth bottleneck marker.
+
+### G1d alert prompt
+
+Create one native-resolution alert prompt frame for “Metabolis: Birth of the City of Life,” exactly 144 × 48 pixels (`9T × 3T`) at reference anchor `(496,40)`, with a cut top-left corner, an opaque `#514854` surface, a 3-pixel `#140F1D` clipped-corner exterior border, a 4-pixel arterial-coral left rail, and one reserved unscaled 16 × 16 slot that directly reuses the matching D-16 bottleneck marker. Reserve two 10-pixel lines for the project pixel font at its native 10-pixel size. The border must support a one-pixel heartbeat contraction at the runtime Balance BPM, plus a one-pixel arterial-coral orthogonal leader that avoids the mapped organ silhouette. Use only locked colours. Apply the G1a forbidden list; the only permitted close control is the assist-mode alert exception, and it must occupy existing padding without adding a row.
 
 ### Organ archive
 
@@ -260,7 +423,7 @@ Seven build decisions × two options = fourteen `128 × 128 px` candidate art sl
 
 ## 10. D-17 acceptance
 
-- Draw the three containers at their exact native sizes and fill them with monospaced `8 px` full-width Chinese test characters. G1 must fit exactly 26 characters on each of two lines; G2 must fit exactly 66 characters per line and three lines in each of seven fields; G3 must fit exactly 64 characters per line and four lines in each of six items.
+- Draw the G1a-G1d variants at their exact native sizes and fill them with the project `10 px` full-width Chinese test characters. G1a must fit 9 characters on one line, G1b 10 characters on each of two lines, G1c 9 characters on each of two lines, and G1d 10 characters on each of two lines. Retain the separately authored G2/G3 modal-capacity checks.
 - Open the organ archive and chapter summary for 30 real-time seconds each. Their two-bar pause symbols must remain visible, and operation time, resource settlement, and map simulation values must remain unchanged until close.
-- Show an immediate knowledge prompt during an operation, attempt map and UI input through its rectangle, and wait for its Balance-defined duration. Input must remain available, no close action may be required, and the prompt must remove itself.
+- Emit each G4 tier during an operation, attempt map and UI input through every card rectangle, and wait for each Balance-defined duration. Input must remain available and all cards must self-dismiss; only an alert while assist mode is active may wait for its close control.
 - Search the document and generated frames for scrollbars, pagination, page dots, folding controls, and collapsed sections. Any occurrence fails D-17; over-capacity copy must be shortened by T-31.

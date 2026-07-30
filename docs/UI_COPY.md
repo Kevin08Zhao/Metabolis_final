@@ -8,7 +8,10 @@ the English equivalent of the player-facing copy requested by T-31.
 
 | Container | Maximum lines | Maximum characters per line |
 |---|---:|---:|
-| G1 immediate knowledge prompt | 2 | 26 |
+| G1a broadcast notification | 1 | 9 |
+| G1b attribution notification | 2 | 10 |
+| G1c pressure notification | 2 | 9 |
+| G1d alert notification | 2 | 10 |
 | G2 organ archive field | 3 | 66 |
 | G3 chapter summary item | 4 | 64 |
 | Guidance line, added by T-34 | 1 | 26 |
@@ -17,20 +20,22 @@ Character counts include spaces and punctuation. Braced runtime substitutions
 are counted as written in this document; callers must shorten substituted values
 when the completed line would exceed the same limit.
 
-## Immediate Knowledge Prompts
+## Immediate Knowledge Notifications
 
-Each E11 hint expands `PROMPT_PLACEHOLDER` with one exact key and two lines.
-The copy describes feedback that has already occurred. It gives no prediction,
-instruction, or ranking.
+Each E11 hint enters the G4 notification mapping with one exact key. Its first
+occurrence uses the two-line G1b attribution copy; a same-stage repeat uses the
+one-line G1a broadcast copy. A critical stability transition uses the same two
+lines in G1d. The copy describes feedback that has already occurred. It gives
+no prediction, instruction, or ranking.
 
-| Key | Copy | Actual character count |
-|---|---|---:|
-| `hint_neural_tube_compensation` | `Neural plate folds to tube`<br>`Brain, spinal cord arise` | 26 / 24 |
-| `hint_transport_capacity` | `Tissue demand increased`<br>`Routes must grow with it` | 23 / 24 |
-| `hint_waste_processing` | `Metabolic waste has risen`<br>`Routes and processing act` | 25 / 25 |
-| `hint_signal_coordination` | `Signals coordinate cells`<br>`They guide growth, fate` | 24 / 23 |
-| `hint_stability_response` | `Stability dropped a tier`<br>`It combines system effects` | 24 / 26 |
-| `hint_birth_transition` | `First breath expands lungs`<br>`Resistance drops; flow up` | 26 / 25 |
+| Key | First / alert copy | Count | Repeat broadcast copy | Count |
+|---|---|---:|---|---:|
+| `hint_neural_tube_compensation` | `Neural map`<br>`Folds tube` | 10 / 10 | `Tube live` | 9 |
+| `hint_transport_capacity` | `Cell load`<br>`Route grow` | 9 / 10 | `Route use` | 9 |
+| `hint_waste_processing` | `Waste rose`<br>`Process it` | 10 / 10 | `Waste up` | 8 |
+| `hint_signal_coordination` | `Signals on`<br>`Growth map` | 10 / 10 | `Sig gap` | 7 |
+| `hint_stability_response` | `Sys strain`<br>`Effects on` | 10 / 10 | `Stability` | 9 |
+| `hint_birth_transition` | `Breath one`<br>`Flow shift` | 10 / 10 | `Flow move` | 9 |
 
 `hint_neural_tube_compensation` is the separate Stage Three compensation hint.
 It appears only on the first signal-coverage competition described by E11 and
@@ -104,10 +109,11 @@ permitted jobs it does.
 - One sentence. No semicolon joining two things, no exclamation mark, no second
   person, and no address to the player.
 - It may name a structure or point at an action, and nothing else. Principle and
-  cause belong to the immediate knowledge prompts and to the visible
+  cause belong to the immediate knowledge notifications and to the visible
   consequence, not here.
-- The G1 per-line maximum of 26 characters applies to every line, because
-  guidance shares the shortest container in the layout.
+- The guidance surface retains its own 26-character one-line capacity. If a
+  later T-33a integration routes a guidance item through G1a-G1d, it must use
+  the selected tier's smaller limit instead.
 - At the build decision and the operation decision no line may indicate that one
   candidate or one plan is preferable, and the five terms banned by T-33a may not
   appear.
@@ -244,15 +250,15 @@ second line would be clipped rather than shown.
 
 ## Closest to the Limit
 
-The three lines closest to their applicable hard maximum are:
+The notification lines closest to their applicable hard maximum are:
 
 | Key and line | Character count | Limit |
 |---|---:|---:|
-| `hint_neural_tube_compensation`, line 1 | 26 | 26 |
-| `hint_stability_response`, line 2 | 26 | 26 |
-| `hint_birth_transition`, line 1 | 26 | 26 |
+| `hint_neural_tube_compensation`, both attribution lines | 10 | 10 |
+| `hint_waste_processing`, both attribution lines | 10 | 10 |
+| `hint_signal_coordination`, both attribution lines | 10 | 10 |
 
-All three must render without truncation in the G1 container before this copy is
+All must render without truncation in their G1 variant before this copy is
 integrated into runtime labels.
 
 Five guidance lines also sit exactly at 26, and carry the same requirement:

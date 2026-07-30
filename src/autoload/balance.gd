@@ -19,6 +19,7 @@ const REQUIRED_PATHS: Array[String] = [
 	"carryover",
 	"minigames",
 	"challenges",
+	"notifications",
 	"assist",
 ]
 const PATH_PREFIX_ALIASES := {

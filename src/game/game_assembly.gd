@@ -39,6 +39,7 @@ var chapter_summary: ChapterSummary = null
 var option_preview: OptionPreview = null
 var tutorial: Tutorial = null
 var hint_system: HintSystem = null
+var notification_queue: NotificationQueue = null
 
 var _assembled := false
 var _bottleneck_evaluations := 0
@@ -238,6 +239,10 @@ func _build_auxiliary_ui() -> void:
 	hint_system = HintSystem.new()
 	hint_system.name = "HintSystem"
 	_mount_panel(hint_system, "GuidanceLayer")
+
+	notification_queue = NotificationQueue.new()
+	notification_queue.name = "NotificationQueue"
+	_mount_panel(notification_queue, "GuidanceLayer")
 
 	# TimelinePanel and MinigamePanel are event-active specification surfaces.
 	# Their content duplicates the compact playable panel, so the controller keeps

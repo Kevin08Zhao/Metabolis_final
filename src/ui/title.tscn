@@ -8,6 +8,11 @@
 ; existing background slot remains as a fallback if any sequence is unavailable.
 ; SceneRouter still owns and dynamically creates the save-aware menu entries;
 ; title_intro.gd only presents and reveals them.
+;
+; The title offers continue, new game and chapter select, with chapter select
+; gated on a finished stage that can really be entered. New Game is the single
+; entry into the body-system city; the former separate Body-System button is
+; retired.
 
 [node name="Title" type="Control"]
 anchors_preset = 15
