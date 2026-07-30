@@ -385,6 +385,13 @@ func _test_system_city_scene() -> void:
 			),
 			"system %d placement must deduct the previewed building cost" % index
 		)
+		var building_cell: Vector2i = placement + Vector2i(2, 2)
+		var while_building: Dictionary = prototype.debug_inspect_cell(building_cell)
+		_expect(
+			String(while_building.get("status", "")) == "CONSTRUCTING"
+			and not String(while_building.get("lines", [])[0]).is_empty(),
+			"system %d must report its remaining build time on hover" % index
+		)
 		if index == 0:
 			await get_tree().create_timer(3.1).timeout
 			var built_after_wait: Dictionary = prototype.debug_snapshot()
@@ -414,9 +421,19 @@ func _test_system_city_scene() -> void:
 				),
 				"relocation must refund the old facility before charging the new one"
 			)
+			building_cell = Vector2i(20, 8) + Vector2i(2, 2)
 		_expect(
 			prototype.debug_finish_construction(),
 			"system %d test build must be finishable after construction starts" % index
+		)
+		## Built but not earning yet: the card must say so and still preview
+		## what connecting it would be worth.
+		var unconnected: Dictionary = prototype.debug_inspect_cell(building_cell)
+		_expect(
+			String(unconnected.get("status", "")) == "NOT CONNECTED"
+			and bool(unconnected.get("muted", false))
+			and (unconnected.get("lines", []) as Array).size() == 3,
+			"an unconnected facility must preview its output in a muted card"
 		)
 		_expect(
 			not prototype.debug_dispatch(),
@@ -479,6 +496,25 @@ func _test_system_city_scene() -> void:
 			float(after_resources.get("biomass_rate", 0.0)) > 0.0,
 			"a committed network must produce biomass every second"
 		)
+		var operating: Dictionary = prototype.debug_inspect_cell(building_cell)
+		_expect(
+			String(operating.get("status", "")) in ["OPERATING", "THROTTLED"]
+			and String((operating.get("lines", []) as Array)[0]).contains("/"),
+			"a committed facility must show actual over nominal output"
+		)
+		## Roads carry a running cost, so they are inspectable too.
+		var road: Array = committed.get("route", [])
+		var road_cell: Vector2i = road[road.size() / 2]
+		var road_card: Dictionary = prototype.debug_inspect_cell(road_cell)
+		_expect(
+			String(road_card.get("name", "")).contains("roads")
+			and (road_card.get("lines", []) as Array).size() == 3,
+			"a committed road must report its length and running cost"
+		)
+		_expect(
+			prototype.debug_inspect_cell(Vector2i(0, 0)).is_empty(),
+			"empty tissue must show no object card"
+		)
 		if index == 0:
 			_expect(
 				float(after_resources.get("waste_rate", 0.0)) > 0.0,
@@ -493,6 +529,16 @@ func _test_system_city_scene() -> void:
 			)
 		prototype.debug_finish_delivery()
 		var post_delivery: Dictionary = prototype.debug_snapshot()
+		## The delivery animation used to share its array with the committed
+		## route, so finishing a delivery erased the road the player paid for.
+		_expect(
+			(post_delivery.get("route", []) as Array).size() == road_cells,
+			"a committed road must survive its delivery animation"
+		)
+		_expect(
+			not prototype.debug_inspect_cell(road_cell).is_empty(),
+			"a committed road must stay inspectable after delivery"
+		)
 		if int(post_delivery.get("mode", -1)) == SystemCityPrototype.Mode.BOTTLENECK:
 			_expect(
 				bool(post_delivery.get("bottleneck_active", false)),

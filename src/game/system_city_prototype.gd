@@ -57,6 +57,7 @@ const SYSTEMS := [
 		"building_asset": &"building_nutrient_depot",
 		"vehicle_asset": &"vehicle_nutrient_delivery",
 		"cargo": "nutrient cargo",
+		"role": "The city's oxygen source and main producer",
 		"accent": Color("#F4B860"),
 		"facility_cost_biomass": 60.0,
 		"build_time_sec": 3.0,
@@ -80,6 +81,7 @@ const SYSTEMS := [
 		"building_asset": &"building_circulation_station",
 		"vehicle_asset": &"vehicle_circulation_freight",
 		"cargo": "circulation freight",
+		"role": "The pump: this is what takes the waste out",
 		"accent": Color("#E85D75"),
 		"facility_cost_biomass": 80.0,
 		"build_time_sec": 3.0,
@@ -104,6 +106,7 @@ const SYSTEMS := [
 		"building_asset": &"building_neural_dispatch",
 		"vehicle_asset": &"vehicle_neural_courier",
 		"cargo": "signal parcels",
+		"role": "Signal dispatch, and the biggest oxygen draw",
 		"accent": Color("#D9A3E8"),
 		"facility_cost_biomass": 90.0,
 		"build_time_sec": 3.0,
@@ -127,6 +130,7 @@ const SYSTEMS := [
 		"building_asset": &"building_respiratory_terminal",
 		"vehicle_asset": &"vehicle_oxygen_tram",
 		"cargo": "oxygen canisters",
+		"role": "Gas exchange: the supply that pays the brain",
 		"accent": Color("#9CE8DE"),
 		"facility_cost_biomass": 100.0,
 		"build_time_sec": 3.0,
@@ -192,6 +196,8 @@ const METRIC_DISPLAY_NAMES := {
 	&"oxygen": "OXYGEN",
 	&"waste": "WASTE",
 }
+const INFO_CARD_WIDTH := 272.0
+const INFO_CARD_LINE_COUNT := 4
 const STABILITY_BAR_SIZE := Vector2(150.0, 6.0)
 const HOVER_PANEL_POSITION := Vector2(416.0, 42.0)
 const HOVER_PANEL_WIDTH := 374.0
@@ -248,6 +254,11 @@ var _build_preview_cost: Label = null
 var _build_preview_time: Label = null
 var _route_cost_bubble: PanelContainer = null
 var _route_cost_label: Label = null
+var _info_card: PanelContainer = null
+var _info_name: Label = null
+var _info_status: Label = null
+var _info_subtitle: Label = null
+var _info_lines: Array[Label] = []
 var _completion_overlay: Control = null
 var _completion_window: PanelContainer = null
 var _completion_title: Label = null
@@ -1075,6 +1086,71 @@ func _build_context_cards() -> void:
 	_route_cost_bubble.add_child(_route_cost_label)
 	_route_cost_bubble.visible = false
 
+	_build_info_card()
+
+
+## Pointer-following card for anything already on the map: a facility in any of
+## its states, or a committed road. The build preview and the route bubble own
+## the placing and routing modes; this one owns everything after.
+func _build_info_card() -> void:
+	_info_card = PanelContainer.new()
+	_info_card.name = "MapObjectInfoCard"
+	_info_card.custom_minimum_size = Vector2(INFO_CARD_WIDTH, 0.0)
+	_info_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_info_card.z_index = 30
+	_info_card.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color(0.08, 0.04, 0.11, 0.96))
+	)
+	add_child(_info_card)
+
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 2)
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_info_card.add_child(column)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 8)
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(header)
+
+	_info_name = Label.new()
+	_info_name.name = "InfoName"
+	_info_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_info_name.add_theme_font_size_override("font_size", 10)
+	_info_name.add_theme_color_override("font_color", COLOR_PORT)
+	_info_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(_info_name)
+
+	_info_status = Label.new()
+	_info_status.name = "InfoStatus"
+	_info_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_info_status.add_theme_font_size_override("font_size", 10)
+	_info_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(_info_status)
+
+	_info_subtitle = Label.new()
+	_info_subtitle.name = "InfoSubtitle"
+	_info_subtitle.add_theme_font_size_override("font_size", 9)
+	_info_subtitle.add_theme_color_override("font_color", COLOR_MUTED)
+	## No autowrap. An autowrapping label reports a minimum width of its longest
+	## word, so the panel's minimum height balloons to the wrapped line count and
+	## the card ends up taller than the map.
+	_info_subtitle.clip_text = true
+	_info_subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(_info_subtitle)
+
+	_info_lines.clear()
+	for index in range(INFO_CARD_LINE_COUNT):
+		var line := Label.new()
+		line.name = "InfoLine%d" % index
+		line.add_theme_font_size_override("font_size", 9)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		column.add_child(line)
+		_info_lines.append(line)
+
+	_info_card.visible = false
+
 
 func _add_button(parent: Container, node_name: String, label: String) -> Button:
 	var button := Button.new()
@@ -1264,7 +1340,10 @@ func _dispatch_to_next_system() -> bool:
 		int(metrics.get("road_cells", 0))
 	)
 	_current_operation_tool().configure(route)
-	_delivery_path = route
+	## Duplicate: `_finish_delivery_leg` clears `_delivery_path`, and sharing the
+	## array with `_outgoing_routes` erased the committed road the moment the
+	## delivery animation ended. That is why finished roads never stayed drawn.
+	_delivery_path = route.duplicate()
 	_delivery_progress = 0.0
 	_delivery_system_index = _current_system_index
 	_pending_delivery_system_index = _current_system_index
@@ -1355,7 +1434,7 @@ func _continue_after_outgoing_delivery() -> void:
 	_current_system_index = next_index
 	var incoming := _entry_route_for(next_index)
 	_incoming_routes[_system_id(next_index)] = incoming
-	_delivery_path = incoming
+	_delivery_path = incoming.duplicate()
 	_delivery_progress = 0.0
 	_delivery_system_index = next_index
 	_mode = Mode.DELIVERY_IN
@@ -1593,7 +1672,14 @@ func _update_context_cards() -> void:
 	if _build_preview_card == null or _route_cost_bubble == null:
 		return
 	_build_preview_card.visible = _mode == Mode.PLACING
-	_route_cost_bubble.visible = _mode in [Mode.ROUTING, Mode.PLAN_READY]
+	## The object card takes priority over the route bubble, because the
+	## "built but not connected" state only exists while a route is being
+	## drawn. Over open ground the bubble comes back.
+	_update_info_card()
+	_route_cost_bubble.visible = (
+		_mode in [Mode.ROUTING, Mode.PLAN_READY]
+		and not _info_card.visible
+	)
 	if _build_preview_card.visible:
 		var facility_cost := _facility_cost()
 		_build_preview_name.text = String(
@@ -1621,6 +1707,199 @@ func _update_context_cards() -> void:
 			COLOR_TEXT if _resources.can_afford(road_cost) else COLOR_INVALID
 		)
 		_position_follow_card(_route_cost_bubble, Vector2(16.0, 16.0))
+
+
+## Fill and place the map-object card from whatever the pointer is over.
+func _update_info_card() -> void:
+	if _info_card == null:
+		return
+	if _mode == Mode.PLACING:
+		_info_card.visible = false
+		return
+	var content := _info_card_content()
+	if content.is_empty():
+		_info_card.visible = false
+		return
+
+	var muted := bool(content.get("muted", false))
+	_info_name.text = String(content.get("name", ""))
+	_info_name.add_theme_color_override(
+		"font_color",
+		COLOR_MUTED if muted else COLOR_PORT
+	)
+	_info_status.text = String(content.get("status", ""))
+	_info_status.add_theme_color_override(
+		"font_color",
+		content.get("status_color", COLOR_TEXT)
+	)
+	_info_subtitle.text = String(content.get("subtitle", ""))
+	_info_subtitle.visible = not _info_subtitle.text.is_empty()
+
+	var lines: Array = content.get("lines", [])
+	for index in range(_info_lines.size()):
+		var label := _info_lines[index]
+		if index < lines.size():
+			label.text = String(lines[index])
+			label.visible = true
+			label.add_theme_color_override(
+				"font_color",
+				COLOR_MUTED if muted else COLOR_TEXT
+			)
+		else:
+			label.visible = false
+
+	_info_card.visible = true
+	## Hug the content: the line count changes between states, and a container
+	## left at its previous size keeps the empty rows' height.
+	_info_card.size = _info_card.get_combined_minimum_size()
+	_position_follow_card(_info_card, Vector2(18.0, 18.0))
+
+
+func _info_card_content() -> Dictionary:
+	var facility_index := _hovered_facility_index()
+	if facility_index >= 0:
+		return _facility_card_content(facility_index)
+	var road_index := _hovered_road_index()
+	if road_index >= 0:
+		return _road_card_content(road_index)
+	return {}
+
+
+## Only the facility of the map currently on screen can be under the pointer.
+func _hovered_facility_index() -> int:
+	var system_id := _system_id()
+	if not _facility_origins.has(system_id):
+		return -1
+	var origin: Vector2i = _facility_origins[system_id]
+	var offset := _hover_cell - origin
+	if (
+		offset.x < 0
+		or offset.y < 0
+		or offset.x >= FACILITY_FOOTPRINT.x
+		or offset.y >= FACILITY_FOOTPRINT.y
+	):
+		return -1
+	return _current_system_index
+
+
+func _hovered_road_index() -> int:
+	var system_id := _system_id()
+	var route: Array[Vector2i] = _route_for(_outgoing_routes, system_id)
+	if route.has(_hover_cell):
+		return _current_system_index
+	return -1
+
+
+func _facility_card_content(index: int) -> Dictionary:
+	var system: Dictionary = SYSTEMS[index]
+	var system_id := _system_id(index)
+	var economy: Dictionary = system.get("economy", {})
+	var facility_name := String(system["facility"])
+
+	if _mode == Mode.CONSTRUCTING and _construction_system_index == index:
+		var remaining := maxf(
+			_current_build_time_sec() - _construction_elapsed,
+			0.0
+		)
+		return {
+			"name": facility_name,
+			"status": "CONSTRUCTING",
+			"status_color": COLOR_PORT,
+			"subtitle": String(system.get("role", "")),
+			"lines": ["Ready in %.1f s" % remaining],
+		}
+
+	var committed := bool(_committed_systems.get(system_id, false))
+	if not committed:
+		## Built but not yet earning. Show what connecting it would be worth,
+		## dimmed, so the card is a reason to draw the road rather than a wall.
+		return {
+			"name": facility_name,
+			"status": "NOT CONNECTED",
+			"status_color": COLOR_MUTED,
+			"subtitle": "Draw a road to the boundary gate to start it",
+			"muted": true,
+			"lines": [
+				"Biomass    - / %s per s" % _rate_text(
+					float(economy.get(&"biomass_output", 0.0))
+				),
+				_oxygen_line(economy),
+				_waste_line(economy),
+			],
+		}
+
+	## Operating. Only biomass is throttled, so only biomass carries an
+	## actual-over-nominal pair; the reason for any gap is named beside it.
+	var nominal := float(economy.get(&"biomass_output", 0.0))
+	var actual := nominal * _resources.oxygen_ratio * _resources.stability_factor
+	var throttled := not is_equal_approx(actual, nominal)
+	var lines: Array[String] = [
+		"Biomass    %s / %s per s" % [_rate_text(actual), _rate_text(nominal)],
+		_oxygen_line(economy),
+		_waste_line(economy),
+	]
+	## The reason for the gap gets its own line rather than a trailing
+	## parenthesis, which would run past the edge of the card.
+	var reasons: Array[String] = []
+	if _resources.oxygen_ratio < 1.0:
+		reasons.append("oxygen x%.2f" % _resources.oxygen_ratio)
+	if _resources.stability_factor < 1.0:
+		reasons.append("stability x%.2f" % _resources.stability_factor)
+	if not reasons.is_empty():
+		lines.append("Throttled by %s" % ", ".join(reasons))
+	return {
+		"name": facility_name,
+		"status": "THROTTLED" if throttled else "OPERATING",
+		"status_color": COLOR_INVALID if throttled else COLOR_VALID,
+		"subtitle": String(system.get("role", "")),
+		"lines": lines,
+	}
+
+
+func _road_card_content(index: int) -> Dictionary:
+	var route: Array[Vector2i] = _route_for(_outgoing_routes, _system_id(index))
+	var tiles := route.size()
+	var spec := _road_economy_spec(tiles)
+	return {
+		"name": "%s roads" % SYSTEMS[index]["name"],
+		"status": "OPERATING",
+		"status_color": COLOR_VALID,
+		"subtitle": "Every tile draws oxygen and makes waste",
+		"lines": [
+			"Length     %d tiles   built for %s" % [
+				tiles,
+				_biomass_cost_text(float(tiles) * ROAD_BIOMASS_COST_PER_TILE),
+			],
+			"Oxygen     demand %.2f" % float(spec[&"oxygen_demand"]),
+			"Waste      in %s per s" % _rate_text(
+				float(spec[&"waste_output"]),
+				2
+			),
+		],
+	}
+
+
+func _oxygen_line(economy: Dictionary) -> String:
+	return "Oxygen     supply %.1f   demand %.1f" % [
+		float(economy.get(&"oxygen_supply", 0.0)),
+		float(economy.get(&"oxygen_demand", 0.0)),
+	]
+
+
+func _waste_line(economy: Dictionary) -> String:
+	var produced := float(economy.get(&"waste_output", 0.0))
+	var cleared := float(economy.get(&"waste_clearance", 0.0))
+	return "Waste      in %s   cleared %s   net %s" % [
+		_rate_text(produced, 2),
+		_rate_text(-cleared, 2),
+		_rate_text(produced - cleared, 2),
+	]
+
+
+func _rate_text(value: float, decimals: int = 1) -> String:
+	if is_zero_approx(value):
+		return "0.%s" % "0".repeat(decimals)
+	return ("%%+.%df" % decimals) % value
 
 
 func _position_follow_card(card: Control, offset: Vector2) -> void:
@@ -2310,6 +2589,18 @@ func debug_switch_system(index: int) -> bool:
 func debug_advance_economy(seconds: float) -> void:
 	_resources.apply_tick(seconds)
 	_refresh_interface()
+
+
+## Move the pointer onto a grid cell and return what the map-object card would
+## show there. An empty dictionary means the cell carries no inspectable object.
+func debug_inspect_cell(cell: Vector2i) -> Dictionary:
+	_hover_cell = cell
+	_update_context_cards()
+	var content := _info_card_content()
+	if content.is_empty():
+		return {}
+	content["card_visible"] = _info_card != null and _info_card.visible
+	return content
 
 
 func debug_hover_metric(metric_id: StringName) -> bool:

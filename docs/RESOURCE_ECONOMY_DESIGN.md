@@ -424,6 +424,84 @@ The three shapes in `docs/ENCODING_SPEC.md` are reused by role, not by old name:
 silhouette, so no new art is required for this pass. Renaming the asset keys is a
 follow-up, not a blocker.
 
+### 5.7 The map-object card
+
+The header answers "what is the city doing". This card answers "what is *this
+thing* doing". It follows the pointer, 272 px wide, and appears over any object
+already on the map. The build preview owns placement and the route bubble owns
+route drawing; this card owns everything after.
+
+It has four states.
+
+**Placing** — unchanged, still the existing build preview: name, biomass cost,
+build time.
+
+**Constructing**
+
+```
+Nutrient Exchange Depot                     CONSTRUCTING
+The city's oxygen source and main producer
+Ready in 0.8 s
+```
+
+**Built but not connected** — rendered muted, because the facility is earning
+nothing yet. It still previews what connecting it would be worth, so the card is
+a reason to draw the road rather than a dead end.
+
+```
+Nutrient Exchange Depot                    NOT CONNECTED
+Draw a road to the boundary gate to start it
+Biomass    - / +3.0 per s
+Oxygen     supply 10.0   demand 2.0
+Waste      in +0.40   cleared -0.40   net 0.00
+```
+
+**Operating**
+
+```
+Nutrient Exchange Depot                        OPERATING
+The city's oxygen source and main producer
+Biomass    +3.0 / +3.0 per s
+Oxygen     supply 10.0   demand 2.0
+Waste      in +0.40   cleared -0.40   net 0.00
+```
+
+Biomass is the only value that carries an actual-over-nominal pair, because it is
+the only one the oxygen ratio and stability tier throttle. When the two differ the
+status reads `THROTTLED` and a fourth line names the cause:
+
+```
+Biomass    +0.7 / +1.0 per s
+Oxygen     supply 0.0   demand 8.0
+Waste      in +0.50   cleared -0.20   net +0.30
+Throttled by oxygen x0.68, stability x0.70
+```
+
+This is what connects a global header figure to a specific building. Without it
+the player can see that the city is short of oxygen but not which structure is
+suffering for it.
+
+**Roads** are inspectable too, because they are a registered economy source with
+a real running cost:
+
+```
+Nutrient Exchange roads                        OPERATING
+Every tile draws oxygen and makes waste
+Length     20 tiles   built for BIO 40
+Oxygen     demand 0.60
+Waste      in +0.20 per s
+```
+
+Two implementation notes worth keeping:
+
+- The subtitle must not autowrap. An autowrapping label reports a minimum width
+  of its longest word, which inflates the container's minimum height until the
+  card is taller than the map. Every card string is therefore budgeted to about
+  46 characters at font size 9.
+- The card must be resized to `get_combined_minimum_size()` on every refresh.
+  The line count changes between states, and a container left at its previous
+  size keeps the height of the rows it is no longer showing.
+
 ---
 
 ## 6. What this removes
