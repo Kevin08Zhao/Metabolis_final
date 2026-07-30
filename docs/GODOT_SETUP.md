@@ -1,6 +1,29 @@
 # Godot Project Setup
 
-This document records the verified T-03 configuration on Windows 11. The exact engine version is `Godot 4.7.1.stable.official.a13da4feb`, the renderer is `GL Compatibility`, and the project root is `src/`. No plugins, addons, third-party assets, or GDScript files are introduced by this setup task.
+> **Current state, read this first.** The reference canvas below is no longer
+> the value in `src/project.godot`. Commit `fd73baf` ("feat: add connected
+> body-system city maps") expanded the interface canvas from `640 x 360` to
+> `800 x 450`, with the window override moving from `1280 x 720` to
+> `1600 x 900`, so that controls stop covering the locked map area. The reasons
+> and the layout that depends on it are recorded in
+> `docs/CITY_BUILDER_REWORK_PLAN.md`, `docs/SYSTEM_MAP_MODE.md`, and
+> `docs/VISUAL_COHESION_GUIDE.md`. This file was not updated at the time and
+> still describes the original T-03 verification.
+>
+> One consequence worth knowing: `640 x 360` divided 1080p exactly at `3x`,
+> while `800 x 450` does not (`1920 / 800 = 2.4`). Under
+> `stretch/scale_mode = integer` a 1080p fullscreen window therefore falls back
+> to `2x` at `1600 x 900` and letterboxes the remainder. Exact integer output
+> scales for the current canvas are `2x` at `1600 x 900` and `3x` at
+> `2400 x 1350`.
+>
+> Two settings in the table below, `window/dpi/allow_hidpi` and
+> `window/stretch/aspect`, equal the Godot 4 engine defaults. The editor drops
+> settings that match their default when it re-saves `project.godot`, so they
+> disappear and reappear across commits. Their absence does not change
+> behaviour.
+
+The rest of this document records the verified T-03 configuration on Windows 11. The exact engine version is `Godot 4.7.1.stable.official.a13da4feb`, the renderer is `GL Compatibility`, and the project root is `src/`. No plugins, addons, third-party assets, or GDScript files are introduced by this setup task.
 
 ## Setup checklist
 

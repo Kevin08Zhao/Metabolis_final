@@ -7,6 +7,13 @@ extends Control
 ## boundary used by AssetLoader, then advanced together at exactly 8 FPS.
 ## Native Godot labels and buttons remain separate so routing, focus, save-state
 ## entries, and future localization do not become baked image assets.
+##
+## The layer directories are deduplicated: a PNG exists only for the first frame
+## that introduces new pixels, and manifest.json's "frame_maps" says which file
+## backs each of the 64 logical frames. Each distinct PNG becomes exactly one
+## ImageTexture that every frame mapped to it shares. When the manifest is
+## missing or malformed the loader falls back to the identity map, so a fully
+## populated directory keeps working unchanged.
 
 signal intro_finished
 
@@ -15,6 +22,7 @@ const FRAME_COUNT := 64
 const INTRO_DURATION_SECONDS := 8.0
 const FRAME_DURATION_SECONDS := 1.0 / float(FPS)
 const ANIMATION_ROOT := "res://../art/animations/title_layers"
+const MANIFEST_PATH := "res://../art/animations/title_layers/manifest.json"
 
 const TITLE_START_SECONDS := 5.25
 const TITLE_END_SECONDS := 6.25
@@ -29,6 +37,20 @@ const LAYER_SPECS := [
 	["VehicleCargo", "05_vehicle_cargo"],
 	["RoadsideProps", "06_roadside_props"],
 ]
+
+## The layer PNGs are 320x180 while the canvas is 800x450, a fractional 2.5x.
+## Stretching across that gap makes neighbouring source pixels 2 and 3 screen
+## pixels wide, which reads as uneven noise beside integer-scaled pixel text.
+## The stack is instead drawn at the smallest integer scale that covers the
+## canvas and clipped by the parent, so every source pixel stays square.
+const LAYER_SOURCE_SIZE := Vector2(320.0, 180.0)
+
+## Whole multiples of UiTheme.NATIVE_FONT_SIZE. Anything else samples the glyph
+## atlas at a fractional scale and breaks the pixel grid.
+const MENU_FONT_SIZE := 20
+const PROMPT_FONT_SIZE := 10
+## "Body-System City Builder" needs 286px at MENU_FONT_SIZE including padding.
+const MENU_BUTTON_SIZE := Vector2(290.0, 36.0)
 
 const COLOR_OUTLINE := Color("#140F1D")
 const COLOR_BLUE_DARK := Color("#29314A")
@@ -66,6 +88,8 @@ func _ready() -> void:
 	if _load_layer_frames():
 		_fallback_background.hide()
 		_animation_layers.show()
+		_layout_animation_layers()
+		_animation_layers.resized.connect(_layout_animation_layers)
 		_set_animation_frame(0)
 	else:
 		_animation_layers.hide()
@@ -112,6 +136,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _load_layer_frames() -> bool:
 	_layers.clear()
+	var frame_maps := _load_frame_maps()
 	for specification in LAYER_SPECS:
 		var node_name: String = specification[0]
 		var directory_name: String = specification[1]
@@ -122,12 +147,20 @@ func _load_layer_frames() -> bool:
 			return false
 
 		layer_node.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		var frame_map := _frame_map_for(frame_maps, directory_name)
+		var textures_by_source: Dictionary = {}
 		var frames: Array[Texture2D] = []
 		for frame_index in range(FRAME_COUNT):
+			var source_index: int = frame_map[frame_index]
+			if textures_by_source.has(source_index):
+				# Duplicate frames share one GPU texture instead of a second upload.
+				frames.append(textures_by_source[source_index])
+				continue
+
 			var resource_path := "%s/%s/frame_%03d.png" % [
 				ANIMATION_ROOT,
 				directory_name,
-				frame_index,
+				source_index,
 			]
 			var absolute_path := ProjectSettings.globalize_path(resource_path)
 			var image := Image.load_from_file(absolute_path)
@@ -142,9 +175,92 @@ func _load_layer_frames() -> bool:
 				)
 				_layers.clear()
 				return false
-			frames.append(ImageTexture.create_from_image(image))
+			var texture := ImageTexture.create_from_image(image)
+			textures_by_source[source_index] = texture
+			frames.append(texture)
 		_layers.append({"node": layer_node, "frames": frames})
 	return true
+
+
+func _layout_animation_layers() -> void:
+	var canvas := _animation_layers.size
+	if canvas.x <= 0.0 or canvas.y <= 0.0:
+		return
+
+	# Cover rather than fit: an integer scale that leaves gaps would need a
+	# backdrop, and the sky changes color across the eight seconds, so there is
+	# no single color that could fill one.
+	var cover := maxf(canvas.x / LAYER_SOURCE_SIZE.x, canvas.y / LAYER_SOURCE_SIZE.y)
+	var scale := maxi(1, int(ceil(cover)))
+	var scaled := LAYER_SOURCE_SIZE * float(scale)
+	var origin := ((canvas - scaled) * 0.5).floor()
+
+	for layer in _layers:
+		var layer_node: TextureRect = layer["node"]
+		layer_node.set_anchors_preset(Control.PRESET_TOP_LEFT, false)
+		layer_node.position = origin
+		layer_node.size = scaled
+
+
+func _load_frame_maps() -> Dictionary:
+	var absolute_path := ProjectSettings.globalize_path(MANIFEST_PATH)
+	if not FileAccess.file_exists(absolute_path):
+		push_warning(
+			"[TITLE INTRO] '%s' is missing; assuming one PNG per frame."
+			% MANIFEST_PATH
+		)
+		return {}
+	var text := FileAccess.get_file_as_string(absolute_path)
+	if text.is_empty():
+		push_warning("[TITLE INTRO] '%s' is empty." % MANIFEST_PATH)
+		return {}
+	var parsed: Variant = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_warning("[TITLE INTRO] '%s' is not a JSON object." % MANIFEST_PATH)
+		return {}
+	var maps: Variant = (parsed as Dictionary).get("frame_maps", {})
+	if typeof(maps) != TYPE_DICTIONARY:
+		push_warning("[TITLE INTRO] '%s' has no usable frame_maps." % MANIFEST_PATH)
+		return {}
+	return maps as Dictionary
+
+
+func _frame_map_for(frame_maps: Dictionary, directory_name: String) -> PackedInt32Array:
+	var identity := PackedInt32Array()
+	for frame_index in range(FRAME_COUNT):
+		identity.append(frame_index)
+
+	var raw: Variant = frame_maps.get(directory_name, null)
+	if typeof(raw) != TYPE_ARRAY:
+		return identity
+	var entries := raw as Array
+	if entries.size() != FRAME_COUNT:
+		push_warning(
+			"[TITLE INTRO] frame_maps['%s'] has %s entries, expected %s."
+			% [directory_name, entries.size(), FRAME_COUNT]
+		)
+		return identity
+
+	var mapped := PackedInt32Array()
+	for frame_index in range(FRAME_COUNT):
+		var entry: Variant = entries[frame_index]
+		if typeof(entry) != TYPE_INT and typeof(entry) != TYPE_FLOAT:
+			push_warning(
+				"[TITLE INTRO] frame_maps['%s'][%s] is not a number."
+				% [directory_name, frame_index]
+			)
+			return identity
+		var source_index := int(entry)
+		# A representative frame can never come after the frame it stands in
+		# for, so anything forward-pointing means the manifest is out of sync.
+		if source_index < 0 or source_index > frame_index:
+			push_warning(
+				"[TITLE INTRO] frame_maps['%s'][%s] = %s is out of range."
+				% [directory_name, frame_index, source_index]
+			)
+			return identity
+		mapped.append(source_index)
+	return mapped
 
 
 func _set_animation_frame(frame_index: int) -> void:
@@ -261,21 +377,21 @@ func _refresh_dynamic_menu() -> void:
 		return
 	title_menu.add_theme_constant_override("separation", 7)
 
-	var title_font := _title_band.get_theme_font("font")
+	# The font itself comes from the global UiTheme, so only the sizes and the
+	# title-specific styling are set here.
 	for descendant in title_menu.find_children("*", "", true, false):
 		if descendant is Button:
-			_style_button(descendant as Button, title_font)
+			_style_button(descendant as Button)
 		elif descendant is Label:
-			_style_prompt(descendant as Label, title_font)
+			_style_prompt(descendant as Label)
 
 
-func _style_button(button: Button, font: Font) -> void:
+func _style_button(button: Button) -> void:
 	if not button.has_meta("metabolis_pixel_styled"):
 		button.set_meta("metabolis_pixel_styled", true)
-		button.custom_minimum_size = Vector2(270.0, 36.0)
+		button.custom_minimum_size = MENU_BUTTON_SIZE
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_font_override("font", font)
-		button.add_theme_font_size_override("font_size", 16)
+		button.add_theme_font_size_override("font_size", MENU_FONT_SIZE)
 		button.add_theme_color_override("font_color", COLOR_CREAM)
 		button.add_theme_color_override("font_hover_color", COLOR_MINT)
 		button.add_theme_color_override("font_pressed_color", COLOR_AMBER_LIGHT)
@@ -289,14 +405,13 @@ func _style_button(button: Button, font: Font) -> void:
 	button.disabled = not _menu_interactive
 
 
-func _style_prompt(label: Label, font: Font) -> void:
+func _style_prompt(label: Label) -> void:
 	if label.has_meta("metabolis_pixel_styled"):
 		return
 	label.set_meta("metabolis_pixel_styled", true)
-	label.custom_minimum_size = Vector2(270.0, 0.0)
+	label.custom_minimum_size = Vector2(MENU_BUTTON_SIZE.x, 0.0)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 12)
+	label.add_theme_font_size_override("font_size", PROMPT_FONT_SIZE)
 	label.add_theme_color_override("font_color", COLOR_CREAM)
 	label.add_theme_color_override("font_outline_color", COLOR_OUTLINE)
 	label.add_theme_constant_override("outline_size", 1)

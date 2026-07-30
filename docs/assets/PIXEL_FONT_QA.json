@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "font_name": "MetabolisPixel",
+  "native_size": 10,
+  "line_height": 10,
+  "baseline": 7,
+  "glyph_count": 95,
+  "covers_printable_ascii": true,
+  "atlas": {
+    "path": "art/fonts/metabolis_pixel_font.png",
+    "width": 97,
+    "height": 61,
+    "sha256": "4575e104c05c9becc2425615473629ce8787455c3c08e2c9be86ec5d0a7b5e7d"
+  },
+  "descriptor": {
+    "path": "art/fonts/metabolis_pixel_font.fnt",
+    "sha256": "598b03acc0b52783a8985688fdd54e1c85ab0522055a595d0c235e5a180a10f8"
+  },
+  "advance_width_at_native_size": {
+    "METABOLIS": 52,
+    "BIRTH OF THE CITY OF LIFE": 134,
+    "Continue": 45,
+    "New Game": 46,
+    "Chapter Select": 77,
+    "Body-System City Builder": 129
+  }
+}

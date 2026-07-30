@@ -311,7 +311,7 @@ func _build_interface() -> void:
 	_resource_label.name = "Resources"
 	_resource_label.position = Vector2(12, 5)
 	_resource_label.size = Vector2(500, 30)
-	_resource_label.add_theme_font_size_override("font_size", 12)
+	_resource_label.add_theme_font_size_override("font_size", 10)
 	hud.add_child(_resource_label)
 
 	_coverage_label = Label.new()
@@ -319,7 +319,7 @@ func _build_interface() -> void:
 	_coverage_label.position = Vector2(530, 5)
 	_coverage_label.size = Vector2(258, 30)
 	_coverage_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_coverage_label.add_theme_font_size_override("font_size", 12)
+	_coverage_label.add_theme_font_size_override("font_size", 10)
 	hud.add_child(_coverage_label)
 
 	var side_rail := ColorRect.new()
@@ -349,14 +349,14 @@ func _build_interface() -> void:
 	)
 	_objective_label.custom_minimum_size = Vector2(610, 31)
 	_objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_objective_label.add_theme_font_size_override("font_size", 12)
+	_objective_label.add_theme_font_size_override("font_size", 10)
 	info_column.add_child(_objective_label)
 
 	_feedback_label = Label.new()
 	_feedback_label.name = "Feedback"
 	_feedback_label.custom_minimum_size = Vector2(610, 28)
 	_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_feedback_label.add_theme_font_size_override("font_size", 11)
+	_feedback_label.add_theme_font_size_override("font_size", 10)
 	info_column.add_child(_feedback_label)
 
 	var tool_panel := PanelContainer.new()
@@ -373,7 +373,7 @@ func _build_interface() -> void:
 
 	var tray_title := Label.new()
 	tray_title.text = "ORIGIN TOOLS"
-	tray_title.add_theme_font_size_override("font_size", 12)
+	tray_title.add_theme_font_size_override("font_size", 10)
 	tray.add_child(tray_title)
 
 	_place_button = _add_button(tray, "PlaceCluster", "Place Cell District")
@@ -404,7 +404,7 @@ func _build_interface() -> void:
 
 	var operation_title := Label.new()
 	operation_title.text = "CELL OPERATIONS"
-	operation_title.add_theme_font_size_override("font_size", 12)
+	operation_title.add_theme_font_size_override("font_size", 10)
 	operation_column.add_child(operation_title)
 
 	_operation_label = Label.new()

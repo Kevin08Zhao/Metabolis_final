@@ -1,12 +1,22 @@
 {
   "status": "PASS",
-  "total_png_frames": 384,
-  "expected_png_frames": 384,
+  "total_png_frames": 188,
+  "expected_png_frames": 188,
+  "logical_frame_count": 384,
+  "unique_frame_counts": {
+    "01_sky": 61,
+    "02_terrain": 4,
+    "03_main_building": 21,
+    "04_small_buildings": 9,
+    "05_vehicle_cargo": 37,
+    "06_roadside_props": 56
+  },
+  "duplicate_frames_removed": 196,
   "output": "art/animations/title_layers",
   "manifest": "art/animations/title_layers/manifest.json",
-  "manifest_sha256": "269a09602aa1e989ef73a5aeb67ae5f56d9e999dd3802db0c1081d9c018026ec",
+  "manifest_sha256": "a0f8722bcb07d4a309654850013647c0e46e98af1e46f222bf9613bd890a64ae",
   "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
-  "specification_sha256": "722d08f999aa08dbe4abc6e7c1f73f00a876a1f38e10d4f2ce3c58b7f4ee0d99",
+  "specification_sha256": "9d840c59ce78b7f88f70af4289a482ae8c324444876743c5f1ca119d3ca21f5b",
   "checks": {
     "01_sky": {
       "frame_count": 64,
@@ -24,10 +34,23 @@
       "all_320x180": true,
       "locked_palette": true,
       "binary_alpha": true,
-      "visible_color_count": 9,
+      "visible_color_count": 7,
       "nonempty_frame_count": 64,
       "first_nonempty_frame": 0,
-      "last_nonempty_frame": 63
+      "last_nonempty_frame": 63,
+      "road_dash_guide": {
+        "start": [
+          0.0,
+          172.0
+        ],
+        "end": [
+          319.0,
+          85.21
+        ]
+      },
+      "road_dash_endpoint_pixels_present": true,
+      "road_dash_maximum_raster_deviation_pixels": 0.499,
+      "road_dash_follows_guide": true
     },
     "03_main_building": {
       "frame_count": 64,

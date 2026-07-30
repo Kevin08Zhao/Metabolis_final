@@ -23,6 +23,7 @@ SaveManager="*res://autoload/save_manager.gd"
 AudioRouter="*res://core/audio_router.gd"
 AssetLoader="*res://core/asset_loader.gd"
 DebugFlags="*res://core/debug_flags.gd"
+UiTheme="*res://core/ui_theme.gd"
 
 [display]
 
@@ -34,6 +35,10 @@ window/dpi/allow_hidpi=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
+
+[gui]
+
+theme/custom="res://ui/metabolis_pixel_theme.tres"
 
 [physics]
 

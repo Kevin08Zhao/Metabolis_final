@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import math
 import shutil
@@ -58,6 +59,10 @@ TRANSPARENT = (0, 0, 0, 0)
 
 VANISHING_POINT = (1088.0 / 3.0, 220.0 / 3.0)
 TRUCK_STOP = (145.0, 121.0)
+ROAD_DASH_START = (0.0, 172.0)
+ROAD_DASH_END = (319.0, 85.21)
+ROAD_DASH_LENGTH_X = 14
+ROAD_DASH_PERIOD_X = 28
 
 BAYER_8 = (
     (0, 32, 8, 40, 2, 34, 10, 42),
@@ -282,8 +287,44 @@ def recolor(
     return result
 
 
+def road_dash_y(x: float) -> float:
+    """Return the continuous center-dash guide at a source-image x coordinate."""
+    progress = (x - ROAD_DASH_START[0]) / (
+        ROAD_DASH_END[0] - ROAD_DASH_START[0]
+    )
+    return ROAD_DASH_START[1] + progress * (
+        ROAD_DASH_END[1] - ROAD_DASH_START[1]
+    )
+
+
+def redraw_road_center_dashes(image: Image.Image) -> Image.Image:
+    """Replace the baked center dashes with one deterministic perspective line."""
+    result = image.convert("RGBA").copy()
+    pixels = result.load()
+
+    # The terrain keyframe contains no cream-colored object other than the old
+    # center dashes. Clear both its ordinary cream pixels and its single bright
+    # highlight before drawing the new line, making repeated rebuilds idempotent.
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            if pixels[x, y] in {CREAM, MINT_LIGHT}:
+                pixels[x, y] = NEUTRAL_DARK
+
+    for start_x in range(
+        int(ROAD_DASH_START[0]),
+        int(ROAD_DASH_END[0]) + 1,
+        ROAD_DASH_PERIOD_X,
+    ):
+        end_x = min(start_x + ROAD_DASH_LENGTH_X, int(ROAD_DASH_END[0]))
+        for x in range(start_x, end_x + 1):
+            pixels[x, round(road_dash_y(x))] = CREAM
+    return result
+
+
 def build_terrain_frames(static: Path) -> list[Image.Image]:
-    day = Image.open(static / "terrain_road_afternoon.png").convert("RGBA")
+    day = redraw_road_center_dashes(
+        Image.open(static / "terrain_road_afternoon.png")
+    )
     dusk = recolor(
         day,
         {
@@ -638,6 +679,39 @@ def validate_layer_frames(
         result["all_frames_opaque"] = all(
             frame.getchannel("A").getextrema() == (255, 255) for frame in frames
         )
+    if layer == "02_terrain":
+        endpoint_pixels = [
+            frame.getpixel(
+                (
+                    round(point[0]),
+                    round(point[1]),
+                )
+            )
+            for frame in frames
+            for point in (ROAD_DASH_START, ROAD_DASH_END)
+        ]
+        dash_pixels = [
+            (x, y)
+            for y in range(HEIGHT)
+            for x in range(WIDTH)
+            if frames[0].getpixel((x, y)) == CREAM
+        ]
+        maximum_deviation = max(
+            (abs(y - road_dash_y(x)) for x, y in dash_pixels),
+            default=float("inf"),
+        )
+        result["road_dash_guide"] = {
+            "start": list(ROAD_DASH_START),
+            "end": list(ROAD_DASH_END),
+        }
+        result["road_dash_endpoint_pixels_present"] = all(
+            pixel == CREAM for pixel in endpoint_pixels
+        )
+        result["road_dash_maximum_raster_deviation_pixels"] = round(
+            maximum_deviation,
+            3,
+        )
+        result["road_dash_follows_guide"] = maximum_deviation <= 0.5
     return result
 
 
@@ -649,20 +723,74 @@ def portable_path(path: Path, repo_root: Path) -> str:
         return resolved.as_posix()
 
 
+def pixel_digest(frame: Image.Image) -> str:
+    """Content address a frame by its exact decoded pixels.
+
+    Two frames that hash the same are byte-identical after decoding, so the
+    playback side can point at one shared PNG instead of storing a copy.
+    """
+    header = f"{frame.mode}:{frame.width}x{frame.height}:".encode("utf-8")
+    return hashlib.sha256(header + frame.tobytes()).hexdigest()
+
+
 def save_frames(
     root: Path,
     layer: str,
     frames: list[Image.Image],
     repo_root: Path,
-) -> list[dict[str, str]]:
+    existing_frame_bytes: dict[str, bytes],
+) -> tuple[list[dict[str, object]], list[int]]:
+    """Write only the distinct frames of one layer.
+
+    Returns the on-disk records plus a 64-entry frame map. `frame_map[i]` is
+    the frame number whose PNG must be shown at logical frame `i`; a frame is
+    its own representative whenever it introduces new pixels. The map is
+    therefore always non-decreasing-safe: `frame_map[i] <= i`.
+    """
     directory = root / layer
     directory.mkdir(parents=True, exist_ok=True)
-    records: list[dict[str, str]] = []
+    records: list[dict[str, object]] = []
+    representative_by_digest: dict[str, int] = {}
+    record_by_representative: dict[int, dict[str, object]] = {}
+    frame_map: list[int] = []
     for index, frame in enumerate(frames):
-        path = directory / f"frame_{index:03d}.png"
-        frame.save(path, optimize=True)
-        records.append({"path": portable_path(path, repo_root), "sha256": sha256(path)})
-    return records
+        digest = pixel_digest(frame)
+        representative = representative_by_digest.get(digest)
+        if representative is None:
+            representative = index
+            representative_by_digest[digest] = index
+            path = directory / f"frame_{index:03d}.png"
+            relative_key = f"{layer}/frame_{index:03d}.png"
+            existing_bytes = existing_frame_bytes.get(relative_key)
+            reused_existing = False
+            if existing_bytes is not None:
+                try:
+                    existing_frame = Image.open(io.BytesIO(existing_bytes)).convert(
+                        "RGBA"
+                    )
+                    reused_existing = (
+                        existing_frame.size == frame.size
+                        and existing_frame.tobytes() == frame.convert("RGBA").tobytes()
+                    )
+                except OSError:
+                    reused_existing = False
+            if reused_existing:
+                path.write_bytes(existing_bytes)
+            else:
+                frame.save(path, optimize=True)
+            record: dict[str, object] = {
+                "path": portable_path(path, repo_root),
+                "sha256": sha256(path),
+                "frame": index,
+                "used_by_frames": [],
+            }
+            records.append(record)
+            record_by_representative[index] = record
+        frame_map.append(representative)
+        used_by = record_by_representative[representative]["used_by_frames"]
+        assert isinstance(used_by, list)
+        used_by.append(index)
+    return records, frame_map
 
 
 def composite_frames(layers: dict[str, list[Image.Image]]) -> list[Image.Image]:
@@ -762,10 +890,8 @@ def cargo_phase(frame: int) -> str:
 def ui_phase(frame: int) -> str:
     if frame < 42:
         return "hidden"
-    if frame < 46:
-        return "title_entering"
     if frame < 52:
-        return "title_and_subtitle_entering"
+        return "title_entering"
     if frame < 60:
         return "menu_entering"
     return "interactive"
@@ -869,7 +995,20 @@ def percent(value: float) -> str:
     return f"{round(value * 100):d}%"
 
 
-def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
+def write_spec(
+    repo_root: Path,
+    contracts: list[dict[str, object]],
+    unique_frame_counts: dict[str, int],
+) -> Path:
+    total_unique = sum(unique_frame_counts.values())
+    dedup_rows = [
+        "| `{layer}` | `{unique}` | `{saved}` |".format(
+            layer=layer,
+            unique=unique_frame_counts[layer],
+            saved=FRAME_COUNT - unique_frame_counts[layer],
+        )
+        for layer in LAYER_ORDER
+    ]
     rows: list[str] = []
     for contract in contracts:
         frame = int(contract["frame"])
@@ -919,7 +1058,7 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "## Source of truth",
         "",
         "- Human-readable contract: this file.",
-        "- Machine-readable per-frame contract and SHA-256 hashes:",
+        "- Machine-readable per-frame contract, frame maps, and SHA-256 hashes:",
         "  `art/animations/title_layers/manifest.json`.",
         "- Deterministic generator: `tools/build_title_layer_animation.py`.",
         "- PixelLab-approved keyframes: `art/previews/title_layers_static/`.",
@@ -941,14 +1080,17 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "| Canvas | `320 × 180` pixels |",
         "| Duration | `8.000 s` |",
         "| Frame rate | `8 FPS` |",
-        "| Frames per layer | `64`, numbered `000–063` |",
-        "| File pattern | `frame_%03d.png` |",
+        "| Frames per layer | `64` logical frames, numbered `000–063` |",
+        "| File pattern | `frame_%03d.png`, sparse — duplicates are not written |",
+        f"| PNG files on disk | `{total_unique}` total across the six layers |",
+        "| Frame resolution | `frame_maps` in the manifest, see below |",
         "| Color | Only the 22 colors in `art/palette.gpl` |",
         "| Alpha | Binary only: `0` or `255` |",
         "| Sampling | Nearest-neighbor; integer source coordinates |",
         "| Vanishing point | `(1088/3, 220/3) = (362.6667, 73.3333)` |",
         "| Road upper edge | `(0,130) → (320,80)` |",
         "| Road lower edge | `(160,200) → (320,100)` |",
+        "| Road center-dash guide | `(0,172) → (319,85.21)` |",
         "| Embedded text | Forbidden; title and menu are native Godot UI |",
         "",
         "Layer order is back-to-front and MUST remain:",
@@ -959,6 +1101,34 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "4. `04_small_buildings` — exactly three perspective buildings.",
         "5. `05_vehicle_cargo` — transient truck and delivered cargo.",
         "6. `06_roadside_props` — lamps and grass anchored to road edges.",
+        "",
+        "## Frame deduplication",
+        "",
+        "Every layer still has `64` logical frames, but identical frames share a",
+        "single PNG. A layer directory is therefore sparse: a file exists only for",
+        "the first frame that introduces new pixels.",
+        "",
+        "`manifest.json` carries the resolution table:",
+        "",
+        "```json",
+        '"frame_maps": { "02_terrain": [0, 0, 0, ..., 24, 24, ...] }',
+        "```",
+        "",
+        "- `frame_maps[layer][i]` is the frame number whose PNG renders logical",
+        "  frame `i`.",
+        "- `frame_maps[layer][i] <= i` MUST always hold; a map that points forward",
+        "  is a build error.",
+        "- Consumers MUST resolve through `frame_maps` and MUST NOT assume that",
+        "  `frame_%03d.png` exists for every `i`.",
+        "- Consumers SHOULD upload each distinct PNG to the GPU once and reuse the",
+        "  texture handle for every logical frame that maps to it.",
+        "- `src/ui/title_intro.gd` falls back to the identity map when the manifest",
+        "  is missing or malformed, so a fully populated directory still plays.",
+        "",
+        "| Layer | Distinct PNGs | Duplicates removed |",
+        "|---|---:|---:|",
+        *dedup_rows,
+        f"| **total** | **{total_unique}** | **{len(LAYER_ORDER) * FRAME_COUNT - total_unique}** |",
         "",
         "## Locked geometry",
         "",
@@ -988,6 +1158,11 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "### 02_terrain",
         "",
         "- Road edges and center dashes MUST not move between frames.",
+        "- The continuous center-dash guide MUST pass through source coordinates",
+        "  `(0,172)` and `(319,85.21)`; rasterized dash pixels may differ by at",
+        "  most `0.5 px` vertically.",
+        "- Exactly four distinct terrain PNGs are stored; the 64 logical frames",
+        "  resolve to them through `manifest.json`'s `frame_maps`.",
         "- Day/night changes are palette swaps, not geometry changes.",
         "- The off-canvas vanishing point MUST remain shared with all buildings.",
         "",
@@ -1024,7 +1199,7 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "`Label`, `Button`, `StyleBoxFlat`, and font resources.",
         "",
         "- Title begins at frame `42` (`5.250 s`).",
-        "- Subtitle begins at frame `46` (`5.750 s`).",
+        "- Only the native `Metabolis` title is shown; there is no subtitle.",
         "- Menu begins at frame `52` (`6.500 s`).",
         "- Menu becomes interactive at frame `60` (`7.500 s`).",
         "- Accept, cancel, or select input may skip to frame `63`.",
@@ -1043,7 +1218,8 @@ def write_spec(repo_root: Path, contracts: list[dict[str, object]]) -> Path:
         "## Required validation after edits",
         "",
         "1. Run the rebuild command.",
-        "2. Confirm QA status is `PASS` and total PNG count is `384`.",
+        f"2. Confirm QA status is `PASS` and total PNG count is `{total_unique}`,",
+        f"   with `logical_frame_count` still `{len(LAYER_ORDER) * FRAME_COUNT}`.",
         "3. Confirm all images are RGBA `320×180`, palette-locked, binary-alpha.",
         "4. Confirm both building layers report `never_intersects_road: true`.",
         "5. Run:",
@@ -1064,10 +1240,10 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
     static = repo_root / STATIC_ROOT
     output = repo_root / OUTPUT_ROOT
     palette = load_palette(repo_root / "art/palette.gpl")
-
-    if output.exists():
-        shutil.rmtree(output)
-    output.mkdir(parents=True, exist_ok=True)
+    existing_frame_bytes = {
+        path.relative_to(output).as_posix(): path.read_bytes()
+        for path in output.glob("*/frame_*.png")
+    }
 
     layers = {
         "01_sky": [build_sky_frame(frame) for frame in range(FRAME_COUNT)],
@@ -1093,13 +1269,49 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
             required.append(result["never_intersects_road"])
         if layer == "01_sky":
             required.append(result["all_frames_opaque"])
+        if layer == "02_terrain":
+            required.extend(
+                [
+                    result["road_dash_endpoint_pixels_present"],
+                    result["road_dash_follows_guide"],
+                ]
+            )
         if not all(required):
             raise RuntimeError(f"Validation failed for {layer}: {result}")
 
-    files = {
-        layer: save_frames(output, layer, frames, repo_root)
+    # Keep the last known-good animation intact until every logical frame has
+    # passed validation. Only then replace the sparse output tree, which also
+    # removes representatives that became redundant after an edit.
+    if output.exists():
+        shutil.rmtree(output)
+    output.mkdir(parents=True, exist_ok=True)
+
+    saved = {
+        layer: save_frames(
+            output,
+            layer,
+            frames,
+            repo_root,
+            existing_frame_bytes,
+        )
         for layer, frames in layers.items()
     }
+    files = {layer: records for layer, (records, _) in saved.items()}
+    frame_maps = {layer: frame_map for layer, (_, frame_map) in saved.items()}
+    unique_frame_counts = {layer: len(records) for layer, records in files.items()}
+    if unique_frame_counts["02_terrain"] != 4:
+        raise RuntimeError(
+            "02_terrain must resolve to exactly four distinct static images, "
+            f"found {unique_frame_counts['02_terrain']}."
+        )
+    for layer, frame_map in frame_maps.items():
+        if len(frame_map) != FRAME_COUNT:
+            raise RuntimeError(f"Frame map for {layer} is not {FRAME_COUNT} entries.")
+        if any(source > index for index, source in enumerate(frame_map)):
+            raise RuntimeError(f"Frame map for {layer} points forward in time.")
+        available = {record["frame"] for record in files[layer]}
+        if not set(frame_map).issubset(available):
+            raise RuntimeError(f"Frame map for {layer} references a missing PNG.")
     composites = composite_frames(layers)
     preview_root.mkdir(parents=True, exist_ok=True)
     preview_files = save_preview(composites, preview_root)
@@ -1115,6 +1327,19 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
         "duration_seconds": DURATION_SECONDS,
         "frame_count_per_layer": FRAME_COUNT,
         "file_pattern": "frame_%03d.png",
+        "deduplicated": True,
+        "frame_map_contract": (
+            "frame_maps[layer][i] is the frame number whose PNG must be shown at "
+            "logical frame i. Identical frames share one file, so a layer "
+            "directory is sparse and frame_maps[layer][i] <= i always holds."
+        ),
+        "frame_maps": frame_maps,
+        "unique_frame_counts": unique_frame_counts,
+        "road_center_dash_guide": {
+            "start": list(ROAD_DASH_START),
+            "end": list(ROAD_DASH_END),
+            "equation": "y = 172 + (85.21 - 172) * x / 319",
+        },
         "layer_order": LAYER_ORDER,
         "timeline": [
             {"frames": [0, 13], "event": "truck enters from lower-left and approaches main building"},
@@ -1137,12 +1362,17 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
     }
     manifest_path = output / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    spec_path = write_spec(repo_root, frame_contract)
+    spec_path = write_spec(repo_root, frame_contract, unique_frame_counts)
 
+    total_png_frames = sum(len(records) for records in files.values())
+    logical_frames = len(LAYER_ORDER) * FRAME_COUNT
     report = {
         "status": "PASS",
-        "total_png_frames": sum(len(records) for records in files.values()),
-        "expected_png_frames": len(LAYER_ORDER) * FRAME_COUNT,
+        "total_png_frames": total_png_frames,
+        "expected_png_frames": sum(unique_frame_counts.values()),
+        "logical_frame_count": logical_frames,
+        "unique_frame_counts": unique_frame_counts,
+        "duplicate_frames_removed": logical_frames - total_png_frames,
         "output": OUTPUT_ROOT.as_posix(),
         "manifest": manifest_path.relative_to(repo_root).as_posix(),
         "manifest_sha256": sha256(manifest_path),

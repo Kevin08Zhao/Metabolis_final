@@ -791,7 +791,7 @@ func _build_panel() -> void:
 
 	_title = Label.new()
 	_title.name = "ActionTitle"
-	_title.add_theme_font_size_override("font_size", 18)
+	_title.add_theme_font_size_override("font_size", 20)
 	content.add_child(_title)
 
 	_body = Label.new()
