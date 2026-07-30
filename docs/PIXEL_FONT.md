@@ -52,8 +52,7 @@ against its container.
 
 | Element | `font_size` | Scale |
 |---|---:|---:|
-| `TitleBand` | `50` | `5x` |
-| `Subtitle` | `20` | `2x` |
+| `TitleBand` | `70` | `7x` |
 | Title menu buttons | `20` | `2x` |
 | `system_city` map title | `20` | `2x` |
 | Gameplay action title, gameplay status | `20` | `2x` |
@@ -118,5 +117,5 @@ overstated.
 3. Run the text-fitting check above and confirm `[UI FIT] PASS`.
 4. Run the project and confirm the log contains
    `[UI THEME] pixel theme applied at native size 10`.
-5. Confirm on screen that the title, subtitle, and menu render in the pixel
-   font, and that no menu label overflows its button.
+5. Confirm on screen that the title and menu render in the pixel font, and that
+   no menu label overflows its button.

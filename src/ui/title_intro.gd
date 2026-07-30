@@ -26,8 +26,6 @@ const MANIFEST_PATH := "res://../art/animations/title_layers/manifest.json"
 
 const TITLE_START_SECONDS := 5.25
 const TITLE_END_SECONDS := 6.25
-const SUBTITLE_START_SECONDS := 5.75
-const SUBTITLE_END_SECONDS := 6.75
 const MENU_START_SECONDS := 6.50
 const MENU_END_SECONDS := 7.50
 
@@ -66,7 +64,6 @@ const COLOR_MINT := Color("#B1FFD1")
 @onready var _fallback_background: TextureRect = $Background
 @onready var _animation_layers: Control = $AnimationLayers
 @onready var _title_band: Label = $TitleBand
-@onready var _subtitle: Label = $Subtitle
 @onready var _menu_anchor: VBoxContainer = $MenuAnchor
 
 var _layers: Array[Dictionary] = []
@@ -75,7 +72,6 @@ var _current_frame := -1
 var _intro_complete := false
 var _menu_interactive := false
 var _title_base_position := Vector2.ZERO
-var _subtitle_base_position := Vector2.ZERO
 var _menu_base_position := Vector2.ZERO
 var _normal_button_style: StyleBoxFlat
 var _hover_button_style: StyleBoxFlat
@@ -85,7 +81,6 @@ var _focus_button_style: StyleBoxFlat
 
 func _ready() -> void:
 	_title_base_position = _title_band.position
-	_subtitle_base_position = _subtitle.position
 	_menu_base_position = _menu_anchor.position
 	_build_menu_styles()
 	_prepare_intro_ui()
@@ -280,10 +275,8 @@ func _set_animation_frame(frame_index: int) -> void:
 
 func _prepare_intro_ui() -> void:
 	_title_band.modulate.a = 0.0
-	_subtitle.modulate.a = 0.0
 	_menu_anchor.modulate.a = 0.0
 	_title_band.position = _title_base_position + Vector2(0.0, -26.0)
-	_subtitle.position = _subtitle_base_position + Vector2(0.0, -10.0)
 	_menu_anchor.position = _menu_base_position + Vector2(0.0, 18.0)
 	_set_menu_interactive(false)
 
@@ -295,11 +288,6 @@ func _update_intro_ui(time_seconds: float) -> void:
 		TITLE_START_SECONDS,
 		TITLE_END_SECONDS
 	)
-	var subtitle_progress := _stepped_progress(
-		stepped_time,
-		SUBTITLE_START_SECONDS,
-		SUBTITLE_END_SECONDS
-	)
 	var menu_progress := _stepped_progress(
 		stepped_time,
 		MENU_START_SECONDS,
@@ -307,14 +295,11 @@ func _update_intro_ui(time_seconds: float) -> void:
 	)
 
 	_title_band.modulate.a = title_progress
-	_subtitle.modulate.a = subtitle_progress
 	_menu_anchor.modulate.a = menu_progress
 
 	var title_offset := roundf(lerpf(-26.0, 0.0, _arrival_curve(title_progress)))
-	var subtitle_offset := roundf(lerpf(-10.0, 0.0, subtitle_progress))
 	var menu_offset := roundf(lerpf(18.0, 0.0, _arrival_curve(menu_progress)))
 	_title_band.position = _title_base_position + Vector2(0.0, title_offset)
-	_subtitle.position = _subtitle_base_position + Vector2(0.0, subtitle_offset)
 	_menu_anchor.position = _menu_base_position + Vector2(0.0, menu_offset)
 
 	if menu_progress >= 1.0 and not _menu_interactive:

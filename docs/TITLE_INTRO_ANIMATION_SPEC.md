@@ -148,7 +148,7 @@ The title and menu are not image layers. Godot draws them from native
 `Label`, `Button`, `StyleBoxFlat`, and font resources.
 
 - Title begins at frame `42` (`5.250 s`).
-- Subtitle begins at frame `46` (`5.750 s`).
+- Only the native `Metabolis` title is shown; there is no subtitle.
 - Menu begins at frame `52` (`6.500 s`).
 - Menu becomes interactive at frame `60` (`7.500 s`).
 - Accept, cancel, or select input may skip to frame `63`.
@@ -208,12 +208,12 @@ file paths, and SHA-256 values are stored in the machine-readable manifest.
 | 43 | 5.375 | night_blue_dark | night | 100% / — | 100%/100%/84% | — | consumed 0% | 100% | title_entering |
 | 44 | 5.500 | night_blue_dark | night | 100% / 0 | 100%/100%/93% | — | absent 0% | 100% | title_entering |
 | 45 | 5.625 | night_blue_dark | night | 100% / 0 | 100%/100%/98% | — | absent 0% | 100% | title_entering |
-| 46 | 5.750 | night_blue_dark | night | 100% / 1 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
-| 47 | 5.875 | night_blue_dark | night | 100% / 1 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
-| 48 | 6.000 | night_blue_dark | night | 100% / 2 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
-| 49 | 6.125 | night_blue_dark | night | 100% / 2 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
-| 50 | 6.250 | night_blue_dark | night | 100% / 3 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
-| 51 | 6.375 | night_blue_dark | night | 100% / 3 | 100%/100%/100% | — | absent 0% | 100% | title_and_subtitle_entering |
+| 46 | 5.750 | night_blue_dark | night | 100% / 1 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
+| 47 | 5.875 | night_blue_dark | night | 100% / 1 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
+| 48 | 6.000 | night_blue_dark | night | 100% / 2 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
+| 49 | 6.125 | night_blue_dark | night | 100% / 2 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
+| 50 | 6.250 | night_blue_dark | night | 100% / 3 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
+| 51 | 6.375 | night_blue_dark | night | 100% / 3 | 100%/100%/100% | — | absent 0% | 100% | title_entering |
 | 52 | 6.500 | night_blue_dark | night | 100% / 0,1,2,3 | 100%/100%/100% | — | absent 0% | 100% | menu_entering |
 | 53 | 6.625 | night_blue_dark | night | 100% / — | 100%/100%/100% | — | absent 0% | 100% | menu_entering |
 | 54 | 6.750 | night_blue_dark | night | 100% / — | 100%/100%/100% | — | absent 0% | 100% | menu_entering |
