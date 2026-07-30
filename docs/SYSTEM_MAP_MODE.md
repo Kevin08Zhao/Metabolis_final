@@ -11,7 +11,7 @@ The body-city is divided into four connected pages. Each page is one body system
 | 3 | Nervous System | Neural Dispatch Center | Signal courier scooter |
 | 4 | Respiratory System | Air Exchange Terminal | Oxygen delivery tram |
 
-The Nutrient Exchange map is available at the start. A player places its 6 × 6 facility and dispatches cargo to unlock the Circulatory System. Repeating the same development action unlocks the Nervous and Respiratory systems in order.
+The Nutrient Exchange map is available at the start. A player places its 7 × 7 facility and dispatches cargo to unlock the Circulatory System. Repeating the same development action unlocks the Nervous and Respiratory systems in order.
 
 ## Cross-Boundary Transport
 
@@ -31,7 +31,7 @@ Completed connections keep an ambient delivery vehicle moving on their road, so 
 - The playable map remains 640 × 320 pixels inside the 800 × 450 interface.
 - Map controls stay in the separate 160 pixel right rail.
 - Objective and feedback text stay below the map.
-- System facilities occupy 6 × 6 tiles, or 96 × 96 logical pixels.
+- System facilities occupy 7 × 7 tiles, or 112 × 112 logical pixels.
 - Delivery vehicles render at 64 × 42 logical pixels.
 - Roads use transparent surroundings, preventing square tile backgrounds from covering the system-map art.
 - All system maps use warm peach, coral, raspberry, cream, gold, and cyan accents.
@@ -49,7 +49,7 @@ Completed connections keep an ambient delivery vehicle moving on their road, so 
 | Circulation freight car | `195b0408-b118-43ca-85a1-11b34a4f6e3f` | `art/vehicles/system/vehicle_circulation_freight.png` |
 | Signal courier scooter | `f167297d-e7e2-49aa-b64d-1fe3748cf386` | `art/vehicles/system/vehicle_neural_courier.png` |
 | Oxygen delivery tram | `6268e0f1-ebb4-401b-8f74-e476036cdd60` | `art/vehicles/system/vehicle_oxygen_tram.png` |
-| Nutrient Exchange Depot | `5244d349-c27c-4a9e-9ad1-e9b374d3f0c0` | `art/buildings/system/building_nutrient_depot.png` |
-| Central Heart Transit Station | `8e41f3d6-90f7-43fe-8ff8-249cf4e739fa` | `art/buildings/system/building_circulation_station.png` |
-| Neural Dispatch Center | `520da400-097e-4be7-adf2-7245c40c2158` | `art/buildings/system/building_neural_dispatch.png` |
-| Air Exchange Terminal | `43d22ccb-134a-4d3a-bbda-2a91bb9b72b9` | `art/buildings/system/building_respiratory_terminal.png` |
+| Nutrient Exchange Depot | `7c5ce766-bfa9-4399-a3b2-923c20960ec7` candidate `02` | `art/buildings/system/building_nutrient_depot.png` |
+| Central Heart Transit Station | `727d6b81-cbea-4328-a52e-6e1693fdbb01` candidate `08` | `art/buildings/system/building_circulation_station.png` |
+| Neural Dispatch Center | `e9cd3f81-cad5-48b9-bd92-2ab1fe772692` candidate `08` | `art/buildings/system/building_neural_dispatch.png` |
+| Air Exchange Terminal | `c9627adc-2e8d-408c-95b1-1d9113b150d8` candidate `03` | `art/buildings/system/building_respiratory_terminal.png` |

@@ -14,16 +14,18 @@ The map reads in this order:
 
 ## Locked Prototype Palette
 
-| Role | Color |
+The canonical 22-color palette is stored in `art/palette.gpl`. System-map art
+uses the same semantic groups documented in `docs/ART_BIBLE.md`:
+
+| Semantic group | Dark / main / light |
 |---|---|
-| Tissue ground | `#F7A39E` |
-| Tissue highlight | `#FFC2B6` |
-| Organ-district top | `#F27FA3` |
-| Organ-district midtone | `#BD4178` |
-| Organ-district wall | `#752754` |
-| Global outline and panel base | `#28152F` |
-| Transport vessel | `#64DDD8` |
-| Vessel highlight | `#C7FFF4` |
+| Arterial coral | `#340106` / `#BA3A3F` / `#C25453` |
+| Oxygen blue | `#48A5CF` / `#7AD1FD` / `#CDD9E1` |
+| Blue violet | `#29314A` / `#404586` / `#53548C` |
+| Tissue pink | `#91465F` / `#BE6E87` / `#C98197` |
+| Warm amber | `#B26C09` / `#E2953A` / `#DDAD7E` |
+| Mint green | `#73CD9B` / `#B1FFD1` / `#F4FFF8` |
+| Neutrals | `#140F1D` / `#514854` / `#817582` / `#E8DCCF` |
 
 ## Scale and Placement Rules
 
@@ -33,9 +35,10 @@ The map reads in this order:
 - Valid anatomical regions may appear as temporary tool overlays, but they are not permanent map rectangles.
 - A confirmed building never keeps a footprint outline.
 - A 2 × 2 structure uses a 32 × 32 pixel canvas.
-- A 6 × 6 landmark uses a 96 × 96 pixel canvas.
-- Transparent padding is cropped and integer-scaled before a sprite is accepted.
-- Buildings use a bottom-center anchor and may not be stretched beyond their declared canvas.
+- A 7 × 7 landmark uses a 112 × 112 pixel canvas.
+- Excess transparent padding is cropped before a sprite is accepted; system facilities retain a four-pixel safety margin inside the standard source canvas.
+- Buildings use nearest-neighbor scaling and a bottom-center anchor.
+- System facilities use 56 × 56 source canvases and render into their 112 × 112 logical footprints at an exact 2× scale.
 - Transport routes use broad arterial-street tiles with cyan curbs and a cream center marking. They select art from neighbor connectivity; separate square stamps may not be placed side by side without edge matching.
 
 ## Screen Composition
@@ -77,6 +80,6 @@ The organ prompts specify compact top-down civic structures, coral roof plates, 
 - The Life Harbor, cell district, and heart pumping station share one palette and top-down camera.
 - At 2× display scale, every landmark is readable without exceeding its grid footprint.
 - The right action rail and lower information region remain fully outside the 640 × 320 map.
-- Routes read as connected city streets and remain visibly narrower than 6 × 6 landmark buildings.
+- Routes read as connected city streets and remain visibly narrower than 7 × 7 landmark buildings.
 - Each body system has a separate warm map page; unlocked pages are selected from the right rail or with number keys.
 - Cross-boundary delivery uses visible vans, freight cars, scooters, and trams instead of abstract moving dots.

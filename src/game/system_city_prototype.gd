@@ -25,7 +25,7 @@ const TILE_SIZE_PX := 16
 const GRID_SIZE := Vector2i(40, 20)
 const MAP_ORIGIN := Vector2(0, 40)
 const MAP_SIZE := Vector2(640, 320)
-const FACILITY_FOOTPRINT := Vector2i(6, 6)
+const FACILITY_FOOTPRINT := Vector2i(7, 7)
 const FULL_MAP_BUILD_ZONE := Rect2i(Vector2i.ZERO, GRID_SIZE)
 const DEFAULT_BUILD_TIME_SEC := 3.0
 ## Biomass charged per road tile. Road cost depends on length and nothing else.
@@ -1228,7 +1228,7 @@ func _select_facility() -> void:
 		_resources.refund(_facility_cost())
 	_mode = Mode.PLACING
 	_set_feedback(
-		"Place the 6 × 6 facility anywhere it fits. Cost and build time follow the cursor.",
+		"Place the 7 × 7 facility anywhere it fits. Cost and build time follow the cursor.",
 		false
 	)
 	_refresh_interface()
@@ -1243,7 +1243,7 @@ func _place_facility_at(origin: Vector2i) -> bool:
 	build_tool.set_preview(origin)
 	if not build_tool.place_preview():
 		_set_feedback(
-			"The complete 6 × 6 facility must fit on the map and avoid occupied cells.",
+			"The complete 7 × 7 facility must fit on the map and avoid occupied cells.",
 			true
 		)
 		queue_redraw()
@@ -1390,7 +1390,7 @@ func _finish_delivery_leg() -> void:
 		_delivery_path.clear()
 		_delivery_progress = 0.0
 		_set_feedback(
-			"Cargo reached the local staging depot. Place this system's 6 × 6 facility.",
+			"Cargo reached the local staging depot. Place this system's 7 × 7 facility.",
 			false
 		)
 		_refresh_interface()
@@ -2431,7 +2431,7 @@ func _objective_text() -> String:
 			SYSTEMS[_current_system_index]["facility"],
 		]
 	if not _facility_origins.has(_system_id()):
-		return "Develop this system: place its 6 × 6 civic facility."
+		return "Develop this system: place its 7 × 7 civic facility."
 	return "Connect this system: finish a player-authored road to the boundary."
 
 
@@ -2634,6 +2634,7 @@ func debug_snapshot() -> Dictionary:
 		"mode": _mode,
 		"current_system_index": _current_system_index,
 		"unlocked_count": _unlocked_count,
+		"facility_footprint": FACILITY_FOOTPRINT,
 		"facility_count": _facility_origins.size(),
 		"completed_dispatch_count": _completed_dispatches.size(),
 		"construction_progress": _construction_progress(),
