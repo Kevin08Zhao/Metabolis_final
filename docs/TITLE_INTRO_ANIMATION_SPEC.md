@@ -32,7 +32,7 @@ python tools/build_title_layer_animation.py \
 | Frame rate | `8 FPS` |
 | Frames per layer | `64` logical frames, numbered `000–063` |
 | File pattern | `frame_%03d.png`, sparse — duplicates are not written |
-| PNG files on disk | `188` total across the six layers |
+| PNG files on disk | `199` total across the seven layers |
 | Frame resolution | `frame_maps` in the manifest, see below |
 | Color | Only the 22 colors in `art/palette.gpl` |
 | Alpha | Binary only: `0` or `255` |
@@ -42,6 +42,7 @@ python tools/build_title_layer_animation.py \
 | Road upper edge | `(0,130) → (320,80)` |
 | Road lower edge | `(160,200) → (320,100)` |
 | Road center-dash guide | `(0,172) → (319,85.21)` |
+| Truck wheel-bottom guide | `(0,168) → (319,84.7)` |
 | Embedded text | Forbidden; title and menu are native Godot UI |
 
 Layer order is back-to-front and MUST remain:
@@ -50,8 +51,9 @@ Layer order is back-to-front and MUST remain:
 2. `02_terrain` — road and surrounding ground; geometry is locked.
 3. `03_main_building` — main perspective building, no road intersection.
 4. `04_small_buildings` — exactly three perspective buildings.
-5. `05_vehicle_cargo` — transient truck and delivered cargo.
-6. `06_roadside_props` — lamps and grass anchored to road edges.
+5. `05_vehicle_unloaded_cargo` — independently timed delivered cargo.
+6. `05_vehicle_truck` — PixelLab loaded/empty truck animation.
+7. `06_roadside_props` — lamps and grass anchored to road edges.
 
 ## Frame deduplication
 
@@ -82,9 +84,10 @@ the first frame that introduces new pixels.
 | `02_terrain` | `4` | `60` |
 | `03_main_building` | `21` | `43` |
 | `04_small_buildings` | `9` | `55` |
-| `05_vehicle_cargo` | `37` | `27` |
+| `05_vehicle_unloaded_cargo` | `17` | `47` |
+| `05_vehicle_truck` | `31` | `33` |
 | `06_roadside_props` | `56` | `8` |
-| **total** | **188** | **196** |
+| **total** | **199** | **249** |
 
 ## Locked geometry
 
@@ -96,11 +99,12 @@ the first frame that introduces new pixels.
   is `9.438 px`.
 - Small buildings minimum road clearance: `> 0 px`; current QA minimum
   is `2.625 px`.
-- Cargo anchor: `(160,99)`.
-- Truck arrival Bézier: `(-15,171) → control (58,163) → (145,121)`.
-- Truck departure Bézier: `(145,121) → control (232,108) → (338,80)`.
+- Delivered-cargo bounding box: `(121,99) → (144,110)`.
+- Truck rear-wheel arrival: `x=-12 → 82`, frames `0–13`.
+- Truck rear-wheel departure: `x=82 → 340`, frames `23–38`.
+- Both visible wheel bottoms follow `(0,168) → (319,84.7)`.
 - Truck scale:
-  `0.65 + 0.35 × clamp(distance_to_VP / stop_distance, 0.15, 1.8)`.
+  `clamp(0.35, 1.15, 0.9 × (VP.x - rear_x) / (VP.x - 82))`.
 
 ## Layer-specific editing rules
 
@@ -139,12 +143,23 @@ the first frame that introduces new pixels.
 - Build intervals: A `22–34`, B `28–40`, C `34–46`.
 - The three bases may differ in height but MUST remain above the road.
 
-### 05_vehicle_cargo
+### 05_vehicle_truck
 
 - Truck faces and travels toward the upper-right vanishing direction.
 - Arrival `0–13`; unload stop `14–22`; departure `23–38`; absent `39–63`.
+- The loaded and empty source sprites are PixelLab assets snapped to the
+  locked 22-color palette before frame generation.
+- The two visible wheel bottoms MUST stay within `1 px` of the locked
+  wheel-bottom guide in every visible frame.
+- Loaded-to-empty transition runs during frames `12–16`.
+- Truck is allowed to be fully transparent when absent.
+
+### 05_vehicle_unloaded_cargo
+
 - Cargo appears `12–16`, stays through `28`, fades `29–43`, then is absent.
-- Truck and cargo are allowed to be fully transparent when absent.
+- Delivered pixels MUST remain inside `(121,99) → (144,110)`.
+- The two boxes use option 2 and preserve their shared vanishing point.
+- Cargo is allowed to be fully transparent when absent.
 
 ### 06_roadside_props
 
@@ -172,45 +187,45 @@ file paths, and SHA-256 values are stored in the machine-readable manifest.
 
 | F | Time | Sky | Terrain | Main / windows | Small A/B/C | Truck | Cargo | Night | UI |
 |---:|---:|---|---|---|---|---|---|---:|---|
-| 00 | 0.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-15.0,171.0) s=1.263 | absent 0% | 0% | hidden |
-| 01 | 0.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-12.5,170.7) s=1.259 | absent 0% | 0% | hidden |
-| 02 | 0.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-5.6,169.8) s=1.248 | absent 0% | 0% | hidden |
-| 03 | 0.375 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (5.0,168.2) s=1.231 | absent 0% | 0% | hidden |
-| 04 | 0.500 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (18.7,165.7) s=1.209 | absent 0% | 0% | hidden |
-| 05 | 0.625 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (34.7,162.0) s=1.184 | absent 0% | 0% | hidden |
-| 06 | 0.750 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (52.3,157.3) s=1.155 | absent 0% | 0% | hidden |
-| 07 | 0.875 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (70.8,151.5) s=1.125 | absent 0% | 0% | hidden |
-| 08 | 1.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (89.1,145.0) s=1.094 | absent 0% | 0% | hidden |
-| 09 | 1.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (106.4,138.2) s=1.065 | absent 0% | 0% | hidden |
-| 10 | 1.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (121.7,131.7) s=1.039 | absent 0% | 0% | hidden |
-| 11 | 1.375 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (134.0,126.2) s=1.019 | absent 0% | 0% | hidden |
-| 12 | 1.500 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (142.1,122.4) s=1.005 | appearing 0% | 0% | hidden |
-| 13 | 1.625 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (145.0,121.0) s=1.000 | appearing 16% | 0% | hidden |
-| 14 | 1.750 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | appearing 50% | 0% | hidden |
-| 15 | 1.875 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | appearing 84% | 0% | hidden |
-| 16 | 2.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 0% | hidden |
-| 17 | 2.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 1% | hidden |
-| 18 | 2.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 3% | hidden |
-| 19 | 2.375 | afternoon_amber | day | 1% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 6% | hidden |
-| 20 | 2.500 | dusk_tissue | day | 2% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 10% | hidden |
-| 21 | 2.625 | dusk_tissue | day | 5% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 16% | hidden |
-| 22 | 2.750 | dusk_tissue | day | 9% / — | 0%/0%/0% | unloading (145.0,121.0) s=1.000 | delivered 100% | 22% | hidden |
-| 23 | 2.875 | dusk_tissue | day | 13% / — | 2%/0%/0% | departing (145.0,121.0) s=1.000 | delivered 100% | 28% | hidden |
-| 24 | 3.000 | dusk_tissue | dusk | 18% / — | 7%/0%/0% | departing (147.2,120.7) s=0.997 | delivered 100% | 35% | hidden |
-| 25 | 3.125 | dusk_tissue | dusk | 24% / — | 16%/0%/0% | departing (153.5,119.7) s=0.987 | delivered 100% | 43% | hidden |
-| 26 | 3.250 | dusk_blue_light | dusk | 30% / — | 26%/0%/0% | departing (163.3,118.1) s=0.971 | delivered 100% | 50% | hidden |
-| 27 | 3.375 | dusk_blue_light | dusk | 37% / — | 38%/0%/0% | departing (176.1,116.0) s=0.951 | delivered 100% | 57% | hidden |
-| 28 | 3.500 | dusk_blue_light | dusk | 43% / — | 50%/0%/0% | departing (191.4,113.3) s=0.926 | delivered 100% | 65% | hidden |
-| 29 | 3.625 | dusk_blue_light | dusk | 50% / — | 62%/2%/0% | departing (208.6,110.0) s=0.899 | consumed 100% | 72% | hidden |
-| 30 | 3.750 | night_blue | late_dusk | 57% / — | 74%/7%/0% | departing (227.2,106.3) s=0.869 | consumed 99% | 78% | hidden |
-| 31 | 3.875 | night_blue | late_dusk | 63% / — | 84%/16%/0% | departing (246.4,102.2) s=0.838 | consumed 94% | 84% | hidden |
-| 32 | 4.000 | night_blue | late_dusk | 70% / — | 93%/26%/0% | departing (265.7,97.9) s=0.807 | consumed 88% | 90% | hidden |
-| 33 | 4.125 | night_blue | late_dusk | 76% / — | 98%/38%/0% | departing (284.3,93.5) s=0.777 | consumed 80% | 94% | hidden |
-| 34 | 4.250 | night_blue_dark | late_dusk | 82% / — | 100%/50%/0% | departing (301.4,89.4) s=0.750 | consumed 71% | 97% | hidden |
-| 35 | 4.375 | night_blue_dark | late_dusk | 87% / — | 100%/62%/2% | departing (316.2,85.7) s=0.726 | consumed 61% | 99% | hidden |
-| 36 | 4.500 | night_blue_dark | night | 91% / — | 100%/74%/7% | departing (327.7,82.7) s=0.707 | consumed 50% | 100% | hidden |
-| 37 | 4.625 | night_blue_dark | night | 95% / — | 100%/84%/16% | departing (335.3,80.7) s=0.703 | consumed 39% | 100% | hidden |
-| 38 | 4.750 | night_blue_dark | night | 98% / — | 100%/93%/26% | departing (338.0,80.0) s=0.703 | consumed 29% | 100% | hidden |
+| 00 | 0.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-12.0,171.1) s=1.150 | absent 0% | 0% | hidden |
+| 01 | 0.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-10.4,170.7) s=1.150 | absent 0% | 0% | hidden |
+| 02 | 0.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (-6.0,169.6) s=1.150 | absent 0% | 0% | hidden |
+| 03 | 0.375 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (0.7,167.8) s=1.150 | absent 0% | 0% | hidden |
+| 04 | 0.500 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (9.2,165.6) s=1.133 | absent 0% | 0% | hidden |
+| 05 | 0.625 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (19.0,163.0) s=1.102 | absent 0% | 0% | hidden |
+| 06 | 0.750 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (29.6,160.3) s=1.068 | absent 0% | 0% | hidden |
+| 07 | 0.875 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (40.4,157.4) s=1.033 | absent 0% | 0% | hidden |
+| 08 | 1.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (51.0,154.7) s=1.000 | absent 0% | 0% | hidden |
+| 09 | 1.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (60.8,152.1) s=0.968 | absent 0% | 0% | hidden |
+| 10 | 1.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (69.3,149.9) s=0.941 | absent 0% | 0% | hidden |
+| 11 | 1.375 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (76.0,148.2) s=0.919 | absent 0% | 0% | hidden |
+| 12 | 1.500 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (80.4,147.0) s=0.905 | appearing 0% | 0% | hidden |
+| 13 | 1.625 | afternoon_amber | day | 0% / — | 0%/0%/0% | arriving (82.0,146.6) s=0.900 | appearing 16% | 0% | hidden |
+| 14 | 1.750 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | appearing 50% | 0% | hidden |
+| 15 | 1.875 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | appearing 84% | 0% | hidden |
+| 16 | 2.000 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 0% | hidden |
+| 17 | 2.125 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 1% | hidden |
+| 18 | 2.250 | afternoon_amber | day | 0% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 3% | hidden |
+| 19 | 2.375 | afternoon_amber | day | 1% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 6% | hidden |
+| 20 | 2.500 | dusk_tissue | day | 2% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 10% | hidden |
+| 21 | 2.625 | dusk_tissue | day | 5% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 16% | hidden |
+| 22 | 2.750 | dusk_tissue | day | 9% / — | 0%/0%/0% | unloading (82.0,146.6) s=0.900 | delivered 100% | 22% | hidden |
+| 23 | 2.875 | dusk_tissue | day | 13% / — | 2%/0%/0% | departing (82.0,146.6) s=0.900 | delivered 100% | 28% | hidden |
+| 24 | 3.000 | dusk_tissue | dusk | 18% / — | 7%/0%/0% | departing (85.3,145.7) s=0.889 | delivered 100% | 35% | hidden |
+| 25 | 3.125 | dusk_tissue | dusk | 24% / — | 16%/0%/0% | departing (94.5,143.3) s=0.860 | delivered 100% | 43% | hidden |
+| 26 | 3.250 | dusk_blue_light | dusk | 30% / — | 26%/0%/0% | departing (108.8,139.6) s=0.814 | delivered 100% | 50% | hidden |
+| 27 | 3.375 | dusk_blue_light | dusk | 37% / — | 38%/0%/0% | departing (127.3,134.8) s=0.755 | delivered 100% | 57% | hidden |
+| 28 | 3.500 | dusk_blue_light | dusk | 43% / — | 50%/0%/0% | departing (148.9,129.1) s=0.685 | delivered 100% | 65% | hidden |
+| 29 | 3.625 | dusk_blue_light | dusk | 50% / — | 62%/2%/0% | departing (172.8,122.9) s=0.609 | consumed 100% | 72% | hidden |
+| 30 | 3.750 | night_blue | late_dusk | 57% / — | 74%/7%/0% | departing (198.1,116.3) s=0.528 | consumed 99% | 78% | hidden |
+| 31 | 3.875 | night_blue | late_dusk | 63% / — | 84%/16%/0% | departing (223.9,109.5) s=0.445 | consumed 94% | 84% | hidden |
+| 32 | 4.000 | night_blue | late_dusk | 70% / — | 93%/26%/0% | departing (249.2,102.9) s=0.364 | consumed 88% | 90% | hidden |
+| 33 | 4.125 | night_blue | late_dusk | 76% / — | 98%/38%/0% | departing (273.1,96.7) s=0.350 | consumed 80% | 94% | hidden |
+| 34 | 4.250 | night_blue_dark | late_dusk | 82% / — | 100%/50%/0% | departing (294.7,91.0) s=0.350 | consumed 71% | 97% | hidden |
+| 35 | 4.375 | night_blue_dark | late_dusk | 87% / — | 100%/62%/2% | departing (313.2,86.2) s=0.350 | consumed 61% | 99% | hidden |
+| 36 | 4.500 | night_blue_dark | night | 91% / — | 100%/74%/7% | departing (327.5,82.5) s=0.350 | consumed 50% | 100% | hidden |
+| 37 | 4.625 | night_blue_dark | night | 95% / — | 100%/84%/16% | departing (336.7,80.1) s=0.350 | consumed 39% | 100% | hidden |
+| 38 | 4.750 | night_blue_dark | night | 98% / — | 100%/93%/26% | departing (340.0,79.2) s=0.350 | consumed 29% | 100% | hidden |
 | 39 | 4.875 | night_blue_dark | night | 99% / — | 100%/98%/38% | — | consumed 20% | 100% | hidden |
 | 40 | 5.000 | night_blue_dark | night | 100% / — | 100%/100%/50% | — | consumed 12% | 100% | hidden |
 | 41 | 5.125 | night_blue_dark | night | 100% / — | 100%/100%/62% | — | consumed 6% | 100% | hidden |
@@ -240,8 +255,8 @@ file paths, and SHA-256 values are stored in the machine-readable manifest.
 ## Required validation after edits
 
 1. Run the rebuild command.
-2. Confirm QA status is `PASS` and total PNG count is `188`,
-   with `logical_frame_count` still `384`.
+2. Confirm QA status is `PASS` and total PNG count is `199`,
+   with `logical_frame_count` still `448`.
 3. Confirm all images are RGBA `320×180`, palette-locked, binary-alpha.
 4. Confirm both building layers report `never_intersects_road: true`.
 5. Run:

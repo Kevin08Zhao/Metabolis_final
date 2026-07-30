@@ -30,7 +30,8 @@ LAYER_ORDER = [
     "02_terrain",
     "03_main_building",
     "04_small_buildings",
-    "05_vehicle_cargo",
+    "05_vehicle_unloaded_cargo",
+    "05_vehicle_truck",
     "06_roadside_props",
 ]
 
@@ -58,7 +59,15 @@ OXYGEN_LIGHT = (205, 217, 225, 255)
 TRANSPARENT = (0, 0, 0, 0)
 
 VANISHING_POINT = (1088.0 / 3.0, 220.0 / 3.0)
-TRUCK_STOP = (145.0, 121.0)
+TRUCK_GROUND_START = (0.0, 168.0)
+TRUCK_GROUND_END = (319.0, 84.7)
+TRUCK_REAR_WHEEL = (30.0, 43.0)
+TRUCK_FRONT_WHEEL = (64.0, 37.0)
+TRUCK_STOP_REAR_X = 82.0
+TRUCK_STOP_SCALE = 0.9
+TRUCK_MIN_SCALE = 0.35
+TRUCK_MAX_SCALE = 1.15
+CARGO_PLACEMENT_BBOX = (121, 99, 144, 110)
 ROAD_DASH_START = (0.0, 172.0)
 ROAD_DASH_END = (319.0, 85.21)
 ROAD_DASH_LENGTH_X = 14
@@ -491,44 +500,70 @@ def build_small_frames(static: Path) -> list[Image.Image]:
     return frames
 
 
-def quadratic_bezier(
-    start: tuple[float, float],
-    control: tuple[float, float],
-    end: tuple[float, float],
-    progress: float,
-) -> tuple[float, float]:
-    inverse = 1.0 - progress
-    x = inverse * inverse * start[0] + 2 * inverse * progress * control[0] + progress * progress * end[0]
-    y = inverse * inverse * start[1] + 2 * inverse * progress * control[1] + progress * progress * end[1]
-    return x, y
+def normalize_pixel_asset(
+    image: Image.Image,
+    palette: set[tuple[int, int, int]],
+) -> Image.Image:
+    """Snap a PixelLab asset to the locked palette and binary transparency."""
+    result = Image.new("RGBA", image.size, TRANSPARENT)
+    nearest: dict[tuple[int, int, int], tuple[int, int, int]] = {}
+    normalized: list[tuple[int, int, int, int]] = []
+    for red, green, blue, alpha in flattened(image.convert("RGBA")):
+        if alpha < 128:
+            normalized.append(TRANSPARENT)
+            continue
+        source = (red, green, blue)
+        target = nearest.get(source)
+        if target is None:
+            target = min(
+                palette,
+                key=lambda color: sum(
+                    (source[channel] - color[channel]) ** 2
+                    for channel in range(3)
+                ),
+            )
+            nearest[source] = target
+        normalized.append((*target, 255))
+    result.putdata(normalized)
+    return result
 
 
-def truck_scale(center: tuple[float, float]) -> float:
-    vx, vy = VANISHING_POINT
-    stop_distance = math.hypot(TRUCK_STOP[0] - vx, TRUCK_STOP[1] - vy)
-    distance = math.hypot(center[0] - vx, center[1] - vy)
-    ratio = max(0.15, min(1.8, distance / stop_distance))
-    return 0.65 + 0.35 * ratio
+def truck_ground_y(x: float) -> float:
+    progress = (x - TRUCK_GROUND_START[0]) / (
+        TRUCK_GROUND_END[0] - TRUCK_GROUND_START[0]
+    )
+    return TRUCK_GROUND_START[1] + progress * (
+        TRUCK_GROUND_END[1] - TRUCK_GROUND_START[1]
+    )
 
 
-def truck_center_for_frame(frame: int) -> tuple[float, float] | None:
+def truck_rear_x_for_frame(frame: int) -> float | None:
     if frame <= 13:
-        return quadratic_bezier(
-            (-15.0, 171.0),
-            (58.0, 163.0),
-            TRUCK_STOP,
-            interval(frame, 0, 13),
-        )
+        return -12.0 + (TRUCK_STOP_REAR_X + 12.0) * interval(frame, 0, 13)
     if frame <= 22:
-        return TRUCK_STOP
+        return TRUCK_STOP_REAR_X
     if frame <= 38:
-        return quadratic_bezier(
-            TRUCK_STOP,
-            (232.0, 108.0),
-            (338.0, 80.0),
-            interval(frame, 23, 38),
+        return TRUCK_STOP_REAR_X + (340.0 - TRUCK_STOP_REAR_X) * interval(
+            frame,
+            23,
+            38,
         )
     return None
+
+
+def truck_scale(rear_x: float) -> float:
+    distance = VANISHING_POINT[0] - rear_x
+    stop_distance = VANISHING_POINT[0] - TRUCK_STOP_REAR_X
+    projected = TRUCK_STOP_SCALE * distance / stop_distance
+    return max(TRUCK_MIN_SCALE, min(TRUCK_MAX_SCALE, projected))
+
+
+def truck_unload_progress(frame: int) -> float:
+    if frame < 12:
+        return 0.0
+    if frame <= 16:
+        return interval(frame, 12, 16)
+    return 1.0
 
 
 def cargo_visibility_for_frame(frame: int) -> float:
@@ -543,45 +578,166 @@ def cargo_visibility_for_frame(frame: int) -> float:
     return 0.0
 
 
-def paste_center(
+def align_truck_wheels(
+    image: Image.Image,
+) -> tuple[Image.Image, tuple[float, float], tuple[float, float]]:
+    """Shear the sprite so both visible wheel bottoms share the road guide."""
+    source_slope = (
+        (TRUCK_FRONT_WHEEL[1] - TRUCK_REAR_WHEEL[1])
+        / (TRUCK_FRONT_WHEEL[0] - TRUCK_REAR_WHEEL[0])
+    )
+    guide_slope = (
+        (TRUCK_GROUND_END[1] - TRUCK_GROUND_START[1])
+        / (TRUCK_GROUND_END[0] - TRUCK_GROUND_START[0])
+    )
+    shear = guide_slope - source_slope
+    margin = 4
+    result = Image.new(
+        "RGBA",
+        (image.width, image.height + margin * 2),
+        TRANSPARENT,
+    )
+    for y in range(image.height):
+        for x in range(image.width):
+            pixel = image.getpixel((x, y))
+            if pixel[3] == 0:
+                continue
+            target_y = round(
+                y + shear * (x - TRUCK_REAR_WHEEL[0])
+            ) + margin
+            if 0 <= target_y < result.height:
+                result.putpixel((x, target_y), pixel)
+    rear = (TRUCK_REAR_WHEEL[0], TRUCK_REAR_WHEEL[1] + margin)
+    front = (
+        TRUCK_FRONT_WHEEL[0],
+        round(
+            TRUCK_FRONT_WHEEL[1]
+            + shear * (TRUCK_FRONT_WHEEL[0] - TRUCK_REAR_WHEEL[0])
+        )
+        + margin,
+    )
+    return result, rear, front
+
+
+def paste_truck_on_guide(
     canvas: Image.Image,
     sprite: Image.Image,
-    center: tuple[float, float],
-    scale: float = 1.0,
+    rear_anchor: tuple[float, float],
+    front_anchor: tuple[float, float],
+    rear_x: float,
+    scale: float,
 ) -> None:
     width = max(1, round(sprite.width * scale))
     height = max(1, round(sprite.height * scale))
     resized = sprite.resize((width, height), Image.Resampling.NEAREST)
-    x = round(center[0] - width / 2)
-    y = round(center[1] - height / 2)
-    canvas.alpha_composite(resized, (x, y))
+    local_rear = (
+        round(rear_anchor[0] * scale),
+        round(rear_anchor[1] * scale),
+    )
+    local_front = (
+        round(front_anchor[0] * scale),
+        round(front_anchor[1] * scale),
+    )
+    rear_screen = (
+        round(rear_x),
+        round(truck_ground_y(rear_x)),
+    )
+    front_screen_x = rear_screen[0] + local_front[0] - local_rear[0]
+    desired_front_y = round(truck_ground_y(front_screen_x))
+    current_front_y = rear_screen[1] + local_front[1] - local_rear[1]
+    correction = desired_front_y - current_front_y
+    if correction != 0 and local_front[0] != local_rear[0]:
+        corrected = Image.new(
+            "RGBA",
+            (resized.width, resized.height + 6),
+            TRANSPARENT,
+        )
+        for y in range(resized.height):
+            for x in range(resized.width):
+                pixel = resized.getpixel((x, y))
+                if pixel[3] == 0:
+                    continue
+                offset = round(
+                    correction
+                    * (x - local_rear[0])
+                    / (local_front[0] - local_rear[0])
+                )
+                corrected.putpixel((x, y + offset + 3), pixel)
+        resized = corrected
+        local_rear = (local_rear[0], local_rear[1] + 3)
+    destination = (
+        rear_screen[0] - local_rear[0],
+        rear_screen[1] - local_rear[1],
+    )
+    canvas.alpha_composite(resized, destination)
 
 
-def build_vehicle_frames(static: Path) -> list[Image.Image]:
-    source = Image.open(static / "vehicle_truck_arrival.png").convert("RGBA")
-    truck = source.crop((124, 108, 174, 134))
-    cargo = source.crop((153, 92, 167, 107))
+def build_vehicle_frames(
+    static: Path,
+    palette: set[tuple[int, int, int]],
+) -> list[Image.Image]:
+    loaded_source = normalize_pixel_asset(
+        Image.open(static / "vehicle_truck_loaded_pixellab.png"),
+        palette,
+    )
+    empty_source = normalize_pixel_asset(
+        Image.open(static / "vehicle_truck_empty_pixellab.png"),
+        palette,
+    )
+    loaded, rear_anchor, front_anchor = align_truck_wheels(loaded_source)
+    empty, empty_rear_anchor, empty_front_anchor = align_truck_wheels(empty_source)
+    if (
+        rear_anchor != empty_rear_anchor
+        or front_anchor != empty_front_anchor
+        or loaded.size != empty.size
+    ):
+        raise RuntimeError("Loaded and empty PixelLab truck variants are misaligned.")
     frames: list[Image.Image] = []
     for frame in range(FRAME_COUNT):
         image = Image.new("RGBA", (WIDTH, HEIGHT), TRANSPARENT)
-        center = truck_center_for_frame(frame)
-        if center is not None:
-            paste_center(image, truck, center, truck_scale(center))
-
-        cargo_visibility = cargo_visibility_for_frame(frame)
-        if cargo_visibility > 0.0:
-            cargo_layer = Image.new("RGBA", (WIDTH, HEIGHT), TRANSPARENT)
-            cargo_layer.alpha_composite(cargo, (153, 92))
-            image.alpha_composite(
-                ordered_blend(
-                    Image.new("RGBA", (WIDTH, HEIGHT), TRANSPARENT),
-                    cargo_layer,
-                    cargo_visibility,
-                    phase=3,
-                )
+        rear_x = truck_rear_x_for_frame(frame)
+        if rear_x is not None:
+            truck = ordered_blend(
+                loaded,
+                empty,
+                truck_unload_progress(frame),
+                phase=5,
+            )
+            paste_truck_on_guide(
+                image,
+                truck,
+                rear_anchor,
+                front_anchor,
+                rear_x,
+                truck_scale(rear_x),
             )
         frames.append(image)
     return frames
+
+
+def build_unloaded_cargo_frames(
+    static: Path,
+    palette: set[tuple[int, int, int]],
+) -> list[Image.Image]:
+    cargo = normalize_pixel_asset(
+        Image.open(static / "unloaded_cargo_option2_pixellab.png"),
+        palette,
+    )
+    if cargo.getchannel("A").getbbox() != CARGO_PLACEMENT_BBOX:
+        raise RuntimeError(
+            "PixelLab cargo bbox changed: "
+            f"{cargo.getchannel('A').getbbox()} != {CARGO_PLACEMENT_BBOX}."
+        )
+    transparent = Image.new("RGBA", (WIDTH, HEIGHT), TRANSPARENT)
+    return [
+        ordered_blend(
+            transparent,
+            cargo,
+            cargo_visibility_for_frame(frame),
+            phase=3,
+        )
+        for frame in range(FRAME_COUNT)
+    ]
 
 
 def green_components(image: Image.Image) -> list[list[tuple[int, int]]]:
@@ -767,6 +923,79 @@ def validate_layer_frames(
         result["road_upper_ground_follows_guide"] = (
             upper_ground_maximum_deviation <= 0.5
         )
+    if layer == "05_vehicle_truck":
+        deviations: list[float] = []
+        scales: list[float] = []
+        for frame in range(FRAME_COUNT):
+            rear_x = truck_rear_x_for_frame(frame)
+            if rear_x is None:
+                continue
+            scale = truck_scale(rear_x)
+            rear_local = (
+                round(TRUCK_REAR_WHEEL[0] * scale),
+                round((TRUCK_REAR_WHEEL[1] + 4) * scale),
+            )
+            guide_slope = (
+                (TRUCK_GROUND_END[1] - TRUCK_GROUND_START[1])
+                / (TRUCK_GROUND_END[0] - TRUCK_GROUND_START[0])
+            )
+            source_slope = (
+                (TRUCK_FRONT_WHEEL[1] - TRUCK_REAR_WHEEL[1])
+                / (TRUCK_FRONT_WHEEL[0] - TRUCK_REAR_WHEEL[0])
+            )
+            aligned_front_y = (
+                round(
+                    TRUCK_FRONT_WHEEL[1]
+                    + (guide_slope - source_slope)
+                    * (TRUCK_FRONT_WHEEL[0] - TRUCK_REAR_WHEEL[0])
+                )
+                + 4
+            )
+            front_local = (
+                round(TRUCK_FRONT_WHEEL[0] * scale),
+                round(aligned_front_y * scale),
+            )
+            rear_screen = (
+                round(rear_x),
+                round(truck_ground_y(rear_x)),
+            )
+            front_screen = (
+                rear_screen[0] + front_local[0] - rear_local[0],
+                round(
+                    truck_ground_y(
+                        rear_screen[0] + front_local[0] - rear_local[0]
+                    )
+                ),
+            )
+            deviations.extend(
+                [
+                    abs(rear_screen[1] - truck_ground_y(rear_screen[0])),
+                    abs(front_screen[1] - truck_ground_y(front_screen[0])),
+                ]
+            )
+            scales.append(scale)
+        result["truck_ground_guide"] = {
+            "start": list(TRUCK_GROUND_START),
+            "end": list(TRUCK_GROUND_END),
+        }
+        result["wheel_bottom_maximum_raster_deviation_pixels"] = round(
+            max(deviations),
+            3,
+        )
+        result["wheels_follow_ground_guide"] = max(deviations) <= 1.0
+        result["minimum_scale"] = round(min(scales), 4)
+        result["maximum_scale"] = round(max(scales), 4)
+        result["maximum_scale_delta_per_frame"] = round(
+            max(
+                abs(scales[index] - scales[index - 1])
+                for index in range(1, len(scales))
+            ),
+            4,
+        )
+    if layer == "05_vehicle_unloaded_cargo":
+        delivered_bbox = frames[16].getchannel("A").getbbox()
+        result["delivered_bbox"] = list(delivered_bbox) if delivered_bbox else None
+        result["matches_locked_placement"] = delivered_bbox == CARGO_PLACEMENT_BBOX
     return result
 
 
@@ -995,7 +1224,7 @@ def sky_objects(frame: int) -> dict[str, object]:
 
 
 def make_frame_contract(frame: int) -> dict[str, object]:
-    center = truck_center_for_frame(frame)
+    rear_x = truck_rear_x_for_frame(frame)
     main_progress = interval(frame, 18, 40)
     small_progress = [
         interval(frame, 22, 34),
@@ -1022,16 +1251,19 @@ def make_frame_contract(frame: int) -> dict[str, object]:
             "build_progress": [round(value, 4) for value in small_progress],
             "footprints": "locked",
         },
-        "05_vehicle_cargo": {
+        "05_vehicle_truck": {
             "truck_phase": truck_phase(frame),
-            "truck_center": (
-                [round(center[0], 3), round(center[1], 3)]
-                if center is not None
+            "rear_wheel": (
+                [round(rear_x, 3), round(truck_ground_y(rear_x), 3)]
+                if rear_x is not None
                 else None
             ),
-            "truck_scale": round(truck_scale(center), 4) if center is not None else None,
+            "truck_scale": round(truck_scale(rear_x), 4) if rear_x is not None else None,
+            "unload_progress": round(truck_unload_progress(frame), 4),
+        },
+        "05_vehicle_unloaded_cargo": {
             "cargo_phase": cargo_phase(frame),
-            "cargo_anchor": [160, 99],
+            "cargo_bbox": list(CARGO_PLACEMENT_BBOX),
             "cargo_visibility": round(cargo_visibility_for_frame(frame), 4),
         },
         "06_roadside_props": {
@@ -1071,15 +1303,16 @@ def write_spec(
         terrain = contract["02_terrain"]
         main = contract["03_main_building"]
         small = contract["04_small_buildings"]
-        vehicle = contract["05_vehicle_cargo"]
+        vehicle = contract["05_vehicle_truck"]
+        cargo = contract["05_vehicle_unloaded_cargo"]
         props = contract["06_roadside_props"]
         ui = contract["godot_ui"]
-        center = vehicle["truck_center"]
+        rear_wheel = vehicle["rear_wheel"]
         truck = "—"
-        if center is not None:
+        if rear_wheel is not None:
             truck = (
                 f"{vehicle['truck_phase']} "
-                f"({center[0]:.1f},{center[1]:.1f}) "
+                f"({rear_wheel[0]:.1f},{rear_wheel[1]:.1f}) "
                 f"s={vehicle['truck_scale']:.3f}"
             )
         small_values = "/".join(percent(value) for value in small["build_progress"])
@@ -1095,8 +1328,8 @@ def write_spec(
                 windows=windows,
                 small=small_values,
                 truck=truck,
-                cargo=vehicle["cargo_phase"],
-                cargo_visibility=percent(vehicle["cargo_visibility"]),
+                cargo=cargo["cargo_phase"],
+                cargo_visibility=percent(cargo["cargo_visibility"]),
                 night=percent(props["night_factor"]),
                 ui=ui["phase"],
             )
@@ -1137,7 +1370,7 @@ def write_spec(
         "| Frame rate | `8 FPS` |",
         "| Frames per layer | `64` logical frames, numbered `000–063` |",
         "| File pattern | `frame_%03d.png`, sparse — duplicates are not written |",
-        f"| PNG files on disk | `{total_unique}` total across the six layers |",
+        f"| PNG files on disk | `{total_unique}` total across the seven layers |",
         "| Frame resolution | `frame_maps` in the manifest, see below |",
         "| Color | Only the 22 colors in `art/palette.gpl` |",
         "| Alpha | Binary only: `0` or `255` |",
@@ -1147,6 +1380,7 @@ def write_spec(
         "| Road upper edge | `(0,130) → (320,80)` |",
         "| Road lower edge | `(160,200) → (320,100)` |",
         "| Road center-dash guide | `(0,172) → (319,85.21)` |",
+        "| Truck wheel-bottom guide | `(0,168) → (319,84.7)` |",
         "| Embedded text | Forbidden; title and menu are native Godot UI |",
         "",
         "Layer order is back-to-front and MUST remain:",
@@ -1155,8 +1389,9 @@ def write_spec(
         "2. `02_terrain` — road and surrounding ground; geometry is locked.",
         "3. `03_main_building` — main perspective building, no road intersection.",
         "4. `04_small_buildings` — exactly three perspective buildings.",
-        "5. `05_vehicle_cargo` — transient truck and delivered cargo.",
-        "6. `06_roadside_props` — lamps and grass anchored to road edges.",
+        "5. `05_vehicle_unloaded_cargo` — independently timed delivered cargo.",
+        "6. `05_vehicle_truck` — PixelLab loaded/empty truck animation.",
+        "7. `06_roadside_props` — lamps and grass anchored to road edges.",
         "",
         "## Frame deduplication",
         "",
@@ -1196,11 +1431,12 @@ def write_spec(
         "  is `9.438 px`.",
         "- Small buildings minimum road clearance: `> 0 px`; current QA minimum",
         "  is `2.625 px`.",
-        "- Cargo anchor: `(160,99)`.",
-        "- Truck arrival Bézier: `(-15,171) → control (58,163) → (145,121)`.",
-        "- Truck departure Bézier: `(145,121) → control (232,108) → (338,80)`.",
+        "- Delivered-cargo bounding box: `(121,99) → (144,110)`.",
+        "- Truck rear-wheel arrival: `x=-12 → 82`, frames `0–13`.",
+        "- Truck rear-wheel departure: `x=82 → 340`, frames `23–38`.",
+        "- Both visible wheel bottoms follow `(0,168) → (319,84.7)`.",
         "- Truck scale:",
-        "  `0.65 + 0.35 × clamp(distance_to_VP / stop_distance, 0.15, 1.8)`.",
+        "  `clamp(0.35, 1.15, 0.9 × (VP.x - rear_x) / (VP.x - 82))`.",
         "",
         "## Layer-specific editing rules",
         "",
@@ -1239,12 +1475,23 @@ def write_spec(
         "- Build intervals: A `22–34`, B `28–40`, C `34–46`.",
         "- The three bases may differ in height but MUST remain above the road.",
         "",
-        "### 05_vehicle_cargo",
+        "### 05_vehicle_truck",
         "",
         "- Truck faces and travels toward the upper-right vanishing direction.",
         "- Arrival `0–13`; unload stop `14–22`; departure `23–38`; absent `39–63`.",
+        "- The loaded and empty source sprites are PixelLab assets snapped to the",
+        "  locked 22-color palette before frame generation.",
+        "- The two visible wheel bottoms MUST stay within `1 px` of the locked",
+        "  wheel-bottom guide in every visible frame.",
+        "- Loaded-to-empty transition runs during frames `12–16`.",
+        "- Truck is allowed to be fully transparent when absent.",
+        "",
+        "### 05_vehicle_unloaded_cargo",
+        "",
         "- Cargo appears `12–16`, stays through `28`, fades `29–43`, then is absent.",
-        "- Truck and cargo are allowed to be fully transparent when absent.",
+        "- Delivered pixels MUST remain inside `(121,99) → (144,110)`.",
+        "- The two boxes use option 2 and preserve their shared vanishing point.",
+        "- Cargo is allowed to be fully transparent when absent.",
         "",
         "### 06_roadside_props",
         "",
@@ -1295,6 +1542,35 @@ def write_spec(
     return spec_path
 
 
+def load_published_layer_frames(
+    output: Path,
+    layer: str,
+) -> list[Image.Image] | None:
+    """Reuse a published sparse layer when the current task does not own it."""
+    manifest_path = output / "manifest.json"
+    if not manifest_path.is_file():
+        return None
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        frame_map = manifest["frame_maps"][layer]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return None
+    if not isinstance(frame_map, list) or len(frame_map) != FRAME_COUNT:
+        return None
+    frames: list[Image.Image] = []
+    for source_index in frame_map:
+        if not isinstance(source_index, int):
+            return None
+        path = output / layer / f"frame_{source_index:03d}.png"
+        if not path.is_file():
+            return None
+        frame = Image.open(path).convert("RGBA")
+        if frame.size != (WIDTH, HEIGHT):
+            return None
+        frames.append(frame.copy())
+    return frames
+
+
 def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
     static = repo_root / STATIC_ROOT
     output = repo_root / OUTPUT_ROOT
@@ -1303,13 +1579,20 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
         path.relative_to(output).as_posix(): path.read_bytes()
         for path in output.glob("*/frame_*.png")
     }
+    published_main = load_published_layer_frames(output, "03_main_building")
+    published_small = load_published_layer_frames(output, "04_small_buildings")
 
     layers = {
         "01_sky": [build_sky_frame(frame) for frame in range(FRAME_COUNT)],
         "02_terrain": build_terrain_frames(static),
-        "03_main_building": build_main_frames(static),
-        "04_small_buildings": build_small_frames(static),
-        "05_vehicle_cargo": build_vehicle_frames(static),
+        "03_main_building": (
+            published_main if published_main is not None else build_main_frames(static)
+        ),
+        "04_small_buildings": (
+            published_small if published_small is not None else build_small_frames(static)
+        ),
+        "05_vehicle_truck": build_vehicle_frames(static, palette),
+        "05_vehicle_unloaded_cargo": build_unloaded_cargo_frames(static, palette),
         "06_roadside_props": build_prop_frames(static),
     }
 
@@ -1337,6 +1620,10 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
                     result["road_upper_ground_follows_guide"],
                 ]
             )
+        if layer == "05_vehicle_truck":
+            required.append(result["wheels_follow_ground_guide"])
+        if layer == "05_vehicle_unloaded_cargo":
+            required.append(result["matches_locked_placement"])
         if not all(required):
             raise RuntimeError(f"Validation failed for {layer}: {result}")
 
@@ -1364,6 +1651,16 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
         raise RuntimeError(
             "02_terrain must resolve to exactly four distinct static images, "
             f"found {unique_frame_counts['02_terrain']}."
+        )
+    if unique_frame_counts["05_vehicle_truck"] > 32:
+        raise RuntimeError(
+            "05_vehicle_truck exceeds its 32-PNG sparse-frame budget: "
+            f"{unique_frame_counts['05_vehicle_truck']}."
+        )
+    if unique_frame_counts["05_vehicle_unloaded_cargo"] > 17:
+        raise RuntimeError(
+            "05_vehicle_unloaded_cargo exceeds its 17-PNG sparse-frame budget: "
+            f"{unique_frame_counts['05_vehicle_unloaded_cargo']}."
         )
     for layer, frame_map in frame_maps.items():
         if len(frame_map) != FRAME_COUNT:
@@ -1406,10 +1703,15 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
             "end": list(ROAD_UPPER_GROUND_END),
             "equation": "y = 92 + (75.58 - 92) * x / 319",
         },
+        "truck_wheel_bottom_guide": {
+            "start": list(TRUCK_GROUND_START),
+            "end": list(TRUCK_GROUND_END),
+            "equation": "y = 168 + (84.7 - 168) * x / 319",
+        },
         "layer_order": LAYER_ORDER,
         "timeline": [
             {"frames": [0, 13], "event": "truck enters from lower-left and approaches main building"},
-            {"frames": [12, 16], "event": "cargo appears at fixed unload anchor (160,99)"},
+            {"frames": [12, 16], "event": "option-2 cargo appears at bbox (121,99)-(144,110)"},
             {"frames": [16, 36], "event": "afternoon transitions through dusk to night"},
             {"frames": [18, 40], "event": "main building completes bottom-to-top"},
             {"frames": [22, 46], "event": "three small buildings complete sequentially"},
@@ -1418,7 +1720,7 @@ def build(repo_root: Path, preview_root: Path) -> dict[str, object]:
             {"frames": [44, 55], "event": "four main-building windows perform chamber pulse sequence"},
             {"frames": [56, 63], "event": "dawn begins and roadside lamps turn down"},
         ],
-        "truck_scale_formula": "scale = 0.65 + 0.35 * clamp(distance_to_vanishing_point / stop_distance, 0.15, 1.8)",
+        "truck_scale_formula": "scale = clamp(0.35, 1.15, 0.9 * (VP.x - rear_x) / (VP.x - 82))",
         "source_keyframes": STATIC_ROOT.as_posix(),
         "specification": SPEC_PATH.as_posix(),
         "frame_contract": frame_contract,

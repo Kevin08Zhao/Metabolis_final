@@ -274,7 +274,7 @@
       34,
       34
     ],
-    "05_vehicle_cargo": [
+    "05_vehicle_truck": [
       0,
       1,
       2,
@@ -313,32 +313,98 @@
       35,
       36,
       37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37,
+      37
+    ],
+    "05_vehicle_unloaded_cargo": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      13,
+      14,
+      15,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      14,
+      37,
       38,
       39,
       40,
       41,
       42,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43,
-      43
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
     ],
     "06_roadside_props": [
       0,
@@ -412,7 +478,8 @@
     "02_terrain": 4,
     "03_main_building": 21,
     "04_small_buildings": 9,
-    "05_vehicle_cargo": 37,
+    "05_vehicle_truck": 31,
+    "05_vehicle_unloaded_cargo": 17,
     "06_roadside_props": 56
   },
   "road_center_dash_guide": {
@@ -437,12 +504,24 @@
     ],
     "equation": "y = 92 + (75.58 - 92) * x / 319"
   },
+  "truck_wheel_bottom_guide": {
+    "start": [
+      0.0,
+      168.0
+    ],
+    "end": [
+      319.0,
+      84.7
+    ],
+    "equation": "y = 168 + (84.7 - 168) * x / 319"
+  },
   "layer_order": [
     "01_sky",
     "02_terrain",
     "03_main_building",
     "04_small_buildings",
-    "05_vehicle_cargo",
+    "05_vehicle_unloaded_cargo",
+    "05_vehicle_truck",
     "06_roadside_props"
   ],
   "timeline": [
@@ -458,7 +537,7 @@
         12,
         16
       ],
-      "event": "cargo appears at fixed unload anchor (160,99)"
+      "event": "option-2 cargo appears at bbox (121,99)-(144,110)"
     },
     {
       "frames": [
@@ -510,7 +589,7 @@
       "event": "dawn begins and roadside lamps turn down"
     }
   ],
-  "truck_scale_formula": "scale = 0.65 + 0.35 * clamp(distance_to_vanishing_point / stop_distance, 0.15, 1.8)",
+  "truck_scale_formula": "scale = clamp(0.35, 1.15, 0.9 * (VP.x - rear_x) / (VP.x - 82))",
   "source_keyframes": "art/previews/title_layers_static",
   "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
   "frame_contract": [
@@ -553,17 +632,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          -15.0,
-          171.0
+        "rear_wheel": [
+          -12.0,
+          171.134
         ],
-        "truck_scale": 1.2627,
+        "truck_scale": 1.15,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -616,17 +700,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          -12.537,
-          170.721
+        "rear_wheel": [
+          -10.417,
+          170.72
         ],
-        "truck_scale": 1.2589,
+        "truck_scale": 1.15,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -679,17 +768,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          -5.64,
-          169.842
+        "rear_wheel": [
+          -6.01,
+          169.569
         ],
-        "truck_scale": 1.248,
+        "truck_scale": 1.15,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -742,17 +836,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          4.993,
-          168.216
+        "rear_wheel": [
+          0.707,
+          167.815
         ],
-        "truck_scale": 1.2312,
+        "truck_scale": 1.15,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -805,17 +904,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          18.675,
-          165.655
+        "rear_wheel": [
+          9.222,
+          165.592
         ],
-        "truck_scale": 1.2094,
+        "truck_scale": 1.1334,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -868,17 +972,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          34.704,
-          162.018
+        "rear_wheel": [
+          19.02,
+          163.033
         ],
-        "truck_scale": 1.1836,
+        "truck_scale": 1.102,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -931,17 +1040,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          52.334,
-          157.266
+        "rear_wheel": [
+          29.588,
+          160.274
         ],
-        "truck_scale": 1.155,
+        "truck_scale": 1.0681,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -994,17 +1108,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          70.759,
-          151.508
+        "rear_wheel": [
+          40.412,
+          157.447
         ],
-        "truck_scale": 1.1247,
+        "truck_scale": 1.0334,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1057,17 +1176,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          89.105,
-          145.017
+        "rear_wheel": [
+          50.98,
+          154.688
         ],
-        "truck_scale": 1.0942,
+        "truck_scale": 0.9995,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1120,17 +1244,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          106.431,
-          138.231
+        "rear_wheel": [
+          60.778,
+          152.129
         ],
-        "truck_scale": 1.0652,
+        "truck_scale": 0.9681,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1183,17 +1312,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          121.734,
-          131.734
+        "rear_wheel": [
+          69.293,
+          149.906
         ],
-        "truck_scale": 1.0394,
+        "truck_scale": 0.9407,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1246,17 +1380,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          133.969,
-          126.215
+        "rear_wheel": [
+          76.01,
+          148.152
         ],
-        "truck_scale": 1.0187,
+        "truck_scale": 0.9192,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1309,17 +1448,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          142.074,
-          122.405
+        "rear_wheel": [
+          80.417,
+          147.001
         ],
-        "truck_scale": 1.005,
+        "truck_scale": 0.9051,
+        "unload_progress": 0.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "appearing",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -1372,17 +1516,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "arriving",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 0.1562
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "appearing",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.1562
       },
@@ -1435,17 +1584,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 0.5
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "appearing",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.5
       },
@@ -1498,17 +1652,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 0.8438
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "appearing",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.8438
       },
@@ -1561,17 +1720,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1624,17 +1788,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1687,17 +1856,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1750,17 +1924,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1813,17 +1992,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1876,17 +2060,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -1939,17 +2128,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "unloading",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2006,17 +2200,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          145.0,
-          121.0
+        "rear_wheel": [
+          82.0,
+          146.587
         ],
-        "truck_scale": 1.0,
+        "truck_scale": 0.9,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2069,17 +2268,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          147.22,
-          120.666
+        "rear_wheel": [
+          85.287,
+          145.729
         ],
-        "truck_scale": 0.9965,
+        "truck_scale": 0.8895,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2132,17 +2336,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          153.5,
-          119.701
+        "rear_wheel": [
+          94.537,
+          143.314
         ],
-        "truck_scale": 0.9865,
+        "truck_scale": 0.8598,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2195,17 +2404,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          163.302,
-          118.134
+        "rear_wheel": [
+          108.832,
+          139.581
         ],
-        "truck_scale": 0.971,
+        "truck_scale": 0.814,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2258,17 +2472,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          176.105,
-          115.978
+        "rear_wheel": [
+          127.255,
+          134.77
         ],
-        "truck_scale": 0.9506,
+        "truck_scale": 0.7549,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2321,17 +2540,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          191.388,
-          113.251
+        "rear_wheel": [
+          148.889,
+          129.121
         ],
-        "truck_scale": 0.9262,
+        "truck_scale": 0.6855,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "delivered",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2384,17 +2608,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          208.602,
-          109.989
+        "rear_wheel": [
+          172.816,
+          122.873
         ],
-        "truck_scale": 0.8988,
+        "truck_scale": 0.6088,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 1.0
       },
@@ -2447,17 +2676,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          227.162,
-          106.26
+        "rear_wheel": [
+          198.119,
+          116.265
         ],
-        "truck_scale": 0.869,
+        "truck_scale": 0.5276,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.9854
       },
@@ -2510,17 +2744,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          246.433,
-          102.166
+        "rear_wheel": [
+          223.881,
+          109.538
         ],
-        "truck_scale": 0.8381,
+        "truck_scale": 0.445,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.9446
       },
@@ -2573,17 +2812,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          265.73,
-          97.853
+        "rear_wheel": [
+          249.184,
+          102.931
         ],
-        "truck_scale": 0.8071,
+        "truck_scale": 0.3639,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.8819
       },
@@ -2636,17 +2880,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          284.314,
-          93.51
+        "rear_wheel": [
+          273.111,
+          96.683
         ],
-        "truck_scale": 0.7771,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.8017
       },
@@ -2699,17 +2948,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          301.398,
-          89.361
+        "rear_wheel": [
+          294.745,
+          91.034
         ],
-        "truck_scale": 0.7495,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.7085
       },
@@ -2762,17 +3016,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          316.158,
-          85.662
+        "rear_wheel": [
+          313.168,
+          86.223
         ],
-        "truck_scale": 0.7256,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.6064
       },
@@ -2825,17 +3084,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          327.743,
-          82.686
+        "rear_wheel": [
+          327.463,
+          82.49
         ],
-        "truck_scale": 0.7068,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.5
       },
@@ -2888,17 +3152,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          335.302,
-          80.711
+        "rear_wheel": [
+          336.713,
+          80.075
         ],
-        "truck_scale": 0.7025,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.3936
       },
@@ -2951,17 +3220,22 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "departing",
-        "truck_center": [
-          338.0,
-          80.0
+        "rear_wheel": [
+          340.0,
+          79.216
         ],
-        "truck_scale": 0.7025,
+        "truck_scale": 0.35,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.2915
       },
@@ -3014,14 +3288,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.1983
       },
@@ -3074,14 +3353,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.1181
       },
@@ -3134,14 +3418,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0554
       },
@@ -3194,14 +3483,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0146
       },
@@ -3254,14 +3548,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "consumed",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3316,14 +3615,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3378,14 +3682,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3440,14 +3749,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3502,14 +3816,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3564,14 +3883,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3626,14 +3950,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3688,14 +4017,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3750,14 +4084,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3815,14 +4154,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3875,14 +4219,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -3935,14 +4284,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4000,14 +4354,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4060,14 +4419,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4120,14 +4484,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4180,14 +4549,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4240,14 +4614,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4300,14 +4679,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4360,14 +4744,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4420,14 +4809,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4480,14 +4874,19 @@
         ],
         "footprints": "locked"
       },
-      "05_vehicle_cargo": {
+      "05_vehicle_truck": {
         "truck_phase": "absent",
-        "truck_center": null,
+        "rear_wheel": null,
         "truck_scale": null,
+        "unload_progress": 1.0
+      },
+      "05_vehicle_unloaded_cargo": {
         "cargo_phase": "absent",
-        "cargo_anchor": [
-          160,
-          99
+        "cargo_bbox": [
+          121,
+          99,
+          144,
+          110
         ],
         "cargo_visibility": 0.0
       },
@@ -4574,15 +4973,47 @@
       "minimum_road_clearance_pixels": 2.625,
       "never_intersects_road": true
     },
-    "05_vehicle_cargo": {
+    "05_vehicle_truck": {
       "frame_count": 64,
       "all_320x180": true,
       "locked_palette": true,
       "binary_alpha": true,
-      "visible_color_count": 17,
-      "nonempty_frame_count": 43,
+      "visible_color_count": 15,
+      "nonempty_frame_count": 37,
       "first_nonempty_frame": 0,
-      "last_nonempty_frame": 42
+      "last_nonempty_frame": 36,
+      "truck_ground_guide": {
+        "start": [
+          0.0,
+          168.0
+        ],
+        "end": [
+          319.0,
+          84.7
+        ]
+      },
+      "wheel_bottom_maximum_raster_deviation_pixels": 0.611,
+      "wheels_follow_ground_guide": true,
+      "minimum_scale": 0.35,
+      "maximum_scale": 1.15,
+      "maximum_scale_delta_per_frame": 0.0826
+    },
+    "05_vehicle_unloaded_cargo": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 14,
+      "nonempty_frame_count": 30,
+      "first_nonempty_frame": 13,
+      "last_nonempty_frame": 42,
+      "delivered_bbox": [
+        121,
+        99,
+        144,
+        110
+      ],
+      "matches_locked_placement": true
     },
     "06_roadside_props": {
       "frame_count": 64,
@@ -5525,138 +5956,138 @@
         ]
       }
     ],
-    "05_vehicle_cargo": [
+    "05_vehicle_truck": [
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_000.png",
-        "sha256": "2f4177e052ae38b536ea8907c81a00422391d50632e39411cad5304bba837273",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_000.png",
+        "sha256": "fdeb2abab3128509be1999c160fd30f7946970fc0b3f1698754a1addfb80b2b5",
         "frame": 0,
         "used_by_frames": [
           0
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_001.png",
-        "sha256": "06c87248a1f323382dbe4683dee7f579de5fc4a0da9e4aab2f3096b2a963ae34",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_001.png",
+        "sha256": "0c7ae3f00029e9b85af5d1aefd601b91476d8822cbb53a98995506b5f0ec0ca5",
         "frame": 1,
         "used_by_frames": [
           1
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_002.png",
-        "sha256": "e4c1a8429da07ada10d10a4d33322ff29e0f3ceb970e3c74c928860c59469cc8",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_002.png",
+        "sha256": "c8992f680b7558f48fb399608f6b65d2516ee238236149139f0bbbaebc54d836",
         "frame": 2,
         "used_by_frames": [
           2
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_003.png",
-        "sha256": "c6b7709f585affd110c2f8e399e3d90e9317c79203fd3824029b2515fb65aff7",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_003.png",
+        "sha256": "6e97399baad96abf8bfdf6ee688a64cc23496aa8d333aa91bf551a4d103f75cb",
         "frame": 3,
         "used_by_frames": [
           3
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_004.png",
-        "sha256": "14a33d39969185cb70a620541333d01914797c09fc34946eb1639b1a41ae2b55",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_004.png",
+        "sha256": "ad65ecd0a89e960c13523c02dd13e063c69c23b3dd59f8e78cd807745bee321d",
         "frame": 4,
         "used_by_frames": [
           4
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_005.png",
-        "sha256": "94efc9109a0d300e482db7d2da3c95922e02fce4e2cd55ce4bf8cfe5a1da57eb",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_005.png",
+        "sha256": "6c243d12c5b9e91b21aac269fad23de2ffce99fea7b91f0957bf38dfab2463e1",
         "frame": 5,
         "used_by_frames": [
           5
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_006.png",
-        "sha256": "0da2545d8cd4880560ebc4d152821f67ec93753590d3a8788a365373921409ac",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_006.png",
+        "sha256": "69b16d7e83c3c79d0b0aa81a6ecfa9afb4d6d021096de886f8158dce1be35958",
         "frame": 6,
         "used_by_frames": [
           6
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_007.png",
-        "sha256": "5278db256dd8b7b2b9b9d78900ff455422a800f82360124c6d136c4824b74281",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_007.png",
+        "sha256": "9e1b28fad72dda2c5947edb155ba936b7d00fedbdc9df0de2e8ddeeee3d4c7b9",
         "frame": 7,
         "used_by_frames": [
           7
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_008.png",
-        "sha256": "3e7372da81a0706f69323867caf9eb6f67379f5f42d99d5d9584e6d6254f7537",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_008.png",
+        "sha256": "c8e2dca7b3367f0cbb3c32ff4ea454ba8ee131ca794e4d186ad86196df6e7004",
         "frame": 8,
         "used_by_frames": [
           8
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_009.png",
-        "sha256": "15083680261eb6c3093072f98ba2030c2fab8b5ad988381510aa27fc648c4865",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_009.png",
+        "sha256": "3da5a61f41aec1c623e39154bd5bf0eeaf429625a16c3894a0ffe1fd05ce9ff4",
         "frame": 9,
         "used_by_frames": [
           9
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_010.png",
-        "sha256": "d1ff67fa869282c1b3aab9df9bda794471969bae2ad1563f9360fb43001937c0",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_010.png",
+        "sha256": "4931bdd3b2101353f93a83388c526746b8729053f7dadf28966a474666b30b2d",
         "frame": 10,
         "used_by_frames": [
           10
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_011.png",
-        "sha256": "628eaa11701432095fdba5d7e2c022ffad8b4e525c81234106148fb1dd2298a6",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_011.png",
+        "sha256": "e838a979e922f32703ec27523b1c02e031554e3f65989c292ddb3f5bbb931cc7",
         "frame": 11,
         "used_by_frames": [
           11
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_012.png",
-        "sha256": "e6bf71c847a53321a912f6e160d4bff479071844720ab181b8bff43d612201de",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_012.png",
+        "sha256": "7c856713141081990970dfba49a9acae7b77d0ee5d902680a0009abec695cdbc",
         "frame": 12,
         "used_by_frames": [
           12
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_013.png",
-        "sha256": "8c81700c470a22f2f6498da01fd443ce1f04999f2f3d07fa8002379adaf25f6c",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_013.png",
+        "sha256": "b59f7bc1cd056677f693c21ae819b9f3e45d30c194734d40d2c2e29c55fac213",
         "frame": 13,
         "used_by_frames": [
           13
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_014.png",
-        "sha256": "3d46660da54994d06fe3c6b01f5dbb62eabb6ca2d58c2382ec6d302e2a471fd0",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_014.png",
+        "sha256": "8234690a4ac5cea1af2b788b0581304bb1d85ddd9f79daec595a0193cb9f9c1d",
         "frame": 14,
         "used_by_frames": [
           14
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_015.png",
-        "sha256": "d6fc7d7e51c8b46e702765f47cc04ca829b4c1fa0757e1ebb858b4b72628cccc",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_015.png",
+        "sha256": "74e27ac39d4a28355ef57a34c8dd680013b9e50df8cdaa64df40c577df3b246a",
         "frame": 15,
         "used_by_frames": [
           15
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_016.png",
-        "sha256": "ddd8eb26d20f8cc61e45898e4f1987c7ab7237127c2f0498370fb4c970038a0a",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_016.png",
+        "sha256": "dff96a74fc2aed6a20ab8c8ed0ce4e3797ff456ff5874384735c8429d77ae58f",
         "frame": 16,
         "used_by_frames": [
           16,
@@ -5670,162 +6101,120 @@
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_024.png",
-        "sha256": "a96756232b66f1b47fa387bebfbf31de3b288d88146fb70ade40922a02b3cfc4",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_024.png",
+        "sha256": "140a267fa38b423e829a3d356cf9cd719b3bff148eb19939aa9c3681e6a21271",
         "frame": 24,
         "used_by_frames": [
           24
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_025.png",
-        "sha256": "113a73e10b43e615aabf206335c840937ae10fd95d79fdb3964b11fbdb943aac",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_025.png",
+        "sha256": "db34a753377a8e2c36094dd1594769cec828c7d5455eec42c0cf8c1aff10cf49",
         "frame": 25,
         "used_by_frames": [
           25
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_026.png",
-        "sha256": "427dd8d4a09b7e7f0aae30950afbda4572e94734e6e01ce09ac05f79ec3cdb23",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_026.png",
+        "sha256": "67958473bdc9cbbf92595c64c454d98ce7ecf619ca026167ac3201398aebe5ce",
         "frame": 26,
         "used_by_frames": [
           26
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_027.png",
-        "sha256": "bf68771e23f3e2651656b6032cfce5a00cb79f56499fed6c8d78e8234e36f1e6",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_027.png",
+        "sha256": "f01047afdeddaa3ff378479dad8b087a09bcbd7f59908e7fe6d7b40bea348629",
         "frame": 27,
         "used_by_frames": [
           27
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_028.png",
-        "sha256": "c1693bd3d1b28dfd96a718b4f7630978210f0dda28bbae9efc9544d16eb7616b",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_028.png",
+        "sha256": "3cf3c404546e301c0fa91fe3a94bc60620e3a272b691af39786967d557e2a3d3",
         "frame": 28,
         "used_by_frames": [
           28
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_029.png",
-        "sha256": "4e42b6dd625ac2dc9f30222d1a0b46358d57670ea03b55bd512ac9fe35857a4c",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_029.png",
+        "sha256": "0176e1e29c57558f21b7123c7a24d9a6965d5786cc4b733627997e8386c7efc8",
         "frame": 29,
         "used_by_frames": [
           29
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_030.png",
-        "sha256": "ecb2e6f38caaacb579843f2e6834238666e2f005257ec7d2090e03af4c285710",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_030.png",
+        "sha256": "15edfd7f73ba786833c6c81f909285bb9a5c4219a2b41a3082996167d1aaa593",
         "frame": 30,
         "used_by_frames": [
           30
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_031.png",
-        "sha256": "5bbe4d812c9a2956afd2ec3ef2279fa0356f58fc98429f068b455728cbb0633c",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_031.png",
+        "sha256": "5ad81307a5402dc064a8933637b8dab7b22093c2c2e1ae8b651130ce2b413e93",
         "frame": 31,
         "used_by_frames": [
           31
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_032.png",
-        "sha256": "173b89bf9a3ae84add3571eda56b94834f561a0a6eedd8165465fa35688c959e",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_032.png",
+        "sha256": "ba9931c753a4a574d26e944468a3ecced7bffa7cbf99f6a87d99acfe6a0bd554",
         "frame": 32,
         "used_by_frames": [
           32
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_033.png",
-        "sha256": "e736f52186a046f000d0780bd95f23ceca5313b4a702e5c904a22adaa0fcddea",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_033.png",
+        "sha256": "d9b7fa0d9b90a6b7e98c1b1badb4fead4da4c5d644d820de6b88d82a9b09c0ae",
         "frame": 33,
         "used_by_frames": [
           33
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_034.png",
-        "sha256": "a57f25a0410488e28c1f7478d0a43e91704fcff0a63669932b61f7bd4c0f77ce",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_034.png",
+        "sha256": "0ea5e9c82ffa89352c30a47b8c988ef5ea3316326472989e68f0de2b17a5aab5",
         "frame": 34,
         "used_by_frames": [
           34
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_035.png",
-        "sha256": "b803fb7a5031b4f9614e39f955a4f053f8e51c898538199eb17c8a3d586aa035",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_035.png",
+        "sha256": "b690e8b059c2b38a7b96faabae4d0740e9e0bed8b74bc7b4f9d32c8263d1367b",
         "frame": 35,
         "used_by_frames": [
           35
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_036.png",
-        "sha256": "e1a5a040e8aa1faed3688f06dbcb7097ba19a5c4629999da32d8329bd1444481",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_036.png",
+        "sha256": "19c799c6072940ae2cf195e7cf7550f35e1c2fa75f62988c0cac6bd36fd39993",
         "frame": 36,
         "used_by_frames": [
           36
         ]
       },
       {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_037.png",
-        "sha256": "8c797e84fa054b218996d48975b63afb9a894b999398274f416d40fc93e4f3cc",
+        "path": "art/animations/title_layers/05_vehicle_truck/frame_037.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c",
         "frame": 37,
         "used_by_frames": [
-          37
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_038.png",
-        "sha256": "2175843225838719ba9e9a9f1b95a2adae38b8bbc5a2a867ac38606bc0afb908",
-        "frame": 38,
-        "used_by_frames": [
-          38
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_039.png",
-        "sha256": "47513d35a5454737b724a2820ff465752b61f83cc0c47c825c439b38e6aa23d1",
-        "frame": 39,
-        "used_by_frames": [
-          39
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_040.png",
-        "sha256": "ea0fb3a5fa04c9dba3bea4099e351b42f7870261eee6ef38e142b8a5acf1717a",
-        "frame": 40,
-        "used_by_frames": [
-          40
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_041.png",
-        "sha256": "8a0c5fa8822dcd6954e933caa4c4aabe748d89ddc22c978b8e41746d7e1804b4",
-        "frame": 41,
-        "used_by_frames": [
-          41
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_042.png",
-        "sha256": "d297a9f670635b61a4968df7edef74bd0a7b2b58d494bc27b858aca488dbce11",
-        "frame": 42,
-        "used_by_frames": [
-          42
-        ]
-      },
-      {
-        "path": "art/animations/title_layers/05_vehicle_cargo/frame_043.png",
-        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c",
-        "frame": 43,
-        "used_by_frames": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
           43,
           44,
           45,
@@ -5847,6 +6236,191 @@
           61,
           62,
           63
+        ]
+      }
+    ],
+    "05_vehicle_unloaded_cargo": [
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_000.png",
+        "sha256": "9f0360de4c5577e6aeded8703ce75d3ec283deedcd80fd4cfb709521d5f0997c",
+        "frame": 0,
+        "used_by_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_013.png",
+        "sha256": "917659696390530a1e0083ec20a40be1ccdf46a0cce4747402fbebfb55aaef5c",
+        "frame": 13,
+        "used_by_frames": [
+          13
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_014.png",
+        "sha256": "159e01f73ad191d6520b36c72cfc74ea62619fe55e4dac6794749ad75e548fce",
+        "frame": 14,
+        "used_by_frames": [
+          14,
+          36
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_015.png",
+        "sha256": "688583a2d23e15b906a19da1ce7e53ac89c2a5e16b089658cde9f38f432da387",
+        "frame": 15,
+        "used_by_frames": [
+          15
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_016.png",
+        "sha256": "f1422f5ec24b35422cea80c41e9f26b5f186a66c044c2f6e778904aeb757af24",
+        "frame": 16,
+        "used_by_frames": [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_030.png",
+        "sha256": "06c3c4945e602a95401f6616b39ec54a19b91467ada1f76587d00848b8921028",
+        "frame": 30,
+        "used_by_frames": [
+          30
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_031.png",
+        "sha256": "64a51a67e4e477b40a9e06374ca108a3681be20e79adab4a0b7e2bad0f7b5082",
+        "frame": 31,
+        "used_by_frames": [
+          31
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_032.png",
+        "sha256": "4aff2133cde9ec23fbf05fe02fe8334da2a472fd19968b26ed7cebfa5a064fea",
+        "frame": 32,
+        "used_by_frames": [
+          32
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_033.png",
+        "sha256": "7712b33203ae7c833180c8b681ab1ef229edfd8ad3dd946d2d258306c7341dc2",
+        "frame": 33,
+        "used_by_frames": [
+          33
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_034.png",
+        "sha256": "1e4f94dd480e0ecd1d1b88130d2a09a831d4e9f22258a0ff169acfb3fee84c9d",
+        "frame": 34,
+        "used_by_frames": [
+          34
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_035.png",
+        "sha256": "8640fd6a1ca553536ac36776f43ab845870146618282b4ebd5c05f97a2a9f367",
+        "frame": 35,
+        "used_by_frames": [
+          35
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_037.png",
+        "sha256": "7ea30573a2be34a58ba92a12edf516679d5d3c95e34a4391c3eb9fa390c9a66f",
+        "frame": 37,
+        "used_by_frames": [
+          37
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_038.png",
+        "sha256": "ee3c542cf7d7aad24b09002de5f366e6483309c558970ee74fde6a1afe9f4965",
+        "frame": 38,
+        "used_by_frames": [
+          38
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_039.png",
+        "sha256": "85e6ecebda2ff61c33464bf85674c5f3517bf76d189f98734a9939cbb0be6ff7",
+        "frame": 39,
+        "used_by_frames": [
+          39
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_040.png",
+        "sha256": "3e150034f285be20815e927223595726c0703dca041b6e5c798caf9842729aa8",
+        "frame": 40,
+        "used_by_frames": [
+          40
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_041.png",
+        "sha256": "10d2ed1e016c46ddee0c71872d5035c4fc5570f98d736fb305cba36b8021337b",
+        "frame": 41,
+        "used_by_frames": [
+          41
+        ]
+      },
+      {
+        "path": "art/animations/title_layers/05_vehicle_unloaded_cargo/frame_042.png",
+        "sha256": "2173bb327109de36ce7cfed6a7e867072a720539229defb64edf93d91ae7de96",
+        "frame": 42,
+        "used_by_frames": [
+          42
         ]
       }
     ],
@@ -6310,7 +6884,7 @@
     ]
   },
   "preview": {
-    "gif": "art/previews/title_layers_animation/metabolis_title_layer_animation.gif",
-    "contact_sheet": "art/previews/title_layers_animation/metabolis_title_layer_animation_contact.png"
+    "gif": "/private/tmp/metabolis_title_layer_animation.gif",
+    "contact_sheet": "/private/tmp/metabolis_title_layer_animation_contact.png"
   }
 }

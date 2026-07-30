@@ -1,22 +1,23 @@
 {
   "status": "PASS",
-  "total_png_frames": 188,
-  "expected_png_frames": 188,
-  "logical_frame_count": 384,
+  "total_png_frames": 199,
+  "expected_png_frames": 199,
+  "logical_frame_count": 448,
   "unique_frame_counts": {
     "01_sky": 61,
     "02_terrain": 4,
     "03_main_building": 21,
     "04_small_buildings": 9,
-    "05_vehicle_cargo": 37,
+    "05_vehicle_truck": 31,
+    "05_vehicle_unloaded_cargo": 17,
     "06_roadside_props": 56
   },
-  "duplicate_frames_removed": 196,
+  "duplicate_frames_removed": 249,
   "output": "art/animations/title_layers",
   "manifest": "art/animations/title_layers/manifest.json",
-  "manifest_sha256": "ad2437f327d466d4d442941aea638b930fdea9458e919a6906aeadc470953041",
+  "manifest_sha256": "d1978f87014aa8f436722a7c3700e0e2a40a60867c5ba4312ae358c50c7a6964",
   "specification": "docs/TITLE_INTRO_ANIMATION_SPEC.md",
-  "specification_sha256": "76cbaddde3cbc114ef721bd6bc7001121ed82cc535264abdfdbf05fc26fc57fd",
+  "specification_sha256": "8054402d120b9055c2c7503dba652ddc56c743ad66e22b01841e91fb280237bc",
   "checks": {
     "01_sky": {
       "frame_count": 64,
@@ -89,15 +90,47 @@
       "minimum_road_clearance_pixels": 2.625,
       "never_intersects_road": true
     },
-    "05_vehicle_cargo": {
+    "05_vehicle_truck": {
       "frame_count": 64,
       "all_320x180": true,
       "locked_palette": true,
       "binary_alpha": true,
-      "visible_color_count": 17,
-      "nonempty_frame_count": 43,
+      "visible_color_count": 15,
+      "nonempty_frame_count": 37,
       "first_nonempty_frame": 0,
-      "last_nonempty_frame": 42
+      "last_nonempty_frame": 36,
+      "truck_ground_guide": {
+        "start": [
+          0.0,
+          168.0
+        ],
+        "end": [
+          319.0,
+          84.7
+        ]
+      },
+      "wheel_bottom_maximum_raster_deviation_pixels": 0.611,
+      "wheels_follow_ground_guide": true,
+      "minimum_scale": 0.35,
+      "maximum_scale": 1.15,
+      "maximum_scale_delta_per_frame": 0.0826
+    },
+    "05_vehicle_unloaded_cargo": {
+      "frame_count": 64,
+      "all_320x180": true,
+      "locked_palette": true,
+      "binary_alpha": true,
+      "visible_color_count": 14,
+      "nonempty_frame_count": 30,
+      "first_nonempty_frame": 13,
+      "last_nonempty_frame": 42,
+      "delivered_bbox": [
+        121,
+        99,
+        144,
+        110
+      ],
+      "matches_locked_placement": true
     },
     "06_roadside_props": {
       "frame_count": 64,
@@ -111,7 +144,7 @@
     }
   },
   "preview": {
-    "gif": "art/previews/title_layers_animation/metabolis_title_layer_animation.gif",
-    "contact_sheet": "art/previews/title_layers_animation/metabolis_title_layer_animation_contact.png"
+    "gif": "/private/tmp/metabolis_title_layer_animation.gif",
+    "contact_sheet": "/private/tmp/metabolis_title_layer_animation_contact.png"
   }
 }
