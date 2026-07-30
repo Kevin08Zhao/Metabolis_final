@@ -363,7 +363,7 @@ func _gui_input(event: InputEvent) -> void:
 	## that state only exists while a route is being drawn.
 	var button := event as InputEventMouseButton
 	if button.pressed and button.double_click and _mode != Mode.PLACING:
-		var subject := _info_card_content()
+		var subject := _detail_subject_at_hover_cell()
 		if not subject.is_empty():
 			_open_detail_window(subject)
 			accept_event()
@@ -1299,9 +1299,9 @@ func _build_context_cards() -> void:
 	_build_info_card()
 
 
-## Pointer-following card for anything already on the map: a facility in any of
-## its states, or a committed road. The build preview and the route bubble own
-## the placing and routing modes; this one owns everything after.
+## Pointer-following card for a facility in any of its states. Roads stay
+## visually quiet on hover; their numerical breakdown remains available by
+## double-clicking them.
 func _build_info_card() -> void:
 	_info_card = PanelContainer.new()
 	_info_card.name = "MapObjectInfoCard"
@@ -1988,6 +1988,16 @@ func _update_info_card() -> void:
 
 
 func _info_card_content() -> Dictionary:
+	var facility_index := _hovered_facility_index()
+	if facility_index >= 0:
+		return _facility_card_content(facility_index)
+	return {}
+
+
+## Detail inspection is intentionally broader than hover inspection: facilities
+## and roads can both open the double-click window, while only facilities show a
+## pointer-following card.
+func _detail_subject_at_hover_cell() -> Dictionary:
 	var facility_index := _hovered_facility_index()
 	if facility_index >= 0:
 		return _facility_card_content(facility_index)
@@ -2961,7 +2971,7 @@ func debug_open_metric_details(metric_id: StringName) -> Dictionary:
 func debug_open_cell_details(cell: Vector2i) -> Dictionary:
 	_hover_cell = cell
 	_update_context_cards()
-	if not _open_detail_window(_info_card_content()):
+	if not _open_detail_window(_detail_subject_at_hover_cell()):
 		return {}
 	return debug_detail_window()
 
