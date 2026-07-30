@@ -269,9 +269,49 @@ func _test_system_city_scene() -> void:
 		true,
 		false
 	) as PanelContainer
+	var progress_console := prototype.find_child(
+		"NetworkProgressConsole",
+		true,
+		false
+	) as Panel
+	var progress_summary := prototype.find_child(
+		"ProgressSummary",
+		true,
+		false
+	) as Label
+	var progress_statuses: Dictionary = {}
 	_expect(
 		resource_status != null,
 		"system-city header must expose an icon-based resource status"
+	)
+	_expect(
+		progress_console != null
+		and progress_console.position == Vector2(0, 360)
+		and progress_console.size == Vector2(640, 90)
+		and prototype.find_child("QuietFooter", true, false) == null,
+		"the former blank footer must be a functional network progress console"
+	)
+	for step_name in ["Place", "Route", "Deliver", "Online"]:
+		var step := prototype.find_child(
+			"ProgressStep%s" % step_name,
+			true,
+			false
+		) as Panel
+		_expect(
+			step != null and step.size == Vector2(142, 50),
+			"progress console must expose the %s phase" % step_name
+		)
+		if step != null:
+			progress_statuses[step_name] = step.get_node("StepStatus") as Label
+	_expect(
+		int(prototype.debug_snapshot().get("progress_stage", -1)) == 0,
+		"network progress console must begin at facility placement"
+	)
+	_expect(
+		progress_summary != null
+		and progress_summary.text == "PHASE 1/4"
+		and (progress_statuses["Place"] as Label).text == "START",
+		"initial progress text must identify facility placement as the active phase"
 	)
 	_expect(
 		completion_overlay != null and not completion_overlay.visible,
@@ -462,6 +502,16 @@ func _test_system_city_scene() -> void:
 			"the detail window must close on demand"
 		)
 		_expect(
+			int(prototype.debug_snapshot().get("progress_stage", -1)) == 1,
+			"system %d progress console must advance to routing" % index
+		)
+		_expect(
+			progress_summary.text == "PHASE 2/4"
+			and (progress_statuses["Place"] as Label).text == "DONE"
+			and (progress_statuses["Route"] as Label).text == "DRAW ROAD",
+			"system %d visible progress text must advance to routing" % index
+		)
+		_expect(
 			not prototype.debug_dispatch(),
 			"system %d must reject automatic dispatch before a route exists" % index
 		)
@@ -473,6 +523,15 @@ func _test_system_city_scene() -> void:
 			"system %d must accept a player-authored boundary route" % index
 		)
 		var planned: Dictionary = prototype.debug_snapshot()
+		_expect(
+			int(planned.get("progress_stage", -1)) == 2,
+			"system %d progress console must advance to delivery readiness" % index
+		)
+		_expect(
+			progress_summary.text == "PHASE 3/4"
+			and (progress_statuses["Deliver"] as Label).text == "READY",
+			"system %d visible progress text must show delivery readiness" % index
+		)
 		var metrics: Dictionary = planned.get("route_metrics", {})
 		var road_cells := int(metrics.get("road_cells", 0))
 		_expect(road_cells > 0, "system %d route must occupy road tiles" % index)
@@ -500,6 +559,11 @@ func _test_system_city_scene() -> void:
 		_expect(
 			prototype.debug_dispatch(),
 			"system %d must commit its planned boundary network" % index
+		)
+		_expect(
+			progress_summary.text == "PHASE 3/4"
+			and (progress_statuses["Deliver"] as Label).text == "TRANSIT",
+			"system %d visible progress text must show outbound transit" % index
 		)
 		var committed: Dictionary = prototype.debug_snapshot()
 		var before_resources: Dictionary = planned.get("resources", {})
@@ -635,15 +699,34 @@ func _test_system_city_scene() -> void:
 				and int(unlocked.get("current_system_index", -1)) == index + 1,
 				"delivery must unlock and enter system %d" % (index + 1)
 			)
+			_expect(
+				int(unlocked.get("progress_stage", -1)) == 0
+				and progress_summary.text == "PHASE 1/4"
+				and (progress_statuses["Place"] as Label).text == "INBOUND"
+				and (progress_statuses["Route"] as Label).text == "WAITING"
+				and (progress_statuses["Deliver"] as Label).text == "WAITING",
+				"incoming delivery must not mark an unbuilt system's phases done"
+			)
 			prototype.debug_finish_delivery()
+			_expect(
+				progress_summary.text == "PHASE 1/4"
+				and (progress_statuses["Place"] as Label).text == "START",
+				"arrival must leave the newly unlocked system ready for placement"
+			)
 
 	var complete: Dictionary = prototype.debug_snapshot()
 	_expect(
 		int(complete.get("mode", -1)) == SystemCityPrototype.Mode.COMPLETE
 		and int(complete.get("unlocked_count", 0)) == 4
 		and int(complete.get("facility_count", 0)) == 4
-		and int(complete.get("completed_dispatch_count", 0)) == 4,
+		and int(complete.get("completed_dispatch_count", 0)) == 4
+		and int(complete.get("progress_stage", -1)) == 3,
 		"four facilities and four boundary dispatches must complete the body network"
+	)
+	_expect(
+		progress_summary.text == "LINK ONLINE"
+		and (progress_statuses["Online"] as Label).text == "ONLINE",
+		"the visible progress console must report the completed network"
 	)
 	var final_resources: Dictionary = complete.get("resources", {})
 	_expect(

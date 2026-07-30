@@ -246,6 +246,7 @@ var _vehicle_textures: Dictionary = {}
 var _road_textures: Array[Texture2D] = []
 
 var _system_title: Label = null
+var _system_accent_bar: ColorRect = null
 var _link_status: Label = null
 var _resource_value_labels: Dictionary = {}
 var _resource_icon_nodes: Dictionary = {}
@@ -260,6 +261,13 @@ var _detail_window: PanelContainer = null
 var _detail_title: Label = null
 var _detail_lines: Array[Label] = []
 var _detail_subject: Dictionary = {}
+var _progress_summary: Label = null
+var _progress_step_panels: Array[Panel] = []
+var _progress_step_icons: Array[TextureRect] = []
+var _progress_step_statuses: Array[Label] = []
+var _progress_connectors: Array[ColorRect] = []
+var _progress_visual_signature := ""
+var _sidebar_visual_signature := ""
 var _latest_feedback := ""
 var _latest_feedback_is_error := false
 var _build_button: Button = null
@@ -729,35 +737,38 @@ func _build_interface() -> void:
 	add_child(top_bar)
 
 	_system_title = Label.new()
-	_system_title.position = Vector2(10, 7)
-	_system_title.size = Vector2(410, 26)
-	_system_title.add_theme_font_size_override("font_size", 20)
+	_system_title.position = Vector2(22, 8)
+	_system_title.size = Vector2(380, 24)
+	_system_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_system_title.add_theme_font_size_override("font_size", 10)
 	top_bar.add_child(_system_title)
+
+	_system_accent_bar = ColorRect.new()
+	_system_accent_bar.position = Vector2(10, 10)
+	_system_accent_bar.size = Vector2(4, 20)
+	_system_accent_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top_bar.add_child(_system_accent_bar)
 
 	_build_resource_status(top_bar)
 
-	var quiet_footer := Panel.new()
-	quiet_footer.name = "QuietFooter"
-	quiet_footer.position = Vector2(0, 360)
-	quiet_footer.size = Vector2(640, 90)
-	quiet_footer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	quiet_footer.add_theme_stylebox_override("panel", _quiet_footer_style())
-	add_child(quiet_footer)
+	_build_progress_console()
 
 	var side_panel := PanelContainer.new()
+	side_panel.name = "SystemSidebar"
 	side_panel.position = Vector2(640, 40)
 	side_panel.size = Vector2(160, 410)
-	side_panel.add_theme_stylebox_override("panel", _panel_style(COLOR_PANEL))
+	side_panel.add_theme_stylebox_override("panel", _sidebar_panel_style())
 	side_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(side_panel)
 
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 5)
+	column.add_theme_constant_override("separation", 4)
 	side_panel.add_child(column)
 
 	var maps_title := Label.new()
-	maps_title.text = "BODY SYSTEM MAPS"
+	maps_title.text = "SYSTEM LINKS"
 	maps_title.add_theme_font_size_override("font_size", 10)
+	maps_title.add_theme_color_override("font_color", COLOR_MUTED)
 	column.add_child(maps_title)
 
 	for index in range(SYSTEMS.size()):
@@ -772,12 +783,19 @@ func _build_interface() -> void:
 	var separator := HSeparator.new()
 	column.add_child(separator)
 
+	var tools_title := Label.new()
+	tools_title.text = "NETWORK TOOLS"
+	tools_title.add_theme_font_size_override("font_size", 10)
+	tools_title.add_theme_color_override("font_color", COLOR_MUTED)
+	column.add_child(tools_title)
+
 	_build_button = _add_button(column, "BuildFacility", "Place Facility")
 	_build_button.pressed.connect(_select_facility)
 	_route_button = _add_button(column, "ClearRoute", "Clear Route")
 	_route_button.pressed.connect(_clear_current_route)
 	_dispatch_button = _add_button(column, "PrimaryAction", "Commit Network")
 	_dispatch_button.pressed.connect(_on_primary_action)
+	_apply_primary_button_style(_dispatch_button)
 
 	var reset_button := _add_button(column, "ResetNetwork", "Reset Network")
 	reset_button.pressed.connect(_reset_network)
@@ -925,6 +943,80 @@ func _detail_content() -> Dictionary:
 				"lines": _road_detail_lines(road_index),
 			}
 	return {}
+
+
+func _build_progress_console() -> void:
+	var console := Panel.new()
+	console.name = "NetworkProgressConsole"
+	console.position = Vector2(0, 360)
+	console.size = Vector2(640, 90)
+	console.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	console.add_theme_stylebox_override("panel", _progress_console_style())
+	add_child(console)
+
+	var title := Label.new()
+	title.name = "ProgressConsoleTitle"
+	title.position = Vector2(12, 5)
+	title.size = Vector2(260, 18)
+	title.text = "NETWORK SEQUENCE"
+	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_color_override("font_color", COLOR_MUTED)
+	console.add_child(title)
+
+	_progress_summary = Label.new()
+	_progress_summary.name = "ProgressSummary"
+	_progress_summary.position = Vector2(482, 5)
+	_progress_summary.size = Vector2(146, 18)
+	_progress_summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_progress_summary.add_theme_font_size_override("font_size", 10)
+	console.add_child(_progress_summary)
+
+	var step_names := ["PLACE", "ROUTE", "DELIVER", "ONLINE"]
+	for index in range(step_names.size()):
+		var step_panel := Panel.new()
+		step_panel.name = "ProgressStep%s" % step_names[index].to_pascal_case()
+		step_panel.position = Vector2(12 + index * 154, 28)
+		step_panel.size = Vector2(142, 50)
+		step_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		console.add_child(step_panel)
+		_progress_step_panels.append(step_panel)
+
+		var icon := TextureRect.new()
+		icon.name = "StepIcon"
+		icon.position = Vector2(8, 9)
+		icon.size = Vector2(32, 32)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		step_panel.add_child(icon)
+		_progress_step_icons.append(icon)
+
+		var step_label := Label.new()
+		step_label.name = "StepName"
+		step_label.position = Vector2(46, 6)
+		step_label.size = Vector2(88, 18)
+		step_label.text = step_names[index]
+		step_label.add_theme_font_size_override("font_size", 10)
+		step_panel.add_child(step_label)
+
+		var status_label := Label.new()
+		status_label.name = "StepStatus"
+		status_label.position = Vector2(46, 26)
+		status_label.size = Vector2(88, 18)
+		status_label.add_theme_font_size_override("font_size", 10)
+		step_panel.add_child(status_label)
+		_progress_step_statuses.append(status_label)
+
+		if index < step_names.size() - 1:
+			var connector := ColorRect.new()
+			connector.name = "ProgressConnector%d" % (index + 1)
+			connector.position = Vector2(154 + index * 154, 52)
+			connector.size = Vector2(12, 3)
+			connector.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			console.add_child(connector)
+			console.move_child(connector, 0)
+			_progress_connectors.append(connector)
 
 
 func _build_resource_status(top_bar: Control) -> void:
@@ -1366,7 +1458,26 @@ func _add_button(parent: Container, node_name: String, label: String) -> Button:
 	var button := Button.new()
 	button.name = node_name
 	button.text = label
-	button.custom_minimum_size = Vector2(144, 27)
+	button.custom_minimum_size = Vector2(144, 25)
+	button.add_theme_stylebox_override(
+		"normal",
+		_sidebar_button_style(Color("#211525"), Color("#514854"))
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_sidebar_button_style(Color("#312036"), COLOR_PANEL_EDGE)
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_sidebar_button_style(Color("#3B2036"), Color("#E86A98"))
+	)
+	button.add_theme_stylebox_override(
+		"disabled",
+		_sidebar_button_style(Color("#170F1C"), Color("#302836"))
+	)
+	button.add_theme_color_override("font_color", COLOR_TEXT)
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_disabled_color", Color("#817582"))
 	parent.add_child(button)
 	return button
 
@@ -1400,12 +1511,62 @@ func _status_panel_style() -> StyleBoxFlat:
 	return style
 
 
-func _quiet_footer_style() -> StyleBoxFlat:
+func _progress_console_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#160C1D")
+	style.bg_color = Color("#140F1D")
 	style.border_color = Color(0.79, 0.31, 0.49, 0.56)
 	style.border_width_top = 1
 	return style
+
+
+func _progress_step_style(
+	background: Color,
+	border: Color,
+	border_width: int = 1
+) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(4)
+	return style
+
+
+func _sidebar_panel_style() -> StyleBoxFlat:
+	var style := _panel_style(COLOR_PANEL)
+	style.corner_radius_top_left = 0
+	style.corner_radius_bottom_left = 0
+	style.content_margin_left = 6.0
+	style.content_margin_right = 6.0
+	return style
+
+
+func _sidebar_button_style(background: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(3)
+	style.content_margin_left = 6.0
+	style.content_margin_right = 6.0
+	style.content_margin_top = 4.0
+	style.content_margin_bottom = 4.0
+	return style
+
+
+func _apply_primary_button_style(button: Button) -> void:
+	button.add_theme_stylebox_override(
+		"normal",
+		_sidebar_button_style(Color("#7C294D"), Color("#E86A98"))
+	)
+	button.add_theme_stylebox_override(
+		"hover",
+		_sidebar_button_style(Color("#9B3760"), Color("#FFF1E2"))
+	)
+	button.add_theme_stylebox_override(
+		"pressed",
+		_sidebar_button_style(Color("#5F203D"), Color("#E86A98"))
+	)
 
 
 func _completion_window_style() -> StyleBoxFlat:
@@ -2450,6 +2611,135 @@ func _metric_icon_state(metric_id: StringName) -> StringName:
 	return &"normal"
 
 
+func _refresh_progress_console() -> void:
+	if _progress_summary == null or _progress_step_panels.size() != 4:
+		return
+	var accent: Color = SYSTEMS[_current_system_index]["accent"]
+	var active_step := _progress_stage_index()
+	var system_complete := bool(
+		_completed_dispatches.get(_system_id(), false)
+	)
+	var statuses := ["WAITING", "WAITING", "WAITING", "WAITING"]
+	if system_complete or _mode == Mode.COMPLETE:
+		statuses = ["DONE", "DONE", "DONE", "ONLINE"]
+	else:
+		match active_step:
+			0:
+				if _mode == Mode.CONSTRUCTING:
+					statuses[0] = "BUILD %d%%" % roundi(
+						_construction_progress() * 100.0
+					)
+				elif _mode == Mode.PLACING:
+					statuses[0] = "PICK SITE"
+				elif _mode == Mode.DELIVERY_IN:
+					statuses[0] = "INBOUND"
+				else:
+					statuses[0] = "START"
+			1:
+				statuses[0] = "DONE"
+				statuses[1] = "DRAW ROAD"
+			2:
+				statuses[0] = "DONE"
+				statuses[1] = "DONE"
+				if _mode == Mode.BOTTLENECK:
+					statuses[2] = "REPAIR"
+				elif _mode in [Mode.DELIVERY_OUT, Mode.DELIVERY_IN]:
+					statuses[2] = "TRANSIT"
+				else:
+					statuses[2] = "READY"
+			3:
+				statuses = ["DONE", "DONE", "DONE", "ONLINE"]
+
+	var visual_signature := "%d:%d:%s" % [
+		_current_system_index,
+		active_step,
+		str(system_complete),
+	]
+	var visuals_changed := visual_signature != _progress_visual_signature
+	var icon_textures: Array[Texture2D] = []
+	if visuals_changed:
+		icon_textures = [
+			_building_textures.get(_system_id(), null),
+			_road_textures[0] if not _road_textures.is_empty() else null,
+			_vehicle_textures.get(_system_id(), null),
+			AssetLoader.get_static_texture(&"ui_resource_stability_normal"),
+		]
+	for index in range(_progress_step_panels.size()):
+		var completed := index < active_step or system_complete
+		var active := index == active_step and not system_complete
+		var text_color := Color("#817582")
+		if completed:
+			text_color = Color("#B1FFD1")
+		elif active:
+			text_color = COLOR_TEXT
+		if visuals_changed:
+			var background := Color("#1B1320")
+			var border := Color("#514854")
+			var border_width := 1
+			var icon_color := Color(1.0, 1.0, 1.0, 0.32)
+			if completed:
+				background = Color(COLOR_VALID, 0.13)
+				border = Color(COLOR_VALID, 0.72)
+				icon_color = Color("#B1FFD1")
+			elif active:
+				background = Color(accent, 0.18)
+				border = accent
+				border_width = 2
+				icon_color = Color.WHITE
+			_progress_step_panels[index].add_theme_stylebox_override(
+				"panel",
+				_progress_step_style(background, border, border_width)
+			)
+			_progress_step_icons[index].texture = icon_textures[index]
+			_progress_step_icons[index].modulate = icon_color
+			var name_label := _progress_step_panels[index].get_node(
+				"StepName"
+			) as Label
+			name_label.add_theme_color_override("font_color", text_color)
+		_progress_step_statuses[index].text = statuses[index]
+		if visuals_changed:
+			_progress_step_statuses[index].add_theme_color_override(
+				"font_color",
+				text_color if active or completed else Color("#514854")
+			)
+
+	if visuals_changed:
+		for index in range(_progress_connectors.size()):
+			_progress_connectors[index].color = (
+				Color(COLOR_VALID, 0.78)
+				if index < active_step or system_complete
+				else Color("#514854")
+			)
+		_progress_summary.add_theme_color_override(
+			"font_color",
+			COLOR_VALID
+			if system_complete or _mode == Mode.COMPLETE
+			else accent
+		)
+		_progress_visual_signature = visual_signature
+
+	var summary_step := mini(active_step + 1, 4)
+	_progress_summary.text = (
+		"LINK ONLINE"
+		if system_complete or _mode == Mode.COMPLETE
+		else "PHASE %d/4" % summary_step
+	)
+
+
+func _progress_stage_index() -> int:
+	if _completed_dispatches.get(_system_id(), false) or _mode == Mode.COMPLETE:
+		return 3
+	if _mode in [
+		Mode.PLAN_READY,
+		Mode.DELIVERY_OUT,
+		Mode.BOTTLENECK,
+	]:
+		return 2
+	if _facility_origins.has(_system_id()) and _mode != Mode.CONSTRUCTING:
+		return 1
+	return 0
+
+
 func _refresh_stability_bar() -> void:
 	if _stability_bar_fill == null or _stability_bar_label == null:
 		return
@@ -2674,23 +2964,55 @@ func _breakdown_gap() -> String:
 func _refresh_interface() -> void:
 	if _system_title == null:
 		return
-	_system_title.text = "%s MAP" % SYSTEMS[_current_system_index]["name"].to_upper()
+	var accent: Color = SYSTEMS[_current_system_index]["accent"]
+	_system_title.text = "%02d / %s" % [
+		_current_system_index + 1,
+		SYSTEMS[_current_system_index]["name"].to_upper(),
+	]
+	_system_accent_bar.color = accent
 	_refresh_resource_status()
-	for index in range(_system_buttons.size()):
-		var unlocked := index < _unlocked_count
-		_system_buttons[index].disabled = (
-			not unlocked
-			or _mode in [
-				Mode.CONSTRUCTING,
-				Mode.DELIVERY_OUT,
-				Mode.DELIVERY_IN,
-				Mode.BOTTLENECK,
+	_refresh_progress_console()
+	var sidebar_signature := "%d:%d:%d" % [
+		_current_system_index,
+		_unlocked_count,
+		_mode,
+	]
+	if sidebar_signature != _sidebar_visual_signature:
+		for index in range(_system_buttons.size()):
+			var unlocked := index < _unlocked_count
+			var selected := index == _current_system_index
+			_system_buttons[index].disabled = (
+				not unlocked
+				or _mode in [
+					Mode.CONSTRUCTING,
+					Mode.DELIVERY_OUT,
+					Mode.DELIVERY_IN,
+					Mode.BOTTLENECK,
+				]
+			)
+			_system_buttons[index].text = "%02d  %s" % [
+				index + 1,
+				SYSTEMS[index]["short"] if unlocked else "LOCKED",
 			]
-		)
-		_system_buttons[index].text = "%s%s" % [
-			"● %d " % (index + 1) if index == _current_system_index else "%d " % (index + 1),
-			SYSTEMS[index]["short"] if unlocked else "LOCKED",
-		]
+			_system_buttons[index].add_theme_stylebox_override(
+				"normal",
+				_sidebar_button_style(
+					Color(accent, 0.18) if selected else Color("#211525"),
+					accent if selected else Color("#514854")
+				)
+			)
+			_system_buttons[index].add_theme_stylebox_override(
+				"disabled",
+				_sidebar_button_style(
+					Color(accent, 0.12) if selected else Color("#170F1C"),
+					Color(accent, 0.62) if selected else Color("#302836")
+				)
+			)
+			_system_buttons[index].add_theme_color_override(
+				"font_color",
+				COLOR_TEXT if selected else COLOR_MUTED
+			)
+		_sidebar_visual_signature = sidebar_signature
 	var system_id := _system_id()
 	var has_facility := _facility_origins.has(system_id)
 	var committed := bool(_committed_systems.get(system_id, false))
@@ -3039,6 +3361,7 @@ func debug_snapshot() -> Dictionary:
 		),
 		"repair_count": operation_tool.repair_count,
 		"completion_popup_visible": _completion_popup_visible(),
+		"progress_stage": _progress_stage_index(),
 		"latest_feedback": _latest_feedback,
 		"latest_feedback_is_error": _latest_feedback_is_error,
 	}
