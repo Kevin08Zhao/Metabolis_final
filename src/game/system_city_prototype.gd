@@ -279,8 +279,6 @@ var _build_preview_name: Label = null
 var _build_preview_cost: Label = null
 var _build_preview_time: Label = null
 var _build_preview_output: Array[Label] = []
-var _route_cost_bubble: PanelContainer = null
-var _route_cost_label: Label = null
 var _info_card: PanelContainer = null
 var _info_name: Label = null
 var _info_status: Label = null
@@ -371,7 +369,7 @@ func _gui_input(event: InputEvent) -> void:
 	## that state only exists while a route is being drawn.
 	var button := event as InputEventMouseButton
 	if button.pressed and button.double_click and _mode != Mode.PLACING:
-		var subject := _detail_subject_at_hover_cell()
+		var subject := _info_card_content()
 		if not subject.is_empty():
 			_open_detail_window(subject)
 			accept_event()
@@ -1372,28 +1370,12 @@ func _build_context_cards() -> void:
 		_build_preview_output.append(line)
 	_build_preview_card.visible = false
 
-	_route_cost_bubble = PanelContainer.new()
-	_route_cost_bubble.name = "RouteCostBubble"
-	_route_cost_bubble.size = Vector2(184, 40)
-	_route_cost_bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_route_cost_bubble.z_index = 30
-	_route_cost_bubble.add_theme_stylebox_override(
-		"panel",
-		_panel_style(Color(0.08, 0.04, 0.11, 0.94))
-	)
-	add_child(_route_cost_bubble)
-	_route_cost_label = Label.new()
-	_route_cost_label.add_theme_font_size_override("font_size", 10)
-	_route_cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_route_cost_bubble.add_child(_route_cost_label)
-	_route_cost_bubble.visible = false
-
 	_build_info_card()
 
 
-## Pointer-following card for a facility in any of its states. Roads stay
-## visually quiet on hover; their numerical breakdown remains available by
-## double-clicking them.
+## Pointer-following card for anything already on the map: a facility in any of
+## its states, or a committed road. The build preview owns placement; this card
+## owns inspection after an object exists.
 func _build_info_card() -> void:
 	_info_card = PanelContainer.new()
 	_info_card.name = "MapObjectInfoCard"
@@ -2041,17 +2023,10 @@ func _operation_tool_for(index: int) -> NetworkOperationTool:
 
 
 func _update_context_cards() -> void:
-	if _build_preview_card == null or _route_cost_bubble == null:
+	if _build_preview_card == null:
 		return
 	_build_preview_card.visible = _mode == Mode.PLACING
-	## The object card takes priority over the route bubble, because the
-	## "built but not connected" state only exists while a route is being
-	## drawn. Over open ground the bubble comes back.
 	_update_info_card()
-	_route_cost_bubble.visible = (
-		_mode in [Mode.ROUTING, Mode.PLAN_READY]
-		and not _info_card.visible
-	)
 	if _build_preview_card.visible:
 		var facility_cost := _facility_cost()
 		_build_preview_name.text = String(
@@ -2088,20 +2063,6 @@ func _update_context_cards() -> void:
 			_build_preview_card,
 			Vector2(FACILITY_FOOTPRINT.x * TILE_SIZE_PX + 18.0, 18.0)
 		)
-	if _route_cost_bubble.visible:
-		var road_cells := _current_road_cell_count()
-		var road_cost := float(road_cells) * ROAD_BIOMASS_COST_PER_TILE
-		_route_cost_label.text = "Road  %d tiles   ·   %s" % [
-			road_cells,
-			_biomass_cost_text(road_cost),
-		]
-		_route_cost_label.add_theme_color_override(
-			"font_color",
-			COLOR_TEXT if _resources.can_afford(road_cost) else COLOR_INVALID
-		)
-		_position_follow_card(_route_cost_bubble, Vector2(16.0, 16.0))
-
-
 ## Fill and place the map-object card from whatever the pointer is over.
 func _update_info_card() -> void:
 	if _info_card == null:
@@ -2149,16 +2110,6 @@ func _update_info_card() -> void:
 
 
 func _info_card_content() -> Dictionary:
-	var facility_index := _hovered_facility_index()
-	if facility_index >= 0:
-		return _facility_card_content(facility_index)
-	return {}
-
-
-## Detail inspection is intentionally broader than hover inspection: facilities
-## and roads can both open the double-click window, while only facilities show a
-## pointer-following card.
-func _detail_subject_at_hover_cell() -> Dictionary:
 	var facility_index := _hovered_facility_index()
 	if facility_index >= 0:
 		return _facility_card_content(facility_index)
@@ -3275,6 +3226,10 @@ func debug_inspect_cell(cell: Vector2i) -> Dictionary:
 	return content
 
 
+func debug_route_cost_bubble_exists() -> bool:
+	return get_node_or_null("RouteCostBubble") != null
+
+
 func debug_hover_metric(metric_id: StringName) -> bool:
 	if not _metric_containers.has(metric_id):
 		return false
@@ -3293,7 +3248,7 @@ func debug_open_metric_details(metric_id: StringName) -> Dictionary:
 func debug_open_cell_details(cell: Vector2i) -> Dictionary:
 	_hover_cell = cell
 	_update_context_cards()
-	if not _open_detail_window(_detail_subject_at_hover_cell()):
+	if not _open_detail_window(_info_card_content()):
 		return {}
 	return debug_detail_window()
 

@@ -501,6 +501,11 @@ func _test_system_city_scene() -> void:
 			prototype.debug_close_detail_window(),
 			"the detail window must close on demand"
 		)
+		prototype.debug_inspect_cell(Vector2i(0, 0))
+		_expect(
+			not prototype.debug_route_cost_bubble_exists(),
+			"routing must not create a pointer-following road cost bubble"
+		)
 		_expect(
 			int(prototype.debug_snapshot().get("progress_stage", -1)) == 1,
 			"system %d progress console must advance to routing" % index
@@ -601,24 +606,19 @@ func _test_system_city_scene() -> void:
 			"the detail window must show actual over nominal output"
 		)
 		_expect(prototype.debug_close_detail_window(), "details must close")
-		## Roads stay visually quiet on hover, but double-click details still
-		## explain their running cost. What they cost to lay is not repeated.
+		## Roads carry a running cost, so they are inspectable too. Their card
+		## reports only the running cost; what they cost to lay is not repeated.
 		var road: Array = committed.get("route", [])
 		var road_cell: Vector2i = road[road.size() / 2]
+		var road_card: Dictionary = prototype.debug_inspect_cell(road_cell)
+		var road_text := _joined(road_card.get("lines", []))
 		_expect(
-			prototype.debug_inspect_cell(road_cell).is_empty(),
-			"a committed road must not open a hover card"
-		)
-		var road_details: Dictionary = prototype.debug_open_cell_details(road_cell)
-		var road_text := _joined(road_details.get("lines", []))
-		_expect(
-			String(road_details.get("title", "")).contains("roads")
+			String(road_card.get("name", "")).contains("roads")
 			and road_text.contains("Length")
 			and road_text.contains("Oxygen")
 			and not road_text.contains("BIO"),
-			"road details must report running cost and not build cost"
+			"a road card must report its running cost and not its build cost"
 		)
-		_expect(prototype.debug_close_detail_window(), "road details must close")
 		_expect(
 			prototype.debug_inspect_cell(Vector2i(0, 0)).is_empty(),
 			"empty tissue must show no object card"
@@ -647,16 +647,9 @@ func _test_system_city_scene() -> void:
 			"system %d road must survive its delivery animation" % index
 		)
 		if int(post_delivery.get("current_system_index", -1)) == index:
-			var surviving_road_details: Dictionary = (
-				prototype.debug_open_cell_details(road_cell)
-			)
 			_expect(
-				not surviving_road_details.is_empty(),
-				"a committed road must retain double-click details after delivery"
-			)
-			_expect(
-				prototype.debug_close_detail_window(),
-				"surviving road details must close"
+				not prototype.debug_inspect_cell(road_cell).is_empty(),
+				"a committed road must stay inspectable after delivery"
 			)
 		if int(post_delivery.get("mode", -1)) == SystemCityPrototype.Mode.BOTTLENECK:
 			_expect(
