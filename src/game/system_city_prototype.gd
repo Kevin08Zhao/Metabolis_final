@@ -196,11 +196,25 @@ const METRIC_DISPLAY_NAMES := {
 	&"oxygen": "OXYGEN",
 	&"waste": "WASTE",
 }
+## One line per metric explaining what kind of thing it is. The header only has
+## room for three-letter abbreviations, so this is where the meaning lives.
+const METRIC_SUMMARIES := {
+	&"biomass": "The only resource you can spend",
+	&"oxygen": "Supply against demand; it is never stored",
+	&"waste": "Rises with activity, falls with clearance",
+}
 const INFO_CARD_WIDTH := 272.0
 const INFO_CARD_LINE_COUNT := 4
 const STABILITY_BAR_SIZE := Vector2(150.0, 6.0)
 const HOVER_PANEL_POSITION := Vector2(416.0, 42.0)
 const HOVER_PANEL_WIDTH := 374.0
+## Hovering gives a name and a state; the figures live in the detail window, so
+## that a card cannot grow past the map as more of them accumulate.
+const DETAIL_WINDOW_SIZE := Vector2(360.0, 210.0)
+const DETAIL_WINDOW_POSITION := Vector2(220.0, 120.0)
+## Enough for the widest case: oxygen with all four facilities and all four
+## roads reporting, plus a title and the ratio.
+const DETAIL_WINDOW_LINE_COUNT := 14
 
 var _mode := Mode.READY
 var _current_system_index := 0
@@ -242,6 +256,10 @@ var _stability_bar_label: Label = null
 var _hover_panel: PanelContainer = null
 var _hover_panel_column: VBoxContainer = null
 var _hovered_metric: StringName = &""
+var _detail_window: PanelContainer = null
+var _detail_title: Label = null
+var _detail_lines: Array[Label] = []
+var _detail_subject: Dictionary = {}
 var _latest_feedback := ""
 var _latest_feedback_is_error := false
 var _build_button: Button = null
@@ -252,6 +270,7 @@ var _build_preview_card: PanelContainer = null
 var _build_preview_name: Label = null
 var _build_preview_cost: Label = null
 var _build_preview_time: Label = null
+var _build_preview_output: Array[Label] = []
 var _route_cost_bubble: PanelContainer = null
 var _route_cost_label: Label = null
 var _info_card: PanelContainer = null
@@ -336,6 +355,19 @@ func _gui_input(event: InputEvent) -> void:
 		return
 	_pointer_position = event.position
 	_hover_cell = _pointer_to_grid(event.position)
+	## A double-click on a map object opens its detail window. Only placement is
+	## excluded, because there the first press of the pair commits a building.
+	## Route drawing is fine: facility and road cells are blocked for routing,
+	## so the click that starts the pair does nothing there anyway. Excluding
+	## it would make the "not connected" state impossible to inspect, since
+	## that state only exists while a route is being drawn.
+	var button := event as InputEventMouseButton
+	if button.pressed and button.double_click and _mode != Mode.PLACING:
+		var subject := _info_card_content()
+		if not subject.is_empty():
+			_open_detail_window(subject)
+			accept_event()
+			return
 	if event.pressed:
 		match _mode:
 			Mode.PLACING:
@@ -380,10 +412,16 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		return
 	if not event.pressed or event.echo:
 		return
-	if _completion_popup_visible() and event.keycode == KEY_ESCAPE:
-		_dismiss_completion_popup()
-		get_viewport().set_input_as_handled()
-		return
+	if event.keycode == KEY_ESCAPE:
+		## The detail window is the topmost thing Escape can dismiss.
+		if _detail_window_visible():
+			_close_detail_window()
+			get_viewport().set_input_as_handled()
+			return
+		if _completion_popup_visible():
+			_dismiss_completion_popup()
+			get_viewport().set_input_as_handled()
+			return
 	match event.keycode:
 		KEY_1:
 			_switch_system(0)
@@ -747,7 +785,146 @@ func _build_interface() -> void:
 	title_button.pressed.connect(_return_to_title)
 
 	_build_context_cards()
+	_build_detail_window()
 	_build_completion_popup()
+
+
+## Centred window opened by double-clicking a header metric or a map object.
+## Everything numeric that used to crowd a hover card lives here instead.
+func _build_detail_window() -> void:
+	_detail_window = PanelContainer.new()
+	_detail_window.name = "DetailWindow"
+	_detail_window.position = DETAIL_WINDOW_POSITION
+	_detail_window.size = DETAIL_WINDOW_SIZE
+	_detail_window.custom_minimum_size = DETAIL_WINDOW_SIZE
+	## Stop, not ignore: a click inside the window must not fall through onto
+	## the map behind it.
+	_detail_window.mouse_filter = Control.MOUSE_FILTER_STOP
+	_detail_window.z_index = 50
+	_detail_window.add_theme_stylebox_override(
+		"panel",
+		_panel_style(Color(0.08, 0.04, 0.11, 0.98))
+	)
+	_detail_window.visible = false
+	add_child(_detail_window)
+
+	var column := VBoxContainer.new()
+	column.name = "DetailColumn"
+	column.add_theme_constant_override("separation", 2)
+	column.mouse_filter = Control.MOUSE_FILTER_PASS
+	_detail_window.add_child(column)
+
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 6)
+	header.mouse_filter = Control.MOUSE_FILTER_PASS
+	column.add_child(header)
+
+	_detail_title = Label.new()
+	_detail_title.name = "DetailTitle"
+	_detail_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_detail_title.add_theme_font_size_override("font_size", 11)
+	_detail_title.add_theme_color_override("font_color", COLOR_PORT)
+	_detail_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.add_child(_detail_title)
+
+	var close_button := Button.new()
+	close_button.name = "DetailClose"
+	close_button.text = "X"
+	close_button.custom_minimum_size = Vector2(22, 18)
+	close_button.add_theme_font_size_override("font_size", 10)
+	close_button.pressed.connect(_close_detail_window)
+	header.add_child(close_button)
+
+	var separator := HSeparator.new()
+	separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(separator)
+
+	_detail_lines.clear()
+	for index in range(DETAIL_WINDOW_LINE_COUNT):
+		var line := Label.new()
+		line.name = "DetailLine%d" % index
+		line.add_theme_font_size_override("font_size", 9)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		column.add_child(line)
+		_detail_lines.append(line)
+
+
+func _open_detail_window(subject: Dictionary) -> bool:
+	if _detail_window == null or subject.is_empty():
+		return false
+	_detail_subject = subject
+	## Show first: `_refresh_detail_window` bails out while the window is
+	## hidden, so filling it before that leaves every line blank.
+	_detail_window.visible = true
+	_detail_window.move_to_front()
+	_refresh_detail_window()
+	return _detail_window.visible
+
+
+func _close_detail_window() -> void:
+	if _detail_window == null:
+		return
+	_detail_window.visible = false
+	_detail_subject = {}
+
+
+func _detail_window_visible() -> bool:
+	return _detail_window != null and _detail_window.visible
+
+
+## Rebuilt every frame from live state, so an open window keeps ticking rather
+## than freezing the values it was opened with.
+func _refresh_detail_window() -> void:
+	if not _detail_window_visible():
+		return
+	var content := _detail_content()
+	if content.is_empty():
+		_close_detail_window()
+		return
+	_detail_title.text = String(content.get("title", ""))
+	var lines: Array = content.get("lines", [])
+	for index in range(_detail_lines.size()):
+		var label := _detail_lines[index]
+		if index >= lines.size():
+			label.visible = false
+			continue
+		var entry: Dictionary = lines[index]
+		label.visible = true
+		label.text = String(entry.get("text", ""))
+		label.add_theme_color_override(
+			"font_color",
+			COLOR_MUTED if bool(entry.get("muted", false)) else COLOR_TEXT
+		)
+
+
+func _detail_content() -> Dictionary:
+	var kind := StringName(_detail_subject.get("kind", &""))
+	match kind:
+		&"metric":
+			var metric_id := StringName(_detail_subject.get("metric", &""))
+			if not METRIC_DISPLAY_NAMES.has(metric_id):
+				return {}
+			return {
+				"title": String(METRIC_DISPLAY_NAMES[metric_id]),
+				"lines": _breakdown_lines(metric_id),
+			}
+		&"facility":
+			var index := int(_detail_subject.get("index", -1))
+			if index < 0 or index >= SYSTEMS.size():
+				return {}
+			return {
+				"title": String(SYSTEMS[index]["facility"]),
+				"lines": _facility_detail_lines(index),
+			}
+		&"road":
+			var road_index := int(_detail_subject.get("index", -1))
+			if road_index < 0 or road_index >= SYSTEMS.size():
+				return {}
+			return {
+				"title": "%s roads" % SYSTEMS[road_index]["name"],
+				"lines": _road_detail_lines(road_index),
+			}
+	return {}
 
 
 func _build_resource_status(top_bar: Control) -> void:
@@ -799,6 +976,7 @@ func _build_resource_metric(
 	metric.mouse_filter = Control.MOUSE_FILTER_STOP
 	metric.mouse_entered.connect(_on_metric_hovered.bind(metric_id))
 	metric.mouse_exited.connect(_on_metric_unhovered.bind(metric_id))
+	metric.gui_input.connect(_on_metric_gui_input.bind(metric_id))
 	row.add_child(metric)
 	_metric_containers[metric_id] = metric
 
@@ -914,6 +1092,25 @@ func _on_metric_unhovered(metric_id: StringName) -> void:
 		return
 	_hovered_metric = &""
 	_refresh_hover_panel()
+
+
+func _on_metric_gui_input(event: InputEvent, metric_id: StringName) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var button := event as InputEventMouseButton
+	if not button.pressed or not button.double_click:
+		return
+	if button.button_index != MOUSE_BUTTON_LEFT:
+		return
+	## Double-clicking the metric that is already open closes it again.
+	if (
+		_detail_window_visible()
+		and StringName(_detail_subject.get("metric", &"")) == metric_id
+	):
+		_close_detail_window()
+	else:
+		_open_detail_window({"kind": &"metric", "metric": metric_id})
+	accept_event()
 
 
 func _build_completion_popup() -> void:
@@ -1046,7 +1243,9 @@ func _on_completion_notification_input(event: InputEvent) -> void:
 func _build_context_cards() -> void:
 	_build_preview_card = PanelContainer.new()
 	_build_preview_card.name = "BuildPreviewCard"
-	_build_preview_card.size = Vector2(238, 90)
+	## Sized to content: this card gained the expected-output lines, and a fixed
+	## height would either clip them or leave a gap.
+	_build_preview_card.custom_minimum_size = Vector2(INFO_CARD_WIDTH, 0.0)
 	_build_preview_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_build_preview_card.z_index = 30
 	_build_preview_card.add_theme_stylebox_override(
@@ -1068,6 +1267,17 @@ func _build_context_cards() -> void:
 	_build_preview_time.add_theme_font_size_override("font_size", 10)
 	_build_preview_time.add_theme_color_override("font_color", COLOR_MUTED)
 	build_column.add_child(_build_preview_time)
+	## What the money buys. Before construction is the one moment the player is
+	## choosing whether to spend at all, so the expected output belongs here.
+	_build_preview_output.clear()
+	for index in range(3):
+		var line := Label.new()
+		line.name = "BuildPreviewOutput%d" % index
+		line.add_theme_font_size_override("font_size", 9)
+		line.add_theme_color_override("font_color", COLOR_VALID)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		build_column.add_child(line)
+		_build_preview_output.append(line)
 	_build_preview_card.visible = false
 
 	_route_cost_bubble = PanelContainer.new()
@@ -1548,6 +1758,7 @@ func _switch_system(index: int) -> bool:
 
 
 func _reset_network() -> void:
+	_close_detail_window()
 	if _completion_overlay != null:
 		_completion_overlay.visible = false
 	_completion_remaining_sec = 0.0
@@ -1691,6 +1902,27 @@ func _update_context_cards() -> void:
 			COLOR_TEXT if _resources.can_afford(facility_cost) else COLOR_INVALID
 		)
 		_build_preview_time.text = "Build time   %.1f s" % _current_build_time_sec()
+		var economy: Dictionary = SYSTEMS[_current_system_index].get(
+			"economy",
+			{}
+		)
+		var preview_lines: Array[String] = [
+			"Once connected, per second:",
+			"  Biomass %s   Oxygen +%.1f supply, %.1f demand" % [
+				_rate_text(float(economy.get(&"biomass_output", 0.0))),
+				float(economy.get(&"oxygen_supply", 0.0)),
+				float(economy.get(&"oxygen_demand", 0.0)),
+			],
+			"  Waste %s in   %s cleared" % [
+				_rate_text(float(economy.get(&"waste_output", 0.0)), 2),
+				_rate_text(-float(economy.get(&"waste_clearance", 0.0)), 2),
+			],
+		]
+		for index in range(_build_preview_output.size()):
+			_build_preview_output[index].text = preview_lines[index]
+		_build_preview_card.size = (
+			_build_preview_card.get_combined_minimum_size()
+		)
 		_position_follow_card(
 			_build_preview_card,
 			Vector2(FACILITY_FOOTPRINT.x * TILE_SIZE_PX + 18.0, 18.0)
@@ -1793,7 +2025,6 @@ func _hovered_road_index() -> int:
 func _facility_card_content(index: int) -> Dictionary:
 	var system: Dictionary = SYSTEMS[index]
 	var system_id := _system_id(index)
-	var economy: Dictionary = system.get("economy", {})
 	var facility_name := String(system["facility"])
 
 	if _mode == Mode.CONSTRUCTING and _construction_system_index == index:
@@ -1802,6 +2033,8 @@ func _facility_card_content(index: int) -> Dictionary:
 			0.0
 		)
 		return {
+			"kind": &"facility",
+			"index": index,
 			"name": facility_name,
 			"status": "CONSTRUCTING",
 			"status_color": COLOR_PORT,
@@ -1809,67 +2042,100 @@ func _facility_card_content(index: int) -> Dictionary:
 			"lines": ["Ready in %.1f s" % remaining],
 		}
 
+	## Built, and from here the hover stays qualitative. Figures accumulate as
+	## the economy grows, so they live in the detail window instead of stretching
+	## a card that follows the pointer.
 	var committed := bool(_committed_systems.get(system_id, false))
 	if not committed:
-		## Built but not yet earning. Show what connecting it would be worth,
-		## dimmed, so the card is a reason to draw the road rather than a wall.
 		return {
+			"kind": &"facility",
+			"index": index,
 			"name": facility_name,
 			"status": "NOT CONNECTED",
 			"status_color": COLOR_MUTED,
 			"subtitle": "Draw a road to the boundary gate to start it",
 			"muted": true,
-			"lines": [
-				"Biomass    - / %s per s" % _rate_text(
-					float(economy.get(&"biomass_output", 0.0))
-				),
-				_oxygen_line(economy),
-				_waste_line(economy),
-			],
+			"lines": [],
 		}
 
-	## Operating. Only biomass is throttled, so only biomass carries an
-	## actual-over-nominal pair; the reason for any gap is named beside it.
-	var nominal := float(economy.get(&"biomass_output", 0.0))
-	var actual := nominal * _resources.oxygen_ratio * _resources.stability_factor
-	var throttled := not is_equal_approx(actual, nominal)
-	var lines: Array[String] = [
-		"Biomass    %s / %s per s" % [_rate_text(actual), _rate_text(nominal)],
-		_oxygen_line(economy),
-		_waste_line(economy),
-	]
-	## The reason for the gap gets its own line rather than a trailing
-	## parenthesis, which would run past the edge of the card.
-	var reasons: Array[String] = []
-	if _resources.oxygen_ratio < 1.0:
-		reasons.append("oxygen x%.2f" % _resources.oxygen_ratio)
-	if _resources.stability_factor < 1.0:
-		reasons.append("stability x%.2f" % _resources.stability_factor)
-	if not reasons.is_empty():
-		lines.append("Throttled by %s" % ", ".join(reasons))
+	var throttled := _facility_is_throttled()
 	return {
+		"kind": &"facility",
+		"index": index,
 		"name": facility_name,
 		"status": "THROTTLED" if throttled else "OPERATING",
 		"status_color": COLOR_INVALID if throttled else COLOR_VALID,
 		"subtitle": String(system.get("role", "")),
-		"lines": lines,
+		"lines": [],
 	}
+
+
+func _facility_is_throttled() -> bool:
+	return (
+		_resources.oxygen_ratio < 1.0
+		or _resources.stability_factor < 1.0
+	)
+
+
+## The figures the hover used to carry. Biomass is the only value the oxygen
+## ratio and the stability tier scale, so it is the only actual-over-nominal
+## pair; the cause of any gap is named on its own line.
+func _facility_detail_lines(index: int) -> Array[Dictionary]:
+	var system: Dictionary = SYSTEMS[index]
+	var system_id := _system_id(index)
+	var economy: Dictionary = system.get("economy", {})
+	var committed := bool(_committed_systems.get(system_id, false))
+	var nominal := float(economy.get(&"biomass_output", 0.0))
+	var lines: Array[Dictionary] = []
+	lines.append({"text": String(system.get("role", "")), "muted": true})
+	lines.append({"text": ""})
+
+	if not committed:
+		lines.append({"text": "Not connected. Expected once a road reaches the gate:"})
+		lines.append({"text": "  Biomass    %s per s" % _rate_text(nominal)})
+	else:
+		var actual := (
+			nominal * _resources.oxygen_ratio * _resources.stability_factor
+		)
+		lines.append({
+			"text": "  Biomass    %s / %s per s" % [
+				_rate_text(actual),
+				_rate_text(nominal),
+			],
+		})
+	lines.append({"text": "  %s" % _oxygen_line(economy)})
+	lines.append({"text": "  %s" % _waste_line(economy)})
+
+	if committed:
+		var reasons: Array[String] = []
+		if _resources.oxygen_ratio < 1.0:
+			reasons.append("oxygen x%.2f" % _resources.oxygen_ratio)
+		if _resources.stability_factor < 1.0:
+			reasons.append("stability x%.2f" % _resources.stability_factor)
+		if reasons.is_empty():
+			lines.append({"text": ""})
+			lines.append({"text": "Running at full output.", "muted": true})
+		else:
+			lines.append({"text": ""})
+			lines.append({
+				"text": "Throttled by %s" % ", ".join(reasons),
+				"muted": true,
+			})
+	return lines
 
 
 func _road_card_content(index: int) -> Dictionary:
 	var route: Array[Vector2i] = _route_for(_outgoing_routes, _system_id(index))
-	var tiles := route.size()
-	var spec := _road_economy_spec(tiles)
+	var spec := _road_economy_spec(route.size())
 	return {
+		"kind": &"road",
+		"index": index,
 		"name": "%s roads" % SYSTEMS[index]["name"],
 		"status": "OPERATING",
 		"status_color": COLOR_VALID,
 		"subtitle": "Every tile draws oxygen and makes waste",
 		"lines": [
-			"Length     %d tiles   built for %s" % [
-				tiles,
-				_biomass_cost_text(float(tiles) * ROAD_BIOMASS_COST_PER_TILE),
-			],
+			"Length     %d tiles" % route.size(),
 			"Oxygen     demand %.2f" % float(spec[&"oxygen_demand"]),
 			"Waste      in %s per s" % _rate_text(
 				float(spec[&"waste_output"]),
@@ -1877,6 +2143,30 @@ func _road_card_content(index: int) -> Dictionary:
 			),
 		],
 	}
+
+
+func _road_detail_lines(index: int) -> Array[Dictionary]:
+	var route: Array[Vector2i] = _route_for(_outgoing_routes, _system_id(index))
+	var tiles := route.size()
+	var spec := _road_economy_spec(tiles)
+	return [
+		{"text": "Every tile draws oxygen and makes waste", "muted": true},
+		{"text": ""},
+		{"text": "  Length     %d tiles" % tiles},
+		{"text": "  Oxygen     demand %.2f" % float(spec[&"oxygen_demand"])},
+		{
+			"text": "  Waste      in %s per s" % _rate_text(
+				float(spec[&"waste_output"]),
+				2
+			),
+		},
+		{"text": ""},
+		{
+			"text": "Length is the only term: a longer road costs more to lay",
+			"muted": true,
+		},
+		{"text": "and keeps costing while it exists.", "muted": true},
+	]
 
 
 func _oxygen_line(economy: Dictionary) -> String:
@@ -2088,6 +2378,7 @@ func _refresh_resource_status() -> void:
 		icon.texture = _resource_icon_textures[asset_name]
 	_refresh_stability_bar()
 	_refresh_hover_panel()
+	_refresh_detail_window()
 
 
 func _metric_text(metric_id: StringName) -> String:
@@ -2175,7 +2466,18 @@ func _refresh_hover_panel() -> void:
 	if _hovered_metric == &"":
 		_hover_panel.visible = false
 		return
-	var lines := _breakdown_lines(_hovered_metric)
+	## Hover stays short: the full name, the live figure and what kind of thing
+	## it is. The per-building breakdown is a double-click away, so this card
+	## cannot grow as the city does.
+	var lines: Array[Dictionary] = [
+		{
+			"text": "%s%s" % [
+				_breakdown_pad(String(METRIC_DISPLAY_NAMES[_hovered_metric])),
+				_metric_headline(_hovered_metric),
+			],
+		},
+		{"text": String(METRIC_SUMMARIES[_hovered_metric]), "muted": true},
+	]
 	## Reuse the existing labels rather than freeing them. `queue_free` defers
 	## to the end of the frame, so rebuilding every frame would leave the old
 	## rows visible alongside the new ones.
@@ -2209,6 +2511,34 @@ func _breakdown_label(text: String, muted: bool) -> Label:
 	)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
+
+
+func _metric_headline(metric_id: StringName) -> String:
+	match metric_id:
+		&"biomass":
+			return "%d    %s/s" % [
+				floori(_resources.biomass),
+				_signed_rate_text(_resources.biomass_rate),
+			]
+		&"oxygen":
+			return "%d supply / %d demand" % [
+				roundi(_resources.oxygen_supply),
+				roundi(_resources.oxygen_demand),
+			]
+		&"waste":
+			return "%d of %d    %s/s" % [
+				floori(_resources.waste),
+				int(ResourcePool.WASTE_CAPACITY),
+				_signed_rate_text(_resources.waste_rate),
+			]
+	return ""
+
+
+func _breakdown_pad(label: String) -> String:
+	var padded := label
+	while padded.length() < 12:
+		padded += " "
+	return padded
 
 
 func _breakdown_lines(metric_id: StringName) -> Array[Dictionary]:
@@ -2618,6 +2948,43 @@ func debug_hover_metric(metric_id: StringName) -> bool:
 		return false
 	_on_metric_hovered(metric_id)
 	return _hover_panel != null and _hover_panel.visible
+
+
+## Open the detail window for a header metric, and report what it shows.
+func debug_open_metric_details(metric_id: StringName) -> Dictionary:
+	if not _open_detail_window({"kind": &"metric", "metric": metric_id}):
+		return {}
+	return debug_detail_window()
+
+
+## Open the detail window for whatever sits on a grid cell.
+func debug_open_cell_details(cell: Vector2i) -> Dictionary:
+	_hover_cell = cell
+	_update_context_cards()
+	if not _open_detail_window(_info_card_content()):
+		return {}
+	return debug_detail_window()
+
+
+func debug_detail_window() -> Dictionary:
+	if not _detail_window_visible():
+		return {}
+	var texts: Array[String] = []
+	for label in _detail_lines:
+		if label.visible:
+			texts.append(label.text)
+	return {
+		"visible": true,
+		"title": _detail_title.text,
+		"lines": texts,
+	}
+
+
+func debug_close_detail_window() -> bool:
+	if not _detail_window_visible():
+		return false
+	_close_detail_window()
+	return not _detail_window_visible()
 
 
 func debug_dismiss_completion_popup() -> bool:
